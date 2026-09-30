@@ -1,0 +1,3027 @@
+{
+  "version": 1,
+  "name": "Campus Friends — warm low-poly avatar set",
+  "coordinateSystem": {
+    "up": "+Y",
+    "forward": "+Z",
+    "unit": "metre",
+    "floorY": 0,
+    "maxStandingHeight": 1.7
+  },
+  "geometrySchema": {
+    "box": "[width,height,depth]",
+    "cylinder": "[radiusTop,radiusBottom,height,radialSegments]",
+    "sphere": "[radius,widthSegments,heightSegments]",
+    "cone": "[radius,height,radialSegments]",
+    "rotation": "Euler XYZ radians",
+    "scale": "optional mesh scale [x,y,z]",
+    "joints": "transform-only nodes; null parent attaches to the internal motion root",
+    "accessory": "include a node only when its accessory tag is listed by the selected variant"
+  },
+  "materialDefaults": {
+    "roughness": 0.93,
+    "metalness": 0,
+    "flatShading": true
+  },
+  "materials": {
+    "skin": "#E8C39A",
+    "skinShade": "#D4AA7B",
+    "cheek": "#CB947A",
+    "eyes": "#30352F",
+    "eyeWhite": "#F6EFDF",
+    "mouth": "#855F54",
+    "hair": "#53463A",
+    "shirt": "#8B779D",
+    "shirtShade": "#6E5E7E",
+    "undershirt": "#E8DDC2",
+    "pants": "#777D78",
+    "shoe": "#605C54",
+    "sole": "#D1CCB8",
+    "accent": "#E8BC63",
+    "hat": "#C5B38B",
+    "hatBand": "#AFA17D",
+    "bag": "#A3A482",
+    "bagShade": "#7B8066",
+    "metal": "#BCAB83",
+    "glasses": "#525A56",
+    "book": "#DFB276"
+  },
+  "variants": {
+    "qiushi-purple": {
+      "label": "求是紫",
+      "description": "紫色校园外套、米色鸭舌帽、浅橄榄双肩包",
+      "materials": {},
+      "accessories": [
+        "cap"
+      ]
+    },
+    "lakeside-green": {
+      "label": "湖畔绿",
+      "description": "鼠尾草绿上衣、奶油色渔夫帽、深绿双肩包",
+      "materials": {
+        "shirt": "#81947B",
+        "shirtShade": "#637763",
+        "pants": "#A3A08B",
+        "hat": "#DDD4B3",
+        "hatBand": "#AEA887",
+        "bag": "#718E80",
+        "bagShade": "#536D65",
+        "accent": "#DAC47F",
+        "shoe": "#6C705E"
+      },
+      "accessories": [
+        "bucket-hat"
+      ]
+    },
+    "academy-blue": {
+      "label": "书院蓝",
+      "description": "雾蓝色外套、方框眼镜、斜挎书袋与暖橙围巾",
+      "materials": {
+        "shirt": "#718F9D",
+        "shirtShade": "#536F7D",
+        "pants": "#666E72",
+        "hair": "#4A4540",
+        "bag": "#B6A17B",
+        "bagShade": "#907E61",
+        "accent": "#D09C65",
+        "shoe": "#555E61"
+      },
+      "accessories": [
+        "glasses",
+        "swept-hair",
+        "scarf",
+        "book-satchel"
+      ],
+      "hide": [
+        "backpack",
+        "backpackPocket",
+        "bagSeam",
+        "strapL",
+        "strapR",
+        "strapTopL",
+        "strapTopR"
+      ]
+    },
+    "sunlight-orange": {
+      "label": "日光橙",
+      "description": "柔橙色连帽衫、芥末黄毛线帽、深棕背包",
+      "materials": {
+        "shirt": "#CE9666",
+        "shirtShade": "#AC7850",
+        "pants": "#777F72",
+        "hat": "#C5AF63",
+        "hatBand": "#AD9751",
+        "hair": "#6B5140",
+        "bag": "#99836C",
+        "bagShade": "#74634F",
+        "accent": "#E7CF8C",
+        "shoe": "#6C5E4D"
+      },
+      "accessories": [
+        "beanie",
+        "hood"
+      ]
+    },
+    "female-lilac": {
+      "label": "丁香紫 · 女生",
+      "description": "齐下颌短发、丁香紫校园外套与帆布双肩包",
+      "presentation": "feminine",
+      "materials": {
+        "shirt": "#AA96BD",
+        "shirtShade": "#89769D",
+        "pants": "#676E79",
+        "hair": "#493A36",
+        "bag": "#B8B29A",
+        "bagShade": "#8F8C75",
+        "shoe": "#686573"
+      },
+      "accessories": [
+        "bob-hair",
+        "small-hair-clip"
+      ],
+      "hide": [
+        "sideburnL",
+        "sideburnR"
+      ]
+    },
+    "female-blue": {
+      "label": "晴空蓝 · 女生",
+      "description": "披肩长发、方框眼镜、雾蓝衬衫与斜挎书袋",
+      "presentation": "feminine",
+      "materials": {
+        "shirt": "#82A4BB",
+        "shirtShade": "#60839B",
+        "pants": "#647080",
+        "hair": "#393437",
+        "skin": "#E5BA94",
+        "skinShade": "#CDA07B",
+        "bag": "#B8A384",
+        "bagShade": "#938168",
+        "shoe": "#5D626D"
+      },
+      "accessories": [
+        "long-hair",
+        "glasses",
+        "book-satchel"
+      ],
+      "hide": [
+        "sideburnL",
+        "sideburnR",
+        "hairBack",
+        "backpack",
+        "backpackPocket",
+        "bagSeam",
+        "strapL",
+        "strapR",
+        "strapTopL",
+        "strapTopR"
+      ]
+    },
+    "female-green": {
+      "label": "青苔绿 · 女生",
+      "description": "高马尾、鼠尾草绿上衣、米灰长裤与轻便背包",
+      "presentation": "feminine",
+      "materials": {
+        "shirt": "#8BA486",
+        "shirtShade": "#6B8367",
+        "pants": "#ABA996",
+        "hair": "#514139",
+        "skin": "#DDB38A",
+        "skinShade": "#C59A71",
+        "bag": "#D0BB93",
+        "bagShade": "#A28F6B",
+        "shoe": "#666C5B"
+      },
+      "accessories": [
+        "ponytail-hair"
+      ],
+      "hide": [
+        "sideburnL",
+        "sideburnR"
+      ]
+    },
+    "female-orange": {
+      "label": "暖阳橙 · 女生",
+      "description": "侧分及肩短发、暖橙上衣与深棕帆布书袋",
+      "presentation": "feminine",
+      "materials": {
+        "shirt": "#D6A071",
+        "shirtShade": "#B17D55",
+        "pants": "#717A75",
+        "hair": "#694937",
+        "bag": "#AA8E72",
+        "bagShade": "#806953",
+        "accent": "#C8B379",
+        "shoe": "#745F51"
+      },
+      "accessories": [
+        "shoulder-bob-hair",
+        "book-satchel"
+      ],
+      "hide": [
+        "sideburnL",
+        "sideburnR",
+        "backpack",
+        "backpackPocket",
+        "bagSeam",
+        "strapL",
+        "strapR",
+        "strapTopL",
+        "strapTopR"
+      ]
+    }
+  },
+  "joints": [
+    {
+      "id": "hips",
+      "parent": null,
+      "position": [
+        0,
+        0.7,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "torso",
+      "parent": "hips",
+      "position": [
+        0,
+        0.08,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "head",
+      "parent": "torso",
+      "position": [
+        0,
+        0.44,
+        0.01
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "upperArmL",
+      "parent": "torso",
+      "position": [
+        0.265,
+        0.31,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "lowerArmL",
+      "parent": "upperArmL",
+      "position": [
+        0,
+        -0.23,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "handL",
+      "parent": "lowerArmL",
+      "position": [
+        0,
+        -0.19,
+        0.006
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "upperLegL",
+      "parent": "hips",
+      "position": [
+        0.105,
+        -0.06,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "lowerLegL",
+      "parent": "upperLegL",
+      "position": [
+        0,
+        -0.27,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "footL",
+      "parent": "lowerLegL",
+      "position": [
+        0,
+        -0.27,
+        0.015
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "upperArmR",
+      "parent": "torso",
+      "position": [
+        -0.265,
+        0.31,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "lowerArmR",
+      "parent": "upperArmR",
+      "position": [
+        0,
+        -0.23,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "handR",
+      "parent": "lowerArmR",
+      "position": [
+        0,
+        -0.19,
+        0.006
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "upperLegR",
+      "parent": "hips",
+      "position": [
+        -0.105,
+        -0.06,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "lowerLegR",
+      "parent": "upperLegR",
+      "position": [
+        0,
+        -0.27,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "footR",
+      "parent": "lowerLegR",
+      "position": [
+        0,
+        -0.27,
+        0.015
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "pelvis",
+      "parent": "hips",
+      "type": "box",
+      "size": [
+        0.365,
+        0.2,
+        0.255
+      ],
+      "position": [
+        0,
+        -0.015,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "pants",
+      "color": "#777D78"
+    },
+    {
+      "id": "shirt",
+      "parent": "torso",
+      "type": "box",
+      "size": [
+        0.435,
+        0.35,
+        0.3
+      ],
+      "position": [
+        0,
+        0.155,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "shirt",
+      "color": "#8B779D"
+    },
+    {
+      "id": "shirtHem",
+      "parent": "torso",
+      "type": "box",
+      "size": [
+        0.44,
+        0.055,
+        0.31
+      ],
+      "position": [
+        0,
+        0.0025,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "shirtShade",
+      "color": "#6E5E7E"
+    },
+    {
+      "id": "shirtPlacket",
+      "parent": "torso",
+      "type": "box",
+      "size": [
+        0.021,
+        0.3,
+        0.009
+      ],
+      "position": [
+        0,
+        0.174,
+        0.155
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "shirtShade",
+      "color": "#6E5E7E"
+    },
+    {
+      "id": "collarL",
+      "parent": "torso",
+      "type": "box",
+      "size": [
+        0.13,
+        0.07,
+        0.022
+      ],
+      "position": [
+        0.074,
+        0.302,
+        0.155
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.24
+      ],
+      "material": "undershirt",
+      "color": "#E8DDC2"
+    },
+    {
+      "id": "collarR",
+      "parent": "torso",
+      "type": "box",
+      "size": [
+        0.13,
+        0.07,
+        0.022
+      ],
+      "position": [
+        -0.074,
+        0.302,
+        0.155
+      ],
+      "rotation": [
+        0,
+        0,
+        0.24
+      ],
+      "material": "undershirt",
+      "color": "#E8DDC2"
+    },
+    {
+      "id": "campusBadge",
+      "parent": "torso",
+      "type": "box",
+      "size": [
+        0.052,
+        0.057,
+        0.012
+      ],
+      "position": [
+        0.127,
+        0.225,
+        0.158
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "accent",
+      "color": "#E8BC63"
+    },
+    {
+      "id": "badgeMark",
+      "parent": "torso",
+      "type": "box",
+      "size": [
+        0.023,
+        0.025,
+        0.009
+      ],
+      "position": [
+        0.127,
+        0.228,
+        0.169
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "undershirt",
+      "color": "#E8DDC2"
+    },
+    {
+      "id": "neck",
+      "parent": "torso",
+      "type": "box",
+      "size": [
+        0.135,
+        0.12,
+        0.14
+      ],
+      "position": [
+        0,
+        0.377,
+        0.012
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "skin",
+      "color": "#E8C39A"
+    },
+    {
+      "id": "headBlock",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.38,
+        0.38,
+        0.35
+      ],
+      "position": [
+        0,
+        0.135,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "skin",
+      "color": "#E8C39A"
+    },
+    {
+      "id": "hairTop",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.392,
+        0.075,
+        0.358
+      ],
+      "position": [
+        0,
+        0.302,
+        -0.007
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "hair",
+      "color": "#53463A"
+    },
+    {
+      "id": "hairBack",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.39,
+        0.245,
+        0.065
+      ],
+      "position": [
+        0,
+        0.207,
+        -0.16
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "hair",
+      "color": "#53463A"
+    },
+    {
+      "id": "sideburnL",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.032,
+        0.11,
+        0.09
+      ],
+      "position": [
+        0.191,
+        0.218,
+        0.057
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "hair",
+      "color": "#53463A"
+    },
+    {
+      "id": "sideburnR",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.032,
+        0.11,
+        0.09
+      ],
+      "position": [
+        -0.191,
+        0.218,
+        0.057
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "hair",
+      "color": "#53463A"
+    },
+    {
+      "id": "earL",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.065,
+        0.1,
+        0.093
+      ],
+      "position": [
+        0.213,
+        0.108,
+        0.003
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "skinShade",
+      "color": "#D4AA7B"
+    },
+    {
+      "id": "earR",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.065,
+        0.1,
+        0.093
+      ],
+      "position": [
+        -0.213,
+        0.108,
+        0.003
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "skinShade",
+      "color": "#D4AA7B"
+    },
+    {
+      "id": "eyeWhiteL",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.063,
+        0.052,
+        0.014
+      ],
+      "position": [
+        0.077,
+        0.151,
+        0.181
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "eyeWhite",
+      "color": "#F6EFDF"
+    },
+    {
+      "id": "eyeL",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.028,
+        0.039,
+        0.014
+      ],
+      "position": [
+        0.074,
+        0.148,
+        0.191
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "eyes",
+      "color": "#30352F"
+    },
+    {
+      "id": "browL",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.071,
+        0.015,
+        0.016
+      ],
+      "position": [
+        0.077,
+        0.211,
+        0.183
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "hair",
+      "color": "#53463A"
+    },
+    {
+      "id": "cheekL",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.044,
+        0.022,
+        0.009
+      ],
+      "position": [
+        0.10856999999999999,
+        0.075,
+        0.179
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "cheek",
+      "color": "#CB947A"
+    },
+    {
+      "id": "eyeWhiteR",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.063,
+        0.052,
+        0.014
+      ],
+      "position": [
+        -0.077,
+        0.151,
+        0.181
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "eyeWhite",
+      "color": "#F6EFDF"
+    },
+    {
+      "id": "eyeR",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.028,
+        0.039,
+        0.014
+      ],
+      "position": [
+        -0.08,
+        0.148,
+        0.191
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "eyes",
+      "color": "#30352F"
+    },
+    {
+      "id": "browR",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.071,
+        0.015,
+        0.016
+      ],
+      "position": [
+        -0.077,
+        0.211,
+        0.183
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "hair",
+      "color": "#53463A"
+    },
+    {
+      "id": "cheekR",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.044,
+        0.022,
+        0.009
+      ],
+      "position": [
+        -0.10856999999999999,
+        0.075,
+        0.179
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "cheek",
+      "color": "#CB947A"
+    },
+    {
+      "id": "nose",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.064,
+        0.055,
+        0.064
+      ],
+      "position": [
+        0,
+        0.091,
+        0.198
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "skinShade",
+      "color": "#D4AA7B"
+    },
+    {
+      "id": "mouth",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.059,
+        0.012,
+        0.01
+      ],
+      "position": [
+        0,
+        0.029,
+        0.181
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "mouth",
+      "color": "#855F54"
+    },
+    {
+      "id": "sleeveL",
+      "parent": "upperArmL",
+      "type": "box",
+      "size": [
+        0.166,
+        0.235,
+        0.19
+      ],
+      "position": [
+        0,
+        -0.103,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "shirt",
+      "color": "#8B779D"
+    },
+    {
+      "id": "cuffL",
+      "parent": "upperArmL",
+      "type": "box",
+      "size": [
+        0.169,
+        0.045,
+        0.194
+      ],
+      "position": [
+        0,
+        -0.199,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "shirtShade",
+      "color": "#6E5E7E"
+    },
+    {
+      "id": "forearmL",
+      "parent": "lowerArmL",
+      "type": "box",
+      "size": [
+        0.137,
+        0.18,
+        0.15
+      ],
+      "position": [
+        0,
+        -0.087,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "skin",
+      "color": "#E8C39A"
+    },
+    {
+      "id": "palmL",
+      "parent": "handL",
+      "type": "box",
+      "size": [
+        0.15,
+        0.143,
+        0.163
+      ],
+      "position": [
+        0,
+        -0.039,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "skin",
+      "color": "#E8C39A"
+    },
+    {
+      "id": "thumbL",
+      "parent": "handL",
+      "type": "box",
+      "size": [
+        0.049,
+        0.077,
+        0.078
+      ],
+      "position": [
+        -0.081,
+        -0.023,
+        0.023
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "skinShade",
+      "color": "#D4AA7B"
+    },
+    {
+      "id": "thighL",
+      "parent": "upperLegL",
+      "type": "box",
+      "size": [
+        0.165,
+        0.27,
+        0.195
+      ],
+      "position": [
+        0,
+        -0.135,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "pants",
+      "color": "#777D78"
+    },
+    {
+      "id": "shinL",
+      "parent": "lowerLegL",
+      "type": "box",
+      "size": [
+        0.155,
+        0.275,
+        0.184
+      ],
+      "position": [
+        0,
+        -0.136,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "pants",
+      "color": "#777D78"
+    },
+    {
+      "id": "shoeL",
+      "parent": "footL",
+      "type": "box",
+      "size": [
+        0.191,
+        0.105,
+        0.278
+      ],
+      "position": [
+        0,
+        -0.0325,
+        0.056
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "shoe",
+      "color": "#605C54"
+    },
+    {
+      "id": "soleL",
+      "parent": "footL",
+      "type": "box",
+      "size": [
+        0.198,
+        0.029,
+        0.286
+      ],
+      "position": [
+        0,
+        -0.0855,
+        0.057
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "sole",
+      "color": "#D1CCB8"
+    },
+    {
+      "id": "shoeTongueL",
+      "parent": "footL",
+      "type": "box",
+      "size": [
+        0.096,
+        0.021,
+        0.091
+      ],
+      "position": [
+        0,
+        0.023,
+        0.049
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "undershirt",
+      "color": "#E8DDC2"
+    },
+    {
+      "id": "sleeveR",
+      "parent": "upperArmR",
+      "type": "box",
+      "size": [
+        0.166,
+        0.235,
+        0.19
+      ],
+      "position": [
+        0,
+        -0.103,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "shirt",
+      "color": "#8B779D"
+    },
+    {
+      "id": "cuffR",
+      "parent": "upperArmR",
+      "type": "box",
+      "size": [
+        0.169,
+        0.045,
+        0.194
+      ],
+      "position": [
+        0,
+        -0.199,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "shirtShade",
+      "color": "#6E5E7E"
+    },
+    {
+      "id": "forearmR",
+      "parent": "lowerArmR",
+      "type": "box",
+      "size": [
+        0.137,
+        0.18,
+        0.15
+      ],
+      "position": [
+        0,
+        -0.087,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "skin",
+      "color": "#E8C39A"
+    },
+    {
+      "id": "palmR",
+      "parent": "handR",
+      "type": "box",
+      "size": [
+        0.15,
+        0.143,
+        0.163
+      ],
+      "position": [
+        0,
+        -0.039,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "skin",
+      "color": "#E8C39A"
+    },
+    {
+      "id": "thumbR",
+      "parent": "handR",
+      "type": "box",
+      "size": [
+        0.049,
+        0.077,
+        0.078
+      ],
+      "position": [
+        0.081,
+        -0.023,
+        0.023
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "skinShade",
+      "color": "#D4AA7B"
+    },
+    {
+      "id": "thighR",
+      "parent": "upperLegR",
+      "type": "box",
+      "size": [
+        0.165,
+        0.27,
+        0.195
+      ],
+      "position": [
+        0,
+        -0.135,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "pants",
+      "color": "#777D78"
+    },
+    {
+      "id": "shinR",
+      "parent": "lowerLegR",
+      "type": "box",
+      "size": [
+        0.155,
+        0.275,
+        0.184
+      ],
+      "position": [
+        0,
+        -0.136,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "pants",
+      "color": "#777D78"
+    },
+    {
+      "id": "shoeR",
+      "parent": "footR",
+      "type": "box",
+      "size": [
+        0.191,
+        0.105,
+        0.278
+      ],
+      "position": [
+        0,
+        -0.0325,
+        0.056
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "shoe",
+      "color": "#605C54"
+    },
+    {
+      "id": "soleR",
+      "parent": "footR",
+      "type": "box",
+      "size": [
+        0.198,
+        0.029,
+        0.286
+      ],
+      "position": [
+        0,
+        -0.0855,
+        0.057
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "sole",
+      "color": "#D1CCB8"
+    },
+    {
+      "id": "shoeTongueR",
+      "parent": "footR",
+      "type": "box",
+      "size": [
+        0.096,
+        0.021,
+        0.091
+      ],
+      "position": [
+        0,
+        0.023,
+        0.049
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "undershirt",
+      "color": "#E8DDC2"
+    },
+    {
+      "id": "backpack",
+      "parent": "torso",
+      "type": "box",
+      "size": [
+        0.315,
+        0.315,
+        0.172
+      ],
+      "position": [
+        0,
+        0.141,
+        -0.226
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "bag",
+      "color": "#A3A482"
+    },
+    {
+      "id": "backpackPocket",
+      "parent": "torso",
+      "type": "box",
+      "size": [
+        0.242,
+        0.135,
+        0.05
+      ],
+      "position": [
+        0,
+        0.067,
+        -0.33
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "bagShade",
+      "color": "#7B8066"
+    },
+    {
+      "id": "bagSeam",
+      "parent": "torso",
+      "type": "box",
+      "size": [
+        0.25,
+        0.014,
+        0.007
+      ],
+      "position": [
+        0,
+        0.129,
+        -0.358
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "metal",
+      "color": "#BCAB83"
+    },
+    {
+      "id": "strapL",
+      "parent": "torso",
+      "type": "box",
+      "size": [
+        0.036,
+        0.343,
+        0.022
+      ],
+      "position": [
+        0.144,
+        0.154,
+        0.167
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "bagShade",
+      "color": "#7B8066"
+    },
+    {
+      "id": "strapTopL",
+      "parent": "torso",
+      "type": "box",
+      "size": [
+        0.038,
+        0.037,
+        0.337
+      ],
+      "position": [
+        0.144,
+        0.323,
+        -0.01
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "bagShade",
+      "color": "#7B8066"
+    },
+    {
+      "id": "strapR",
+      "parent": "torso",
+      "type": "box",
+      "size": [
+        0.036,
+        0.343,
+        0.022
+      ],
+      "position": [
+        -0.144,
+        0.154,
+        0.167
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "bagShade",
+      "color": "#7B8066"
+    },
+    {
+      "id": "strapTopR",
+      "parent": "torso",
+      "type": "box",
+      "size": [
+        0.038,
+        0.037,
+        0.337
+      ],
+      "position": [
+        -0.144,
+        0.323,
+        -0.01
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "bagShade",
+      "color": "#7B8066"
+    },
+    {
+      "id": "capCrown",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.421,
+        0.105,
+        0.383
+      ],
+      "position": [
+        0,
+        0.365,
+        -0.007
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "hat",
+      "color": "#C5B38B",
+      "accessory": "cap"
+    },
+    {
+      "id": "capBand",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.429,
+        0.026,
+        0.39
+      ],
+      "position": [
+        0,
+        0.314,
+        -0.007
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "hatBand",
+      "color": "#AFA17D",
+      "accessory": "cap"
+    },
+    {
+      "id": "capBrim",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.455,
+        0.034,
+        0.218
+      ],
+      "position": [
+        0,
+        0.314,
+        0.213
+      ],
+      "rotation": [
+        0.045,
+        0,
+        0
+      ],
+      "material": "hat",
+      "color": "#C5B38B",
+      "accessory": "cap"
+    },
+    {
+      "id": "capButton",
+      "parent": "head",
+      "type": "cylinder",
+      "size": [
+        0.03,
+        0.03,
+        0.024,
+        8
+      ],
+      "position": [
+        0,
+        0.429,
+        -0.007
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "hatBand",
+      "color": "#AFA17D",
+      "accessory": "cap"
+    },
+    {
+      "id": "capEmblem",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.047,
+        0.038,
+        0.013
+      ],
+      "position": [
+        0,
+        0.363,
+        0.19
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "shirt",
+      "color": "#8B779D",
+      "accessory": "cap"
+    },
+    {
+      "id": "bucketCrown",
+      "parent": "head",
+      "type": "cylinder",
+      "size": [
+        0.225,
+        0.255,
+        0.115,
+        10
+      ],
+      "position": [
+        0,
+        0.366,
+        -0.005
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "hat",
+      "color": "#C5B38B",
+      "accessory": "bucket-hat"
+    },
+    {
+      "id": "bucketBand",
+      "parent": "head",
+      "type": "cylinder",
+      "size": [
+        0.255,
+        0.26,
+        0.027,
+        10
+      ],
+      "position": [
+        0,
+        0.32,
+        -0.005
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "hatBand",
+      "color": "#AFA17D",
+      "accessory": "bucket-hat"
+    },
+    {
+      "id": "bucketBrim",
+      "parent": "head",
+      "type": "cylinder",
+      "size": [
+        0.276,
+        0.293,
+        0.038,
+        10
+      ],
+      "position": [
+        0,
+        0.302,
+        -0.005
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "hat",
+      "color": "#C5B38B",
+      "accessory": "bucket-hat"
+    },
+    {
+      "id": "bucketPin",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.035,
+        0.031,
+        0.012
+      ],
+      "position": [
+        0.111,
+        0.365,
+        0.208
+      ],
+      "rotation": [
+        0,
+        0.39,
+        0
+      ],
+      "material": "accent",
+      "color": "#E8BC63",
+      "accessory": "bucket-hat"
+    },
+    {
+      "id": "hairSweep",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.352,
+        0.108,
+        0.135
+      ],
+      "position": [
+        0,
+        0.307,
+        0.132
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.11
+      ],
+      "material": "hair",
+      "color": "#53463A",
+      "accessory": "swept-hair"
+    },
+    {
+      "id": "hairTuft",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.162,
+        0.072,
+        0.26
+      ],
+      "position": [
+        -0.096,
+        0.358,
+        -0.016
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.13
+      ],
+      "material": "hair",
+      "color": "#53463A",
+      "accessory": "swept-hair"
+    },
+    {
+      "id": "glassesLTop",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.139,
+        0.017,
+        0.022
+      ],
+      "position": [
+        0.081,
+        0.202,
+        0.208
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "glasses",
+      "color": "#525A56",
+      "accessory": "glasses"
+    },
+    {
+      "id": "glassesLBottom",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.139,
+        0.017,
+        0.022
+      ],
+      "position": [
+        0.081,
+        0.101,
+        0.208
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "glasses",
+      "color": "#525A56",
+      "accessory": "glasses"
+    },
+    {
+      "id": "glassesLOuter",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.017,
+        0.112,
+        0.022
+      ],
+      "position": [
+        0.14200000000000002,
+        0.151,
+        0.208
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "glasses",
+      "color": "#525A56",
+      "accessory": "glasses"
+    },
+    {
+      "id": "glassesLInner",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.017,
+        0.112,
+        0.022
+      ],
+      "position": [
+        0.020000000000000004,
+        0.151,
+        0.208
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "glasses",
+      "color": "#525A56",
+      "accessory": "glasses"
+    },
+    {
+      "id": "glassesTempleL",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.018,
+        0.02,
+        0.18
+      ],
+      "position": [
+        0.184,
+        0.176,
+        0.114
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "glasses",
+      "color": "#525A56",
+      "accessory": "glasses"
+    },
+    {
+      "id": "glassesRTop",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.139,
+        0.017,
+        0.022
+      ],
+      "position": [
+        -0.081,
+        0.202,
+        0.208
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "glasses",
+      "color": "#525A56",
+      "accessory": "glasses"
+    },
+    {
+      "id": "glassesRBottom",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.139,
+        0.017,
+        0.022
+      ],
+      "position": [
+        -0.081,
+        0.101,
+        0.208
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "glasses",
+      "color": "#525A56",
+      "accessory": "glasses"
+    },
+    {
+      "id": "glassesROuter",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.017,
+        0.112,
+        0.022
+      ],
+      "position": [
+        -0.14200000000000002,
+        0.151,
+        0.208
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "glasses",
+      "color": "#525A56",
+      "accessory": "glasses"
+    },
+    {
+      "id": "glassesRInner",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.017,
+        0.112,
+        0.022
+      ],
+      "position": [
+        -0.020000000000000004,
+        0.151,
+        0.208
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "glasses",
+      "color": "#525A56",
+      "accessory": "glasses"
+    },
+    {
+      "id": "glassesTempleR",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.018,
+        0.02,
+        0.18
+      ],
+      "position": [
+        -0.184,
+        0.176,
+        0.114
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "glasses",
+      "color": "#525A56",
+      "accessory": "glasses"
+    },
+    {
+      "id": "glassesBridge",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.05,
+        0.018,
+        0.019
+      ],
+      "position": [
+        0,
+        0.165,
+        0.214
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "glasses",
+      "color": "#525A56",
+      "accessory": "glasses"
+    },
+    {
+      "id": "scarfWrap",
+      "parent": "torso",
+      "type": "box",
+      "size": [
+        0.258,
+        0.093,
+        0.232
+      ],
+      "position": [
+        0,
+        0.353,
+        0.03
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "accent",
+      "color": "#E8BC63",
+      "accessory": "scarf"
+    },
+    {
+      "id": "scarfTail",
+      "parent": "torso",
+      "type": "box",
+      "size": [
+        0.074,
+        0.18,
+        0.032
+      ],
+      "position": [
+        -0.069,
+        0.237,
+        0.181
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.1
+      ],
+      "material": "accent",
+      "color": "#E8BC63",
+      "accessory": "scarf"
+    },
+    {
+      "id": "satchelStrap",
+      "parent": "torso",
+      "type": "box",
+      "size": [
+        0.036,
+        0.442,
+        0.018
+      ],
+      "position": [
+        -0.035,
+        0.137,
+        0.181
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.56
+      ],
+      "material": "bagShade",
+      "color": "#7B8066",
+      "accessory": "book-satchel"
+    },
+    {
+      "id": "satchel",
+      "parent": "torso",
+      "type": "box",
+      "size": [
+        0.145,
+        0.266,
+        0.255
+      ],
+      "position": [
+        -0.265,
+        -0.011,
+        -0.04
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "bag",
+      "color": "#A3A482",
+      "accessory": "book-satchel"
+    },
+    {
+      "id": "satchelFlap",
+      "parent": "torso",
+      "type": "box",
+      "size": [
+        0.154,
+        0.092,
+        0.263
+      ],
+      "position": [
+        -0.265,
+        0.078,
+        -0.04
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "bagShade",
+      "color": "#7B8066",
+      "accessory": "book-satchel"
+    },
+    {
+      "id": "bookCover",
+      "parent": "torso",
+      "type": "box",
+      "size": [
+        0.065,
+        0.22,
+        0.176
+      ],
+      "position": [
+        -0.265,
+        0.137,
+        -0.052
+      ],
+      "rotation": [
+        0,
+        0,
+        0.055
+      ],
+      "material": "book",
+      "color": "#DFB276",
+      "accessory": "book-satchel"
+    },
+    {
+      "id": "bookPages",
+      "parent": "torso",
+      "type": "box",
+      "size": [
+        0.05,
+        0.193,
+        0.164
+      ],
+      "position": [
+        -0.266,
+        0.151,
+        -0.043
+      ],
+      "rotation": [
+        0,
+        0,
+        0.055
+      ],
+      "material": "undershirt",
+      "color": "#E8DDC2",
+      "accessory": "book-satchel"
+    },
+    {
+      "id": "beanieCrown",
+      "parent": "head",
+      "type": "sphere",
+      "size": [
+        0.233,
+        10,
+        6
+      ],
+      "position": [
+        0,
+        0.35,
+        -0.007
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "hat",
+      "color": "#C5B38B",
+      "accessory": "beanie",
+      "scale": [
+        1,
+        0.5,
+        1
+      ]
+    },
+    {
+      "id": "beanieBand",
+      "parent": "head",
+      "type": "cylinder",
+      "size": [
+        0.247,
+        0.247,
+        0.063,
+        10
+      ],
+      "position": [
+        0,
+        0.307,
+        -0.007
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "hatBand",
+      "color": "#AFA17D",
+      "accessory": "beanie"
+    },
+    {
+      "id": "beaniePompom",
+      "parent": "head",
+      "type": "sphere",
+      "size": [
+        0.025,
+        6,
+        4
+      ],
+      "position": [
+        0,
+        0.455,
+        -0.007
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "hat",
+      "color": "#C5B38B",
+      "accessory": "beanie"
+    },
+    {
+      "id": "beanieLabel",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.064,
+        0.039,
+        0.015
+      ],
+      "position": [
+        0,
+        0.307,
+        0.241
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "undershirt",
+      "color": "#E8DDC2",
+      "accessory": "beanie"
+    },
+    {
+      "id": "hood",
+      "parent": "torso",
+      "type": "box",
+      "size": [
+        0.35,
+        0.22,
+        0.173
+      ],
+      "position": [
+        0,
+        0.38,
+        -0.132
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "shirtShade",
+      "color": "#6E5E7E",
+      "accessory": "hood"
+    },
+    {
+      "id": "hoodLaceL",
+      "parent": "torso",
+      "type": "box",
+      "size": [
+        0.015,
+        0.12,
+        0.016
+      ],
+      "position": [
+        0.061,
+        0.274,
+        0.186
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "undershirt",
+      "color": "#E8DDC2",
+      "accessory": "hood"
+    },
+    {
+      "id": "hoodLaceR",
+      "parent": "torso",
+      "type": "box",
+      "size": [
+        0.015,
+        0.103,
+        0.016
+      ],
+      "position": [
+        -0.061,
+        0.282,
+        0.186
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "undershirt",
+      "color": "#E8DDC2",
+      "accessory": "hood"
+    },
+    {
+      "id": "bobBack",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.404,
+        0.315,
+        0.084
+      ],
+      "position": [
+        0,
+        0.137,
+        -0.176
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "hair",
+      "color": "#53463A",
+      "accessory": "bob-hair"
+    },
+    {
+      "id": "bobSideL",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.069,
+        0.326,
+        0.279
+      ],
+      "position": [
+        0.204,
+        0.127,
+        -0.032
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.035
+      ],
+      "material": "hair",
+      "color": "#53463A",
+      "accessory": "bob-hair"
+    },
+    {
+      "id": "bobSideR",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.069,
+        0.326,
+        0.279
+      ],
+      "position": [
+        -0.204,
+        0.127,
+        -0.032
+      ],
+      "rotation": [
+        0,
+        0,
+        0.035
+      ],
+      "material": "hair",
+      "color": "#53463A",
+      "accessory": "bob-hair"
+    },
+    {
+      "id": "bobFringeL",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.235,
+        0.094,
+        0.058
+      ],
+      "position": [
+        -0.069,
+        0.279,
+        0.169
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.065
+      ],
+      "material": "hair",
+      "color": "#53463A",
+      "accessory": "bob-hair"
+    },
+    {
+      "id": "bobFringeR",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.125,
+        0.075,
+        0.056
+      ],
+      "position": [
+        0.115,
+        0.283,
+        0.169
+      ],
+      "rotation": [
+        0,
+        0,
+        0.08
+      ],
+      "material": "hair",
+      "color": "#53463A",
+      "accessory": "bob-hair"
+    },
+    {
+      "id": "bobHairClip",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.069,
+        0.019,
+        0.019
+      ],
+      "position": [
+        0.144,
+        0.257,
+        0.206
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.12
+      ],
+      "material": "accent",
+      "color": "#E8BC63",
+      "accessory": "small-hair-clip"
+    },
+    {
+      "id": "longHairBack",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.407,
+        0.55,
+        0.09
+      ],
+      "position": [
+        0,
+        0.072,
+        -0.191
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "hair",
+      "color": "#53463A",
+      "accessory": "long-hair"
+    },
+    {
+      "id": "longHairSideL",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.059,
+        0.441,
+        0.28
+      ],
+      "position": [
+        0.207,
+        0.082,
+        -0.057
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.035
+      ],
+      "material": "hair",
+      "color": "#53463A",
+      "accessory": "long-hair"
+    },
+    {
+      "id": "longHairSideR",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.059,
+        0.441,
+        0.28
+      ],
+      "position": [
+        -0.207,
+        0.082,
+        -0.057
+      ],
+      "rotation": [
+        0,
+        0,
+        0.035
+      ],
+      "material": "hair",
+      "color": "#53463A",
+      "accessory": "long-hair"
+    },
+    {
+      "id": "longHairFrontL",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.065,
+        0.39,
+        0.061
+      ],
+      "position": [
+        0.179,
+        0.091,
+        0.157
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.075
+      ],
+      "material": "hair",
+      "color": "#53463A",
+      "accessory": "long-hair"
+    },
+    {
+      "id": "longHairFrontR",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.065,
+        0.39,
+        0.061
+      ],
+      "position": [
+        -0.179,
+        0.091,
+        0.157
+      ],
+      "rotation": [
+        0,
+        0,
+        0.075
+      ],
+      "material": "hair",
+      "color": "#53463A",
+      "accessory": "long-hair"
+    },
+    {
+      "id": "longHairPartL",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.217,
+        0.067,
+        0.098
+      ],
+      "position": [
+        0.107,
+        0.306,
+        0.124
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.07
+      ],
+      "material": "hair",
+      "color": "#53463A",
+      "accessory": "long-hair"
+    },
+    {
+      "id": "longHairPartR",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.188,
+        0.077,
+        0.093
+      ],
+      "position": [
+        -0.105,
+        0.301,
+        0.127
+      ],
+      "rotation": [
+        0,
+        0,
+        0.1
+      ],
+      "material": "hair",
+      "color": "#53463A",
+      "accessory": "long-hair"
+    },
+    {
+      "id": "ponyGather",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.221,
+        0.204,
+        0.136
+      ],
+      "position": [
+        0,
+        0.283,
+        -0.208
+      ],
+      "rotation": [
+        0.12,
+        0,
+        0
+      ],
+      "material": "hair",
+      "color": "#53463A",
+      "accessory": "ponytail-hair"
+    },
+    {
+      "id": "ponyTie",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.148,
+        0.049,
+        0.12
+      ],
+      "position": [
+        0,
+        0.241,
+        -0.282
+      ],
+      "rotation": [
+        0.18,
+        0,
+        0
+      ],
+      "material": "accent",
+      "color": "#E8BC63",
+      "accessory": "ponytail-hair"
+    },
+    {
+      "id": "ponyTailUpper",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.161,
+        0.224,
+        0.139
+      ],
+      "position": [
+        0,
+        0.123,
+        -0.292
+      ],
+      "rotation": [
+        -0.19,
+        0,
+        0
+      ],
+      "material": "hair",
+      "color": "#53463A",
+      "accessory": "ponytail-hair"
+    },
+    {
+      "id": "ponyTailLower",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.141,
+        0.18,
+        0.116
+      ],
+      "position": [
+        0,
+        -0.054,
+        -0.265
+      ],
+      "rotation": [
+        0.12,
+        0,
+        0
+      ],
+      "material": "hair",
+      "color": "#53463A",
+      "accessory": "ponytail-hair"
+    },
+    {
+      "id": "ponyTempleL",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.04,
+        0.21,
+        0.128
+      ],
+      "position": [
+        0.197,
+        0.192,
+        0.036
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "hair",
+      "color": "#53463A",
+      "accessory": "ponytail-hair"
+    },
+    {
+      "id": "ponyTempleR",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.04,
+        0.21,
+        0.128
+      ],
+      "position": [
+        -0.197,
+        0.192,
+        0.036
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "hair",
+      "color": "#53463A",
+      "accessory": "ponytail-hair"
+    },
+    {
+      "id": "ponyFringe",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.309,
+        0.075,
+        0.07
+      ],
+      "position": [
+        -0.019,
+        0.288,
+        0.166
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.13
+      ],
+      "material": "hair",
+      "color": "#53463A",
+      "accessory": "ponytail-hair"
+    },
+    {
+      "id": "shoulderBobBack",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.409,
+        0.418,
+        0.078
+      ],
+      "position": [
+        0,
+        0.104,
+        -0.176
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "hair",
+      "color": "#53463A",
+      "accessory": "shoulder-bob-hair"
+    },
+    {
+      "id": "shoulderBobL",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.079,
+        0.413,
+        0.263
+      ],
+      "position": [
+        0.211,
+        0.097,
+        -0.029
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.075
+      ],
+      "material": "hair",
+      "color": "#53463A",
+      "accessory": "shoulder-bob-hair"
+    },
+    {
+      "id": "shoulderBobR",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.074,
+        0.389,
+        0.249
+      ],
+      "position": [
+        -0.207,
+        0.11,
+        -0.036
+      ],
+      "rotation": [
+        0,
+        0,
+        0.065
+      ],
+      "material": "hair",
+      "color": "#53463A",
+      "accessory": "shoulder-bob-hair"
+    },
+    {
+      "id": "shoulderBobFringe",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.274,
+        0.094,
+        0.072
+      ],
+      "position": [
+        -0.043,
+        0.294,
+        0.163
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.13
+      ],
+      "material": "hair",
+      "color": "#53463A",
+      "accessory": "shoulder-bob-hair"
+    },
+    {
+      "id": "shoulderBobTuck",
+      "parent": "head",
+      "type": "box",
+      "size": [
+        0.086,
+        0.155,
+        0.066
+      ],
+      "position": [
+        0.163,
+        0.24,
+        0.142
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.08
+      ],
+      "material": "hair",
+      "color": "#53463A",
+      "accessory": "shoulder-bob-hair"
+    }
+  ]
+}

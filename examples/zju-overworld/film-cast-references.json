@@ -1,0 +1,98 @@
+[
+  {
+    "id": "film-nolan",
+    "name": "克里斯托弗·诺兰",
+    "englishName": "Christopher Nolan",
+    "movies": [
+      "奥本海默",
+      "盗梦空间"
+    ],
+    "source": "https://www.oscars.org/oscars/ceremonies/2024",
+    "features": "灰棕短发侧分向后梳，额头露出较多；脸型偏宽圆矩形，下颌轮廓厚实；眉线较平，鼻梁较长而直，面部无明显胡须",
+    "credit": "Academy of Motion Picture Arts and Sciences"
+  },
+  {
+    "id": "film-murphy",
+    "name": "基里安·墨菲",
+    "englishName": "Cillian Murphy",
+    "movies": [
+      "奥本海默",
+      "盗梦空间"
+    ],
+    "source": "https://www.oscars.org/oscars/ceremonies/2024",
+    "features": "棕色侧扫刘海覆盖部分额头，两侧较短；颧骨突出、脸颊内收，脸型明显向窄下巴收拢；鼻梁细直，上眼睑轮廓明显，嘴部较窄",
+    "credit": "Academy of Motion Picture Arts and Sciences"
+  },
+  {
+    "id": "film-dicaprio",
+    "name": "莱昂纳多·迪卡普里奥",
+    "englishName": "Leonardo DiCaprio",
+    "movies": [
+      "荒野猎人",
+      "盗梦空间"
+    ],
+    "source": "https://www.oscars.org/oscars/88th-oscars-winners-portraits",
+    "features": "棕发侧分后梳，发际线与额头清楚露出；较宽颧部向小圆下巴收拢，眉浓而较直、眼睛浅蓝；鼻尖较圆；参考照有短络腮胡茬和小胡须",
+    "credit": "Academy of Motion Picture Arts and Sciences"
+  },
+  {
+    "id": "film-hathaway",
+    "name": "安妮·海瑟薇",
+    "englishName": "Anne Hathaway",
+    "movies": [
+      "星际穿越",
+      "悲惨世界"
+    ],
+    "source": "https://www.festival-cannes.com/en/medialibrary/anne-hathaway-armageddon-time/",
+    "features": "棕色长发半扎起，头顶蓬松，中分帘状发束垂在脸侧；大眼睛配较浓弧眉，鼻梁直、鼻尖圆；嘴部较宽且双唇饱满，椭圆脸的下颌转折圆缓",
+    "credit": "Joachim Tournebize / FDC"
+  },
+  {
+    "id": "film-tony-leung",
+    "name": "梁朝伟",
+    "englishName": "Tony Leung Chiu-wai",
+    "movies": [
+      "花样年华",
+      "2046"
+    ],
+    "source": "https://2024.tiff-jp.net/news/en/?p=18841",
+    "features": "黑灰短发向上梳，两鬓灰发明显；眉形较平、眼裂偏窄，笑时眼尾折线清楚；颧部较宽，向圆窄下巴自然收拢，笑容带较深面颊线",
+    "credit": "Tokyo International Film Festival（页面未标明摄影者）"
+  },
+  {
+    "id": "film-andy-lau",
+    "name": "刘德华",
+    "englishName": "Andy Lau",
+    "movies": [
+      "天若有情",
+      "无间道III终极无间"
+    ],
+    "source": "https://www.afa-academy.com/jury-list/andy-lau/",
+    "features": "高梳背头露出额头，两侧剪短、顶部成整齐发块；脸偏长，额侧、颧面和下颌转折较直；浓眉尾部微挑，鼻梁长直，唇线偏薄而清晰",
+    "credit": "Asian Film Awards Academy（页面未标明摄影者）"
+  },
+  {
+    "id": "film-zhou-xun",
+    "name": "周迅",
+    "englishName": "Zhou Xun",
+    "movies": [
+      "苏州河",
+      "如果·爱"
+    ],
+    "source": "https://www.bjiff.com/Archives/dwjywda/ta_3224/The5thInternationalJuryofTiantanAward/201603/t20160317_9679.html",
+    "features": "黑色侧分披肩波浪发，一侧耳朵露出；脸部短而窄，下颌向小圆尖下巴收拢；眼睛大而开阔，眉较细平，唇峰清楚且上唇偏薄",
+    "credit": "Beijing International Film Festival（页面未标明摄影者）"
+  },
+  {
+    "id": "film-zhang-ziyi",
+    "name": "章子怡",
+    "englishName": "Zhang Ziyi",
+    "movies": [
+      "卧虎藏龙",
+      "一代宗师"
+    ],
+    "source": "https://2019.tiff-jp.net/en/tiff/jury.html",
+    "features": "偏侧分的肩长蓬松发，前额有少量散落发丝；长椭圆脸，鼻梁直而较长、鼻翼窄；眼形细长，唇峰清晰、下唇较丰，下巴窄圆",
+    "credit": "courtesy Peter Lindbergh, Paris"
+  }
+]

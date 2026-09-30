@@ -71,6 +71,8 @@ def project_files(identifier):
         folders = ['public/local-apps/chaoshan-atlas/adventure']
     elif identifier == 'rooster-rush':
         folders = ['public/games/rooster-rush']
+    elif identifier == 'zju-overworld':
+        folders = ['examples/zju-overworld']
     else:
         folders = ['examples/xiamen-3d-map']
     result = []
@@ -147,6 +149,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     if args.chaoshan: import_map(args.chaoshan, 'chaoshan-3d-map')
     if args.xiamen: import_map(args.xiamen, 'xiamen-3d-map')
-    result = [bundle(identifier) for identifier in ['chaoshan-map', 'chaoshan-adventure', 'rooster-rush', 'xiamen-map']]
+    result = [bundle(identifier) for identifier in ['chaoshan-map', 'chaoshan-adventure', 'rooster-rush', 'xiamen-map', 'zju-overworld']]
     (ROOT / 'public/source-library/manifest.json').write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding='utf-8')
     print(json.dumps(result))

@@ -30,6 +30,7 @@ npm run dev
 
 - 潮汕行旅：`http://localhost:8080/public/local-apps/chaoshan-atlas/adventure/`
 - 公鸡快跑：`http://localhost:8080/public/games/rooster-rush/`
+- 浙大校园漫游：`http://localhost:8080/examples/zju-overworld/`
 
 游戏使用浏览器存储保存进度。可选动物精灵依赖外部提供方；公开包使用通用动物预览占位图。受限角色模型不随仓库分发。
 
@@ -54,4 +55,3 @@ npm run dev
 运行 `python scripts/prepare-source-library.py`，生成 `public/source-library/*.txt` 和被忽略的 `work/source-packages/*.zip`。将 ZIP 上传到对应 GitHub Release，更新 `app/source-actions.tsx` 的 Release 版本路径。
 
 `python scripts/export-github.py <新的空目录>` 生成移除原站绑定、个人示例值及受限素材的公开快照；不覆盖已有项目。
-

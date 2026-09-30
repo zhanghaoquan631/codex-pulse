@@ -1,0 +1,111 @@
+[
+  {
+    "id": "x-cambridge-phonemic",
+    "url": "https://x.com/CambridgeEng/status/1489619265418190854?lang=en",
+    "title": "剑桥英语：用音标图观察元音与辅音",
+    "author": "Teaching English with Cambridge (@CambridgeEng)",
+    "publishedAt": "2022-02-04",
+    "summary": "正文说明音标图用符号表示英语的元音和辅音，并询问教师是否及如何在课堂使用。已读到这段说明，未读取配图中的具体符号或例词。",
+    "classroomUse": "教师用原创 ship / sheep、sit / seat 例子示范声音对比，让学生先辨听，再看音标，并把易混音放回完整句子。",
+    "verification": "搜索索引正文已核实；作者显示名、账号和发布日期可见。直接打开帖子返回空正文。图片未查看，不能称已核实整张音标图。",
+    "verificationDetails": {
+      "method": "search_index_body",
+      "directAccess": "empty_body",
+      "mediaViewed": false,
+      "externalLinksFollowed": false,
+      "coverage": "文字说明完整可见；配图未核实",
+      "identityBasis": "X 显示名和 @CambridgeEng 账号；未作站外身份核验"
+    }
+  },
+  {
+    "id": "x-bc-football",
+    "url": "https://x.com/LearnEnglish_BC/status/1146824505190494209",
+    "title": "LearnEnglish：soccer 与 football 的地区用词",
+    "author": "LearnEnglish (@LearnEnglish_BC)",
+    "publishedAt": "2019-07-04",
+    "summary": "正文把足球的美式用词 soccer 与英式用词 football 对照，并询问读者是否喜欢或参与这项运动。帖子注明配图来自 American English at State，但未查看配图或该账号的其他内容。",
+    "classroomUse": "以足球为话题，练习回答、理由、具体经历三步口头表达，再用频率和同伴信息扩展答案。仅使用正文中已出现的一组地区词汇。",
+    "verification": "搜索索引正文已核实；作者显示名、账号和发布日期可见。直接打开帖子返回空正文。仅核实 soccer / football 这组词，不推断配图还有哪些词。",
+    "verificationDetails": {
+      "method": "search_index_body",
+      "directAccess": "empty_body",
+      "mediaViewed": false,
+      "externalLinksFollowed": false,
+      "coverage": "文字及一组词汇可见；其余配图词汇未核实",
+      "identityBasis": "X 的 LearnEnglish / @LearnEnglish_BC 标识；未作站外身份核验"
+    }
+  },
+  {
+    "id": "x-ielts-collocations",
+    "url": "https://x.com/JKEnglish_ielts/status/1742431330204582069",
+    "title": "Mr. IELTS：因果表达中的动词搭配",
+    "author": "英語とIELTSの人 Mr. IELTS（小谷延良）(@JKEnglish_ielts)",
+    "publishedAt": "2024-01-03",
+    "summary": "日文长帖讨论常见用词问题。已读到 lead to、contribute to 后接名词的纠错示例，以及 encourage 后接人和不定式的对照。课堂仅采用这部分明确的基础搭配，不沿用全文其他绝对化判断或提分说法。",
+    "classroomUse": "练习把校园措施和可能结果连接起来，区分 lead to + 名词或动名词 与 encourage somebody to do，并为概括性观点添加具体解释。",
+    "verification": "搜索索引中可读到长帖相关段落及日期；帖子直连返回 403。作者在正文自述英语教学经历及 IELTS 教材著作，身份未站外核验。全文存在过度概括，本课只选取注明的搭配，不把整帖视作权威规则。",
+    "verificationDetails": {
+      "method": "search_index_body",
+      "directAccess": "403",
+      "mediaViewed": false,
+      "externalLinksFollowed": false,
+      "coverage": "相关语法段落和改错例句已读；未采用其余词义、程度词和考试分数断言",
+      "identityBasis": "X 账号、自述教学经历和著作；非 IELTS 官方账号"
+    }
+  },
+  {
+    "id": "x-gorrie-reading",
+    "url": "https://x.com/colingorrie/status/2024144046965334246",
+    "title": "Colin Gorrie：观察英语拼写变化与作者论点",
+    "author": "Colin Gorrie (@colingorrie)",
+    "publishedAt": "2026-02-18",
+    "summary": "正文先提出书面英语变化较小的观点，再逐步改用较早形式的拼写和语法进行演示，并提及历史用语 thou 的语境差别。可以实际观察文字变化；文中的历史概括未作独立核实。",
+    "classroomUse": "让学生区分作者主张与帖内演示，概括文章组织方式。历史拼写仅供阅读观察，不要求模仿到现代英语或 IELTS 作答中。",
+    "verification": "搜索索引全文可见；作者显示名、账号和发布日期可见。直连返回空正文。仅核实作者确实提出该观点和进行了文字演示，不把其历史判断当作已证实事实。",
+    "verificationDetails": {
+      "method": "search_index_body",
+      "directAccess": "empty_body",
+      "mediaViewed": false,
+      "externalLinksFollowed": false,
+      "coverage": "整段文字演示可见；历史事实未独立验证",
+      "identityBasis": "X 作者显示名和账号；本次未独立核验专业资历"
+    }
+  },
+  {
+    "id": "x-bbc-home-learning",
+    "url": "https://x.com/bbcbitesize/status/1316291946915213313",
+    "title": "BBC Bitesize：从真实问句读出时间和受众",
+    "author": "BBC Bitesize (@bbcbitesize)",
+    "publishedAt": "2020-10-14",
+    "summary": "正文先询问读者本周是否在家学习或教学，然后介绍为英国七至九年级整理的两周学习包。可用正文研究问句、时间范围和受众；未打开或读取学习包。",
+    "classroomUse": "圈出正文的提问、时间提示及年级信息；比较正在进行的阶段性活动和日常习惯，并判断哪些内容仅凭帖子无法得知。",
+    "verification": "搜索索引完整帖子文字已核实；直连返回 403。它在本资源包中是英语阅读材料，不是已核实内容的课程包；回复串、图片和外链均未读取。",
+    "verificationDetails": {
+      "method": "search_index_body",
+      "directAccess": "403",
+      "mediaViewed": false,
+      "externalLinksFollowed": false,
+      "coverage": "公开公告文字；学习包内容未核实",
+      "identityBasis": "X 的 BBC Bitesize 显示名和账号；未作站外身份核验"
+    }
+  },
+  {
+    "id": "x-everwin-prepositions",
+    "url": "https://x.com/EverwinAlert/status/1949100798782161032",
+    "title": "Everwin：good at 与 good in 的搭配主题导入",
+    "author": "EverwinAlert (@EverwinAlert)",
+    "publishedAt": "2025-07-26",
+    "summary": "文字说明第 148 期英语教学视频将比较 good at 和 good in，并称讲者为学校创办人兼资深校长。正文能确认教学主题，不能确认未观看视频中的具体解释。",
+    "classroomUse": "仅作搭配观察的主题导入。原创练习采用 good at + 活动或动名词描述技能，不复述视频结论，也不把 good in 一概判为错误。",
+    "verification": "搜索索引帖子正文已核实；直连返回空正文。视频未观看，讲者资历仅为帖子自述。原帖把相关表达称为 phrasal verbs，本课不沿用该分类，按形容词与介词搭配讲解。",
+    "verificationDetails": {
+      "method": "search_index_body",
+      "directAccess": "empty_body",
+      "mediaViewed": false,
+      "externalLinksFollowed": false,
+      "coverage": "主题和节目介绍可见；具体教学内容未核实",
+      "identityBasis": "X 帖文中的学校教学背景自述；未作站外身份核验",
+      "useRestriction": "仅主题导入，不可显示为已看过的视频课程"
+    }
+  }
+]

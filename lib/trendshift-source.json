@@ -1,0 +1,2535 @@
+{
+  "capturedAt": "2026-09-30T06:23:07.904Z",
+  "source": "Trendshift public ranking HTML, JSON-only parsing of server-rendered data",
+  "periods": {
+    "monthly": {
+      "sourceUrl": "https://trendshift.io/monthly",
+      "capturedAt": "2026-09-30T06:23:09.540Z",
+      "items": [
+        {
+          "repository_id": 28176,
+          "full_name": "debpalash/VoiceStudio",
+          "rank": 1,
+          "repository_description": "VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.",
+          "repository_language": "Python",
+          "repository_stars": 48812,
+          "repository_forks": 5530,
+          "repository_stars_gained": 36124,
+          "repository_forks_gained": 3514,
+          "repository_created_at": "2026-04-09T21:40:26Z",
+          "tags": [
+            {
+              "id": 4,
+              "name": "ai-voice",
+              "display_name": "AI voice",
+              "slug": "ai-voice"
+            },
+            {
+              "id": 19,
+              "name": "text-to-speech",
+              "display_name": "Text to speech",
+              "slug": "text-to-speech"
+            },
+            {
+              "id": 22,
+              "name": "audio-processing",
+              "display_name": "Audio processing",
+              "slug": "audio-processing"
+            },
+            {
+              "id": 43,
+              "name": "self-hosted",
+              "display_name": "Self-hosted",
+              "slug": "self-hosted"
+            }
+          ],
+          "year": 2026,
+          "month": 9
+        },
+        {
+          "repository_id": 62154,
+          "full_name": "bilawalsidhu/gods-eye-view",
+          "rank": 2,
+          "repository_description": "God's Eye View v1 public open-source release placeholder",
+          "repository_language": "",
+          "repository_stars": 45181,
+          "repository_forks": 9240,
+          "repository_stars_gained": 30618,
+          "repository_forks_gained": 6415,
+          "repository_created_at": "2026-06-22T23:37:22Z",
+          "tags": [],
+          "year": 2026,
+          "month": 9
+        },
+        {
+          "repository_id": 21488,
+          "full_name": "affaan-m/ECC",
+          "rank": 3,
+          "repository_description": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond.",
+          "repository_language": "JavaScript",
+          "repository_stars": 269724,
+          "repository_forks": 41920,
+          "repository_stars_gained": 24528,
+          "repository_forks_gained": 3597,
+          "repository_created_at": "2026-01-18T00:51:51Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 8,
+              "name": "ai-coding",
+              "display_name": "AI coding assistant",
+              "slug": "ai-coding"
+            },
+            {
+              "id": 11,
+              "name": "ai-skills",
+              "display_name": "AI skills",
+              "slug": "ai-skills"
+            }
+          ],
+          "year": 2026,
+          "month": 9
+        },
+        {
+          "repository_id": 15603,
+          "full_name": "vectorize-io/hindsight",
+          "rank": 4,
+          "repository_description": "Hindsight: Agent Memory That Learns",
+          "repository_language": "Python",
+          "repository_stars": 43098,
+          "repository_forks": 5959,
+          "repository_stars_gained": 21140,
+          "repository_forks_gained": 4165,
+          "repository_created_at": "2025-10-30T11:49:48Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 10,
+              "name": "ai-memory",
+              "display_name": "AI memory",
+              "slug": "ai-memory"
+            }
+          ],
+          "year": 2026,
+          "month": 9
+        },
+        {
+          "repository_id": 30905,
+          "full_name": "ayghri/i-have-adhd",
+          "rank": 5,
+          "repository_description": "A skill to stop your coding agent from burying the answer. ADHD-friendly output.",
+          "repository_language": "Python",
+          "repository_stars": 52215,
+          "repository_forks": 3116,
+          "repository_stars_gained": 26168,
+          "repository_forks_gained": 1432,
+          "repository_created_at": "2026-05-13T20:42:06Z",
+          "tags": [
+            {
+              "id": 11,
+              "name": "ai-skills",
+              "display_name": "AI skills",
+              "slug": "ai-skills"
+            }
+          ],
+          "year": 2026,
+          "month": 9
+        },
+        {
+          "repository_id": 41087,
+          "full_name": "alibaba/open-code-review",
+          "rank": 6,
+          "repository_description": "Secure, fast, efficient, battle-tested at Alibaba's scale. Hybrid architecture code review tool: deterministic pipelines + LLM Agent, precise line-level comments, built-in multi-language ruleset (NPE, thread-safety, XSS, SQL injection), OpenAI & Anthropic compatible.",
+          "repository_language": "Go",
+          "repository_stars": 42663,
+          "repository_forks": 3180,
+          "repository_stars_gained": 20949,
+          "repository_forks_gained": 1500,
+          "repository_created_at": "2026-05-18T02:16:36Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 8,
+              "name": "ai-coding",
+              "display_name": "AI coding assistant",
+              "slug": "ai-coding"
+            }
+          ],
+          "year": 2026,
+          "month": 9
+        },
+        {
+          "repository_id": 222292,
+          "full_name": "eternity4719/HowToLiveBetter",
+          "rank": 7,
+          "repository_description": "354 条循证建议，覆盖长寿防病、急救、省钱理财、法律红线、失业与工伤、医保社保、恋爱婚育、出国与技能。每条写明成本、收益、证据等级和原始出处，只引期刊论文与官方文件。",
+          "repository_language": "HTML",
+          "repository_stars": 29621,
+          "repository_forks": 2031,
+          "repository_stars_gained": 29508,
+          "repository_forks_gained": 2031,
+          "repository_created_at": "2026-09-07T01:53:36Z",
+          "tags": [
+            {
+              "id": 57,
+              "name": "curated-list",
+              "display_name": "Curated list",
+              "slug": "curated-list"
+            }
+          ],
+          "year": 2026,
+          "month": 9
+        },
+        {
+          "repository_id": 64056,
+          "full_name": "cloudflare/security-audit-skill",
+          "rank": 8,
+          "repository_description": "A coding-agent skill for multi-phase security audits with independently verified, machine-readable findings",
+          "repository_language": "JavaScript",
+          "repository_stars": 23237,
+          "repository_forks": 1349,
+          "repository_stars_gained": 20069,
+          "repository_forks_gained": 1133,
+          "repository_created_at": "2026-06-18T14:08:44Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 11,
+              "name": "ai-skills",
+              "display_name": "AI skills",
+              "slug": "ai-skills"
+            },
+            {
+              "id": 40,
+              "name": "pentesting",
+              "display_name": "Pentesting",
+              "slug": "pentesting"
+            }
+          ],
+          "year": 2026,
+          "month": 9
+        },
+        {
+          "repository_id": 31352,
+          "full_name": "tt-a1i/archify",
+          "rank": 9,
+          "repository_description": "Agent skill for beautiful, verifiable architecture, workflow, sequence, data-flow, and lifecycle diagrams—self-contained HTML with motion and crisp export.",
+          "repository_language": "JavaScript",
+          "repository_stars": 74418,
+          "repository_forks": 5251,
+          "repository_stars_gained": 35907,
+          "repository_forks_gained": 2615,
+          "repository_created_at": "2026-04-15T05:27:37Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 11,
+              "name": "ai-skills",
+              "display_name": "AI skills",
+              "slug": "ai-skills"
+            }
+          ],
+          "year": 2026,
+          "month": 9
+        },
+        {
+          "repository_id": 244591,
+          "full_name": "NandhaKishorM/laya",
+          "rank": 10,
+          "repository_description": "",
+          "repository_language": "Python",
+          "repository_stars": 28750,
+          "repository_forks": 2492,
+          "repository_stars_gained": 28753,
+          "repository_forks_gained": 2492,
+          "repository_created_at": "2026-09-18T04:46:33Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            }
+          ],
+          "year": 2026,
+          "month": 9
+        },
+        {
+          "repository_id": 50668,
+          "full_name": "DietrichGebert/ponytail",
+          "rank": 11,
+          "repository_description": "Makes your AI agent think like the laziest senior dev in the room. The best code is the code you never wrote.",
+          "repository_language": "JavaScript",
+          "repository_stars": 148351,
+          "repository_forks": 8316,
+          "repository_stars_gained": 30138,
+          "repository_forks_gained": 1647,
+          "repository_created_at": "2026-06-12T00:52:37Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 8,
+              "name": "ai-coding",
+              "display_name": "AI coding assistant",
+              "slug": "ai-coding"
+            }
+          ],
+          "year": 2026,
+          "month": 9
+        },
+        {
+          "repository_id": 229030,
+          "full_name": "hypit-ai/hypit",
+          "rank": 12,
+          "repository_description": "Clone any viral video with AI agents. Not just a script, the whole workflow: swap the face, the words, the B-roll, ship 100 variants in one command, and get your 100M views.",
+          "repository_language": "TypeScript",
+          "repository_stars": 17681,
+          "repository_forks": 2095,
+          "repository_stars_gained": 17713,
+          "repository_forks_gained": 2095,
+          "repository_created_at": "2026-07-29T18:49:19Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 6,
+              "name": "ai-video",
+              "display_name": "AI video generation",
+              "slug": "ai-video"
+            },
+            {
+              "id": 21,
+              "name": "video-editing",
+              "display_name": "Video editing",
+              "slug": "video-editing"
+            }
+          ],
+          "year": 2026,
+          "month": 9
+        },
+        {
+          "repository_id": 22502,
+          "full_name": "paperclipai/paperclip",
+          "rank": 13,
+          "repository_description": "The open-source app everyone uses to manage agents at work",
+          "repository_language": "TypeScript",
+          "repository_stars": 94684,
+          "repository_forks": 17104,
+          "repository_stars_gained": 14958,
+          "repository_forks_gained": 1645,
+          "repository_created_at": "2026-03-02T15:01:51Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 23,
+              "name": "workflow-automation",
+              "display_name": "Workflow automation",
+              "slug": "workflow-automation"
+            }
+          ],
+          "year": 2026,
+          "month": 9
+        },
+        {
+          "repository_id": 242003,
+          "full_name": "browser-use/jev-ultrafast",
+          "rank": 14,
+          "repository_description": "",
+          "repository_language": "Python",
+          "repository_stars": 21440,
+          "repository_forks": 1499,
+          "repository_stars_gained": 21279,
+          "repository_forks_gained": 1499,
+          "repository_created_at": "2026-09-16T21:30:12Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 24,
+              "name": "headless-browser",
+              "display_name": "Headless browser",
+              "slug": "headless-browser"
+            }
+          ],
+          "year": 2026,
+          "month": 9
+        },
+        {
+          "repository_id": 21589,
+          "full_name": "mattpocock/skills",
+          "rank": 15,
+          "repository_description": "Skills for Real Engineers. Straight from my .agents directory.",
+          "repository_language": "Shell",
+          "repository_stars": 272247,
+          "repository_forks": 23948,
+          "repository_stars_gained": 29418,
+          "repository_forks_gained": 2549,
+          "repository_created_at": "2026-02-03T11:15:53Z",
+          "tags": [
+            {
+              "id": 11,
+              "name": "ai-skills",
+              "display_name": "AI skills",
+              "slug": "ai-skills"
+            }
+          ],
+          "year": 2026,
+          "month": 9
+        },
+        {
+          "repository_id": 154069,
+          "full_name": "hydra-db/hydradb",
+          "rank": 16,
+          "repository_description": "HydraDB - fast graph database on object storage",
+          "repository_language": "Rust",
+          "repository_stars": 12880,
+          "repository_forks": 5569,
+          "repository_stars_gained": 10993,
+          "repository_forks_gained": 4906,
+          "repository_created_at": "2026-07-03T05:34:15Z",
+          "tags": [],
+          "year": 2026,
+          "month": 9
+        },
+        {
+          "repository_id": 26256,
+          "full_name": "stablyai/orca",
+          "rank": 17,
+          "repository_description": "Orca is the ADE for working with a fleet of parallel agents. Run any coding agent with your own subscription. Available on desktop, mobile and remote runtime.",
+          "repository_language": "TypeScript",
+          "repository_stars": 81775,
+          "repository_forks": 5846,
+          "repository_stars_gained": 23441,
+          "repository_forks_gained": 1510,
+          "repository_created_at": "2026-03-17T03:28:57Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 8,
+              "name": "ai-coding",
+              "display_name": "AI coding assistant",
+              "slug": "ai-coding"
+            }
+          ],
+          "year": 2026,
+          "month": 9
+        },
+        {
+          "repository_id": 56942,
+          "full_name": "latent-spaces/brag",
+          "rank": 18,
+          "repository_description": "You built it. Now brag. Turn the project you just created into a short, shareable launch video with one command.",
+          "repository_language": "Python",
+          "repository_stars": 12117,
+          "repository_forks": 785,
+          "repository_stars_gained": 10991,
+          "repository_forks_gained": 738,
+          "repository_created_at": "2026-06-16T19:36:36Z",
+          "tags": [
+            {
+              "id": 6,
+              "name": "ai-video",
+              "display_name": "AI video generation",
+              "slug": "ai-video"
+            }
+          ],
+          "year": 2026,
+          "month": 9
+        },
+        {
+          "repository_id": 177876,
+          "full_name": "google/artemis",
+          "rank": 19,
+          "repository_description": "ARTEMIS turns natural-language instructions into reliable Android automation. It automates end-to-end workflows, captures logs for debugging and analysis, and integrates seamlessly with AI coding assistants such as Antigravity, Codex, and Claude Code. On the AndroidWorld benchmark, ARTEMIS achieves a success rate of over 99%.",
+          "repository_language": "Python",
+          "repository_stars": 10673,
+          "repository_forks": 1075,
+          "repository_stars_gained": 10540,
+          "repository_forks_gained": 1058,
+          "repository_created_at": "2026-08-13T17:59:37Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 7,
+              "name": "ai-workflow",
+              "display_name": "AI workflow",
+              "slug": "ai-workflow"
+            },
+            {
+              "id": 23,
+              "name": "workflow-automation",
+              "display_name": "Workflow automation",
+              "slug": "workflow-automation"
+            }
+          ],
+          "year": 2026,
+          "month": 9
+        },
+        {
+          "repository_id": 15289,
+          "full_name": "Tencent/WeKnora",
+          "rank": 20,
+          "repository_description": "Open-source LLM knowledge platform: turn raw documents into a queryable RAG, an autonomous reasoning agent, and a self-maintaining Wiki.",
+          "repository_language": "Go",
+          "repository_stars": 31313,
+          "repository_forks": 4357,
+          "repository_stars_gained": 10271,
+          "repository_forks_gained": 1211,
+          "repository_created_at": "2025-07-22T08:01:23Z",
+          "tags": [
+            {
+              "id": 14,
+              "name": "rag",
+              "display_name": "RAG",
+              "slug": "rag"
+            },
+            {
+              "id": 34,
+              "name": "document-processing",
+              "display_name": "Document processing",
+              "slug": "document-processing"
+            }
+          ],
+          "year": 2026,
+          "month": 9
+        },
+        {
+          "repository_id": 37651,
+          "full_name": "rocketride-org/rocketride-server",
+          "rank": 21,
+          "repository_description": "High-performance AI pipeline engine with a C++ core and 50+ Python-extensible nodes. Build, debug, and scale LLM workflows with 13+ model providers, 8+ vector databases, and agent orchestration, all from your IDE. Includes VS Code extension, TypeScript/Python SDKs, and Docker deployment.",
+          "repository_language": "Python",
+          "repository_stars": 17793,
+          "repository_forks": 8226,
+          "repository_stars_gained": 10226,
+          "repository_forks_gained": 5126,
+          "repository_created_at": "2026-02-11T17:02:53Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 7,
+              "name": "ai-workflow",
+              "display_name": "AI workflow",
+              "slug": "ai-workflow"
+            },
+            {
+              "id": 23,
+              "name": "workflow-automation",
+              "display_name": "Workflow automation",
+              "slug": "workflow-automation"
+            }
+          ],
+          "year": 2026,
+          "month": 9
+        },
+        {
+          "repository_id": 146135,
+          "full_name": "deepseek-ai/deepseek-harness",
+          "rank": 22,
+          "repository_description": "",
+          "repository_language": "TypeScript",
+          "repository_stars": 240388,
+          "repository_forks": 30016,
+          "repository_stars_gained": 33994,
+          "repository_forks_gained": 5536,
+          "repository_created_at": "2026-08-13T11:56:32Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            }
+          ],
+          "year": 2026,
+          "month": 9
+        },
+        {
+          "repository_id": 34611,
+          "full_name": "google/ax",
+          "rank": 23,
+          "repository_description": "Google's open agentic orchestration runtime",
+          "repository_language": "Go",
+          "repository_stars": 12594,
+          "repository_forks": 623,
+          "repository_stars_gained": 10627,
+          "repository_forks_gained": 502,
+          "repository_created_at": "2026-03-30T17:55:01Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 7,
+              "name": "ai-workflow",
+              "display_name": "AI workflow",
+              "slug": "ai-workflow"
+            }
+          ],
+          "year": 2026,
+          "month": 9
+        },
+        {
+          "repository_id": 21585,
+          "full_name": "blader/humanizer",
+          "rank": 24,
+          "repository_description": "Agent skill that removes signs of AI-generated writing from text",
+          "repository_language": "Python",
+          "repository_stars": 52936,
+          "repository_forks": 4388,
+          "repository_stars_gained": 13679,
+          "repository_forks_gained": 844,
+          "repository_created_at": "2026-01-18T05:30:15Z",
+          "tags": [
+            {
+              "id": 2,
+              "name": "nlp",
+              "display_name": "NLP",
+              "slug": "nlp"
+            },
+            {
+              "id": 11,
+              "name": "ai-skills",
+              "display_name": "AI skills",
+              "slug": "ai-skills"
+            }
+          ],
+          "year": 2026,
+          "month": 9
+        },
+        {
+          "repository_id": 73945,
+          "full_name": "JustVugg/colibri",
+          "rank": 25,
+          "repository_description": "Run GLM-5.2 (744B MoE) on a 25GB-RAM consumer machine — pure C, zero deps, experts streamed from disk. Tiny engine, immense model. 🐦",
+          "repository_language": "C",
+          "repository_stars": 38516,
+          "repository_forks": 4273,
+          "repository_stars_gained": 11984,
+          "repository_forks_gained": 1341,
+          "repository_created_at": "2026-07-01T12:27:49Z",
+          "tags": [
+            {
+              "id": 13,
+              "name": "local-llm",
+              "display_name": "Local LLM",
+              "slug": "local-llm"
+            }
+          ],
+          "year": 2026,
+          "month": 9
+        }
+      ]
+    },
+    "weekly": {
+      "sourceUrl": "https://trendshift.io/weekly",
+      "capturedAt": "2026-09-30T06:23:09.736Z",
+      "items": [
+        {
+          "repository_id": 28176,
+          "full_name": "debpalash/VoiceStudio",
+          "rank": 1,
+          "repository_description": "VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.",
+          "repository_language": "Python",
+          "repository_stars": 48538,
+          "repository_forks": 5231,
+          "repository_stars_gained": 8707,
+          "repository_forks_gained": 682,
+          "repository_created_at": "2026-04-09T21:40:26Z",
+          "tags": [
+            {
+              "id": 4,
+              "name": "ai-voice",
+              "display_name": "AI voice",
+              "slug": "ai-voice"
+            },
+            {
+              "id": 19,
+              "name": "text-to-speech",
+              "display_name": "Text to speech",
+              "slug": "text-to-speech"
+            },
+            {
+              "id": 22,
+              "name": "audio-processing",
+              "display_name": "Audio processing",
+              "slug": "audio-processing"
+            },
+            {
+              "id": 43,
+              "name": "self-hosted",
+              "display_name": "Self-hosted",
+              "slug": "self-hosted"
+            }
+          ],
+          "year": 2026,
+          "week": 40,
+          "week_start": "2026-09-28T00:00:00Z"
+        },
+        {
+          "repository_id": 222292,
+          "full_name": "eternity4719/HowToLiveBetter",
+          "rank": 2,
+          "repository_description": "354 条循证建议，覆盖长寿防病、急救、省钱理财、法律红线、失业与工伤、医保社保、恋爱婚育、出国与技能。每条写明成本、收益、证据等级和原始出处，只引期刊论文与官方文件。",
+          "repository_language": "HTML",
+          "repository_stars": 29299,
+          "repository_forks": 2031,
+          "repository_stars_gained": 9020,
+          "repository_forks_gained": 547,
+          "repository_created_at": "2026-09-07T01:53:36Z",
+          "tags": [
+            {
+              "id": 57,
+              "name": "curated-list",
+              "display_name": "Curated list",
+              "slug": "curated-list"
+            }
+          ],
+          "year": 2026,
+          "week": 40,
+          "week_start": "2026-09-28T00:00:00Z"
+        },
+        {
+          "repository_id": 268236,
+          "full_name": "KKKKhazix/AIHOT",
+          "rank": 3,
+          "repository_description": "一个自己找热点、自己写日报的网站框架。把信源和精选标准换成你的，它就是你的行业热点站。",
+          "repository_language": "TypeScript",
+          "repository_stars": 3486,
+          "repository_forks": 804,
+          "repository_stars_gained": 3173,
+          "repository_forks_gained": 804,
+          "repository_created_at": "2026-09-28T23:40:05Z",
+          "tags": [],
+          "year": 2026,
+          "week": 40,
+          "week_start": "2026-09-28T00:00:00Z"
+        },
+        {
+          "repository_id": 15603,
+          "full_name": "vectorize-io/hindsight",
+          "rank": 4,
+          "repository_description": "Hindsight: Agent Memory That Learns",
+          "repository_language": "Python",
+          "repository_stars": 43098,
+          "repository_forks": 5959,
+          "repository_stars_gained": 5914,
+          "repository_forks_gained": 985,
+          "repository_created_at": "2025-10-30T11:49:48Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 10,
+              "name": "ai-memory",
+              "display_name": "AI memory",
+              "slug": "ai-memory"
+            }
+          ],
+          "year": 2026,
+          "week": 40,
+          "week_start": "2026-09-28T00:00:00Z"
+        },
+        {
+          "repository_id": 23555,
+          "full_name": "NVIDIA/OpenShell",
+          "rank": 5,
+          "repository_description": "OpenShell is the safe, private runtime for autonomous AI agents.",
+          "repository_language": "Rust",
+          "repository_stars": 10817,
+          "repository_forks": 1617,
+          "repository_stars_gained": 2034,
+          "repository_forks_gained": 154,
+          "repository_created_at": "2026-02-24T22:52:22Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            }
+          ],
+          "year": 2026,
+          "week": 40,
+          "week_start": "2026-09-28T00:00:00Z"
+        },
+        {
+          "repository_id": 22502,
+          "full_name": "paperclipai/paperclip",
+          "rank": 6,
+          "repository_description": "The open-source app everyone uses to manage agents at work",
+          "repository_language": "TypeScript",
+          "repository_stars": 94684,
+          "repository_forks": 17104,
+          "repository_stars_gained": 4954,
+          "repository_forks_gained": 425,
+          "repository_created_at": "2026-03-02T15:01:51Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 23,
+              "name": "workflow-automation",
+              "display_name": "Workflow automation",
+              "slug": "workflow-automation"
+            }
+          ],
+          "year": 2026,
+          "week": 40,
+          "week_start": "2026-09-28T00:00:00Z"
+        },
+        {
+          "repository_id": 14736,
+          "full_name": "VectifyAI/PageIndex",
+          "rank": 7,
+          "repository_description": "📑 PageIndex: Document Index for Vectorless, Reasoning-based RAG",
+          "repository_language": "Python",
+          "repository_stars": 37561,
+          "repository_forks": 3391,
+          "repository_stars_gained": 1699,
+          "repository_forks_gained": 108,
+          "repository_created_at": "2025-04-01T10:53:54Z",
+          "tags": [
+            {
+              "id": 14,
+              "name": "rag",
+              "display_name": "RAG",
+              "slug": "rag"
+            },
+            {
+              "id": 34,
+              "name": "document-processing",
+              "display_name": "Document processing",
+              "slug": "document-processing"
+            }
+          ],
+          "year": 2026,
+          "week": 40,
+          "week_start": "2026-09-28T00:00:00Z"
+        },
+        {
+          "repository_id": 249699,
+          "full_name": "cdyforever/how-to-live-better",
+          "rank": 8,
+          "repository_description": "《高性价比人生指南》全书 528 条的在线单页阅读版：手机可读、可搜索、零依赖、支持离线",
+          "repository_language": "HTML",
+          "repository_stars": 5099,
+          "repository_forks": 316,
+          "repository_stars_gained": 2864,
+          "repository_forks_gained": 181,
+          "repository_created_at": "2026-09-18T14:35:08Z",
+          "tags": [],
+          "year": 2026,
+          "week": 40,
+          "week_start": "2026-09-28T00:00:00Z"
+        },
+        {
+          "repository_id": 259708,
+          "full_name": "Niko1221/Strata",
+          "rank": 9,
+          "repository_description": "Qwen3.8-Flash-Next (125B MoE) on a 12-24 GB NVIDIA GPU + 64 GB RAM: one-click install for Windows / Linux. Strata inference engine, OpenAI/Anthropic API on localhost, optional image input.",
+          "repository_language": "C++",
+          "repository_stars": 1885,
+          "repository_forks": 176,
+          "repository_stars_gained": 1481,
+          "repository_forks_gained": 124,
+          "repository_created_at": "2026-09-24T16:40:20Z",
+          "tags": [
+            {
+              "id": 13,
+              "name": "local-llm",
+              "display_name": "Local LLM",
+              "slug": "local-llm"
+            },
+            {
+              "id": 41,
+              "name": "chatbot",
+              "display_name": "Chatbot",
+              "slug": "chatbot"
+            }
+          ],
+          "year": 2026,
+          "week": 40,
+          "week_start": "2026-09-28T00:00:00Z"
+        },
+        {
+          "repository_id": 7097,
+          "full_name": "byoungd/up",
+          "rank": 10,
+          "repository_description": "An advanced guide which might benefit you a lot 🎉 . 韩先凯的人生进阶指南 人生进阶指南 离谱的人生 人生进阶 AI学习 AI指南 韩先凯的AI学习指南 英语学习指南/英语学习教程/英语学习/学英语",
+          "repository_language": "JavaScript",
+          "repository_stars": 65869,
+          "repository_forks": 6563,
+          "repository_stars_gained": 1770,
+          "repository_forks_gained": 116,
+          "repository_created_at": "2017-05-30T07:18:52Z",
+          "tags": [
+            {
+              "id": 57,
+              "name": "curated-list",
+              "display_name": "Curated list",
+              "slug": "curated-list"
+            }
+          ],
+          "year": 2026,
+          "week": 40,
+          "week_start": "2026-09-28T00:00:00Z"
+        },
+        {
+          "repository_id": 257963,
+          "full_name": "yetone/magpie",
+          "rank": 11,
+          "repository_description": "Every agent's model. One place. Codex on DeepSeek, Claude Code on Kimi, from the menu bar.",
+          "repository_language": "Go",
+          "repository_stars": 3044,
+          "repository_forks": 134,
+          "repository_stars_gained": 1853,
+          "repository_forks_gained": 64,
+          "repository_created_at": "2026-09-23T16:22:35Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 8,
+              "name": "ai-coding",
+              "display_name": "AI coding assistant",
+              "slug": "ai-coding"
+            }
+          ],
+          "year": 2026,
+          "week": 40,
+          "week_start": "2026-09-28T00:00:00Z"
+        },
+        {
+          "repository_id": 118354,
+          "full_name": "spinabot/brigade",
+          "rank": 12,
+          "repository_description": "Brigade — Your personal intelligence, built enterprise-grade",
+          "repository_language": "TypeScript",
+          "repository_stars": 9572,
+          "repository_forks": 57,
+          "repository_stars_gained": 2541,
+          "repository_forks_gained": 2,
+          "repository_created_at": "2026-06-19T15:18:17Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 7,
+              "name": "ai-workflow",
+              "display_name": "AI workflow",
+              "slug": "ai-workflow"
+            },
+            {
+              "id": 43,
+              "name": "self-hosted",
+              "display_name": "Self-hosted",
+              "slug": "self-hosted"
+            }
+          ],
+          "year": 2026,
+          "week": 40,
+          "week_start": "2026-09-28T00:00:00Z"
+        },
+        {
+          "repository_id": 141565,
+          "full_name": "mvschwarz/openrig",
+          "rank": 13,
+          "repository_description": "Multi-agent harness that runs Claude Code and  Codex together as one system",
+          "repository_language": "TypeScript",
+          "repository_stars": 2520,
+          "repository_forks": 152,
+          "repository_stars_gained": 1619,
+          "repository_forks_gained": 51,
+          "repository_created_at": "2026-04-01T06:22:40Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 8,
+              "name": "ai-coding",
+              "display_name": "AI coding assistant",
+              "slug": "ai-coding"
+            }
+          ],
+          "year": 2026,
+          "week": 40,
+          "week_start": "2026-09-28T00:00:00Z"
+        },
+        {
+          "repository_id": 146135,
+          "full_name": "deepseek-ai/deepseek-harness",
+          "rank": 14,
+          "repository_description": "",
+          "repository_language": "TypeScript",
+          "repository_stars": 240388,
+          "repository_forks": 30016,
+          "repository_stars_gained": 2763,
+          "repository_forks_gained": 246,
+          "repository_created_at": "2026-08-13T11:56:32Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            }
+          ],
+          "year": 2026,
+          "week": 40,
+          "week_start": "2026-09-28T00:00:00Z"
+        },
+        {
+          "repository_id": 29638,
+          "full_name": "ifixai-ai/iFixAi",
+          "rank": 15,
+          "repository_description": "Independent Auditing of AI Agents. Run by human or the agent itself, to answer the most crucial question in the AI Agent Economy. Is the agent doing what is supposed to do? With iFixAi you can have this answer in less than 120 seconds.",
+          "repository_language": "Python",
+          "repository_stars": 16699,
+          "repository_forks": 1436,
+          "repository_stars_gained": 998,
+          "repository_forks_gained": 17,
+          "repository_created_at": "2026-04-27T13:02:34Z",
+          "tags": [
+            {
+              "id": 9,
+              "name": "ai-infrastructure",
+              "display_name": "AI infrastructure",
+              "slug": "ai-infrastructure"
+            }
+          ],
+          "year": 2026,
+          "week": 40,
+          "week_start": "2026-09-28T00:00:00Z"
+        },
+        {
+          "repository_id": 24667,
+          "full_name": "rohitg00/ai-engineering-from-scratch",
+          "rank": 16,
+          "repository_description": "Learn it. Build it. Ship it for others.",
+          "repository_language": "Python",
+          "repository_stars": 61626,
+          "repository_forks": 10847,
+          "repository_stars_gained": 2420,
+          "repository_forks_gained": 326,
+          "repository_created_at": "2026-03-18T18:38:02Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 48,
+              "name": "programming-examples",
+              "display_name": "Programming examples",
+              "slug": "programming-examples"
+            }
+          ],
+          "year": 2026,
+          "week": 40,
+          "week_start": "2026-09-28T00:00:00Z"
+        },
+        {
+          "repository_id": 38817,
+          "full_name": "oblien/openship",
+          "rank": 17,
+          "repository_description": "Self-hosted deployment platform",
+          "repository_language": "TypeScript",
+          "repository_stars": 13957,
+          "repository_forks": 1290,
+          "repository_stars_gained": 1136,
+          "repository_forks_gained": 80,
+          "repository_created_at": "2026-03-05T20:16:56Z",
+          "tags": [
+            {
+              "id": 43,
+              "name": "self-hosted",
+              "display_name": "Self-hosted",
+              "slug": "self-hosted"
+            }
+          ],
+          "year": 2026,
+          "week": 40,
+          "week_start": "2026-09-28T00:00:00Z"
+        },
+        {
+          "repository_id": 26775,
+          "full_name": "t8y2/dbx",
+          "rank": 18,
+          "repository_description": "25 MB lightweight cross-platform database client for 100+ databases, including MySQL, PostgreSQL, SQLite, Redis, MongoDB, DuckDB, SQL Server, and Dameng. Built-in AI, MCP Server, CLI, desktop and Docker. | 轻量级跨平台数据库管理工具，支持 MySQL、PostgreSQL、SQLite、Redis、MongoDB、达梦等 100+ 数据库，提供桌面端、Docker、CLI、内置 AI 助手和 MCP。",
+          "repository_language": "Rust",
+          "repository_stars": 22279,
+          "repository_forks": 2312,
+          "repository_stars_gained": 1328,
+          "repository_forks_gained": 82,
+          "repository_created_at": "2026-04-29T03:00:36Z",
+          "tags": [],
+          "year": 2026,
+          "week": 40,
+          "week_start": "2026-09-28T00:00:00Z"
+        },
+        {
+          "repository_id": 267022,
+          "full_name": "shihabal3amri/DiPlay",
+          "rank": 19,
+          "repository_description": "Independent CarPlay receiver for compatible Android head units. Wired and wireless public preview.",
+          "repository_language": "Kotlin",
+          "repository_stars": 1079,
+          "repository_forks": 146,
+          "repository_stars_gained": 820,
+          "repository_forks_gained": 129,
+          "repository_created_at": "2026-09-24T15:36:38Z",
+          "tags": [],
+          "year": 2026,
+          "week": 40,
+          "week_start": "2026-09-28T00:00:00Z"
+        },
+        {
+          "repository_id": 40353,
+          "full_name": "cs341-illinois/coursebook",
+          "rank": 20,
+          "repository_description": "Open Source Introductory Systems Programming Textbook for the University of Illinois",
+          "repository_language": "TeX",
+          "repository_stars": 3180,
+          "repository_forks": 280,
+          "repository_stars_gained": 1080,
+          "repository_forks_gained": 66,
+          "repository_created_at": "2018-01-26T15:30:07Z",
+          "tags": [
+            {
+              "id": 48,
+              "name": "programming-examples",
+              "display_name": "Programming examples",
+              "slug": "programming-examples"
+            }
+          ],
+          "year": 2026,
+          "week": 40,
+          "week_start": "2026-09-28T00:00:00Z"
+        },
+        {
+          "repository_id": 268033,
+          "full_name": "firelex/jeff",
+          "rank": 21,
+          "repository_description": "Fine-tunes of Qwen3.5 and Gemma 4 for zero-shot classification",
+          "repository_language": "Python",
+          "repository_stars": 1085,
+          "repository_forks": 34,
+          "repository_stars_gained": 1051,
+          "repository_forks_gained": 34,
+          "repository_created_at": "2026-09-28T16:18:39Z",
+          "tags": [],
+          "year": 2026,
+          "week": 40,
+          "week_start": "2026-09-28T00:00:00Z"
+        },
+        {
+          "repository_id": 26256,
+          "full_name": "stablyai/orca",
+          "rank": 22,
+          "repository_description": "Orca is the ADE for working with a fleet of parallel agents. Run any coding agent with your own subscription. Available on desktop, mobile and remote runtime.",
+          "repository_language": "TypeScript",
+          "repository_stars": 81775,
+          "repository_forks": 5846,
+          "repository_stars_gained": 2259,
+          "repository_forks_gained": 110,
+          "repository_created_at": "2026-03-17T03:28:57Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 8,
+              "name": "ai-coding",
+              "display_name": "AI coding assistant",
+              "slug": "ai-coding"
+            }
+          ],
+          "year": 2026,
+          "week": 40,
+          "week_start": "2026-09-28T00:00:00Z"
+        },
+        {
+          "repository_id": 264220,
+          "full_name": "dzhng/jevgrep",
+          "rank": 23,
+          "repository_description": "Find code by asking what it does. A CLI for coding agents that uses Jev to discover relevant files and source context.",
+          "repository_language": "TypeScript",
+          "repository_stars": 1792,
+          "repository_forks": 107,
+          "repository_stars_gained": 1071,
+          "repository_forks_gained": 61,
+          "repository_created_at": "2026-09-26T04:06:56Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            }
+          ],
+          "year": 2026,
+          "week": 40,
+          "week_start": "2026-09-28T00:00:00Z"
+        },
+        {
+          "repository_id": 266160,
+          "full_name": "dmtrKovalenko/fframes",
+          "rank": 24,
+          "repository_description": "Write some Rust. Get video. Enjoy 🥤🍿 ",
+          "repository_language": "Rust",
+          "repository_stars": 886,
+          "repository_forks": 16,
+          "repository_stars_gained": 716,
+          "repository_forks_gained": 16,
+          "repository_created_at": "2021-11-22T14:40:26Z",
+          "tags": [],
+          "year": 2026,
+          "week": 40,
+          "week_start": "2026-09-28T00:00:00Z"
+        },
+        {
+          "repository_id": 264088,
+          "full_name": "kaankiziltug/logo-design-skill",
+          "rank": 25,
+          "repository_description": "A comprehensive logo-design skill for Claude: principles, process, SVG craft, testing tools and a 1,400+ logo reference library.",
+          "repository_language": "HTML",
+          "repository_stars": 863,
+          "repository_forks": 34,
+          "repository_stars_gained": 710,
+          "repository_forks_gained": 27,
+          "repository_created_at": "2026-09-26T08:23:34Z",
+          "tags": [
+            {
+              "id": 11,
+              "name": "ai-skills",
+              "display_name": "AI skills",
+              "slug": "ai-skills"
+            }
+          ],
+          "year": 2026,
+          "week": 40,
+          "week_start": "2026-09-28T00:00:00Z"
+        }
+      ]
+    },
+    "yearly": {
+      "sourceUrl": "https://trendshift.io/yearly",
+      "capturedAt": "2026-09-30T06:23:09.751Z",
+      "items": [
+        {
+          "repository_id": 19374,
+          "full_name": "openclaw/openclaw",
+          "rank": 1,
+          "repository_description": "The AI that really does things. Any OS. Any Platform. The lobster way. 🦞 ",
+          "repository_language": "TypeScript",
+          "repository_stars": 390811,
+          "repository_forks": 85758,
+          "repository_stars_gained": 395316,
+          "repository_forks_gained": 85670,
+          "repository_created_at": "2025-11-24T10:16:47Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 43,
+              "name": "self-hosted",
+              "display_name": "Self-hosted",
+              "slug": "self-hosted"
+            }
+          ],
+          "year": 2026
+        },
+        {
+          "repository_id": 17415,
+          "full_name": "obra/superpowers",
+          "rank": 2,
+          "repository_description": "An agentic skills framework & software development methodology that works.",
+          "repository_language": "Shell",
+          "repository_stars": 293075,
+          "repository_forks": 27350,
+          "repository_stars_gained": 281566,
+          "repository_forks_gained": 26356,
+          "repository_created_at": "2025-10-09T19:45:18Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 8,
+              "name": "ai-coding",
+              "display_name": "AI coding assistant",
+              "slug": "ai-coding"
+            },
+            {
+              "id": 11,
+              "name": "ai-skills",
+              "display_name": "AI skills",
+              "slug": "ai-skills"
+            }
+          ],
+          "year": 2026
+        },
+        {
+          "repository_id": 22055,
+          "full_name": "NousResearch/hermes-agent",
+          "rank": 3,
+          "repository_description": "The agent that grows with you",
+          "repository_language": "Python",
+          "repository_stars": 250121,
+          "repository_forks": 57946,
+          "repository_stars_gained": 251164,
+          "repository_forks_gained": 57946,
+          "repository_created_at": "2025-07-22T22:22:28Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 11,
+              "name": "ai-skills",
+              "display_name": "AI skills",
+              "slug": "ai-skills"
+            }
+          ],
+          "year": 2026
+        },
+        {
+          "repository_id": 21488,
+          "full_name": "affaan-m/ECC",
+          "rank": 4,
+          "repository_description": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond.",
+          "repository_language": "JavaScript",
+          "repository_stars": 269724,
+          "repository_forks": 41920,
+          "repository_stars_gained": 271128,
+          "repository_forks_gained": 41920,
+          "repository_created_at": "2026-01-18T00:51:51Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 8,
+              "name": "ai-coding",
+              "display_name": "AI coding assistant",
+              "slug": "ai-coding"
+            },
+            {
+              "id": 11,
+              "name": "ai-skills",
+              "display_name": "AI skills",
+              "slug": "ai-skills"
+            }
+          ],
+          "year": 2026
+        },
+        {
+          "repository_id": 21589,
+          "full_name": "mattpocock/skills",
+          "rank": 5,
+          "repository_description": "Skills for Real Engineers. Straight from my .agents directory.",
+          "repository_language": "Shell",
+          "repository_stars": 272247,
+          "repository_forks": 23948,
+          "repository_stars_gained": 270181,
+          "repository_forks_gained": 23948,
+          "repository_created_at": "2026-02-03T11:15:53Z",
+          "tags": [
+            {
+              "id": 11,
+              "name": "ai-skills",
+              "display_name": "AI skills",
+              "slug": "ai-skills"
+            }
+          ],
+          "year": 2026
+        },
+        {
+          "repository_id": 17001,
+          "full_name": "anomalyco/opencode",
+          "rank": 6,
+          "repository_description": "The open source coding agent.",
+          "repository_language": "TypeScript",
+          "repository_stars": 210979,
+          "repository_forks": 29953,
+          "repository_stars_gained": 168378,
+          "repository_forks_gained": 26465,
+          "repository_created_at": "2025-04-30T20:08:00Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 8,
+              "name": "ai-coding",
+              "display_name": "AI coding assistant",
+              "slug": "ai-coding"
+            }
+          ],
+          "year": 2026
+        },
+        {
+          "repository_id": 21654,
+          "full_name": "multica-ai/andrej-karpathy-skills",
+          "rank": 7,
+          "repository_description": "A single CLAUDE.md file to improve Claude Code behavior, derived from Andrej Karpathy's observations on LLM coding pitfalls.",
+          "repository_language": "",
+          "repository_stars": 215929,
+          "repository_forks": 22434,
+          "repository_stars_gained": 217044,
+          "repository_forks_gained": 22434,
+          "repository_created_at": "2026-01-27T03:53:13Z",
+          "tags": [],
+          "year": 2026
+        },
+        {
+          "repository_id": 22315,
+          "full_name": "msitarzewski/agency-agents",
+          "rank": 8,
+          "repository_description": "A complete AI agency at your fingertips - From frontend wizards to Reddit community ninjas, from whimsy injectors to reality checkers. Each agent is a specialized expert with personality, processes, and proven deliverables.",
+          "repository_language": "Shell",
+          "repository_stars": 155370,
+          "repository_forks": 25899,
+          "repository_stars_gained": 155013,
+          "repository_forks_gained": 25702,
+          "repository_created_at": "2025-10-13T12:12:29Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            }
+          ],
+          "year": 2026
+        },
+        {
+          "repository_id": 15786,
+          "full_name": "anthropics/skills",
+          "rank": 9,
+          "repository_description": "Public repository for Agent Skills",
+          "repository_language": "Python",
+          "repository_stars": 179042,
+          "repository_forks": 22004,
+          "repository_stars_gained": 149304,
+          "repository_forks_gained": 19383,
+          "repository_created_at": "2025-09-22T15:53:31Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 11,
+              "name": "ai-skills",
+              "display_name": "AI skills",
+              "slug": "ai-skills"
+            }
+          ],
+          "year": 2026
+        },
+        {
+          "repository_id": 24872,
+          "full_name": "ultraworkers/claw-code",
+          "rank": 10,
+          "repository_description": "An agent-managed museum exhibit, built in Rust with Gajae-Code / LazyCodex — developed and maintained with no human intervention.",
+          "repository_language": "Rust",
+          "repository_stars": 195289,
+          "repository_forks": 107935,
+          "repository_stars_gained": 197223,
+          "repository_forks_gained": 107935,
+          "repository_created_at": "2026-03-31T08:58:08Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 7,
+              "name": "ai-workflow",
+              "display_name": "AI workflow",
+              "slug": "ai-workflow"
+            }
+          ],
+          "year": 2026
+        },
+        {
+          "repository_id": 15372,
+          "full_name": "farion1231/cc-switch",
+          "rank": 11,
+          "repository_description": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode, OpenClaw, Grok Build & Hermes Agent. Only official website: ccswitch.io",
+          "repository_language": "Rust",
+          "repository_stars": 138814,
+          "repository_forks": 9930,
+          "repository_stars_gained": 131048,
+          "repository_forks_gained": 9426,
+          "repository_created_at": "2025-08-04T14:16:16Z",
+          "tags": [
+            {
+              "id": 8,
+              "name": "ai-coding",
+              "display_name": "AI coding assistant",
+              "slug": "ai-coding"
+            },
+            {
+              "id": 17,
+              "name": "mcp",
+              "display_name": "MCP",
+              "slug": "mcp"
+            }
+          ],
+          "year": 2026
+        },
+        {
+          "repository_id": 15781,
+          "full_name": "nextlevelbuilder/ui-ux-pro-max-skill",
+          "rank": 12,
+          "repository_description": "An AI skill that provides design intelligence for building professional UI/UX across multiple platforms.",
+          "repository_language": "Python",
+          "repository_stars": 131695,
+          "repository_forks": 14483,
+          "repository_stars_gained": 129537,
+          "repository_forks_gained": 14075,
+          "repository_created_at": "2025-11-30T11:36:31Z",
+          "tags": [
+            {
+              "id": 11,
+              "name": "ai-skills",
+              "display_name": "AI skills",
+              "slug": "ai-skills"
+            },
+            {
+              "id": 49,
+              "name": "design-system",
+              "display_name": "Design system",
+              "slug": "design-system"
+            }
+          ],
+          "year": 2026
+        },
+        {
+          "repository_id": 146135,
+          "full_name": "deepseek-ai/deepseek-harness",
+          "rank": 13,
+          "repository_description": "",
+          "repository_language": "TypeScript",
+          "repository_stars": 240388,
+          "repository_forks": 30016,
+          "repository_stars_gained": 224954,
+          "repository_forks_gained": 30016,
+          "repository_created_at": "2026-08-13T11:56:32Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            }
+          ],
+          "year": 2026
+        },
+        {
+          "repository_id": 15471,
+          "full_name": "earendil-works/pi",
+          "rank": 14,
+          "repository_description": "AI agent toolkit: unified LLM API, agent loop, TUI, coding agent CLI",
+          "repository_language": "TypeScript",
+          "repository_stars": 110473,
+          "repository_forks": 15126,
+          "repository_stars_gained": 109063,
+          "repository_forks_gained": 15016,
+          "repository_created_at": "2025-08-09T14:03:50Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 8,
+              "name": "ai-coding",
+              "display_name": "AI coding assistant",
+              "slug": "ai-coding"
+            }
+          ],
+          "year": 2026
+        },
+        {
+          "repository_id": 23253,
+          "full_name": "garrytan/gstack",
+          "rank": 15,
+          "repository_description": "Use Garry Tan's exact Claude Code setup: 23 opinionated tools that serve as CEO, Designer, Eng Manager, Release Manager, Doc Engineer, and QA",
+          "repository_language": "TypeScript",
+          "repository_stars": 134525,
+          "repository_forks": 20902,
+          "repository_stars_gained": 135070,
+          "repository_forks_gained": 20902,
+          "repository_created_at": "2026-03-11T21:22:45Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 7,
+              "name": "ai-workflow",
+              "display_name": "AI workflow",
+              "slug": "ai-workflow"
+            }
+          ],
+          "year": 2026
+        },
+        {
+          "repository_id": 14644,
+          "full_name": "firecrawl/firecrawl",
+          "rank": 16,
+          "repository_description": "The web data API to search, scrape, and interact at scale. 🔥",
+          "repository_language": "TypeScript",
+          "repository_stars": 186744,
+          "repository_forks": 10245,
+          "repository_stars_gained": 116155,
+          "repository_forks_gained": 4914,
+          "repository_created_at": "2024-04-15T21:02:29Z",
+          "tags": [
+            {
+              "id": 7,
+              "name": "ai-workflow",
+              "display_name": "AI workflow",
+              "slug": "ai-workflow"
+            },
+            {
+              "id": 25,
+              "name": "web-scraping",
+              "display_name": "Web scraping",
+              "slug": "web-scraping"
+            }
+          ],
+          "year": 2026
+        },
+        {
+          "repository_id": 22266,
+          "full_name": "ruvnet/RuView",
+          "rank": 17,
+          "repository_description": "π RuView turns commodity WiFi signals into real-time spatial intelligence, vital sign monitoring, and presence detection — all without a single pixel of video.",
+          "repository_language": "Rust",
+          "repository_stars": 95604,
+          "repository_forks": 13155,
+          "repository_stars_gained": 90365,
+          "repository_forks_gained": 12782,
+          "repository_created_at": "2025-06-07T04:32:30Z",
+          "tags": [],
+          "year": 2026
+        },
+        {
+          "repository_id": 50668,
+          "full_name": "DietrichGebert/ponytail",
+          "rank": 18,
+          "repository_description": "Makes your AI agent think like the laziest senior dev in the room. The best code is the code you never wrote.",
+          "repository_language": "JavaScript",
+          "repository_stars": 148351,
+          "repository_forks": 8316,
+          "repository_stars_gained": 148214,
+          "repository_forks_gained": 8316,
+          "repository_created_at": "2026-06-12T00:52:37Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 8,
+              "name": "ai-coding",
+              "display_name": "AI coding assistant",
+              "slug": "ai-coding"
+            }
+          ],
+          "year": 2026
+        },
+        {
+          "repository_id": 15496,
+          "full_name": "thedotmack/claude-mem",
+          "rank": 19,
+          "repository_description": "Persistent Context Across Sessions for Every Agent –  Captures everything your agent does during sessions, compresses it with AI, and injects relevant context back into future sessions. Works with Claude Code, OpenClaw, Codex, Gemini, Hermes, Copilot, OpenCode + More",
+          "repository_language": "TypeScript",
+          "repository_stars": 94966,
+          "repository_forks": 8779,
+          "repository_stars_gained": 86475,
+          "repository_forks_gained": 8235,
+          "repository_created_at": "2025-08-31T20:50:03Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 8,
+              "name": "ai-coding",
+              "display_name": "AI coding assistant",
+              "slug": "ai-coding"
+            },
+            {
+              "id": 10,
+              "name": "ai-memory",
+              "display_name": "AI memory",
+              "slug": "ai-memory"
+            }
+          ],
+          "year": 2026
+        },
+        {
+          "repository_id": 13856,
+          "full_name": "anthropics/claude-code",
+          "rank": 20,
+          "repository_description": "Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands.",
+          "repository_language": "TypeScript",
+          "repository_stars": 148617,
+          "repository_forks": 26119,
+          "repository_stars_gained": 100909,
+          "repository_forks_gained": 22919,
+          "repository_created_at": "2025-02-22T17:41:21Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 8,
+              "name": "ai-coding",
+              "display_name": "AI coding assistant",
+              "slug": "ai-coding"
+            }
+          ],
+          "year": 2026
+        },
+        {
+          "repository_id": 16192,
+          "full_name": "TauricResearch/TradingAgents",
+          "rank": 21,
+          "repository_description": "TradingAgents: Multi-Agents LLM Financial Trading Framework",
+          "repository_language": "Python",
+          "repository_stars": 109289,
+          "repository_forks": 21725,
+          "repository_stars_gained": 82961,
+          "repository_forks_gained": 16774,
+          "repository_created_at": "2024-12-28T03:31:08Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 32,
+              "name": "fintech",
+              "display_name": "Fintech",
+              "slug": "fintech"
+            }
+          ],
+          "year": 2026
+        },
+        {
+          "repository_id": 25296,
+          "full_name": "Graphify-Labs/graphify",
+          "rank": 22,
+          "repository_description": "Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill for Claude Code, Cursor, Codex, and Gemini CLI: local deterministic AST parsing, every edge explained, no vector store.",
+          "repository_language": "Python",
+          "repository_stars": 122553,
+          "repository_forks": 12351,
+          "repository_stars_gained": 123079,
+          "repository_forks_gained": 12351,
+          "repository_created_at": "2026-04-03T15:49:07Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 11,
+              "name": "ai-skills",
+              "display_name": "AI skills",
+              "slug": "ai-skills"
+            }
+          ],
+          "year": 2026
+        },
+        {
+          "repository_id": 25016,
+          "full_name": "VoltAgent/awesome-design-md",
+          "rank": 23,
+          "repository_description": "A collection of DESIGN.md files analysis by popular brand design systems. Drop one into your project and let coding agents generate a matching UI.",
+          "repository_language": "",
+          "repository_stars": 118842,
+          "repository_forks": 13681,
+          "repository_stars_gained": 119135,
+          "repository_forks_gained": 13681,
+          "repository_created_at": "2026-03-31T16:37:01Z",
+          "tags": [
+            {
+              "id": 8,
+              "name": "ai-coding",
+              "display_name": "AI coding assistant",
+              "slug": "ai-coding"
+            },
+            {
+              "id": 49,
+              "name": "design-system",
+              "display_name": "Design system",
+              "slug": "design-system"
+            },
+            {
+              "id": 57,
+              "name": "curated-list",
+              "display_name": "Curated list",
+              "slug": "curated-list"
+            }
+          ],
+          "year": 2026
+        },
+        {
+          "repository_id": 8731,
+          "full_name": "harry0703/MoneyPrinterTurbo",
+          "rank": 24,
+          "repository_description": "利用 AI 大模型和自动化工作流，根据主题或关键词一键生成高清短视频。Generate HD short videos from a topic or keyword with an automated AI workflow.",
+          "repository_language": "Python",
+          "repository_stars": 127134,
+          "repository_forks": 20676,
+          "repository_stars_gained": 80231,
+          "repository_forks_gained": 14013,
+          "repository_created_at": "2024-03-11T02:57:34Z",
+          "tags": [
+            {
+              "id": 6,
+              "name": "ai-video",
+              "display_name": "AI video generation",
+              "slug": "ai-video"
+            }
+          ],
+          "year": 2026
+        },
+        {
+          "repository_id": 14244,
+          "full_name": "D4Vinci/Scrapling",
+          "rank": 25,
+          "repository_description": "🕷️ An adaptive Web Scraping framework that handles everything from a single request to a full-scale crawl! Don't be shy, join here: https://discord.gg/EMgGbDceNQ and follow here for daily tips and tricks: https://x.com/Scrapling_dev",
+          "repository_language": "Python",
+          "repository_stars": 84572,
+          "repository_forks": 8903,
+          "repository_stars_gained": 76516,
+          "repository_forks_gained": 8444,
+          "repository_created_at": "2024-10-13T20:29:53Z",
+          "tags": [
+            {
+              "id": 25,
+              "name": "web-scraping",
+              "display_name": "Web scraping",
+              "slug": "web-scraping"
+            }
+          ],
+          "year": 2026
+        }
+      ]
+    },
+    "daily": {
+      "sourceUrl": "https://trendshift.io/",
+      "capturedAt": "2026-09-30T06:23:09.780Z",
+      "items": [
+        {
+          "repository_id": 222292,
+          "full_name": "eternity4719/HowToLiveBetter",
+          "rank": 1,
+          "repository_description": "354 条循证建议，覆盖长寿防病、急救、省钱理财、法律红线、失业与工伤、医保社保、恋爱婚育、出国与技能。每条写明成本、收益、证据等级和原始出处，只引期刊论文与官方文件。",
+          "repository_language": "HTML",
+          "repository_stars": 29621,
+          "repository_forks": 2031,
+          "repository_stars_gained": 1568,
+          "repository_forks_gained": 0,
+          "repository_created_at": "2026-09-07T01:53:36Z",
+          "tags": [
+            {
+              "id": 57,
+              "name": "curated-list",
+              "display_name": "Curated list",
+              "slug": "curated-list"
+            }
+          ],
+          "date": "2026-09-30T00:00:00Z"
+        },
+        {
+          "repository_id": 26775,
+          "full_name": "t8y2/dbx",
+          "rank": 2,
+          "repository_description": "25 MB lightweight cross-platform database client for 100+ databases, including MySQL, PostgreSQL, SQLite, Redis, MongoDB, DuckDB, SQL Server, and Dameng. Built-in AI, MCP Server, CLI, desktop and Docker. | 轻量级跨平台数据库管理工具，支持 MySQL、PostgreSQL、SQLite、Redis、MongoDB、达梦等 100+ 数据库，提供桌面端、Docker、CLI、内置 AI 助手和 MCP。",
+          "repository_language": "Rust",
+          "repository_stars": 22406,
+          "repository_forks": 2357,
+          "repository_stars_gained": 455,
+          "repository_forks_gained": 14,
+          "repository_created_at": "2026-04-29T03:00:36Z",
+          "tags": [],
+          "date": "2026-09-30T00:00:00Z"
+        },
+        {
+          "repository_id": 257963,
+          "full_name": "yetone/magpie",
+          "rank": 3,
+          "repository_description": "Every agent's model. One place. Codex on DeepSeek, Claude Code on Kimi, from the menu bar.",
+          "repository_language": "Go",
+          "repository_stars": 3044,
+          "repository_forks": 134,
+          "repository_stars_gained": 460,
+          "repository_forks_gained": 0,
+          "repository_created_at": "2026-09-23T16:22:35Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 8,
+              "name": "ai-coding",
+              "display_name": "AI coding assistant",
+              "slug": "ai-coding"
+            }
+          ],
+          "date": "2026-09-30T00:00:00Z"
+        },
+        {
+          "repository_id": 24676,
+          "full_name": "averygan/reclip",
+          "rank": 4,
+          "repository_description": "Download videos from almost any website. Lightweight, self-hosted media downloader with a clean web UI.",
+          "repository_language": "HTML",
+          "repository_stars": 10274,
+          "repository_forks": 1597,
+          "repository_stars_gained": 245,
+          "repository_forks_gained": 7,
+          "repository_created_at": "2026-03-31T04:29:13Z",
+          "tags": [
+            {
+              "id": 25,
+              "name": "web-scraping",
+              "display_name": "Web scraping",
+              "slug": "web-scraping"
+            },
+            {
+              "id": 43,
+              "name": "self-hosted",
+              "display_name": "Self-hosted",
+              "slug": "self-hosted"
+            }
+          ],
+          "date": "2026-09-30T00:00:00Z"
+        },
+        {
+          "repository_id": 268236,
+          "full_name": "KKKKhazix/AIHOT",
+          "rank": 5,
+          "repository_description": "一个自己找热点、自己写日报的网站框架。把信源和精选标准换成你的，它就是你的行业热点站。",
+          "repository_language": "TypeScript",
+          "repository_stars": 3486,
+          "repository_forks": 804,
+          "repository_stars_gained": 450,
+          "repository_forks_gained": 0,
+          "repository_created_at": "2026-09-28T23:40:05Z",
+          "tags": [],
+          "date": "2026-09-30T00:00:00Z"
+        },
+        {
+          "repository_id": 255393,
+          "full_name": "ninjahawk/livenerf",
+          "rank": 6,
+          "repository_description": "Benchmark for tracking model capability after release.",
+          "repository_language": "Python",
+          "repository_stars": 408,
+          "repository_forks": 5,
+          "repository_stars_gained": 206,
+          "repository_forks_gained": 0,
+          "repository_created_at": "2026-09-22T21:59:26Z",
+          "tags": [
+            {
+              "id": 47,
+              "name": "monitoring",
+              "display_name": "Monitoring",
+              "slug": "monitoring"
+            }
+          ],
+          "date": "2026-09-30T00:00:00Z"
+        },
+        {
+          "repository_id": 15037,
+          "full_name": "tile-ai/tilelang",
+          "rank": 7,
+          "repository_description": " Domain-specific language designed to streamline the development of high-performance GPU/CPU/Accelerators kernels",
+          "repository_language": "Python",
+          "repository_stars": 7669,
+          "repository_forks": 752,
+          "repository_stars_gained": 189,
+          "repository_forks_gained": 8,
+          "repository_created_at": "2024-10-03T09:25:45Z",
+          "tags": [],
+          "date": "2026-09-30T00:00:00Z"
+        },
+        {
+          "repository_id": 23555,
+          "full_name": "NVIDIA/OpenShell",
+          "rank": 8,
+          "repository_description": "OpenShell is the safe, private runtime for autonomous AI agents.",
+          "repository_language": "Rust",
+          "repository_stars": 10817,
+          "repository_forks": 1617,
+          "repository_stars_gained": 323,
+          "repository_forks_gained": 14,
+          "repository_created_at": "2026-02-24T22:52:22Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            }
+          ],
+          "date": "2026-09-30T00:00:00Z"
+        },
+        {
+          "repository_id": 253721,
+          "full_name": "deepopen-com/deepopen",
+          "rank": 9,
+          "repository_description": "非自回归System 1决策引擎，专为结构化类型决策场景设计  DeepOpen Multilingual, non-autoregressive System 1 decision engine. ",
+          "repository_language": "Python",
+          "repository_stars": 1623,
+          "repository_forks": 212,
+          "repository_stars_gained": 274,
+          "repository_forks_gained": 0,
+          "repository_created_at": "2026-09-21T02:12:24Z",
+          "tags": [
+            {
+              "id": 2,
+              "name": "nlp",
+              "display_name": "NLP",
+              "slug": "nlp"
+            }
+          ],
+          "date": "2026-09-30T00:00:00Z"
+        },
+        {
+          "repository_id": 106003,
+          "full_name": "pablostanley/yoinks",
+          "rank": 10,
+          "repository_description": "yoink any video from your terminal. no shady ads.",
+          "repository_language": "TypeScript",
+          "repository_stars": 2098,
+          "repository_forks": 158,
+          "repository_stars_gained": 179,
+          "repository_forks_gained": 0,
+          "repository_created_at": "2026-07-16T07:06:09Z",
+          "tags": [
+            {
+              "id": 25,
+              "name": "web-scraping",
+              "display_name": "Web scraping",
+              "slug": "web-scraping"
+            }
+          ],
+          "date": "2026-09-30T00:00:00Z"
+        },
+        {
+          "repository_id": 14736,
+          "full_name": "VectifyAI/PageIndex",
+          "rank": 11,
+          "repository_description": "📑 PageIndex: Document Index for Vectorless, Reasoning-based RAG",
+          "repository_language": "Python",
+          "repository_stars": 37561,
+          "repository_forks": 3391,
+          "repository_stars_gained": 287,
+          "repository_forks_gained": 7,
+          "repository_created_at": "2025-04-01T10:53:54Z",
+          "tags": [
+            {
+              "id": 14,
+              "name": "rag",
+              "display_name": "RAG",
+              "slug": "rag"
+            },
+            {
+              "id": 34,
+              "name": "document-processing",
+              "display_name": "Document processing",
+              "slug": "document-processing"
+            }
+          ],
+          "date": "2026-09-30T00:00:00Z"
+        },
+        {
+          "repository_id": 14617,
+          "full_name": "HunxByts/GhostTrack",
+          "rank": 12,
+          "repository_description": "Useful tool to track location or mobile number",
+          "repository_language": "Python",
+          "repository_stars": 15581,
+          "repository_forks": 2200,
+          "repository_stars_gained": 160,
+          "repository_forks_gained": 12,
+          "repository_created_at": "2023-04-15T07:20:47Z",
+          "tags": [],
+          "date": "2026-09-30T00:00:00Z"
+        },
+        {
+          "repository_id": 241546,
+          "full_name": "monid-ai/monid",
+          "rank": 13,
+          "repository_description": "",
+          "repository_language": "TypeScript",
+          "repository_stars": 545,
+          "repository_forks": 78,
+          "repository_stars_gained": 154,
+          "repository_forks_gained": 0,
+          "repository_created_at": "2026-08-26T03:45:18Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            }
+          ],
+          "date": "2026-09-30T00:00:00Z"
+        },
+        {
+          "repository_id": 208417,
+          "full_name": "SonicloudTech/sonicloud_opensdk",
+          "rank": 14,
+          "repository_description": "Recorder Sdk",
+          "repository_language": "Objective-C",
+          "repository_stars": 2974,
+          "repository_forks": 63,
+          "repository_stars_gained": 181,
+          "repository_forks_gained": 0,
+          "repository_created_at": "2026-09-02T03:32:02Z",
+          "tags": [],
+          "date": "2026-09-30T00:00:00Z"
+        },
+        {
+          "repository_id": 23001,
+          "full_name": "Anil-matcha/open-dots",
+          "rank": 15,
+          "repository_description": "Multi-modal Generative Media Skills for AI Agents (Claude Code, Cursor, Gemini CLI). High-quality image, video, and audio generation powered by muapi.ai.",
+          "repository_language": "Shell",
+          "repository_stars": 4570,
+          "repository_forks": 534,
+          "repository_stars_gained": 144,
+          "repository_forks_gained": 10,
+          "repository_created_at": "2023-05-25T14:21:12Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 5,
+              "name": "ai-image",
+              "display_name": "AI image generation",
+              "slug": "ai-image"
+            },
+            {
+              "id": 6,
+              "name": "ai-video",
+              "display_name": "AI video generation",
+              "slug": "ai-video"
+            },
+            {
+              "id": 11,
+              "name": "ai-skills",
+              "display_name": "AI skills",
+              "slug": "ai-skills"
+            },
+            {
+              "id": 17,
+              "name": "mcp",
+              "display_name": "MCP",
+              "slug": "mcp"
+            }
+          ],
+          "date": "2026-09-30T00:00:00Z"
+        },
+        {
+          "repository_id": 28176,
+          "full_name": "debpalash/VoiceStudio",
+          "rank": 16,
+          "repository_description": "VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.",
+          "repository_language": "Python",
+          "repository_stars": 48812,
+          "repository_forks": 5530,
+          "repository_stars_gained": 817,
+          "repository_forks_gained": 51,
+          "repository_created_at": "2026-04-09T21:40:26Z",
+          "tags": [
+            {
+              "id": 4,
+              "name": "ai-voice",
+              "display_name": "AI voice",
+              "slug": "ai-voice"
+            },
+            {
+              "id": 19,
+              "name": "text-to-speech",
+              "display_name": "Text to speech",
+              "slug": "text-to-speech"
+            },
+            {
+              "id": 22,
+              "name": "audio-processing",
+              "display_name": "Audio processing",
+              "slug": "audio-processing"
+            },
+            {
+              "id": 43,
+              "name": "self-hosted",
+              "display_name": "Self-hosted",
+              "slug": "self-hosted"
+            }
+          ],
+          "date": "2026-09-30T00:00:00Z"
+        },
+        {
+          "repository_id": 227054,
+          "full_name": "yi1108/printfilm",
+          "rank": 17,
+          "repository_description": "PRINTFILM：AI 科普视频与漫剧创作平台",
+          "repository_language": "Python",
+          "repository_stars": 3925,
+          "repository_forks": 440,
+          "repository_stars_gained": 264,
+          "repository_forks_gained": 0,
+          "repository_created_at": "2026-09-10T02:08:47Z",
+          "tags": [
+            {
+              "id": 4,
+              "name": "ai-voice",
+              "display_name": "AI voice",
+              "slug": "ai-voice"
+            },
+            {
+              "id": 5,
+              "name": "ai-image",
+              "display_name": "AI image generation",
+              "slug": "ai-image"
+            },
+            {
+              "id": 6,
+              "name": "ai-video",
+              "display_name": "AI video generation",
+              "slug": "ai-video"
+            },
+            {
+              "id": 23,
+              "name": "workflow-automation",
+              "display_name": "Workflow automation",
+              "slug": "workflow-automation"
+            }
+          ],
+          "date": "2026-09-30T00:00:00Z"
+        },
+        {
+          "repository_id": 268336,
+          "full_name": "wy51ai/floorplan-3d",
+          "rank": 18,
+          "repository_description": "",
+          "repository_language": "HTML",
+          "repository_stars": 627,
+          "repository_forks": 0,
+          "repository_stars_gained": 163,
+          "repository_forks_gained": 0,
+          "repository_created_at": "2026-09-29T02:57:30Z",
+          "tags": [],
+          "date": "2026-09-30T00:00:00Z"
+        },
+        {
+          "repository_id": 263598,
+          "full_name": "CorgiCorner/bisibility",
+          "rank": 19,
+          "repository_description": "Open-source SEO platform. Track Google rankings. Research keywords. Inspect backlinks.",
+          "repository_language": "TypeScript",
+          "repository_stars": 402,
+          "repository_forks": 2,
+          "repository_stars_gained": 137,
+          "repository_forks_gained": 0,
+          "repository_created_at": "2026-06-18T16:08:33Z",
+          "tags": [
+            {
+              "id": 30,
+              "name": "search",
+              "display_name": "Search",
+              "slug": "search"
+            },
+            {
+              "id": 43,
+              "name": "self-hosted",
+              "display_name": "Self-hosted",
+              "slug": "self-hosted"
+            }
+          ],
+          "date": "2026-09-30T00:00:00Z"
+        },
+        {
+          "repository_id": 24667,
+          "full_name": "rohitg00/ai-engineering-from-scratch",
+          "rank": 20,
+          "repository_description": "Learn it. Build it. Ship it for others.",
+          "repository_language": "Python",
+          "repository_stars": 61626,
+          "repository_forks": 10847,
+          "repository_stars_gained": 365,
+          "repository_forks_gained": 19,
+          "repository_created_at": "2026-03-18T18:38:02Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 48,
+              "name": "programming-examples",
+              "display_name": "Programming examples",
+              "slug": "programming-examples"
+            }
+          ],
+          "date": "2026-09-30T00:00:00Z"
+        },
+        {
+          "repository_id": 259708,
+          "full_name": "Niko1221/Strata",
+          "rank": 21,
+          "repository_description": "Qwen3.8-Flash-Next (125B MoE) on a 12-24 GB NVIDIA GPU + 64 GB RAM: one-click install for Windows / Linux. Strata inference engine, OpenAI/Anthropic API on localhost, optional image input.",
+          "repository_language": "C++",
+          "repository_stars": 1953,
+          "repository_forks": 176,
+          "repository_stars_gained": 246,
+          "repository_forks_gained": 0,
+          "repository_created_at": "2026-09-24T16:40:20Z",
+          "tags": [
+            {
+              "id": 13,
+              "name": "local-llm",
+              "display_name": "Local LLM",
+              "slug": "local-llm"
+            },
+            {
+              "id": 41,
+              "name": "chatbot",
+              "display_name": "Chatbot",
+              "slug": "chatbot"
+            }
+          ],
+          "date": "2026-09-30T00:00:00Z"
+        },
+        {
+          "repository_id": 267022,
+          "full_name": "shihabal3amri/DiPlay",
+          "rank": 22,
+          "repository_description": "Independent CarPlay receiver for compatible Android head units. Wired and wireless public preview.",
+          "repository_language": "Kotlin",
+          "repository_stars": 1079,
+          "repository_forks": 146,
+          "repository_stars_gained": 171,
+          "repository_forks_gained": 0,
+          "repository_created_at": "2026-09-24T15:36:38Z",
+          "tags": [],
+          "date": "2026-09-30T00:00:00Z"
+        },
+        {
+          "repository_id": 118354,
+          "full_name": "spinabot/brigade",
+          "rank": 23,
+          "repository_description": "Brigade — Your personal intelligence, built enterprise-grade",
+          "repository_language": "TypeScript",
+          "repository_stars": 9572,
+          "repository_forks": 57,
+          "repository_stars_gained": 344,
+          "repository_forks_gained": 0,
+          "repository_created_at": "2026-06-19T15:18:17Z",
+          "tags": [
+            {
+              "id": 3,
+              "name": "ai-agent",
+              "display_name": "AI agent",
+              "slug": "ai-agent"
+            },
+            {
+              "id": 7,
+              "name": "ai-workflow",
+              "display_name": "AI workflow",
+              "slug": "ai-workflow"
+            },
+            {
+              "id": 43,
+              "name": "self-hosted",
+              "display_name": "Self-hosted",
+              "slug": "self-hosted"
+            }
+          ],
+          "date": "2026-09-30T00:00:00Z"
+        },
+        {
+          "repository_id": 221876,
+          "full_name": "Friedrich-M/UniMate",
+          "rank": 24,
+          "repository_description": "[SIGGRAPH Asia 2026] UniMate: One Unified Model to Animate Diverse Skeletons",
+          "repository_language": "Python",
+          "repository_stars": 570,
+          "repository_forks": 34,
+          "repository_stars_gained": 111,
+          "repository_forks_gained": 0,
+          "repository_created_at": "2026-07-22T20:57:39Z",
+          "tags": [],
+          "date": "2026-09-30T00:00:00Z"
+        },
+        {
+          "repository_id": 268524,
+          "full_name": "ntfargo/Relapse-Exploit",
+          "rank": 25,
+          "repository_description": "Exploit chain for PS5 7.00 - 13.60",
+          "repository_language": "JavaScript",
+          "repository_stars": 1122,
+          "repository_forks": 26,
+          "repository_stars_gained": 173,
+          "repository_forks_gained": 0,
+          "repository_created_at": "2026-09-17T19:45:13Z",
+          "tags": [
+            {
+              "id": 40,
+              "name": "pentesting",
+              "display_name": "Pentesting",
+              "slug": "pentesting"
+            }
+          ],
+          "date": "2026-09-30T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

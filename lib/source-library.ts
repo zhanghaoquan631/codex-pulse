@@ -1,6 +1,15 @@
 export const sourceRepository = 'https://github.com/zhanghaoquan631/codex-pulse';
 
 export const sourceProjects = {
+  'zju-overworld': {
+    title: '浙大校园漫游',
+    path: 'examples/zju-overworld',
+    prompt: `请用原生 JavaScript ES modules 与 Three.js 制作浙大紫金港主题的浏览器三维校园漫游游戏。
+用有来源的地图数据和程序化几何呈现校园道路、建筑、绿地与水面，提供可操作的俯视视角、步行与自由探索；地图为艺术化近似，不能作为精确导航。
+加入课程与微课、校园运动、搭建与物品、动物，以及夜间怪兽和生存玩法。微课使用原创内容与有权使用的声音，模型优先程序生成。
+兼容键盘鼠标和手机触控，支持暂停、昼夜变化与浏览器本地存档；用户操作后才播放声音。保留来源说明和加载失败提示。
+按世界、校园活动、教学、动物与夜间玩法拆分模块。交付可通过静态 HTTP 运行的 HTML、CSS、全部 ES modules、数据、资源许可与启动说明。提示词描述功能方向，不承诺与已有版本逐像素一致。`,
+  },
   'chaoshan-map': {
     title: '潮汕共创地图',
     path: 'public/local-apps/chaoshan-atlas',

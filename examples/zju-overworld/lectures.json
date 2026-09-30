@@ -1,0 +1,885 @@
+[
+  {
+    "id": "calculus-derivative",
+    "title": "高等数学 · 导数入门",
+    "teacher": "陈老师",
+    "audio": "calculus-derivative.wav",
+    "segments": [
+      {
+        "text": "同学们好。这节课我们认识导数。想象一辆正在行驶的汽车，一段时间内的路程除以时间，是平均速度。可是，仪表盘显示的，是某一时刻的瞬时速度。怎样从平均变化率走向瞬时变化率，就是导数要回答的问题。",
+        "board": "导数：描述瞬时变化率\n平均速度 = 路程变化 ÷ 时间变化",
+        "duration": 18.002
+      },
+      {
+        "text": "来看函数，y 等于 x 的平方。在 x 等于一附近，让 x 增加一个不为零的小量 h。函数值的变化，是一加 h 的平方减一。用它除以 h，展开并约分，就得到二加 h。这表示两点之间的平均变化率。",
+        "board": "f(x) = x²，考察 x = 1\n[f(1+h) − f(1)] / h\n= [(1+h)² − 1] / h = 2+h（h ≠ 0）",
+        "duration": 17.249
+      },
+      {
+        "text": "当 h 越来越接近零，二加 h 就越来越接近二。所以，这个函数在 x 等于一处的导数等于二。几何上，两点连成的割线逐渐靠近切线。导数二，就是这条切线的斜率。",
+        "board": "f′(1) = lim（h→0）(2+h) = 2\n割线 → 切线\n导数 = 切线斜率",
+        "duration": 14.132
+      },
+      {
+        "text": "最后记住，导数反映局部变化的快慢。在 x 等于一附近，x 增加零点零一，函数值大约增加零点零二。这是局部近似，实际增加量是零点零二零一。增量越小，这个近似通常越准确。",
+        "board": "局部近似：Δy ≈ f′(x) · Δx\n在 x = 1，Δx = 0.01 时\nΔy ≈ 0.02；实际为 0.0201",
+        "duration": 15.499
+      }
+    ],
+    "duration": 64.883,
+    "subject": "math",
+    "original": true
+  },
+  {
+    "id": "programming-loops",
+    "title": "程序设计 · 循环入门",
+    "teacher": "许老师",
+    "audio": "programming-loops.wav",
+    "segments": [
+      {
+        "text": "同学们好。假如要计算一加二，一直加到五，我们可以逐项相加。如果加到一千呢？重复写一千次加法很麻烦。循环让计算机按照规则，重复执行一段代码。今天我们用一个简单的求和程序来理解它。",
+        "board": "任务：计算 1 + 2 + 3 + 4 + 5\n循环 = 按规则重复执行代码",
+        "duration": 17.263
+      },
+      {
+        "text": "先把总和 sum 设为零。然后让变量 i 依次取一到五，每次把 i 加到 sum 里面。在 Python 中，range 一逗号六，包含起点一，但不包含终点六，所以它正好产生一、二、三、四、五。",
+        "board": "sum = 0\nfor i in range(1, 6):\n    sum = sum + i\nprint(sum)",
+        "duration": 15.589
+      },
+      {
+        "text": "跟踪一下执行过程。第一次，零加一，总和变成一。第二次再加二，总和变成三。接着依次得到六、十、十五。循环结束后再打印，输出就是十五。缩进表示哪些语句属于循环，位置不同，执行次数也会不同。",
+        "board": "i：      1 → 2 → 3 → 4 → 5\nsum：1 → 3 → 6 → 10 → 15\n循环外的 print 只执行一次",
+        "duration": 19.212
+      },
+      {
+        "text": "写循环时，检查三件事：从哪里开始，每次怎样推进，什么时候结束。如果要计算一到十的和，只需把 range 的终点改成十一，结果是五十五。请注意终点不包含在内，这是初学者常见的边界错误。",
+        "board": "检查：起点 · 推进 · 终点\n1 到 10：range(1, 11)\n结果：55；右端点不包含",
+        "duration": 16.318
+      }
+    ],
+    "duration": 68.382,
+    "subject": "programming",
+    "original": true
+  },
+  {
+    "id": "physics-inertia",
+    "title": "大学物理 · 惯性",
+    "teacher": "吴老师",
+    "audio": "physics-inertia.wav",
+    "segments": [
+      {
+        "text": "同学们好。公交车突然刹车，站着的乘客往往向前倾。这不是有一种叫惯性力的真实外力把人向前推，而是身体倾向于保持原来的运动状态。这种保持静止或者匀速直线运动状态的性质，就叫惯性。",
+        "board": "惯性：保持原有运动状态的性质\n刹车时前倾：身体仍有向前运动的趋势",
+        "duration": 16.221
+      },
+      {
+        "text": "牛顿第一定律告诉我们，在惯性参考系中，物体不受外力，或者所受外力的合力为零时，会保持静止或者匀速直线运动。这里的关键词是合力为零。物体受到几个力，也可能因为这些力互相平衡而保持原来的状态。",
+        "board": "牛顿第一定律（惯性参考系）\n合外力 ΣF = 0\n静止，或匀速直线运动",
+        "duration": 16.999
+      },
+      {
+        "text": "惯性大小由质量衡量，不由速度大小决定。质量越大，要让它产生相同的加速度，通常就需要越大的合外力。在质量不变的经典力学情形下，牛顿第二定律写成，合外力等于质量乘以加速度。",
+        "board": "质量是惯性大小的量度\nΣF = ma\n同样的 a，m 越大，所需合外力越大",
+        "duration": 15.598
+      },
+      {
+        "text": "桌面上的书被推一下，最后会停下，是因为摩擦等外力改变了它的运动状态。运动本身不需要一个持续向前的合力来维持。请记住，合外力改变速度；合外力为零时，速度保持不变，包括大小和方向。",
+        "board": "推书后停下：摩擦力使速度改变\n合外力改变运动状态\nΣF = 0 → 速度大小和方向不变",
+        "duration": 16.516
+      }
+    ],
+    "duration": 65.334,
+    "subject": "physics",
+    "original": true
+  },
+  {
+    "id": "philosophy-fact-and-value",
+    "title": "哲学 · 从事实到价值判断",
+    "segments": [
+      {
+        "text": "同学们，假设有人说，图书馆晚上常常满座，所以应该延长开放时间。前半句描述一种可以调查的情况，后半句提出一种行动主张。两句话并非毫无关系，但从事实走向应该怎样做，还需要说明我们重视什么，以及愿意承担哪些代价。",
+        "board": "事实：情况是否如此\n价值：什么值得重视\n主张：我们应该怎样做",
+        "duration": 19.14585
+      },
+      {
+        "text": "把理由补完整，我们可能得到这样的讨论：学生需要安静的学习空间，而现有空间难以满足需求，因此可以考虑延时开放。不过，这个结论还依赖人员安排、安全条件和其他替代方案。理由越透明，别人越容易指出分歧究竟发生在哪里。",
+        "board": "说出隐含的理由\n检查条件与替代方案\n结论需要理由支持",
+        "duration": 19.123583
+      },
+      {
+        "text": "哲学讨论不只是表明赞成或反对，也要检查自己的判断如何形成。我们可以先问，对方提供的事实可靠吗，再问，双方重视的目标是否不同。如果新证据出现，适当修改结论并不等于没有立场，而是让立场继续接受理由的检验。",
+        "board": "先核事实，再谈目标\n区分证据分歧与价值分歧\n允许有理由地修正判断",
+        "duration": 18.221723
+      }
+    ],
+    "question": "“晚上满座，所以图书馆必须延时开放”中，哪部分是事实描述？还缺少什么理由？",
+    "answer": "“晚上满座”是可调查的事实描述。还需说明满足夜间学习需求为何重要，并比较人员、安全、成本和其他方案；满座本身不能单独推出“必须延时”。",
+    "subject": "philosophy",
+    "teacher": "林老师",
+    "audio": "audio/philosophy-fact-and-value.mp3",
+    "duration": 56.491156,
+    "original": true
+  },
+  {
+    "id": "philosophy-identity-and-change",
+    "title": "哲学 · 变化中的同一性",
+    "segments": [
+      {
+        "text": "设想一辆陪你上学的自行车，轮胎、车把和车架先后换过，最后没有留下最初的零件。你仍然叫它我的那辆车。这里的问题不是给自行车验明正身，而是追问：当事物不断变化时，我们依据什么，仍把前后的它看成同一个事物呢？",
+        "board": "零件变化，名称延续\n同一个事物依据什么\n区分材料与延续关系",
+        "duration": 18.300454
+      },
+      {
+        "text": "一种判断重视材料，认为原来的组成部分十分重要；另一种判断重视连续的使用过程、功能和关系。这些标准可能给出不同答案。不要急着挑选最顺耳的一种，先说明自己采用的标准，再看看它遇到特殊情况时，能否保持前后一致。",
+        "board": "材料标准：由什么组成\n连续标准：怎样延续\n同一标准能否处理新情况",
+        "duration": 18.609569
+      },
+      {
+        "text": "把问题转向人，我们也会谈到身体、记忆、承诺和社会关系的延续。这里不能简单照搬修车的比喻，因为人的经验与责任更复杂。思想实验的作用，是让平时含混的词变得清楚，并帮助我们发现一个答案背后究竟保留了哪些假设。",
+        "board": "比喻有帮助，也有限度\n澄清概念与判断标准\n思想实验用来发现假设",
+        "duration": 18.040136
+      }
+    ],
+    "question": "自行车换掉所有零件后仍算原来的车吗？请提出一种标准，并说明它的局限。",
+    "answer": "可以采用使用过程连续的标准：维修、保管和用途持续衔接，因此仍视为同一辆车。局限是若拆下的旧零件又组装成车，仅凭连续性还需要进一步澄清两辆车各自的身份。允许采用其他明确且自洽的标准。",
+    "subject": "philosophy",
+    "teacher": "林老师",
+    "audio": "audio/philosophy-identity-and-change.mp3",
+    "duration": 54.950159,
+    "original": true
+  },
+  {
+    "id": "philosophy-choice-and-responsibility",
+    "title": "哲学 · 选择与责任的边界",
+    "segments": [
+      {
+        "text": "假设两位同学都没有按时完成小组任务，一位忘记安排时间，另一位在途中遇到突发阻碍。结果相同，不代表我们对责任的判断也必须相同。讨论责任时，除了事情造成了什么影响，还需要了解当事人知道什么，以及实际能够做些什么。",
+        "board": "相同结果不等于相同责任\n考察知情、能力与选择\n先了解具体处境",
+        "duration": 18.585941
+      },
+      {
+        "text": "我们可以提出三个问题：这个后果事先能够合理预见吗，当事人有没有可行的其他选择，他是否尽力履行已经答应的事情。这些问题不是一张自动判分表，而是帮助我们避免只凭结果或好恶下判断，也避免把所有困难都当作免除责任的理由。",
+        "board": "后果能否预见\n是否存在可行替代\n承诺是否得到认真对待",
+        "duration": 17.941361
+      },
+      {
+        "text": "承担责任也不只意味着接受批评。说明经过、补救影响、重新分配任务和改进计划，都可能是负责任的行动。评判过去与安排下一步可以同时进行。我们既要看见限制，也要寻找仍然能够选择的部分，让讨论帮助合作继续，而不是停在互相指责。",
+        "board": "说明经过，补救影响\n区分追责与改进\n在限制中寻找可行行动",
+        "duration": 19.908526
+      }
+    ],
+    "question": "小组成员因可预见的时间冲突而迟交任务，主动说明情况就能免除责任吗？",
+    "answer": "不能仅凭说明情况就免除责任。还应看他能否提前沟通、调整安排或寻求帮助。主动说明与补救值得肯定，但需要分别评价事前的选择和事后的处理。",
+    "subject": "philosophy",
+    "teacher": "林老师",
+    "audio": "audio/philosophy-choice-and-responsibility.mp3",
+    "duration": 56.435828,
+    "original": true
+  },
+  {
+    "id": "philosophy-fair-allocation",
+    "title": "哲学 · 有限资源怎样分配",
+    "segments": [
+      {
+        "text": "假设学院只有十个活动名额，却有二十位同学报名。平均抽签、先到先得、优先照顾最需要的人，都可能被称为公平，但它们依据的理由并不一样。开始争论前，先问这些名额是为了什么，才能判断哪种分配方式更适合这个具体目标。",
+        "board": "名额有限，标准可以不同\n平等机会、顺序与需要\n先说明资源的用途",
+        "duration": 18.936327
+      },
+      {
+        "text": "抽签可以在符合条件的人之间提供相同机会，却不一定照顾差异很大的需要。先到先得规则清楚，但也可能偏向更早获得消息的人。指出一种办法的局限，不等于它在所有情境下都不可用，而是要求我们同时说明它保护了什么，又忽略了什么。",
+        "board": "比较每种办法的理由\n注意信息与需要的差异\n公平需要具体情境",
+        "duration": 18.84068
+      },
+      {
+        "text": "分配结果之外，过程也值得检查。标准是否提前公开，报名条件是否一致，错误是否可以纠正，都是讨论的一部分。有时我们无法让每个人都满意，但可以把理由说明白，并提供合理的复核机会。公平并不是一个口号，而是一组可以追问的安排。",
+        "board": "规则公开，条件一致\n允许纠错与合理复核\n结果和过程都需要说明",
+        "duration": 19.721859
+      }
+    ],
+    "question": "面向新生的基础体验活动，名额不足时为何可以考虑在合格报名者中抽签？",
+    "answer": "如果活动目标是让条件相近的新生获得平等体验机会，抽签能提供相同的中签机会。但仍应公平发布信息、明确资格并处理报名错误；它不适合直接替代对特殊需要的判断。",
+    "subject": "philosophy",
+    "teacher": "林老师",
+    "audio": "audio/philosophy-fair-allocation.mp3",
+    "duration": 57.498866,
+    "original": true
+  },
+  {
+    "id": "chinese-close-reading",
+    "title": "大学语文 · 从一个细节进入文本",
+    "segments": [
+      {
+        "text": "请读这句原创练习：雨停了，窗台上的水珠还抓着一线光。句子没有直接说人物感到留恋，却把注意力放在仍未消失的水珠上。细读时，可以先圈出具体词语，观察它们如何安排我们的目光，再讨论这些细节可能带来怎样的情绪和联想。",
+        "board": "原创例句：水珠抓着一线光\n先找具体词语与细节\n再讨论情绪和联想",
+        "duration": 18.553696
+      },
+      {
+        "text": "如果把抓着改成映着，句子的基本景物没有变化，动作感却有所不同。前者使水珠仿佛具有主动挽留的力量，后者更接近平静的观察。替换词语是一种阅读方法：通过比较表达效果，我们能更具体地说明自己的感受，避免只写优美或生动。",
+        "board": "替换词语，比较效果\n动作感影响阅读节奏\n用证据代替空泛评价",
+        "duration": 18.782902
+      },
+      {
+        "text": "当然，一个句子不能决定整篇文章的意义。如果前文写离别，水珠可能呼应留恋；如果前文写久雨初晴，它也可能表现重新发现日常的欣喜。这些都是有条件的解释。把局部细节放回上下文，才能让理解既有个人感受，也得到文本本身的支持。",
+        "board": "细节需要放回上下文\n同一景物可能承担不同作用\n解释应有文本依据",
+        "duration": 19.958186
+      }
+    ],
+    "question": "为什么不能只凭“水珠抓着一线光”就断定全文写的是离别？",
+    "answer": "这个细节可以引起留恋的联想，但全文主题还取决于人物、事件和上下文。离别只是待验证的解释，需要其他文本线索支持。",
+    "subject": "college-chinese",
+    "teacher": "沈老师",
+    "audio": "audio/chinese-close-reading.mp3",
+    "duration": 57.294785,
+    "original": true
+  },
+  {
+    "id": "chinese-narrative-viewpoint",
+    "title": "大学语文 · 谁在讲述，谁能知道",
+    "segments": [
+      {
+        "text": "看两句原创叙述：我走进教室时，大家忽然安静下来；小周走进教室，大家正好结束了讨论。两句话可能描写同一场景，却给读者不同的解释空间。分析叙述视角时，先确认谁在讲述，他站在什么位置，以及他真正能够知道哪些事情。",
+        "board": "叙述者站在哪里\n他能观察到什么\n他未必知道全部原因",
+        "duration": 19.397868
+      },
+      {
+        "text": "第一人称容易让我们接近讲述者的感受，但接近不等于必须接受他的全部判断。他可能记错、误解，也可能只掌握部分信息。阅读时把看见的事情与推测的原因分开，便能发现叙述中的空白，并理解人物为何会用这样的方式解释自己的经历。",
+        "board": "观察与推测需要区分\n亲近叙述者不等于全盘相信\n留意信息空白",
+        "duration": 18.911383
+      },
+      {
+        "text": "换一个视角重写同一场景，可以检验原来的理解。让正在讨论的同学开口，安静也许只是话题自然结束；让迟到者讲述，安静又可能被感受为压力。练习的重点不是找出唯一正确的情绪，而是看见信息范围如何影响语言、判断和人物关系。",
+        "board": "换视角，重写同一场景\n信息范围影响解释\n视角塑造人物关系",
+        "duration": 19.458866
+      }
+    ],
+    "question": "“大家安静了，所以他们一定不欢迎我”包含哪一步未经证实的推测？",
+    "answer": "“大家安静了”可以是观察；把安静的原因认定为“不欢迎我”是推测。应寻找其他线索，也考虑讨论结束等不同解释。",
+    "subject": "college-chinese",
+    "teacher": "沈老师",
+    "audio": "audio/chinese-narrative-viewpoint.mp3",
+    "duration": 57.768118,
+    "original": true
+  },
+  {
+    "id": "chinese-sentence-order",
+    "title": "大学语文 · 让长句的信息走得更清楚",
+    "segments": [
+      {
+        "text": "写作时，我们常把时间、原因、人物和行动塞进同一句话，结果读者读到最后，才知道究竟发生了什么。修改长句可以先找主干：谁做了什么。保留主干之后，再判断哪些背景必须提前交代，哪些补充可以放在后面，或者单独写成一句。",
+        "board": "先找主干：谁做了什么\n再安排时间、原因和补充\n一句话不必承担所有信息",
+        "duration": 19.488299
+      },
+      {
+        "text": "例如这句原创说明，因教室设备检修，原定周三举行的讨论改到周四下午，并转至隔壁教室。读者最关心的可能是新的时间与地点。如果写通知，可以先突出调整结果，再补充原因。表达顺序没有脱离情境的万能答案，要根据读者接下来需要做什么来选择。",
+        "board": "根据读者任务安排顺序\n通知先突出新的安排\n原因可以随后交代",
+        "duration": 21.010748
+      },
+      {
+        "text": "清楚也不等于把所有句子切得一样短。连续几句如果都省略主语，反而可能让人分不清谁在行动。修改后可以请另一位同学复述：事情是什么，条件有哪些，下一步要做什么。能否准确复述，比句子看起来是否简短，更能帮助我们发现表达中的问题。",
+        "board": "短句也要保持指代清楚\n检查条件是否遗漏\n用复述检验表达效果",
+        "duration": 20.116009
+      }
+    ],
+    "question": "把设备检修例句改成一条便于同学执行的两句通知。",
+    "answer": "示例：“原定周三的讨论改到周四下午，地点为隔壁教室。调整原因是原教室设备检修。”保留新的时间、地点及调整缘由即可；正式通知还应补足具体日期、时刻和教室编号。",
+    "subject": "college-chinese",
+    "teacher": "沈老师",
+    "audio": "audio/chinese-sentence-order.mp3",
+    "duration": 60.615057,
+    "original": true
+  },
+  {
+    "id": "chinese-classical-context",
+    "title": "大学语文 · 在语境中读懂文言",
+    "segments": [
+      {
+        "text": "今天用一段自拟文言做练习：友以书授余，嘱余明日还之。既读，余录其要，乃还。先不要逐字拼接现代词义，试着确定人物和事件：朋友把书交给我，叮嘱归还，我读过之后摘录要点，再把书还回去。事件顺序能够帮助我们理解具体词语。",
+        "board": "自拟例文：友以书授余\n先辨人物，再理事件\n借书、读书、摘录、归还",
+        "duration": 20.380136
+      },
+      {
+        "text": "这里的余指我，之指前面提到的书，其要可以理解为书中的要点。判断这些词时，应回到前后句寻找对象，而不是见到一个字就立刻套用固定答案。同一个字在不同句子中可能承担不同作用，语境能帮助我们排除那些无法连成完整意思的解释。",
+        "board": "余：我；之：前述的书\n其要：书中的要点\n用上下文确认指代",
+        "duration": 18.736508
+      },
+      {
+        "text": "把文言译成现代汉语时，可以补出为理解所必需的成分，但不要随意增加人物心情或事件原因。例文没有交代朋友为何把书借给我，也没有说明摘录了多少内容。好的翻译应当清楚而克制：让原文已经表达的信息显现出来，同时保留原文没有提供的信息边界。",
+        "board": "必要时补足省略成分\n不擅自增加心理和原因\n翻译应守住原文的信息边界",
+        "duration": 20.269932
+      }
+    ],
+    "question": "例文中的“之”指什么？能否把“乃还”译成“我十分感激地归还了书”？",
+    "answer": "“之”指朋友交给我的书。“乃还”可译为“于是归还了书”或“然后把书还回去”；“十分感激”没有原文依据，不宜加入。例文为原创练习，并非古籍引文。",
+    "subject": "college-chinese",
+    "teacher": "沈老师",
+    "audio": "audio/chinese-classical-context.mp3",
+    "duration": 59.386576,
+    "original": true
+  },
+  {
+    "id": "geography-map-scale",
+    "title": "地理 · 读地图先找哪三件事",
+    "segments": [
+      {
+        "text": "拿到一张校园地图，先确认方向、比例尺和图例。方向帮助我们理解位置关系，比例尺联系图上距离与实际距离，图例说明符号代表什么。地图总会省略一些细节，因此还要问它服务什么任务：寻找教室、规划步行路线，还是观察整个校园的空间结构。",
+        "board": "先读方向、比例尺、图例\n地图是有目的的表达\n任务决定需要哪些细节",
+        "duration": 20.28907
+      },
+      {
+        "text": "假设平面图的比例尺是一比一万，图上一厘米对应地面一百米。量出两点之间三厘米，得到的是图示两点的平面直线距离三百米，不一定是实际步行长度。道路的弯曲、入口的位置和不能穿越的区域，都可能使真正需要走的路比这个距离更长。",
+        "board": "比例尺一比一万\n图上一厘米对应地面一百米\n直线距离不等于步行距离",
+        "duration": 18.557506
+      },
+      {
+        "text": "比较两张地图时，还要注意细节是否使用了相同的表达规则。某处没有画出小路，不一定意味着那里绝对没有路，也可能是比例尺较小而省略了。地图既提供信息，也有表达边界。把符号、绘制目的和必要的现场信息结合起来，才能更合理地使用它。",
+        "board": "未画出不一定等于不存在\n注意表达范围与省略\n使用地图也要理解它的边界",
+        "duration": 19.900363
+      }
+    ],
+    "question": "比例尺一比一万的平面图上，两点相距二点五厘米，图示地面直线距离是多少？能直接当作步行距离吗？",
+    "answer": "地面直线距离为二百五十米。不能直接当作步行距离，还需沿实际道路计算，并考虑弯路、入口和不可通行区域。",
+    "subject": "geography",
+    "teacher": "陆老师",
+    "audio": "audio/geography-map-scale.mp3",
+    "duration": 58.746939,
+    "original": true
+  },
+  {
+    "id": "geography-surface-temperature",
+    "title": "地理 · 同一校园为什么有冷暖差异",
+    "segments": [
+      {
+        "text": "同一天走过树荫、草地和铺装广场，我们可能感到不同的冷热。解释这种差异时，可以从遮阴、地表材料、水分和空气流动入手。但身体感受并不等于温度计读数，晒热的地面温度也不等于空气温度。首先说清比较的对象，才能提出可以检验的问题。",
+        "board": "先区分体感、气温与地表温度\n关注遮阴、材料、水分、通风\n明确要比较的对象",
+        "duration": 20.23288
+      },
+      {
+        "text": "如果做一次简单观察，应尽量在相近时刻、相同高度，用相同的方法测量。把一个地点的正午读数与另一地点的傍晚读数直接相比，很难判断差异来自地点还是时间。记录云量、风和地面是否湿润，也能帮助我们发现看似相同的环境其实有哪些不同。",
+        "board": "同一时段，相同测量方法\n记录天气和地面状况\n避免把时间差异当作地点差异",
+        "duration": 19.904807
+      },
+      {
+        "text": "我们可以提出树荫影响受热的解释，再用多次观察来检验，而不是用一次读数证明所有树荫都更凉。地点之间常有多个条件同时变化，结果也可能随天气改变。地理观察的重要习惯，是把发现、解释和不确定之处分开记录，让下一次调查有明确方向。",
+        "board": "一次观察不能代表所有情况\n区分发现、解释与不确定\n用重复观察检验解释",
+        "duration": 20.000816
+      }
+    ],
+    "question": "甲在中午测草地，乙在傍晚测广场，能据此判断哪种地表白天更热吗？",
+    "answer": "不能。测量时刻不同，混入了时间条件的影响。应在相近时刻、相同方法下比较同一种温度指标，并记录遮阴、风和湿润状况等条件。",
+    "subject": "geography",
+    "teacher": "陆老师",
+    "audio": "audio/geography-surface-temperature.mp3",
+    "duration": 60.138503,
+    "original": true
+  },
+  {
+    "id": "geography-rainfall-and-runoff",
+    "title": "地理 · 雨水落地后去了哪里",
+    "segments": [
+      {
+        "text": "一场雨落到地面之后，不会全部沿同一条路离开。有些水暂时停留在叶片或低洼处，有些进入土壤，有些沿地表流动，之后还可能蒸发。把这些去向分开观察，我们便能理解，同样降下一场雨，不同地点出现的地表径流可能并不相同。",
+        "board": "降水之后有多种去向\n截留、下渗、地表径流\n暂存与蒸发也参与其中",
+        "duration": 19.047982
+      },
+      {
+        "text": "地表是否容易让水进入，土壤原先是否已经湿润，降雨强度怎样，都会影响水的去向。不能只看有草还是有路，就给出完全确定的结论。比如原本能够入渗的土壤，在很湿或降雨很强时，也可能产生明显径流，因此要同时考虑材料和当时的条件。",
+        "board": "下渗受地表与土壤条件影响\n前期湿润程度很重要\n降雨强度也会改变结果",
+        "duration": 19.893243
+      },
+      {
+        "text": "讨论校园积水时，可以沿着雨水的路径提出问题：水从哪里来，在哪里汇集，通过哪里排走。一个低点的现象可能与上游较大范围有关，而不只由脚下几平方米决定。画出汇水关系，比单独描述某处有水，更有助于理解地形、地表和排水通道之间的联系。",
+        "board": "追踪来水、汇水与去水\n局部现象联系较大范围\n用路径图整理影响因素",
+        "duration": 20.39542
+      }
+    ],
+    "question": "为什么同一块草地在连续降雨后，可能比雨前更容易出现地表径流？",
+    "answer": "连续降雨会提高土壤湿润程度，土壤能够继续暂存或吸收雨水的条件可能变差；若来水超过入渗等过程的承受范围，地表径流就可能增加。还需结合降雨强度和具体土壤判断。",
+    "subject": "geography",
+    "teacher": "陆老师",
+    "audio": "audio/geography-rainfall-and-runoff.mp3",
+    "duration": 59.336644,
+    "original": true
+  },
+  {
+    "id": "geography-mobility-and-city",
+    "title": "地理 · 从通勤路线理解城市联系",
+    "segments": [
+      {
+        "text": "观察一座城市，不只要看建筑在哪里，还可以看人们怎样在居住、学习和工作地点之间移动。每天的通勤路线把不同区域联系起来。一个地方白天很热闹、晚上较安静，可能与活动功能有关，但仅凭这种现象，还不能准确推断当地常住人口的多少。",
+        "board": "城市由地点和联系共同构成\n观察居住、学习与工作流动\n活动人数不等于常住人口",
+        "duration": 19.944308
+      },
+      {
+        "text": "比较两位同学的通勤，距离相同也未必花费相同时间。道路连接、换乘次数、出行方式和等待时间，都可能改变体验。地图上的近，和实际到达的方便，不是完全相同的概念。描述一个地点的可达性时，要说明从哪里出发、采用什么方式以及考察哪个时段。",
+        "board": "近距离不一定容易到达\n路线、方式、换乘与等待\n可达性需要具体条件",
+        "duration": 21.009796
+      },
+      {
+        "text": "解释居住地点的选择时，也不宜只用一个原因概括所有人。学习工作机会、住房条件、家庭关系和个人偏好，都可能发挥作用。我们可以比较不同群体的路线与处境，再提出有条件的解释。这样既能看见总体空间格局，也不会抹去其中真实存在的差异。",
+        "board": "地点选择常受多种因素影响\n比较群体，也关注处境\n总体格局不等于人人相同",
+        "duration": 20.358912
+      }
+    ],
+    "question": "两名同学住处离学校都五公里，为什么不能直接认定他们的通勤条件相同？",
+    "answer": "还要比较道路连接、交通方式、换乘和等待时间、出发时段等。直线距离只反映部分空间关系，不能单独代表实际到达的便利程度。",
+    "subject": "geography",
+    "teacher": "陆老师",
+    "audio": "audio/geography-mobility-and-city.mp3",
+    "duration": 61.313016,
+    "original": true
+  },
+  {
+    "id": "math-limits-continuity",
+    "title": "高等数学 · 极限与连续：靠近一个点",
+    "segments": [
+      {
+        "text": "想象你沿着数轴靠近一个位置，我们关心函数值会靠近哪里。极限描述的是靠近过程中的趋势，不是直接把自变量代进去。左右两边都能靠近同一个数，才可能有这个点的双侧极限，单看一边还不够。",
+        "board": "极限：研究靠近时的趋势\n左极限 = 右极限 → 双侧极限存在",
+        "duration": 16.048844
+      },
+      {
+        "text": "来看一个例子，函数是自变量平方减一，再除以自变量减一。只要自变量不等于一，就能约去共同因子，得到自变量加一。因此，虽然原式在一处没有定义，当自变量趋近一时，函数值仍会趋近二。",
+        "board": "f(x) = (x²−1)/(x−1)，x≠1\nf(x) = x+1\nlim(x→1) f(x) = 2",
+        "duration": 16.571746
+      },
+      {
+        "text": "连续还需要多检查一步：这个点的函数值必须已经定义，并且等于它的极限。把刚才空缺的函数值补成二，图像上的小洞就接好了；如果补成五，小洞附近的趋势依旧是二，所以这个函数在一处仍不连续。",
+        "board": "连续：有定义、有极限、两者相等\n补 f(1)=2 → 连续\n补 f(1)=5 → 不连续",
+        "duration": 16.128617
+      }
+    ],
+    "question": "函数在一点的极限等于二，但该点函数值等于五，它在该点连续吗？",
+    "answer": "不连续。连续要求该点函数值与极限相等，五不等于二。",
+    "subject": "math",
+    "teacher": "陈老师",
+    "audio": "audio/math-limits-continuity.mp3",
+    "duration": 48.749206,
+    "original": true
+  },
+  {
+    "id": "math-definite-integral",
+    "title": "高等数学 · 定积分：把小量累积起来",
+    "segments": [
+      {
+        "text": "水龙头的流量如果一直变化，怎样知道一段时间里流入多少水？可以先把时间分成许多小段，在每段里用一个代表流量乘以时长，再把这些小水量相加。分段越来越细，这些和的极限就是定积分的基本想法。",
+        "board": "小水量 ≈ 流量 × 小段时长\n总水量 ≈ Σ q(tᵢ)Δt\n定积分：细分求和的极限",
+        "duration": 16.248662
+      },
+      {
+        "text": "如果流量恒定为每秒三升，持续五秒，流入的水量就是十五升。在流量与时间的图像上，它对应一个长五、宽三的矩形。这个例子提醒我们看清单位：每秒的量乘以秒，得到的是累积的量，而不是流量。",
+        "board": "q = 3 升/秒，时间 = 5 秒\nV = ∫₀⁵ 3 dt = 15 升\n流量 × 时间 = 水量",
+        "duration": 16.199955
+      },
+      {
+        "text": "定积分也可以累积带方向的量。例如用速度对时间积分，得到的是位移，反方向运动会贡献负值。如果想求总路程，就要累积速度的绝对值。因此，图像在横轴下方的部分，不能一律当成正面积相加。",
+        "board": "位移 = ∫ v(t) dt\n路程 = ∫ |v(t)| dt\n横轴下方对位移贡献为负",
+        "duration": 16.584807
+      }
+    ],
+    "question": "水流以每秒三升的恒定流量持续五秒，一共流入多少水？",
+    "answer": "十五升。水量等于三升每秒乘以五秒。",
+    "subject": "math",
+    "teacher": "陈老师",
+    "audio": "audio/math-definite-integral.mp3",
+    "duration": 49.033424,
+    "original": true
+  },
+  {
+    "id": "math-geometric-series",
+    "title": "高等数学 · 无穷级数：越来越多的项",
+    "segments": [
+      {
+        "text": "无穷级数不能理解成一次完成无穷多个加法。我们先加第一项，再加前两项、前三项，得到一串部分和。只有当部分和趋近一个有限的数时，才说级数收敛；如果没有这样的极限，就不能给它指定普通意义的和。",
+        "board": "部分和 Sₙ = a₁+…+aₙ\nSₙ 趋近有限数 → 级数收敛\n研究对象：部分和的极限",
+        "duration": 16.992971
+      },
+      {
+        "text": "先看一、二分之一、四分之一这样不断减半的数。前几项相加，得到一、一点五、一点七五，越来越接近二。首项为一、公比为二分之一的等比级数，因此收敛到二，每多加一项，离二剩下的差距又减半。",
+        "board": "1 + 1/2 + 1/4 + …\nSₙ = 2(1−2⁻ⁿ)\nSₙ → 2",
+        "duration": 16.97746
+      },
+      {
+        "text": "对于首项非零的等比级数，公比的绝对值小于一时，和等于首项除以一减公比。条件不能省略：公比等于一时，部分和不断累积；公比等于负一时，部分和来回跳动。这两种情况都没有有限的极限。",
+        "board": "a ≠ 0，|r| < 1\na + ar + ar² + … = a/(1−r)\nr=1 或 r=−1：不收敛",
+        "duration": 15.947166
+      }
+    ],
+    "question": "首项是三、公比是二分之一的无穷等比级数，和是多少？",
+    "answer": "六。公比的绝对值小于一，使用三除以一减二分之一，得到六。",
+    "subject": "math",
+    "teacher": "陈老师",
+    "audio": "audio/math-geometric-series.mp3",
+    "duration": 49.917596,
+    "original": true
+  },
+  {
+    "id": "programming-functions",
+    "title": "程序设计 · 函数：输入、处理与返回",
+    "segments": [
+      {
+        "text": "写程序时，经常需要多次完成同一种小任务。函数可以把这项任务装进一个有名字的代码块，调用时提供输入，执行后取得结果。例如计算一个数的平方，只需写好一次规则，就能对不同的数字重复使用。",
+        "board": "函数：封装一项任务\n输入 → 处理 → 返回结果\n定义一次，可以多次调用",
+        "duration": 16.478912
+      },
+      {
+        "text": "用一个平方函数做例子。定义时写下参数名称，函数内部返回这个参数乘以自身。调用时传入三，参数就接收三，返回值是九。参数是定义中的名字，实参是调用时提供的值，把两者区分开就更容易读懂程序。",
+        "board": "def square(x):\n    return x * x\nsquare(3) → 9",
+        "duration": 17.781587
+      },
+      {
+        "text": "请区分返回和打印。打印只是把内容显示出来，返回则把结果交给调用者，让后续计算继续使用。在这个例子里，我们可以把平方函数的返回值保存到变量，再加上一。只打印九，并不等于把数字九返回出去。",
+        "board": "result = square(3)\nresult + 1 → 10\nprint 显示；return 交回结果",
+        "duration": 17.356009
+      }
+    ],
+    "question": "平方函数返回输入值乘以自身，square(4) 的返回值是多少？",
+    "answer": "十六，因为四乘以四等于十六。",
+    "subject": "programming",
+    "teacher": "许老师",
+    "audio": "audio/programming-functions.mp3",
+    "duration": 51.616508,
+    "original": true
+  },
+  {
+    "id": "programming-list-index",
+    "title": "程序设计 · 列表与索引：找到正确的位置",
+    "segments": [
+      {
+        "text": "如果要保存三次测验的成绩，可以把它们按顺序放进一个列表。在这节课采用的语言中，列表使用方括号，元素之间用逗号分开。顺序使每个元素都有明确的位置，我们可以通过索引读取其中某一个，而不必拆开整个列表。",
+        "board": "scores = [80, 90, 70]\nPython 列表保留元素顺序\n索引用于定位元素",
+        "duration": 17.80381
+      },
+      {
+        "text": "这里使用从零开始的索引。三个元素的索引依次是零、一、二，所以索引一对应第二个元素，而不是第一个。列表长度是三，并不意味着索引三也有效。访问不存在的位置，会产生越界错误，需要先检查范围。",
+        "board": "索引：     0    1    2\nscores：[80, 90, 70]\n非负有效索引：0 ≤ i < 3",
+        "duration": 17.413787
+      },
+      {
+        "text": "列表中的元素还可以更新。把索引一的位置赋值为九十五，只会替换第二个成绩，列表长度仍然是三。读取一个位置与修改一个位置，要看它出现在赋值号的哪一侧。处理数据前确认索引，可以避免改错记录。",
+        "board": "scores[1] = 95\nscores → [80, 95, 70]\n替换元素不会增加列表长度",
+        "duration": 16.884898
+      }
+    ],
+    "question": "列表 scores 是 [80, 90, 70]，scores[1] 的值是多少？",
+    "answer": "九十。索引从零开始，索引一对应第二个元素。",
+    "subject": "programming",
+    "teacher": "许老师",
+    "audio": "audio/programming-list-index.mp3",
+    "duration": 52.102494,
+    "original": true
+  },
+  {
+    "id": "programming-conditionals",
+    "title": "程序设计 · 条件分支：让程序作出选择",
+    "segments": [
+      {
+        "text": "程序有时需要根据数据选择不同操作，例如成绩达到及格线就显示通过，否则显示未通过。条件表达式会得到真或假，分支语句据此选择执行的代码。写条件前，先用一句清楚的话说明判断规则，代码才不容易写反。",
+        "board": "条件表达式 → 真或假\nscore ≥ 60 → 通过\n否则 → 未通过",
+        "duration": 17.809388
+      },
+      {
+        "text": "如果需要分成优秀、良好和其他三档，可以先判断成绩是否至少九十，再判断是否至少八十，最后处理剩余情况。在同一条条件分支链里，命中第一条成立的条件后，就跳过后面的分支，所以判断顺序会影响结果。",
+        "board": "if score >= 90: tag='优秀'\nelif score >= 80: tag='良好'\nelse: tag='其他'",
+        "duration": 17.592925
+      },
+      {
+        "text": "边界值最适合用来检查条件。八十分应该进入良好，九十分应该进入优秀，七十九分进入其他。如果把至少八十放在最前面，九十五分也会先被它接住。规则存在包含关系时，通常先检查要求更严格的那一档。",
+        "board": "79 → 其他；80 → 良好\n90 → 优秀；95 → 优秀\n包含关系：先判断更严格条件",
+        "duration": 17.324036
+      }
+    ],
+    "question": "先判断至少九十为优秀，再判断至少八十为良好，八十二分会进入哪一档？",
+    "answer": "良好。八十二不满足至少九十，但满足至少八十。",
+    "subject": "programming",
+    "teacher": "许老师",
+    "audio": "audio/programming-conditionals.mp3",
+    "duration": 52.726349,
+    "original": true
+  },
+  {
+    "id": "physics-work-energy",
+    "title": "大学物理 · 功与动能：追踪能量变化",
+    "segments": [
+      {
+        "text": "物理学中的功，需要同时考虑力和位移。在恒力作用的情形下，功等于力的大小、位移大小以及两者夹角余弦的乘积。力与位移同向时做正功，反向时做负功，垂直时做功为零，不能只看有没有用力。",
+        "board": "恒力做功 W = Fs cosθ\n同向：正功；反向：负功\n力与位移垂直：W = 0",
+        "duration": 16.437007
+      },
+      {
+        "text": "运动中的物体具有动能，在经典力学适用的范围内，动能等于质量乘以速度平方的一半。同样质量的物体，速度变为原来的两倍，动能会变为原来的四倍。速度在公式中被平方，这是判断变化比例时的关键。",
+        "board": "动能 K = ½mv²\nm 不变，v 变为 2v\n动能变为原来的 4 倍",
+        "duration": 16.311111
+      },
+      {
+        "text": "动能定理把这两件事连起来：物体所受各个力做功的总和，等于动能的变化。如果总功是负值，动能就减少；如果总功为零，动能保持不变。计算时要把所有相关力的功计入，而不能只挑向前推动的那个力。",
+        "board": "总功 W总 = K末 − K初\nW总 < 0 → 动能减少\n计入所有相关力的功",
+        "duration": 16.547891
+      }
+    ],
+    "question": "质量为二千克的物体以每秒三米运动，它的动能是多少？",
+    "answer": "九焦耳。动能等于二分之一乘二，再乘三的平方。",
+    "subject": "physics",
+    "teacher": "吴老师",
+    "audio": "audio/physics-work-energy.mp3",
+    "duration": 49.296009,
+    "original": true
+  },
+  {
+    "id": "physics-ohms-law",
+    "title": "大学物理 · 欧姆定律：电压、电流与电阻",
+    "segments": [
+      {
+        "text": "电压、电流和电阻描述电路的不同方面。对于温度等条件保持不变的欧姆导体，电压等于电流乘以电阻。同一个电阻两端电压增大时，电流会相应增大；如果电压保持不变，电阻越大，流过它的电流就越小。",
+        "board": "欧姆导体：U = IR\nI = U/R\n条件：温度等保持不变",
+        "duration": 16.837279
+      },
+      {
+        "text": "算一个简单例子：六伏电压加在三欧姆电阻两端，电流就是二安培。单位也能帮我们核对公式，伏特除以欧姆得到安培。计算之前，先确认题目给的是哪个元件两端的电压，不要把局部电压和整个电路的电压混用。",
+        "board": "U = 6 V，R = 3 Ω\nI = 6/3 = 2 A\n对应同一个元件的 U、I、R",
+        "duration": 16.931519
+      },
+      {
+        "text": "把两个电阻串联起来，电流依次通过它们，两者电流相同，总电压等于各自电压之和，所以总电阻等于两个电阻相加。两个三欧姆电阻串联接在六伏理想电源上，总电阻为六欧姆，电流便是一个安培。",
+        "board": "串联：I 相同，U总 = U₁+U₂\nR总 = R₁+R₂ = 6 Ω\nI = 6 V / 6 Ω = 1 A",
+        "duration": 16.169025
+      }
+    ],
+    "question": "一个六欧姆的欧姆电阻两端电压为十二伏，电流是多少？",
+    "answer": "二安培。电流等于十二伏除以六欧姆。",
+    "subject": "physics",
+    "teacher": "吴老师",
+    "audio": "audio/physics-ohms-law.mp3",
+    "duration": 49.937823,
+    "original": true
+  },
+  {
+    "id": "physics-waves-frequency",
+    "title": "大学物理 · 波：频率、波长与传播速度",
+    "segments": [
+      {
+        "text": "观察水面上的浮标，波经过时它主要在原处附近振动，波形却可以向远处传播。波传播的是扰动和能量，不能简单理解成所有介质都随波整体搬走。描述周期性波动时，我们常用周期、频率和波长三个量。",
+        "board": "介质振动 ≠ 随波整体迁移\n周期 T：完成一次振动的时间\n频率 f：每秒振动的次数",
+        "duration": 17.061315
+      },
+      {
+        "text": "周期与频率互为倒数，频率越高，一次振动所用的时间越短。波长则是同一时刻相邻两个同相位点之间的距离，例如相邻波峰的间距。波在一个周期里前进一个波长，因此传播速度等于频率乘以波长。",
+        "board": "f = 1/T\nλ：相邻同相位点间距\nv = λ/T = fλ",
+        "duration": 16.030975
+      },
+      {
+        "text": "波跨入另一种静止介质时，如果波源和边界条件稳定，频率通常保持不变，传播速度和波长却可能改变。以声波为例，声音需要介质传播，不能通过真空。计算波长时，要使用该介质中的波速，而不是随便套一个数值。",
+        "board": "跨介质：频率通常不变\n波速改变 → 波长改变\n声波需要介质，不能在真空传播",
+        "duration": 17.998231
+      }
+    ],
+    "question": "某声波在介质中的波速为每秒三百四十米，频率为一百七十赫兹，波长是多少？",
+    "answer": "二米。波长等于波速除以频率，也就是三百四十除以一百七十。",
+    "subject": "physics",
+    "teacher": "吴老师",
+    "audio": "audio/physics-waves-frequency.mp3",
+    "duration": 51.090522,
+    "original": true
+  },
+  {
+    "id": "english-sound-pairs",
+    "title": "英语与雅思练习 · 把音标变成可听见的区别",
+    "level": "英语基础与雅思口语准备",
+    "original": true,
+    "sourceIds": [
+      "x-cambridge-phonemic"
+    ],
+    "segments": [
+      {
+        "text": "英语字母和实际发音并不总是一一对应。音标的作用，是把声音单独标出来，帮助我们发现同一字母可能有不同读法。今天只比较一组容易混淆的元音，先听老师示范，再观察口形，不急着背完整张表。",
+        "board": "Sound ≠ spelling\n/ɪ/ → ship, sit\n/iː/ → sheep, seat\n先听辨，再看音标。",
+        "duration": 16.316871
+      },
+      {
+        "text": "Ship. Sheep. Sit. Seat.",
+        "board": "Sound ≠ spelling\n/ɪ/ → ship, sit\n/iː/ → sheep, seat\n先听辨，再看音标。",
+        "lang": "en-US",
+        "duration": 5.269297
+      },
+      {
+        "text": "比较这两个元音时，不要只把区别理解为拖长或缩短。舌位和口腔紧张程度也会影响听感。老师交替读两组词，学生先用手势选择，再轮流读给同伴判断；听错的词留下来，作为下一轮重点练习。",
+        "board": "ship ↔ sheep\nsit ↔ seat\n听：选出目标词\n说：让同伴听出区别",
+        "duration": 16.50322
+      },
+      {
+        "text": "Ship. Sheep. Sit. Seat. Ship. Seat. Sheep. Sit.",
+        "board": "ship ↔ sheep\nsit ↔ seat\n听：选出目标词\n说：让同伴听出区别",
+        "lang": "en-US",
+        "duration": 10.539138
+      },
+      {
+        "text": "单词读清楚以后，把它放进一句有意义的话，观察语速加快后是否仍能区分。练习的目标是让对方听懂，而不是机械追求某一种口音。最后记录一个容易混淆的词，并在下次开口前做一次简短复习。",
+        "board": "Please take this seat.\nThe sheep is near the ship.\n清晰 → 连贯 → 复听",
+        "duration": 15.840091
+      },
+      {
+        "text": "Please take this seat. The sheep is near the ship.",
+        "board": "Please take this seat.\nThe sheep is near the ship.\n清晰 → 连贯 → 复听",
+        "lang": "en-US",
+        "duration": 4.098957
+      }
+    ],
+    "question": "先朗读 ship / sheep、sit / seat，再给 sheep 和 ship 分别选择 /ɪ/ 或 /iː/。最后读出 The sheep is near the ship.，请同伴确认听到的两个词。",
+    "answer": "sheep 使用 /iː/；ship 使用 /ɪ/。同伴应能区分两个词。句子练习只检查可懂度和目标音区别，不用拖长所有元音，也不要求改变个人口音。",
+    "subject": "english",
+    "teacher": "周老师",
+    "audio": "audio/english-sound-pairs.mp3",
+    "duration": 68.567574
+  },
+  {
+    "id": "english-sports-speaking",
+    "title": "英语与雅思练习 · 从足球词汇到完整口语回答",
+    "level": "英语会话与雅思口语准备",
+    "original": true,
+    "sourceIds": [
+      "x-bc-football",
+      "x-everwin-prepositions"
+    ],
+    "segments": [
+      {
+        "text": "同一项运动，在不同地区可能有不同的常用名称。来源正文给出了英式和美式的足球用词。会话中先确认双方说的是哪项运动，再选择清楚的表达；认识这种差异，有助于理解材料中的词汇变化。",
+        "board": "football（英式，足球）\nsoccer（美式，足球）\nWhich sport do you enjoy?",
+        "duration": 15.698322
+      },
+      {
+        "text": "Football. Soccer. Which sport do you enjoy?",
+        "board": "football（英式，足球）\nsoccer（美式，足球）\nWhich sport do you enjoy?",
+        "lang": "en-US",
+        "duration": 5.053923
+      },
+      {
+        "text": "回答兴趣问题时，可以先说明喜好，再补一个原因，最后给出具体情境。这样对方更容易继续追问。细节不需要复杂，可以是每周的次数、一起活动的人或常去的地点；用真实经验组织答案，比堆砌生词更自然。",
+        "board": "Answer → Reason → Detail\nI enjoy football because it helps me relax.\nI play with my classmates on Fridays.",
+        "duration": 17.236599
+      },
+      {
+        "text": "I enjoy football because it helps me relax. I play with my classmates on Fridays.",
+        "board": "Answer → Reason → Detail\nI enjoy football because it helps me relax.\nI play with my classmates on Fridays.",
+        "lang": "en-US",
+        "duration": 6.633333
+      },
+      {
+        "text": "谈到擅长的活动，可以使用形容词与介词的固定搭配，后面接活动名称或动名词。把能力和喜好分开说也很有用：喜欢一项运动，并不代表已经很擅长。接着邀请同伴追问原因，练习自然延续对话。",
+        "board": "be good at + noun / -ing\nI am good at swimming.\nI enjoy football, but I am still learning.",
+        "duration": 16.250884
+      },
+      {
+        "text": "I am good at swimming. I enjoy football, but I am still learning.",
+        "board": "be good at + noun / -ing\nI am good at swimming.\nI enjoy football, but I am still learning.",
+        "lang": "en-US",
+        "duration": 5.453515
+      }
+    ],
+    "question": "用三句英文回答 What sport do you enjoy?，包含喜好、原因和具体细节。再补全 She is good at ___ (swim).，并说明英式 football 在本文所指运动的美式常用名称。",
+    "answer": "参考：I enjoy badminton. It helps me relax after class. I play with my roommate twice a week. 填空 swimming；对应词 soccer。口头回答内容可以不同，只要原因和细节与个人喜好一致。",
+    "subject": "english",
+    "teacher": "周老师",
+    "audio": "audio/english-sports-speaking.mp3",
+    "duration": 66.326576
+  },
+  {
+    "id": "ielts-cause-collocations",
+    "title": "英语与雅思练习 · 写清原因与结果：两种常用搭配",
+    "level": "雅思写作语言基础",
+    "original": true,
+    "sourceIds": [
+      "x-ielts-collocations"
+    ],
+    "segments": [
+      {
+        "text": "写因果关系时，先想清楚前面是措施还是原因，后面是行为还是结果。表示导致某个结果的搭配，后面可以接名词或动名词，不能因为看见字母组合就直接接动词原形。先把结构写对，再扩展句子内容。",
+        "board": "lead to + noun / -ing\nRegular practice can lead to improvement.\n避免：lead to improve",
+        "duration": 16.819229
+      },
+      {
+        "text": "Regular practice can lead to improvement.",
+        "board": "lead to + noun / -ing\nRegular practice can lead to improvement.\n避免：lead to improve",
+        "lang": "en-US",
+        "duration": 3.113878
+      },
+      {
+        "text": "如果想表达某项措施鼓励人们采取行动，可以换成鼓励某人做某事的结构。这里需要说清楚谁受到影响，以及他们被鼓励做什么。两个句型强调的角度不同，写作时应按照想表达的关系选择，而不是机械替换。",
+        "board": "encourage + person + to do\nA bike lane can encourage students to cycle.\n谁？students\n做什么？cycle",
+        "duration": 16.39873
+      },
+      {
+        "text": "A bike lane can encourage students to cycle.",
+        "board": "encourage + person + to do\nA bike lane can encourage students to cycle.\n谁？students\n做什么？cycle",
+        "lang": "en-US",
+        "duration": 3.253787
+      },
+      {
+        "text": "正确的搭配还需要合理的解释来支撑。讨论校园措施时，可以补充它怎样改变日常行为，以及在什么条件下可能有效。没有证据时，不要把可能结果写成必然事实；用具体情境说明理由，让读者看见因果过程。",
+        "board": "Measure → Behaviour → Possible result\nA safer bike lane may encourage cycling.\nSome students may then make fewer car trips.",
+        "duration": 16.910476
+      },
+      {
+        "text": "Regular reading can lead to a wider vocabulary. Our reading club encourages students to share useful expressions.",
+        "board": "Measure → Behaviour → Possible result\nA safer bike lane may encourage cycling.\nSome students may then make fewer car trips.",
+        "lang": "en-US",
+        "duration": 7.842902
+      }
+    ],
+    "question": "改正 More practice can lead to improve speaking skills.；再用 encourage、students、read 写一句与图书馆有关的完整句子。",
+    "answer": "参考：More practice can lead to improvements in speaking skills. 或 More practice can lead to improving speaking skills. 第二句：A quiet library can encourage students to read. 检查结果结构、人和后续行动是否清楚，不把句型使用等同于保证提分。",
+    "subject": "english",
+    "teacher": "周老师",
+    "audio": "audio/ielts-cause-collocations.mp3",
+    "duration": 64.339002
+  },
+  {
+    "id": "english-read-the-evidence",
+    "title": "英语与雅思练习 · 读懂公开帖文：时间、受众与证据",
+    "level": "英语阅读与雅思阅读准备",
+    "original": true,
+    "sourceIds": [
+      "x-bbc-home-learning",
+      "x-gorrie-reading"
+    ],
+    "segments": [
+      {
+        "text": "阅读短帖时，先找作者在对谁说话、谈哪个时间范围，以及希望读者做什么。学习公告里的本周和年级信息，就是定位线索。不要只看到熟悉单词就推断全部内容，先用一句中文概括正文确实提供的信息。",
+        "board": "Who? → learners / teachers\nWhen? → this week\nAudience? → Years 7–9\nWhat is actually stated?",
+        "duration": 16.735556
+      },
+      {
+        "text": "What is the main idea? What evidence does the writer give?",
+        "board": "Who? → learners / teachers\nWhen? → this week\nAudience? → Years 7–9\nWhat is actually stated?",
+        "lang": "en-US",
+        "duration": 4.528662
+      },
+      {
+        "text": "再观察句子形式如何配合语境。询问这一阶段正在做的事，可以用进行时；谈每周反复出现的习惯，则常用一般现在时。先根据时间提示理解意思，再改写成自己的生活问句，避免脱离情境只背语法名称。",
+        "board": "Are you studying at home this week?\nDo you study at home every weekend?\n阶段性活动 ↔ 日常习惯",
+        "duration": 16.634104
+      },
+      {
+        "text": "I study in the library every week. I am studying at home this week.",
+        "board": "Are you studying at home this week?\nDo you study at home every weekend?\n阶段性活动 ↔ 日常习惯",
+        "lang": "en-US",
+        "duration": 5.293651
+      },
+      {
+        "text": "有些帖子会先提出观点，再给出例子或演示。阅读时要分清作者声称什么，以及文字本身能证明什么。历史拼写演示可以观察形式变化，却不能代替完整的历史证据；同样，看见课程包介绍，也不等于已经读过课程。",
+        "board": "Claim ≠ evidence\nThe author argues that…\nThe post demonstrates…\nWe cannot tell from the post whether…",
+        "duration": 17.477959
+      },
+      {
+        "text": "Find the main idea. Find the time expression. Check what the text actually says.",
+        "board": "Claim ≠ evidence\nThe author argues that…\nThe post demonstrates…\nWe cannot tell from the post whether…",
+        "lang": "en-US",
+        "duration": 7.118503
+      }
+    ],
+    "question": "根据 BBC 帖文，判断两句话是否有正文依据：①学习包面向 Years 7–9；②学习包里共有十段发音视频。然后用 this week 和 every weekend 各写一个询问在家学习的英文问句。",
+    "answer": "①正文有依据；②正文没有提供，不能推出。参考：Are you studying at home this week? / Do you study at home every weekend? 本题是原创证据辨认练习，不是官方 IELTS 真题。",
+    "subject": "english",
+    "teacher": "周老师",
+    "audio": "audio/english-read-the-evidence.mp3",
+    "duration": 67.788435
+  }
+]

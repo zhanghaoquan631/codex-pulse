@@ -1,0 +1,580 @@
+/* Independent presentation layer. Load after every original campus stylesheet. */
+body.overworld {
+  --ow-paper: #fffcf1;
+  --ow-paper-soft: #f3f0e2;
+  --ow-ink: #243e35;
+  --ow-muted: #627168;
+  --ow-line: #52685a;
+  --ow-line-light: #c3cabc;
+  --ow-green: #315c46;
+  --ow-sage: #e5ead8;
+  --ow-yellow: #f3bc58;
+  --ow-shadow: 3px 3px 0 #243e3529;
+  --ink: var(--ow-ink);
+  --teal: var(--ow-green);
+  --line: var(--ow-line-light);
+  font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ow-ink);
+  background: #c8d5ad;
+}
+
+body.overworld :is(button, input, select, textarea) { font: inherit; }
+body.overworld button { color: var(--ow-ink); cursor: pointer; border-radius: 3px; }
+body.overworld button:hover { filter: brightness(.97); }
+body.overworld button:disabled { opacity: .55; cursor: default; }
+body.overworld :is(button, a, input, select, summary):focus-visible {
+  outline: 3px solid var(--ow-yellow);
+  outline-offset: 3px;
+}
+body.overworld :is(input, select, progress) { accent-color: var(--ow-green); }
+body.overworld :is(small, .eyebrow) { font-size: 14px; }
+body.overworld [hidden] { display: none !important; }
+body.overworld kbd {
+  display: inline-grid;
+  place-items: center;
+  min-width: 23px;
+  padding: 1px 5px;
+  margin: 0 2px;
+  border: 1px solid var(--ow-line-light);
+  border-bottom-width: 2px;
+  border-radius: 2px;
+  background: #fffdf7;
+  font: 13px/1.5 ui-monospace, "Cascadia Code", Consolas, monospace;
+}
+body.overworld #scene { cursor: crosshair; }
+
+/* The game remains edge-to-edge; each tool is a small object on the map. */
+body.overworld header {
+  inset: 20px auto auto 20px;
+  height: 57px;
+  width: auto;
+  padding: 9px 14px 9px 9px;
+  gap: 20px;
+  border: 1px solid var(--ow-line);
+  border-radius: 3px;
+  background: var(--ow-paper);
+  box-shadow: var(--ow-shadow);
+  backdrop-filter: none;
+  z-index: 20;
+}
+body.overworld .brand { gap: 10px; }
+body.overworld .brandmark {
+  width: 35px;
+  height: 36px;
+  border-radius: 2px;
+  color: var(--ow-paper);
+  background: var(--ow-green);
+  font-size: 23px;
+}
+body.overworld .brand b { font-size: 20px; letter-spacing: .04em; line-height: 1.05; }
+body.overworld .brand small { font-size: 12px; line-height: 1.2; letter-spacing: .08em; color: var(--ow-muted); margin-top: 4px; }
+body.overworld .brand-dot { color: #d9a347; }
+body.overworld .campus-title { display: none; }
+body.overworld #about-button { padding: 7px 0 7px 12px; border-left: 1px solid var(--ow-line-light); font-size: 14px; color: var(--ow-muted); }
+body.overworld #about-button span { margin-left: 4px; }
+body.overworld .top-tools { top: 20px; right: 20px; left: auto; gap: 8px; z-index: 20; }
+body.overworld .segmented {
+  padding: 4px;
+  gap: 2px;
+  background: var(--ow-paper);
+  border: 1px solid var(--ow-line);
+  border-radius: 3px;
+  box-shadow: var(--ow-shadow);
+}
+body.overworld .segmented button { min-height: 39px; padding: 8px 12px; font-size: 14px; border-radius: 2px; color: var(--ow-muted); }
+body.overworld .segmented button.active { background: var(--ow-green); color: var(--ow-paper); }
+body.overworld #fly-button { display: none; }
+body.overworld .tool-button {
+  padding: 9px 12px;
+  border: 1px solid var(--ow-line);
+  border-radius: 3px;
+  background: var(--ow-paper);
+  color: var(--ow-ink);
+  box-shadow: var(--ow-shadow);
+}
+body.overworld .tool-button span { font-size: 14px; }
+body.overworld #ow-location {
+  position: fixed;
+  top: 94px;
+  left: 20px;
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 14px;
+  background: #fffcf1e8;
+  border: 1px solid var(--ow-line-light);
+  border-left: 4px solid var(--ow-yellow);
+  border-radius: 2px;
+  max-width: 285px;
+  pointer-events: none;
+}
+body.overworld #ow-location small { color: var(--ow-muted); font-size: 12px; letter-spacing: .05em; }
+body.overworld #ow-location b { font-size: 18px; }
+body.overworld #ow-location span { color: var(--ow-muted); font-size: 14px; }
+body.overworld #ow-location .ow-kicker { color: var(--ow-muted); font-size: 12px; letter-spacing: .07em; }
+body.overworld #ow-location #ow-location-status { color: var(--ow-muted); font-size: 14px; letter-spacing: 0; }
+body.overworld #ow-player-label {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 3;
+  padding: 4px 9px;
+  background: var(--ow-paper);
+  border: 1px solid var(--ow-line);
+  border-radius: 2px;
+  box-shadow: 2px 2px 0 #243e351a;
+  color: var(--ow-ink);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  transform: translate(-50%, -100%);
+}
+body.overworld #ow-player-label::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: calc(50% - 4px);
+  width: 7px;
+  height: 7px;
+  background: var(--ow-paper);
+  border-right: 1px solid var(--ow-line);
+  border-bottom: 1px solid var(--ow-line);
+  transform: rotate(45deg);
+}
+body.overworld .map-label {
+  border: 1px solid #738574;
+  border-radius: 2px;
+  background: #fffcf1eb;
+  color: #29483a;
+  padding: 4px 9px;
+  font-size: 14px;
+  box-shadow: 2px 2px 0 #2b483322;
+  text-shadow: none;
+}
+body.overworld .map-label.selected { background: var(--ow-green); color: white; border-color: var(--ow-green); }
+
+/* Three drawers are controlled exclusively by the new dock body classes. */
+body.overworld:not(.ow-map-open) #explorer,
+body.overworld:not(.ow-life-open) #campus-life-nav,
+body.overworld:not(.ow-character-open) #character-tools { display: none !important; }
+body.overworld :is(#motion-tools, #view-controls, #position-panel, .walk-hint, #places-toggle) { display: none !important; }
+body.overworld.ow-map-open #explorer,
+body.overworld.ow-life-open #campus-life-nav,
+body.overworld.ow-character-open #character-tools {
+  position: fixed;
+  top: 94px;
+  bottom: auto;
+  left: 20px;
+  right: auto;
+  width: 318px;
+  max-height: calc(100dvh - 213px);
+  overflow: auto;
+  z-index: 25;
+  padding: 0;
+  border: 1px solid var(--ow-line);
+  border-radius: 3px;
+  background: var(--ow-paper);
+  color: var(--ow-ink);
+  box-shadow: 5px 5px 0 #29433325;
+  backdrop-filter: none;
+}
+body.overworld.ow-map-open #explorer { display: flex !important; }
+body.overworld.ow-life-open #campus-life-nav { display: block !important; }
+body.overworld.ow-character-open #character-tools { display: block !important; left: auto; right: 20px; padding: 18px; }
+body.overworld.ow-map-open #ow-location,
+body.overworld.ow-life-open #ow-location { visibility: hidden; }
+body.overworld #explorer.collapsed > :not(.panel-heading) { display: revert; }
+body.overworld #explorer .panel-heading { padding: 17px 18px 0; }
+body.overworld #explorer h1 { margin: 4px 0 0; font-size: 22px; letter-spacing: 0; }
+body.overworld .eyebrow { font-size: 12px; letter-spacing: .08em; color: var(--ow-muted); }
+body.overworld .intro { margin: 8px 18px 14px; font-size: 14px; line-height: 1.6; color: var(--ow-muted); }
+body.overworld .search { margin: 15px 16px 12px; padding: 0 9px; background: var(--ow-paper-soft); border: 1px solid var(--ow-line-light); border-radius: 2px; }
+body.overworld .search input { min-height: 40px; font-size: 14px; }
+body.overworld #categories { display: flex; gap: 3px; margin: 0 15px 9px; }
+body.overworld #categories button { font-size: 14px; border-radius: 2px; padding: 8px 0; color: var(--ow-muted); }
+body.overworld #categories button.active { background: var(--ow-green); color: var(--ow-paper); }
+body.overworld #places { padding: 0 8px 9px; min-height: 0; overflow-y: auto; }
+body.overworld .place { padding: 12px 10px; gap: 10px; border-radius: 2px; border-bottom: 1px solid #dce0d2; }
+body.overworld .place:hover, body.overworld .place.active { background: var(--ow-sage); }
+body.overworld .place .place-icon { width: 33px; height: 33px; flex-shrink: 0; font-size: 18px; background: var(--ow-paper-soft); border-color: var(--ow-line-light); border-radius: 2px; }
+body.overworld .place b { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+body.overworld .place small { font-size: 14px; color: var(--ow-muted); }
+body.overworld .panel-foot { padding: 11px 16px; font-size: 14px; border-color: var(--ow-line-light); color: var(--ow-muted); }
+body.overworld #campus-life-toggle { padding: 16px 18px; border-radius: 0; border-bottom: 1px solid var(--ow-line-light); background: var(--ow-paper); color: var(--ow-ink); font-size: 18px; }
+body.overworld #campus-life-menu { display: grid !important; padding: 12px; gap: 7px; border-radius: 0; background: transparent; }
+body.overworld #campus-life-menu button { font-size: 14px; min-height: 48px; padding: 11px 5px; border: 1px solid var(--ow-line-light); border-radius: 2px; background: var(--ow-paper-soft); color: var(--ow-ink); }
+body.overworld #campus-life-menu button:hover { background: var(--ow-sage); border-color: var(--ow-line); }
+body.overworld #character-tools .character-head { font-size: 14px; line-height: 1.5; gap: 7px; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--ow-line-light); }
+body.overworld #character-tools .character-head > span { flex: 1; }
+body.overworld #character-tools.compact .wardrobe-options { display: block; }
+body.overworld #character-tools.compact .avatar-options { display: grid; }
+body.overworld #character-tools.compact .character-actions { display: flex; }
+body.overworld #character-tools :is(button, select, label, small) { font-size: 14px; }
+body.overworld .gender-options button { background: var(--ow-sage); padding: 9px; border: 1px solid var(--ow-line-light); }
+body.overworld .gender-options button.active { color: var(--ow-paper); background: var(--ow-green); }
+body.overworld .wardrobe-selects { gap: 10px; margin: 12px 0; grid-template-columns: 1fr 1fr; }
+body.overworld .wardrobe-selects label { color: var(--ow-muted); }
+body.overworld .wardrobe-selects select { margin-top: 5px; padding: 9px 6px; background: #fffdf7; color: var(--ow-ink); border: 1px solid var(--ow-line-light); border-radius: 2px; }
+body.overworld .avatar-options { gap: 7px; }
+body.overworld .avatar-options button { padding: 10px 6px; border-color: var(--ow-line-light); border-radius: 2px; background: var(--ow-paper-soft); color: var(--ow-ink); }
+body.overworld .avatar-options button.active { background: var(--ow-sage); border-color: var(--ow-green); }
+body.overworld .character-actions { gap: 5px; flex-wrap: wrap; }
+body.overworld .character-actions button { min-height: 38px; background: var(--ow-sage); }
+body.overworld #current-role { display: block; margin: 3px 0 0; color: var(--ow-muted); }
+body.overworld .film-selection { background: var(--ow-paper-soft); border-color: var(--ow-line-light); border-radius: 2px; }
+body.overworld #film-character-select { font-size: 14px; min-height: 40px; border-radius: 2px; }
+
+/* The fixed game dock also provides a predictable place to dismiss drawers. */
+body.overworld #overworld-dock {
+  position: fixed;
+  left: 50%;
+  bottom: max(29px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 45;
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  max-width: calc(100vw - 32px);
+  padding: 5px;
+  border: 1px solid var(--ow-line);
+  border-radius: 4px;
+  background: var(--ow-paper);
+  box-shadow: 4px 4px 0 #263d3533;
+}
+body.overworld #overworld-dock button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 43px;
+  min-width: 78px;
+  padding: 9px 14px;
+  font-size: 14px;
+  white-space: nowrap;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 2px;
+}
+body.overworld #overworld-dock button:hover { background: var(--ow-sage); }
+body.overworld #overworld-dock button[aria-pressed="true"],
+body.overworld #overworld-dock button[aria-expanded="true"],
+body.overworld.ow-map-open #ow-map,
+body.overworld.ow-life-open #ow-life,
+body.overworld.ow-character-open #ow-character { background: var(--ow-green); color: var(--ow-paper); }
+body.overworld #overworld-dock button > span { font-size: 18px; }
+body.overworld #ow-tutorial {
+  position: fixed;
+  left: 20px;
+  bottom: 103px;
+  z-index: 18;
+  width: 300px;
+  max-width: calc(100vw - 40px);
+  padding: 15px 17px;
+  background: var(--ow-paper);
+  border: 1px solid var(--ow-line);
+  border-radius: 3px;
+  box-shadow: var(--ow-shadow);
+  font-size: 14px;
+}
+body.overworld #ow-tutorial b { display: block; margin-bottom: 8px; font-size: 16px; }
+body.overworld #ow-tutorial p { margin: 7px 0; color: var(--ow-muted); line-height: 1.8; }
+body.overworld #ow-tutorial > button { position: absolute; right: 7px; top: 5px; background: transparent; min-width: 28px; min-height: 28px; font-size: 22px; }
+body.overworld #ow-tutorial small { display: block; margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--ow-line-light); color: var(--ow-muted); }
+body.overworld footer { inset: auto 0 0; padding: 5px 20px; height: 25px; font-size: 12px; background: transparent; pointer-events: none; z-index: 6; }
+body.overworld footer :is(.reality-badge, #controls-hint) { display: none; }
+body.overworld footer a { pointer-events: auto; margin-left: auto; padding: 0 5px; background: #fffcf1a8; font-size: 12px; color: #475e4d; }
+
+/* Minimap, coordinates and context actions. */
+body.overworld .map-inset {
+  display: block;
+  top: auto;
+  right: 20px;
+  bottom: 103px;
+  width: 190px;
+  border: 1px solid var(--ow-line);
+  border-radius: 3px;
+  background: var(--ow-paper);
+  box-shadow: var(--ow-shadow);
+  z-index: 9;
+}
+body.overworld .map-inset canvas { height: 133px; border-bottom: 1px solid var(--ow-line-light); }
+body.overworld #my-location { padding: 7px 9px; font-size: 14px; border-bottom: 1px solid var(--ow-line-light); background: var(--ow-paper); color: var(--ow-ink); }
+body.overworld #map-expand { padding: 6px 9px; font-size: 14px; background: var(--ow-sage); color: var(--ow-ink); }
+body.overworld .map-inset > div { padding: 6px 8px; color: var(--ow-muted); background: var(--ow-paper); font-size: 14px; letter-spacing: 0; }
+body.overworld .map-inset small { font-size: 14px; }
+body.overworld #navigation-status { padding: 0 8px 7px; font-size: 14px; margin: 4px 0 0; max-width: none; color: var(--ow-muted); }
+body.overworld #navigation-stop { margin: 0 8px 8px; background: var(--ow-yellow); border: 1px solid var(--ow-line-light); font-size: 14px; }
+body.overworld #navigation { top: 42%; right: 20px; gap: 6px; z-index: 8; }
+body.overworld .compass { border-radius: 3px; width: 42px; height: 63px; margin-bottom: 0; background: var(--ow-paper); border: 1px solid var(--ow-line); box-shadow: var(--ow-shadow); }
+body.overworld .compass span { font: 13px ui-monospace, monospace; margin-top: 5px; }
+body.overworld .compass i { font-size: 23px; color: var(--ow-green); }
+body.overworld .compass small { font-size: 10px; }
+body.overworld #navigation > .icon-button { width: 42px; height: 36px; background: var(--ow-paper); border: 1px solid var(--ow-line); border-radius: 2px; box-shadow: 2px 2px 0 #243e3522; }
+body.overworld #interaction-panel { bottom: 102px; gap: 6px; width: max-content; max-width: calc(100vw - 450px); z-index: 24; }
+body.overworld #interact-button { padding: 11px 16px; min-height: 43px; font-size: 14px; border-radius: 3px; background: var(--ow-green); color: var(--ow-paper); border: 1px solid #243e35; box-shadow: var(--ow-shadow); }
+body.overworld #interact-button:disabled { display: none; }
+body.overworld #nearby-hint { padding: 5px 10px; border: 1px solid #c6a963; border-radius: 2px; background: #fff0c9; color: #5d4b2d; font-size: 14px; text-align: center; }
+body.overworld #swap-button { padding: 8px 12px; font-size: 14px; border: 1px solid #af8c4b; border-radius: 2px; background: var(--ow-yellow); color: #453d2b; }
+body.overworld #toast { bottom: 103px; border: 1px solid #233d32; border-radius: 3px; padding: 11px 16px; font-size: 14px; color: var(--ow-paper); background: #284d3ef7; max-width: min(550px, calc(100vw - 40px)); width: max-content; z-index: 60; box-shadow: var(--ow-shadow); }
+body.overworld #touch-controls { left: 20px; bottom: 105px; z-index: 30; }
+body.overworld #touch-controls button { width: 44px; height: 44px; border-radius: 3px; margin: 2px; border: 1px solid var(--ow-line); background: #fffcf1e8; color: var(--ow-green); font-size: 23px; box-shadow: 2px 2px 0 #243e3522; }
+
+/* Context panels remain real controls, not presentation-only cards. */
+body.overworld :is(#place-card, #activity-panel, #lecture-panel, #weather-panel, #transport-panel, #build-panel, #floor-controls, #window-controls) {
+  border: 1px solid var(--ow-line);
+  border-radius: 3px;
+  background: var(--ow-paper);
+  color: var(--ow-ink);
+  box-shadow: 4px 4px 0 #263d3529;
+  backdrop-filter: none;
+  scrollbar-width: thin;
+  scrollbar-color: #bac7ae transparent;
+}
+body.overworld :is(#place-card, #activity-panel, #lecture-panel, #weather-panel, #transport-panel, #build-panel, #floor-controls, #window-controls) :is(button, select, small, label, p, summary) { font-size: 14px; }
+body.overworld :is(#place-card, #activity-panel, #lecture-panel, #weather-panel, #transport-panel, #build-panel, #floor-controls, #window-controls) button { min-height: 36px; border-radius: 2px; }
+body.overworld #place-card { left: auto; right: 20px; top: 94px; bottom: auto; width: 315px; padding: 20px; max-height: calc(100dvh - 211px); overflow: auto; z-index: 27; }
+body.overworld #place-name { font-size: 22px; line-height: 1.35; padding-right: 10px; }
+body.overworld #place-desc { color: var(--ow-muted); line-height: 1.8; }
+body.overworld #place-fidelity { font-size: 14px; color: var(--ow-muted); }
+body.overworld .primary-button { background: var(--ow-green); color: var(--ow-paper); }
+body.overworld .secondary-button { background: var(--ow-sage); color: var(--ow-ink); }
+body.overworld .place-actions { gap: 7px; }
+body.overworld .place-actions button { padding: 10px; gap: 10px; }
+body.overworld #place-source { font-size: 14px; }
+body.overworld #interior-banner {
+  top: 87px;
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+  max-width: min(620px, calc(100vw - 380px));
+  padding: 9px 13px;
+  gap: 9px;
+  flex-wrap: wrap;
+  white-space: normal;
+  border: 1px solid #50674e;
+  border-radius: 3px;
+  color: var(--ow-paper);
+  background: #2c523feb;
+  box-shadow: var(--ow-shadow);
+  z-index: 19;
+}
+body.overworld #interior-banner b { font-size: 15px; }
+body.overworld #interior-banner span { display: none; }
+body.overworld #interior-banner button { font-size: 14px; color: #fff2bf; margin-left: auto; }
+body.overworld #activity-panel,
+body.overworld.sports-playing #activity-panel { top: 94px; left: 20px; right: auto; bottom: auto; transform: none; width: 308px; max-width: none; max-height: calc(100dvh - 213px); overflow: auto; padding: 17px; visibility: visible !important; z-index: 29; }
+body.overworld #activity-title { font-size: 18px; }
+body.overworld #activity-description { color: var(--ow-muted); line-height: 1.65; margin: 10px 0; }
+body.overworld #activity-primary { background: var(--ow-green); color: var(--ow-paper); }
+body.overworld #activity-close { width: 28px; padding: 0; font-size: 23px; }
+body.overworld #sports-score { font: 700 26px/1.5 ui-monospace, "Microsoft YaHei", monospace; color: var(--ow-green); }
+body.overworld #sports-ready { color: #7b5c2a; font-size: 14px; line-height: 1.6; }
+body.overworld .sports-instructions { font-size: 14px; line-height: 1.7; color: var(--ow-muted); }
+body.overworld .sports-actions { position: static; width: auto; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 12px; }
+body.overworld .sports-actions button { padding: 11px 5px; font-size: 14px; background: var(--ow-green); color: var(--ow-paper); }
+body.overworld .sports-actions button:last-child { grid-column: 1 / -1; background: var(--ow-sage); color: var(--ow-ink); }
+body.overworld #sports-detail, body.overworld .sports-note { font-size: 14px; color: var(--ow-muted); }
+body.overworld #lecture-panel { top: 94px; left: 20px; right: auto; bottom: auto; width: 360px; padding: 18px; max-height: calc(100dvh - 213px); transform: none; z-index: 29; }
+body.overworld #lecture-title { font-size: 20px; line-height: 1.4; margin: 6px 75px 12px 0; }
+body.overworld #lecture-panel > div > span { font-size: 14px; color: var(--ow-muted); }
+body.overworld #lecture-subtitle { font-size: 15px; max-height: 150px; line-height: 1.9; color: var(--ow-ink); }
+body.overworld #lecture-room, body.overworld #lecture-sources, body.overworld #lecture-answer-details { font-size: 14px; color: var(--ow-muted); }
+body.overworld #lecture-course { width: 100%; font-size: 14px; padding: 8px; background: #fffdf8; border-color: var(--ow-line-light); border-radius: 2px; }
+body.overworld #lecture-time { white-space: nowrap; font: 13px ui-monospace, monospace; color: var(--ow-muted); }
+body.overworld #lecture-play { background: var(--ow-green); color: var(--ow-paper); }
+body.overworld #lecture-next, body.overworld #stand-button { background: var(--ow-sage); color: var(--ow-ink); font-size: 14px; padding: 7px 9px; }
+body.overworld #weather-panel { top: 87px; right: 20px; width: 306px; padding: 19px; max-height: calc(100dvh - 193px); overflow: auto; z-index: 32; }
+body.overworld #weather-summary { font: 600 18px ui-monospace, "Microsoft YaHei", monospace; }
+body.overworld #weather-select { border-color: var(--ow-line-light); background: #fffdf8; border-radius: 2px; }
+body.overworld .weather-checks { gap: 12px; }
+body.overworld #transport-panel { top: 94px; left: 20px; width: 330px; max-height: calc(100dvh - 213px); padding: 18px; z-index: 31; }
+body.overworld #transport-panel button { background: var(--ow-sage); color: var(--ow-ink); }
+body.overworld #transport-panel :is(#hail-taxi, #ride-pay, #board-vehicle) { background: var(--ow-green); color: var(--ow-paper); }
+body.overworld #ride-destination { background: #fffdf8; border-color: var(--ow-line-light); border-radius: 2px; }
+body.overworld .transport-wallet { border-color: var(--ow-line-light); flex-wrap: wrap; }
+body.overworld #build-panel { top: 94px; left: 20px; width: 318px; max-height: calc(100dvh - 213px); z-index: 33; }
+body.overworld #build-panel button { background: var(--ow-sage); border-color: var(--ow-line-light); color: var(--ow-ink); }
+body.overworld #build-panel button.active { background: var(--ow-green); color: var(--ow-paper); }
+body.overworld #build-status { border-radius: 2px; background: var(--ow-paper-soft); }
+body.overworld #floor-controls { top: 94px; right: 20px; bottom: auto; width: 232px; max-height: calc(100dvh - 215px); padding: 16px; z-index: 28; }
+body.overworld #floor-controls button { padding: 10px 6px; background: var(--ow-sage); border-color: var(--ow-line-light); }
+body.overworld #floor-controls button.active { background: var(--ow-green); color: var(--ow-paper); }
+body.overworld #floor-label { font-family: ui-monospace, monospace; }
+body.overworld #window-controls { bottom: 104px; padding: 12px; gap: 7px; z-index: 27; }
+body.overworld #window-controls button { background: var(--ow-green); color: var(--ow-paper); }
+body.overworld #flight-controls { bottom: 176px; left: 20px; right: auto; z-index: 26; }
+body.overworld #flight-controls button { min-height: 40px; padding: 9px 12px; background: var(--ow-paper); color: var(--ow-ink); border: 1px solid var(--ow-line); font-size: 14px; }
+body.overworld:has(#lecture-panel:not([hidden])) #ow-tutorial,
+body.overworld:has(#activity-panel:not([hidden])) #ow-tutorial,
+body.overworld:has(#transport-panel:not([hidden])) #ow-tutorial,
+body.overworld:has(#build-panel:not([hidden])) #ow-tutorial,
+body.overworld.ow-map-open #ow-tutorial,
+body.overworld.ow-life-open #ow-tutorial { display: none; }
+body.overworld:has(#floor-controls:not([hidden])) .map-inset { display: none; }
+
+/* Full map and modal reference material use the same paper UI. */
+body.overworld.map-expanded .map-inset { inset: 88px 20px 102px; width: auto; max-width: 1050px; margin: auto; z-index: 44; overflow: auto; background: var(--ow-paper); }
+body.overworld.map-expanded #minimap { width: 100%; height: calc(100dvh - 365px); min-height: 220px; max-height: none; }
+body.overworld.map-expanded #map-expand { padding: 11px 14px; font-size: 15px; }
+body.overworld.map-expanded #navigation-status { padding: 6px 14px; }
+body.overworld #map-destinations { display: flex; gap: 7px; padding: 12px; background: var(--ow-paper); }
+body.overworld #map-destinations button { padding: 9px 11px; font-size: 14px; background: var(--ow-sage); color: var(--ow-ink); border-radius: 2px; }
+body.overworld dialog { padding: 27px; border: 1px solid var(--ow-line); border-radius: 4px; background: var(--ow-paper); color: var(--ow-ink); box-shadow: 7px 7px 0 #172c3045; max-height: 85dvh; overflow: auto; }
+body.overworld dialog::backdrop { background: #203d2c75; backdrop-filter: blur(2px); }
+body.overworld dialog p, body.overworld dialog li { font-size: 15px; color: var(--ow-muted); line-height: 1.85; }
+body.overworld dialog h2 { font-size: 25px; }
+body.overworld dialog h3 { font-size: 18px; }
+body.overworld dialog a { color: #285c3b; }
+body.overworld #course-catalog { border-radius: 4px; background: var(--ow-paper); }
+body.overworld #course-list article { border: 1px solid var(--ow-line-light); border-radius: 2px; background: #fffef7; }
+body.overworld #course-list p, body.overworld .course-notice { font-size: 14px !important; }
+body.overworld #course-list button { font-size: 14px; min-height: 40px; background: var(--ow-green); border-radius: 2px; }
+body.overworld #course-list button.course-walk { background: var(--ow-sage); color: var(--ow-ink); }
+body.overworld #course-resources a { border-color: var(--ow-line-light); border-radius: 2px; }
+body.overworld #course-resources span { font-size: 14px; }
+body.overworld #film-gallery { background: var(--ow-paper); }
+body.overworld #film-cast-use { background: var(--ow-green); }
+body.overworld #loading { color: var(--ow-green); background: #f3f0df; }
+body.overworld .loader-mark { border: 1px solid var(--ow-green); border-radius: 3px; background: var(--ow-green); box-shadow: 5px 5px 0 #34523b24; }
+body.overworld #loading h2 { letter-spacing: .1em; font-size: 25px; }
+body.overworld #loading p { font-size: 15px; color: var(--ow-muted); }
+body.overworld .loading-line { width: 200px; height: 4px; background: #dedec8; }
+body.overworld .loading-line::after { background: #cf9f40; }
+
+@media (max-width: 1050px) and (min-width: 701px) {
+  body.overworld header { gap: 13px; }
+  body.overworld #about-button { font-size: 0; padding-left: 8px; }
+  body.overworld #about-button span { font-size: 19px; }
+  body.overworld .segmented button { padding: 8px 9px; }
+  body.overworld #ow-location { max-width: 245px; }
+  body.overworld .map-inset { width: 168px; }
+  body.overworld .map-inset canvas { height: 113px; }
+  body.overworld #navigation-status { display: none; }
+  body.overworld #interaction-panel { max-width: calc(100vw - 395px); }
+}
+
+@media (max-width: 700px) {
+  body.overworld header { top: max(10px, env(safe-area-inset-top)); left: 10px; height: 48px; padding: 6px; gap: 5px; }
+  body.overworld .brand { gap: 7px; }
+  body.overworld .brandmark { height: 32px; width: 31px; font-size: 21px; }
+  body.overworld .brand b { font-size: 17px; }
+  body.overworld .brand small { display: none; }
+  body.overworld #about-button { display: none; }
+  body.overworld .top-tools { top: max(10px, env(safe-area-inset-top)); left: auto; right: 10px; gap: 5px; }
+  body.overworld .segmented { padding: 3px; flex: initial; }
+  body.overworld .segmented button { min-height: 38px; padding: 7px 8px; font-size: 14px; }
+  body.overworld #aerial-button, body.overworld #walk-button { display: none; }
+  body.overworld .tool-button { min-width: 43px; padding: 7px 9px; font-size: 19px; }
+  body.overworld .tool-button span { display: none; }
+  body.overworld #ow-location { left: 10px; top: 70px; padding: 7px 10px; gap: 0; max-width: calc(100vw - 115px); }
+  body.overworld #ow-location b { font-size: 16px; }
+  body.overworld #ow-location small { font-size: 11px; }
+  body.overworld #ow-location span { display: none; }
+  body.overworld #ow-location #ow-location-status { font-size: 14px; }
+  body.overworld .map-label { font-size: 14px; padding: 3px 6px; }
+  body.overworld #overworld-dock { bottom: max(16px, env(safe-area-inset-bottom)); width: calc(100vw - 20px); max-width: 470px; padding: 4px; gap: 1px; }
+  body.overworld #overworld-dock button { flex: 1; min-width: 0; min-height: 44px; padding: 8px 5px; font-size: 14px; gap: 4px; }
+  body.overworld #overworld-dock button > span { font-size: 16px; }
+  body.overworld #ow-tutorial { left: 10px; right: 10px; bottom: 83px; width: auto; max-width: none; padding: 14px; }
+  body.overworld #ow-tutorial p { margin: 5px 0; }
+  body.overworld footer { height: 15px; padding: 0 10px; }
+  body.overworld footer a { font-size: 10px; }
+  body.overworld .map-inset { width: 106px; right: 10px; top: 70px; bottom: auto; }
+  body.overworld .map-inset canvas { height: 81px; }
+  body.overworld #my-location { display: none; }
+  body.overworld #map-expand { text-align: center; padding: 5px 2px; font-size: 14px; }
+  body.overworld .map-inset > div, body.overworld .map-inset #navigation-status { display: none; }
+  body.overworld #navigation-stop { font-size: 14px; padding: 5px; margin: 4px; }
+  body.overworld #navigation { right: 11px; top: 205px; gap: 5px; }
+  body.overworld .compass { display: none; }
+  body.overworld #navigation > .icon-button { width: 35px; height: 35px; }
+  body.overworld #touch-controls { left: 10px; bottom: 85px; }
+  body.overworld #touch-controls button { width: 43px; height: 43px; margin: 2px; font-size: 22px; }
+  body.overworld #interaction-panel { bottom: 91px; left: auto; right: 10px; transform: none; width: 180px; max-width: calc(100vw - 164px); gap: 5px; align-items: stretch; }
+  body.overworld #interact-button { padding: 10px 8px; font-size: 14px; text-align: center; }
+  body.overworld #nearby-hint { font-size: 14px; padding: 5px 7px; }
+  body.overworld #swap-button { font-size: 14px; padding: 7px 5px; }
+  body.overworld #toast { left: 10px; right: 10px; top: auto; bottom: 80px; transform: none; width: auto; max-width: none; padding: 9px 12px; font-size: 14px; }
+  body.overworld.ow-map-open #explorer,
+  body.overworld.ow-life-open #campus-life-nav,
+  body.overworld.ow-character-open #character-tools {
+    left: 10px;
+    right: 10px;
+    top: 70px;
+    bottom: auto;
+    width: auto;
+    max-height: calc(100dvh - 162px);
+    padding: 0;
+    z-index: 35;
+  }
+  body.overworld.ow-character-open #character-tools { padding: 16px; }
+  body.overworld #explorer .panel-heading { padding: 16px 17px 0; }
+  body.overworld #explorer .intro { display: block; }
+  body.overworld #explorer h1 { font-size: 21px; }
+  body.overworld .place b { font-size: 15px; }
+  body.overworld .place small { font-size: 14px; }
+  body.overworld #character-tools .character-head > span { flex-basis: auto; }
+  body.overworld #campus-life-menu { grid-template-columns: 1fr 1fr; padding: 12px; gap: 8px; }
+  body.overworld #campus-life-menu button { font-size: 14px; min-height: 45px; }
+  body.overworld #place-card { left: 10px; right: 10px; top: 70px; bottom: auto; width: auto; max-height: calc(100dvh - 165px); padding: 19px; z-index: 38; }
+  body.overworld #interior-banner { top: 70px; left: 10px; right: 127px; transform: none; max-width: none; padding: 8px 10px; gap: 5px; z-index: 18; }
+  body.overworld #interior-banner b, body.overworld #interior-banner button { font-size: 14px; }
+  body.overworld #interior-banner button { margin-left: 0; padding: 0; }
+  body.overworld #activity-panel,
+  body.overworld.sports-playing #activity-panel { left: 10px; right: 10px; top: 70px; bottom: auto; width: auto; max-height: calc(100dvh - 270px); padding: 14px; overflow: auto; z-index: 29; }
+  body.overworld #activity-title, body.overworld.sports-playing #activity-title { font-size: 17px; }
+  body.overworld #activity-description { display: block; font-size: 14px; }
+  body.overworld.sports-playing #activity-description { display: none; }
+  body.overworld.sports-playing #sports-score { font-size: 23px; line-height: 1.35; }
+  body.overworld.sports-playing #sports-ready { font-size: 14px; margin: 4px 0; }
+  body.overworld.sports-playing .sports-instructions { display: block; font-size: 14px; margin: 6px 0; }
+  body.overworld.sports-playing .sports-actions { position: fixed; top: auto; left: auto; right: 10px; bottom: 85px; width: min(190px, calc(100vw - 165px)); padding: 0; gap: 6px; margin: 0; }
+  body.overworld.sports-playing .sports-actions button { font-size: 14px; min-height: 44px; padding: 10px 5px; border: 1px solid var(--ow-line); box-shadow: 2px 2px 0 #243e3522; }
+  body.overworld.sports-playing .sports-actions button:last-child { padding: 7px 5px; min-height: 36px; }
+  body.overworld.sports-playing #touch-controls { left: 10px; bottom: 85px; }
+  body.overworld.sports-playing .map-inset { display: none; }
+  body.overworld #lecture-panel { left: 10px; right: 10px; top: auto; bottom: 82px; width: auto; padding: 15px; max-height: min(60dvh, 480px); z-index: 36; }
+  body.overworld #lecture-title { font-size: 18px; margin-right: 90px; }
+  body.overworld #lecture-subtitle { max-height: 125px; font-size: 15px; line-height: 1.8; }
+  body.overworld #lecture-exercise { display: block; font-size: 14px; }
+  body.overworld #weather-panel, body.overworld #transport-panel, body.overworld #build-panel { left: 10px; right: 10px; top: 70px; width: auto; max-height: calc(100dvh - 164px); padding: 16px; z-index: 37; }
+  body.overworld #build-panel { max-height: min(50dvh, 400px); }
+  body.overworld #build-materials { grid-template-columns: repeat(3, 1fr); }
+  body.overworld #build-materials button { min-height: 39px; padding: 6px 2px; font-size: 14px; }
+  body.overworld #build-panel > .build-actions { grid-template-columns: repeat(2, 1fr); }
+  body.overworld #floor-controls { top: 70px; right: 10px; bottom: auto; width: 210px; max-height: calc(100dvh - 285px); padding: 13px; z-index: 29; }
+  body.overworld #lift-floors { grid-template-columns: repeat(3, 1fr); }
+  body.overworld #window-controls { left: 10px; right: 10px; bottom: 85px; transform: none; width: auto; max-width: none; padding: 10px; }
+  body.overworld #flight-controls { left: auto; right: 10px; bottom: 87px; }
+  body.overworld.map-expanded .map-inset { inset: 70px 10px 82px; max-width: none; width: auto; z-index: 44; }
+  body.overworld.map-expanded #minimap { min-height: 220px; height: calc(100dvh - 342px); }
+  body.overworld.map-expanded #map-expand { text-align: left; padding: 10px 12px; font-size: 15px; }
+  body.overworld.map-expanded #map-destinations { display: flex; padding: 10px; }
+  body.overworld.map-expanded #navigation-status { display: block; padding: 5px 12px; }
+  body.overworld dialog { padding: 21px; width: calc(100vw - 20px); }
+  body.overworld #course-catalog { padding: 21px; }
+  body.overworld #course-catalog h2 { font-size: 22px; }
+  body.overworld #course-list { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 370px) {
+  body.overworld #overworld-dock button { padding: 8px 3px; }
+  body.overworld #overworld-dock button > span { display: none; }
+  body.overworld .brand b { font-size: 16px; }
+  body.overworld #ow-location { max-width: 205px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.overworld *, body.overworld *::before, body.overworld *::after { scroll-behavior: auto !important; transition-duration: 0s !important; }
+  body.overworld .loading-line::after { animation-duration: 3s; }
+}
+
+@media (min-width: 701px) and (pointer: fine) {
+  body.overworld #touch-controls { display: none !important; }
+}
+body.overworld #film-gallery-open,
+body.overworld #film-cast-use { background: var(--ow-green); color: var(--ow-paper); }

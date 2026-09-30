@@ -1,0 +1,44 @@
+[
+  {
+    "id": "english",
+    "title": "英语与雅思练习",
+    "teacher": "周老师",
+    "building": "东1教学楼"
+  },
+  {
+    "id": "philosophy",
+    "title": "哲学",
+    "teacher": "林老师",
+    "building": "东2教学楼"
+  },
+  {
+    "id": "college-chinese",
+    "title": "大学语文",
+    "teacher": "沈老师",
+    "building": "东3教学楼"
+  },
+  {
+    "id": "geography",
+    "title": "地理",
+    "teacher": "陆老师",
+    "building": "东4教学楼"
+  },
+  {
+    "id": "math",
+    "title": "高等数学",
+    "teacher": "陈老师",
+    "building": "西1教学楼"
+  },
+  {
+    "id": "programming",
+    "title": "程序设计",
+    "teacher": "许老师",
+    "building": "西2教学楼"
+  },
+  {
+    "id": "physics",
+    "title": "大学物理",
+    "teacher": "吴老师",
+    "building": "西3教学楼"
+  }
+]

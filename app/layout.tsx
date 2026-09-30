@@ -10,6 +10,7 @@ import "./shop.css";
 import "./atlas.css";
 import "./pro.css";
 import "./knowledge.css";
+import "./compass-today.css";
 import "./theme.css";
 import "./snow.css";
 import "./music.css";
@@ -26,6 +27,7 @@ import "./fullscreen.css";
 import "./bookshelf.css";
 import "./mobile.css";
 import "./source-actions.css";
+import "./trendshift.css";
 
 export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover" };
 
