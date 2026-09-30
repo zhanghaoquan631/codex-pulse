@@ -1,6 +1,6 @@
 {
   "catalog": {
-    "release": "source-v2.0.0",
+    "release": "source-v2.0.1",
     "sections": [
       {
         "id": "tokens",
@@ -175,6 +175,48 @@
             "title": "标签归纳",
             "requirements": "维护内容标签、搜索和多条件筛选，重命名标签时保留内容关联",
             "path": "standalone/library"
+          },
+          {
+            "id": "knowledge-compass-tasks",
+            "title": "Compass 待办",
+            "requirements": "新增与完成待办，保留截止日期、跨日期记录和版本冲突处理",
+            "path": "app/compass-today.tsx"
+          },
+          {
+            "id": "knowledge-compass-journal",
+            "title": "Compass 日记",
+            "requirements": "按日期记录日记、收获和感恩，保存原文与时间并支持自定义分类名",
+            "path": "app/compass-today.tsx"
+          },
+          {
+            "id": "knowledge-compass-questions",
+            "title": "Compass 每日自问",
+            "requirements": "配置六个自问问题，逐项评分、保存和放弃未保存修改",
+            "path": "app/compass-today.tsx"
+          },
+          {
+            "id": "knowledge-compass-habits",
+            "title": "Compass 习惯打卡",
+            "requirements": "配置三个习惯，按日打卡与取消，防止覆盖正在编辑的评分",
+            "path": "app/compass-today.tsx"
+          },
+          {
+            "id": "knowledge-compass-focus",
+            "title": "Compass 专注计时",
+            "requirements": "配置专注与休息时间，启动、暂停、恢复和结束计时，按服务器时间恢复状态并提供通知",
+            "path": "app/compass-studio.tsx"
+          },
+          {
+            "id": "knowledge-compass-companions",
+            "title": "Compass 伙伴与重要事项",
+            "requirements": "切换互动伙伴，保存、编辑、完成和删除重要事项，配置优先级与提醒；伙伴采用固定互动语句，不能宣称为 AI 对话",
+            "path": "app/compass-studio.tsx"
+          },
+          {
+            "id": "knowledge-compass-customize",
+            "title": "Compass 板块自定义",
+            "requirements": "编辑标题、板块名称、说明、标签、颜色与图片，上传封面和头像，保留鉴权、并发版本与数据恢复",
+            "path": "app/compass-studio.tsx"
           }
         ]
       },
@@ -860,93 +902,93 @@
     },
     {
       "id": "core",
-      "files": 270,
-      "textBytes": 2119111,
-      "zipBytes": 605310
+      "files": 282,
+      "textBytes": 2276904,
+      "zipBytes": 638219
     },
     {
       "id": "tokens",
-      "files": 302,
-      "textBytes": 2339343,
-      "zipBytes": 687295
+      "files": 314,
+      "textBytes": 2497136,
+      "zipBytes": 720215
     },
     {
       "id": "websites",
-      "files": 302,
-      "textBytes": 2339345,
-      "zipBytes": 687297
+      "files": 314,
+      "textBytes": 2497138,
+      "zipBytes": 720217
     },
     {
       "id": "betteropc",
-      "files": 270,
-      "textBytes": 2119116,
-      "zipBytes": 605313
+      "files": 282,
+      "textBytes": 2276909,
+      "zipBytes": 638222
     },
     {
       "id": "knowledge",
-      "files": 411,
-      "textBytes": 3853763,
-      "zipBytes": 1166442
+      "files": 423,
+      "textBytes": 4011556,
+      "zipBytes": 1199337
     },
     {
       "id": "bookshelf",
-      "files": 515,
-      "textBytes": 2602807,
-      "zipBytes": 11749402
+      "files": 527,
+      "textBytes": 2760600,
+      "zipBytes": 11782316
     },
     {
       "id": "mezip",
-      "files": 1065,
-      "textBytes": 6322288,
-      "zipBytes": 320510847
+      "files": 1077,
+      "textBytes": 6480081,
+      "zipBytes": 320543755
     },
     {
       "id": "shop",
-      "files": 327,
-      "textBytes": 2659757,
-      "zipBytes": 870876
+      "files": 339,
+      "textBytes": 2817550,
+      "zipBytes": 903784
     },
     {
       "id": "mezip-local",
-      "files": 1034,
-      "textBytes": 11485862,
-      "zipBytes": 3545267
+      "files": 1046,
+      "textBytes": 11643655,
+      "zipBytes": 3578185
     },
     {
       "id": "finance",
-      "files": 1046,
-      "textBytes": 11844691,
-      "zipBytes": 3651869
+      "files": 1058,
+      "textBytes": 12002484,
+      "zipBytes": 3684781
     },
     {
       "id": "github",
-      "files": 1047,
-      "textBytes": 11607892,
-      "zipBytes": 3587923
+      "files": 1059,
+      "textBytes": 11765685,
+      "zipBytes": 3620836
     },
     {
       "id": "media",
-      "files": 1041,
-      "textBytes": 11613072,
-      "zipBytes": 3586755
+      "files": 1053,
+      "textBytes": 11770865,
+      "zipBytes": 3619671
     },
     {
       "id": "music",
-      "files": 425,
-      "textBytes": 3485744,
-      "zipBytes": 3880632
+      "files": 437,
+      "textBytes": 3643537,
+      "zipBytes": 3913525
     },
     {
       "id": "booking",
-      "files": 326,
-      "textBytes": 2582857,
-      "zipBytes": 771248
+      "files": 338,
+      "textBytes": 2740650,
+      "zipBytes": 804166
     },
     {
       "id": "qduo",
-      "files": 281,
-      "textBytes": 2442161,
-      "zipBytes": 697298
+      "files": 293,
+      "textBytes": 2599954,
+      "zipBytes": 730225
     }
   ]
 }

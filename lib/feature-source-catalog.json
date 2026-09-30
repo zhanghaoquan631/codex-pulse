@@ -1,5 +1,5 @@
 {
-  "release": "source-v2.0.0",
+  "release": "source-v2.0.1",
   "sections": [
     {
       "id": "tokens",
@@ -174,6 +174,48 @@
           "title": "标签归纳",
           "requirements": "维护内容标签、搜索和多条件筛选，重命名标签时保留内容关联",
           "path": "standalone/library"
+        },
+        {
+          "id": "knowledge-compass-tasks",
+          "title": "Compass 待办",
+          "requirements": "新增与完成待办，保留截止日期、跨日期记录和版本冲突处理",
+          "path": "app/compass-today.tsx"
+        },
+        {
+          "id": "knowledge-compass-journal",
+          "title": "Compass 日记",
+          "requirements": "按日期记录日记、收获和感恩，保存原文与时间并支持自定义分类名",
+          "path": "app/compass-today.tsx"
+        },
+        {
+          "id": "knowledge-compass-questions",
+          "title": "Compass 每日自问",
+          "requirements": "配置六个自问问题，逐项评分、保存和放弃未保存修改",
+          "path": "app/compass-today.tsx"
+        },
+        {
+          "id": "knowledge-compass-habits",
+          "title": "Compass 习惯打卡",
+          "requirements": "配置三个习惯，按日打卡与取消，防止覆盖正在编辑的评分",
+          "path": "app/compass-today.tsx"
+        },
+        {
+          "id": "knowledge-compass-focus",
+          "title": "Compass 专注计时",
+          "requirements": "配置专注与休息时间，启动、暂停、恢复和结束计时，按服务器时间恢复状态并提供通知",
+          "path": "app/compass-studio.tsx"
+        },
+        {
+          "id": "knowledge-compass-companions",
+          "title": "Compass 伙伴与重要事项",
+          "requirements": "切换互动伙伴，保存、编辑、完成和删除重要事项，配置优先级与提醒；伙伴采用固定互动语句，不能宣称为 AI 对话",
+          "path": "app/compass-studio.tsx"
+        },
+        {
+          "id": "knowledge-compass-customize",
+          "title": "Compass 板块自定义",
+          "requirements": "编辑标题、板块名称、说明、标签、颜色与图片，上传封面和头像，保留鉴权、并发版本与数据恢复",
+          "path": "app/compass-studio.tsx"
         }
       ]
     },

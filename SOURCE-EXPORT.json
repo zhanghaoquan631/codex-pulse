@@ -1655,5 +1655,7 @@
   "history": "Not exported",
   "siteBinding": "Removed from public hosting manifest",
   "optionalCharacter": "Default traveler retained; restricted external skin omitted",
-  "optionalIllustrations": "Attribution and interfaces retained; artwork omitted"
+  "optionalIllustrations": "Attribution and interfaces retained; artwork omitted",
+  "additionalSourceCommit": "21610f10387ef8f81d4292c06e83a31a34241a7d",
+  "latestFeatureEntries": 136
 }

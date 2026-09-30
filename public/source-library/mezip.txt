@@ -9,7 +9,7 @@ Module: mezip
 ===== FILE: .openai/hosting.json =====
 {
   "d1": "DB",
-  "r2": null
+  "r2": "BUCKET"
 }
 
 
@@ -495,6 +495,29 @@ export async function POST(request: Request) {
 
 
 
+===== FILE: app/api/compass/media/route.ts =====
+import { env } from 'cloudflare:workers';
+import { database } from '@/db/raw';
+import { compassScope, compassHeaders, compassReply as reply } from '@/lib/compass-auth';
+import { cleanPng } from '@/lib/compass-png';
+import { uuid } from '@/lib/compass-workspace';
+export const dynamic='force-dynamic';
+export async function GET(request:Request){
+  const scope=await compassScope(request);if(!scope)return reply({error:'请登录网站管理账号。'},401);
+  const id=new URL(request.url).searchParams.get('id');if(!id||!uuid.test(id))return reply({error:'封面不存在。'},404);
+  try{if(!await database().prepare('SELECT id FROM compass_media WHERE scope=? AND id=?').bind(scope,id).first())return reply({error:'封面不存在。'},404);const object=await env.BUCKET?.get(`compass/${scope}/${id}.png`);if(!object)return reply({error:'封面暂时无法读取。'},503);return new Response(object.body,{headers:{...compassHeaders,'Content-Type':'image/png','Content-Security-Policy':"default-src 'none'; sandbox"}});}catch{return reply({error:'封面暂时无法读取。'},503);}
+}
+export async function POST(request:Request){
+  const scope=await compassScope(request);if(!scope)return reply({error:'请登录网站管理账号。'},401);if(request.headers.get('Origin')!==new URL(request.url).origin)return reply({error:'请从本站上传。'},403);
+  if(request.headers.get('Content-Type')!=='image/png')return reply({error:'请选择 PNG、JPEG 或 WebP 图片。'},400);
+  let image;
+  try{const reader=request.body?.getReader();if(!reader)throw new Error();const chunks:Uint8Array[]=[];let size=0;while(true){const {done,value}=await reader.read();if(done)break;size+=value.length;if(size>3_000_000){await reader.cancel();throw new Error();}chunks.push(value);}image=await cleanPng(new Uint8Array(await new Blob(chunks as BlobPart[]).arrayBuffer()));}catch{return reply({error:'图片无效或太大，请换一张图片。'},400);}
+  const id=crypto.randomUUID(),key=`compass/${scope}/${id}.png`;
+  try{if(!env.BUCKET)throw new Error('Storage unavailable');await env.BUCKET.put(key,image.bytes,{httpMetadata:{contentType:'image/png'}});try{await database().prepare('INSERT INTO compass_media(scope,id,width,height,created) VALUES(?,?,?,?,?)').bind(scope,id,image.width,image.height,Date.now()).run();}catch(error){await env.BUCKET.delete(key);throw error;}return reply({id,width:image.width,height:image.height});}catch{return reply({error:'封面未能保存，请重试。原来的封面仍保留。'},503);}
+}
+
+
+
 ===== FILE: app/api/compass/route.ts =====
 import { database } from '@/db/raw';
 import { boundedJson, isOwner, websiteId } from '@/lib/website-api';
@@ -559,6 +582,68 @@ export async function POST(request:Request){
     }else return reply({error:'不支持的操作。'},400);
     return reply(await readCompass(scope,date));
   }catch{return reply({error:'暂时无法确认保存结果，输入已保留。请点击原按钮重试，同一条记录不会重复添加。'},503);}
+}
+
+
+
+===== FILE: app/api/compass/workspace/route.ts =====
+import { database } from '@/db/raw';
+import { boundedJson } from '@/lib/website-api';
+import { compassScope, compassReply as reply } from '@/lib/compass-auth';
+import { defaultConfig, emptyTimer, timerTransition, uuid, validConfig, type Timer, type WorkspaceConfig } from '@/lib/compass-workspace';
+export const dynamic='force-dynamic';
+async function read(scope:string){
+  const db=database();
+  const [docs,memories]=await Promise.all([db.prepare('SELECT key,payload,version FROM compass_workspace WHERE scope=?').bind(scope).all<{key:string;payload:string;version:number}>(),db.prepare('SELECT id,text,priority,done,remind_at AS remindAt,notified,version,created FROM compass_memories WHERE scope=? ORDER BY done ASC,created DESC LIMIT 500').bind(scope).all<{id:string;text:string;priority:string;done:number;remindAt:number|null;notified:number;version:number;created:number}>()]);
+  const config=docs.results.find(d=>d.key==='config'),timer=docs.results.find(d=>d.key==='timer');
+  const [alerts,due]=await Promise.all([db.prepare('SELECT id,text FROM compass_alerts WHERE scope=? AND seen=0 ORDER BY created ASC LIMIT 50').bind(scope).all<{id:string;text:string}>(),db.prepare('SELECT id,text,priority,done,remind_at AS remindAt,notified,version,created FROM compass_memories WHERE scope=? AND done=0 AND notified=0 AND remind_at<=? ORDER BY remind_at ASC LIMIT 50').bind(scope,Date.now()).all()]);
+  return {config:config?JSON.parse(config.payload) as WorkspaceConfig:defaultConfig(),configVersion:config?.version||0,timer:timer?{...JSON.parse(timer.payload),version:timer.version} as Timer:emptyTimer(),memories:memories.results.map(m=>({...m,done:!!m.done,notified:!!m.notified})),dueMemories:due.results,alerts:alerts.results,serverNow:Date.now()};
+}
+async function cas(scope:string,key:string,payload:unknown,version:number){
+  if(version===0)return !!(await database().prepare('INSERT INTO compass_workspace(scope,key,payload,version) VALUES(?,?,?,1) ON CONFLICT(scope,key) DO NOTHING').bind(scope,key,JSON.stringify(payload)).run()).meta.changes;
+  return !!(await database().prepare('UPDATE compass_workspace SET payload=?,version=version+1 WHERE scope=? AND key=? AND version=?').bind(JSON.stringify(payload),scope,key,version).run()).meta.changes;
+}
+export async function GET(request:Request){const scope=await compassScope(request);if(!scope)return reply({error:'请登录网站管理账号。',needsLogin:true},401);try{return reply(await read(scope));}catch{return reply({error:'暂时无法读取，请重试。'},503);}}
+export async function POST(request:Request){
+  const scope=await compassScope(request);if(!scope)return reply({error:'请重新登录网站管理账号。',needsLogin:true},401);
+  if(request.headers.get('Origin')!==new URL(request.url).origin)return reply({error:'请从本站操作。'},403);
+  let b;try{b=await boundedJson(request,150000);}catch{return reply({error:'内容无效或过长。'},400);}
+  if(!b||!Number.isSafeInteger(b.version)||b.version<0)return reply({error:'记录版本无效。'},400);
+  try{
+    const db=database();let notify=false;
+    if(b.action==='config'){
+      if(!validConfig(b.config))return reply({error:'请检查板块名称、标签、内容和计时设置。'},400);
+      for(const id of [...b.config.sections.map((s:{cover:string|null})=>s.cover),...b.config.portraits])if(id&&!await db.prepare('SELECT id FROM compass_media WHERE scope=? AND id=?').bind(scope,id).first())return reply({error:'图片不存在，请重新上传。'},400);
+      if(!await cas(scope,'config',b.config,b.version))return reply({error:'配置已在另一页面更改。草稿已保留，请重新读取后核对。'},409);
+    }else if(b.action==='timer'){
+      const current=(await read(scope)).timer;
+      if(current.version!==b.version)return reply({error:'计时状态已变化，正在重新同步。'},409);
+      const next=timerTransition(current,b.command,Date.now(),b);
+      if(!next)return reply({error:'当前计时状态不支持此操作。'},400);
+      if(b.command==='finish'){
+        const results=await db.batch([db.prepare('UPDATE compass_workspace SET payload=?,version=version+1 WHERE scope=? AND key=? AND version=?').bind(JSON.stringify(next),scope,'timer',b.version),db.prepare("INSERT INTO compass_alerts(scope,id,text,seen,created) SELECT ?,?,?,0,? WHERE EXISTS(SELECT 1 FROM compass_workspace WHERE scope=? AND key='timer' AND version=? AND json_extract(payload,'$.id')=? AND json_extract(payload,'$.status')='finished') ON CONFLICT(scope,id) DO NOTHING").bind(scope,'timer:'+current.id,current.phase==='focus'?'专注完成了，休息一下吧。':'休息结束了，准备好再开始。',Date.now(),scope,b.version+1,current.id)]);
+        if(!results[0].meta.changes)return reply({error:'计时状态已在另一页面更新。'},409);
+      }else if(!await cas(scope,'timer',next,b.version))return reply({error:'计时状态已在另一页面更新。'},409);
+      notify=b.command==='finish';
+    }else if(b.action==='memory'){
+      if(typeof b.id!=='string'||!uuid.test(b.id)||typeof b.text!=='string'||!b.text.trim()||b.text.length>2000||!['normal','important'].includes(b.priority)||typeof b.done!=='boolean'||!(b.remindAt===null||(Number.isSafeInteger(b.remindAt)&&b.remindAt>0&&b.remindAt<4102444800000)))return reply({error:'请填写有效的重要事项。'},400);
+      if(b.version===0){
+        const result=await db.prepare('INSERT INTO compass_memories(scope,id,text,priority,done,remind_at,notified,version,created) VALUES(?,?,?,?,?,?,0,1,?) ON CONFLICT(scope,id) DO NOTHING').bind(scope,b.id,b.text.trim(),b.priority,b.done?1:0,b.remindAt,Date.now()).run();
+        if(!result.meta.changes){const old=await db.prepare('SELECT text,priority,done,remind_at FROM compass_memories WHERE scope=? AND id=?').bind(scope,b.id).first<{text:string;priority:string;done:number;remind_at:number|null}>();if(!old||old.text!==b.text.trim()||old.priority!==b.priority||!!old.done!==b.done||old.remind_at!==b.remindAt)return reply({error:'事项已更新，请重新读取。'},409);}
+      }else if(!(await db.prepare('UPDATE compass_memories SET text=?,priority=?,done=?,notified=CASE WHEN remind_at IS ? THEN notified ELSE 0 END,remind_at=?,version=version+1 WHERE scope=? AND id=? AND version=?').bind(b.text.trim(),b.priority,b.done?1:0,b.remindAt,b.remindAt,scope,b.id,b.version).run()).meta.changes)return reply({error:'事项已在另一页面更新，输入已保留。'},409);
+    }else if(b.action==='memory-delete'){
+      if(typeof b.id!=='string'||!uuid.test(b.id))return reply({error:'事项编号无效。'},400);
+      const results=await db.batch([db.prepare('DELETE FROM compass_alerts WHERE scope=? AND id LIKE ? AND EXISTS(SELECT 1 FROM compass_memories WHERE scope=? AND id=? AND version=?)').bind(scope,'memory:'+b.id+':%',scope,b.id,b.version),db.prepare('DELETE FROM compass_memories WHERE scope=? AND id=? AND version=?').bind(scope,b.id,b.version)]);
+      if(!results[1].meta.changes)return reply({error:'事项已变化，请重新读取。'},409);
+    }else if(b.action==='memory-alert'){
+      if(typeof b.id!=='string'||!uuid.test(b.id))return reply({error:'事项编号无效。'},400);
+      const results=await db.batch([db.prepare("INSERT INTO compass_alerts(scope,id,text,seen,created) SELECT scope,'memory:'||id||':'||remind_at,'你交代的事：'||text,0,? FROM compass_memories WHERE scope=? AND id=? AND done=0 AND notified=0 AND remind_at<=? AND version=? ON CONFLICT(scope,id) DO NOTHING").bind(Date.now(),scope,b.id,Date.now(),b.version),db.prepare('UPDATE compass_memories SET notified=1 WHERE scope=? AND id=? AND done=0 AND notified=0 AND remind_at<=? AND version=?').bind(scope,b.id,Date.now(),b.version)]);notify=!!results[0].meta.changes;
+    }else if(b.action==='ack-alert'){
+      if(typeof b.id!=='string'||b.id.length>120)return reply({error:'提醒编号无效。'},400);
+      await db.prepare('UPDATE compass_alerts SET seen=1 WHERE scope=? AND id=?').bind(scope,b.id).run();
+    }else return reply({error:'不支持此操作。'},400);
+    return reply({...await read(scope),notify});
+  }catch{return reply({error:'保存暂时失败，输入已保留，请重试。'},503);}
 }
 
 
@@ -1470,6 +1555,114 @@ function safeDecodeURIComponent(value: string): string | null {
 
 
 
+===== FILE: app/compass-studio.css =====
+.compass-workspace[hidden]{display:none}.cp-studio{padding:0 28px 26px}.cp-studio button,.cp-studio-status button{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--cp-line);border-radius:8px;background:var(--cp-surface);color:var(--cp-ink);padding:8px 12px;min-height:38px}.cp-studio input:not([type=checkbox]),.cp-studio select{min-height:38px;padding:8px 10px;max-width:100%;min-width:0}.cp-studio textarea{width:100%;padding:12px;min-height:100px;resize:vertical;line-height:1.8}.cp-studio-status{padding:20px 28px;display:flex;justify-content:space-between}.cp-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:15px;font-size:15px;font-weight:500}.cp-toolbar small{font-size:12px;color:var(--cp-muted);font-weight:400;margin-left:8px}.cp-modules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.cp-studio .cp-module{display:block;padding:0;overflow:hidden;border-radius:12px;text-align:left;width:100%;min-width:0;transition:box-shadow .15s,transform .15s}.cp-module:hover{transform:translateY(-2px)}.cp-studio .cp-module[aria-pressed=true]{border-color:#537d61;box-shadow:0 0 0 2px #537d6120}.cp-module-cover{height:78px;background:var(--cover-bg);color:var(--cover-ink);position:relative;display:flex;align-items:center;justify-content:space-between;padding:19px;overflow:hidden}.cp-module-cover:after{content:'';position:absolute;width:110px;height:110px;border:1px solid currentColor;opacity:.14;border-radius:50%;right:-16px;top:5px}.cp-module-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.cp-cover-mark{font-family:serif;font-size:30px;letter-spacing:3px;font-weight:500;opacity:.6}.cp-color-sage{--cover-bg:#dce9da;--cover-ink:#345a3e}.cp-color-rose{--cover-bg:#eedbd9;--cover-ink:#835852}.cp-color-night{--cover-bg:#374943;--cover-ink:#dfead6}.cp-color-sand{--cover-bg:#eae1ce;--cover-ink:#7c6847}.cp-color-lilac{--cover-bg:#e4e0ef;--cover-ink:#716381}.cp-module-info{padding:12px 14px}.cp-module-info>strong{display:block;font-size:15px;font-weight:600}.cp-module-info>span{display:block;font-size:12px;color:var(--cp-muted);line-height:1.6;margin-top:4px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.cp-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}.cp-tags small{display:inline-block;background:var(--cp-paper);border:1px solid var(--cp-line);border-radius:5px;padding:2px 6px;font-size:10px;font-weight:400;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.cp-notice{display:flex;align-items:center;gap:12px;padding:15px 18px;margin-top:18px;border:1px solid #cfb77b;background:#fcf5dd;border-radius:10px;font-size:14px;line-height:1.7;color:#625126}.cp-notice>span{flex:1;white-space:pre-wrap;overflow-wrap:anywhere}.cp-notice button{border:0;background:transparent;padding:0}.cp-focus-panel{display:grid;grid-template-columns:1.1fr 1fr;border:1px solid var(--cp-line);border-radius:14px;margin-top:22px;overflow:hidden;background:var(--cp-surface)}.cp-timer-face{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--cp-ink);color:var(--cp-paper);padding:32px 20px;text-align:center}.cp-timer-face>span{font-size:12px;letter-spacing:1px;opacity:.8}.cp-timer-face>strong{font-size:68px;line-height:1.2;font-weight:400;font-variant-numeric:tabular-nums;letter-spacing:-2px;margin:22px 0}.cp-timer-face>p{font-size:13px;line-height:1.7;opacity:.75;margin:17px 0 0}.cp-actions{display:flex;flex-wrap:wrap;gap:9px}.cp-timer-face .cp-actions{justify-content:center}.cp-studio .cp-timer-face .compass-save{background:#e0ead9;color:#284b3c}.cp-timer-settings{padding:24px}.cp-duration{display:flex;align-items:center;gap:8px;margin-top:13px;font-size:12px}.cp-duration>span:first-child{margin-right:5px}.cp-duration input{width:66px}.cp-timer-settings>button{margin-top:15px}.cp-reminder-controls{border-top:1px solid var(--cp-line);padding-top:14px;margin-top:18px;display:flex;flex-wrap:wrap;gap:7px}.cp-reminder-controls button{font-size:12px;padding:7px}.cp-reminder-controls small{display:block;flex-basis:100%;font-size:11px;color:var(--cp-muted)}.cp-companion-panel{margin-top:20px;border:1px solid var(--cp-line);border-radius:14px;background:var(--cp-surface);padding:24px}.cp-companion-stage{display:flex;align-items:center;gap:24px;min-height:145px}.cp-studio .cp-actor{width:126px;height:145px;flex-shrink:0;border-radius:32px 32px 15px 15px;background:#eedbd9;border:4px solid var(--cp-paper);padding:0;overflow:hidden;color:#835852}.cp-actor>span{font-family:serif;font-size:54px;line-height:1}.cp-actor img{width:100%;height:100%;object-fit:cover}.cp-studio .cp-actor-1{background:#e4e0ef;color:#716381}.cp-studio .cp-actor-2{background:#dce9da;color:#345a3e}.cp-studio .cp-actor-3{background:#e4e7e8;color:#45534e}.cp-studio .cp-actor-4{background:#62444d;color:#f4dfe6}.cp-actor:hover{transform:rotate(-3deg)}.cp-bubble{flex:1;min-width:0}.cp-bubble small{font-size:12px;color:var(--cp-muted)}.cp-bubble p{font-size:16px;line-height:1.9;margin:8px 0 12px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:140px;overflow:auto}.cp-bubble button{font-size:12px}.cp-actor-picker{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px;align-items:center}.cp-actor-picker button{font-size:12px;min-height:32px;padding:4px 10px}.cp-actor-picker button[aria-pressed=true]{background:var(--cp-ink);color:var(--cp-paper)}.cp-actor-picker small{font-size:11px;color:var(--cp-muted);margin-left:8px}.cp-memory-panel{margin-top:20px}.cp-memory-panel form{padding:20px;background:var(--cp-surface);border:1px solid var(--cp-line);border-radius:12px}.cp-memory-panel textarea{margin-top:12px}.cp-memory-fields{display:flex;align-items:end;flex-wrap:wrap;gap:12px;margin-top:12px}.cp-memory-fields label{display:grid;gap:6px;font-size:12px;color:var(--cp-muted)}.cp-memory-heading{display:flex;justify-content:space-between;align-items:center;margin-top:24px}.cp-memory-heading label{display:flex;align-items:center;gap:7px;font-size:12px}.cp-memory{display:flex;align-items:flex-start;gap:10px;border-bottom:1px solid var(--cp-line);padding:17px 0}.cp-memory>div{flex:1;min-width:0}.cp-memory>div>span{color:var(--cp-muted);font-size:11px}.cp-memory p{font-size:14px;line-height:1.85;white-space:pre-wrap;overflow-wrap:anywhere;margin:5px 0 0}.cp-memory>button{font-size:12px;padding:5px 7px;min-height:30px}.cp-memory.is-done p{text-decoration:line-through;opacity:.55}.cp-memory.is-done .cp-memory-check{background:var(--cp-ink);color:var(--cp-paper)}.cp-custom-content{padding:26px;margin-top:22px;background:var(--cp-surface);border:1px solid var(--cp-line);border-radius:12px}.cp-custom-content p,.cp-custom-preview p{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.9;margin:12px 0 20px}.cp-feedback{display:flex;gap:12px;align-items:center;justify-content:space-between;font-size:13px;padding:15px 0 0;line-height:1.8}.cp-feedback button{font-size:12px;white-space:nowrap}.cp-editor{margin-top:24px;border:1px solid #abc0a3;border-radius:14px;background:var(--cp-surface);padding:24px;box-shadow:0 10px 35px #284b3c0b}.cp-editor>fieldset{border:0;padding:0;margin:0;min-width:0}.cp-editor header{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:23px}.cp-editor header small,.cp-editor-preview>small{font-size:11px;color:var(--cp-muted);letter-spacing:1px}.cp-editor header h3{font-size:19px;margin-top:4px}.cp-editor-body{display:grid;grid-template-columns:1.1fr 1fr;gap:30px}.cp-editor-fields>label{display:grid;gap:7px;font-size:12px;margin-bottom:14px;color:var(--cp-muted)}.cp-editor-fields input,.cp-editor-fields textarea{font-size:14px}.cp-editor-preview>.cp-module{margin-top:12px}.cp-editor-preview .cp-module-cover{height:145px}.cp-custom-preview{margin-top:15px;border-top:1px solid var(--cp-line);padding-top:16px}.cp-cover-actions{display:flex;gap:8px;margin:12px 0 16px;flex-wrap:wrap}.cp-upload{display:inline-flex;gap:7px;align-items:center;border:1px dashed #9db493;border-radius:8px;padding:9px 12px;font-size:12px;cursor:pointer;position:relative;overflow:hidden}.cp-upload input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}.cp-editor details{border-top:1px solid var(--cp-line);margin-top:25px;padding-top:18px}.cp-editor summary{font-size:14px;cursor:pointer;line-height:1.8}.cp-editor details fieldset{padding:15px;border:1px solid var(--cp-line);border-radius:10px;margin:20px 0 10px}.cp-editor legend{font-size:13px;padding:0 5px}.cp-editor details fieldset>label{display:flex;gap:9px;align-items:center;margin:8px 0;font-size:12px}.cp-editor details input:not([type=checkbox]){flex:1;min-width:0}.cp-editor details>label{display:flex;align-items:center;gap:8px;margin-top:20px;font-size:13px}.cp-editor footer{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:24px;padding-top:20px;border-top:1px solid var(--cp-line)}.cp-editor footer p{font-size:12px;line-height:1.8;color:var(--cp-muted);margin:0}.cp-portrait-setting{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:9px 0}.cp-portrait-setting img{width:40px;height:40px;object-fit:cover;border-radius:7px}.cp-portrait-setting button{font-size:12px}
+@media(max-width:900px){.cp-modules{grid-template-columns:repeat(2,minmax(0,1fr))}.cp-focus-panel,.cp-editor-body{grid-template-columns:1fr}.cp-editor-preview{max-width:400px}.cp-timer-face>strong{font-size:60px}.cp-duration input{width:78px}}
+@media(max-width:600px){.cp-studio{padding:0 15px 20px}.cp-module-info{padding:10px}.cp-module-info>strong{font-size:14px}.cp-module-cover{height:62px;padding:12px}.cp-cover-mark{font-size:25px}.cp-modules{gap:8px}.cp-companion-panel,.cp-editor{padding:16px}.cp-companion-stage{gap:14px}.cp-studio .cp-actor{width:83px;height:115px}.cp-actor>span{font-size:38px}.cp-bubble p{font-size:14px}.cp-memory{gap:7px;flex-wrap:wrap}.cp-memory>div{flex-basis:70%}.cp-editor footer{align-items:stretch;flex-direction:column;gap:10px}.cp-memory-fields{align-items:stretch}.cp-memory-fields label{flex:1}.cp-memory-fields input{width:100%}}
+@media(prefers-reduced-motion:reduce){.cp-module:hover,.cp-actor:hover{transform:none}.cp-module{transition:none}}
+
+
+
+===== FILE: app/compass-studio.tsx =====
+"use client";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Bell, BookOpen, Check, Clock3, ImagePlus, ListTodo, MessageCircle, Pause, Play, Plus, RotateCcw, Settings2, Shuffle, Sprout, X } from 'lucide-react';
+import { colors, defaultConfig, mergeConfig, remaining, sectionIds, type Memory, type Section, type Workspace, type WorkspaceConfig } from '@/lib/compass-workspace';
+
+const icons=[ListTodo,BookOpen,MessageCircle,Sprout,Clock3,MessageCircle];
+const api='/api/compass/workspace';
+const coverUrl=(id:string)=>'/api/compass/media?id='+encodeURIComponent(id);
+const timeLabel=(ms:number)=>{const s=Math.ceil(ms/1000);return `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`;};
+const localDate=(stamp:number)=>{const date=new Date(stamp);return new Date(stamp-date.getTimezoneOffset()*60000).toISOString().slice(0,16);};
+
+function SectionCard({section,onClick,active=false}:{section:Section;onClick?:()=>void;active?:boolean}){
+  const Icon=icons[sectionIds.indexOf(section.id as typeof sectionIds[number])]||BookOpen;
+  return <button type="button" className={'cp-module cp-color-'+section.color} aria-pressed={active} onClick={onClick}>
+    <div className="cp-module-cover">{section.cover?<img src={coverUrl(section.cover)} alt=""/>:<><Icon size={25}/><span className="cp-cover-mark">{section.name.slice(0,2)}</span></>}</div>
+    <div className="cp-module-info"><strong>{section.name}</strong><span>{section.description||'写下这个板块的内容'}</span><div className="cp-tags">{section.tags.map((tag,i)=><small key={i}>{tag}</small>)}</div></div>
+  </button>;
+}
+
+export default function CompassStudio({view,onView,onConfig}:{view:string;onView:(v:string)=>void;onConfig:(c:WorkspaceConfig)=>void}){
+  const [state,setState]=useState<Workspace|null>(null),[message,setMessage]=useState(''),[busy,setBusy]=useState(false),[editor,setEditor]=useState(false),[draft,setDraft]=useState<WorkspaceConfig>(defaultConfig),[draftVersion,setDraftVersion]=useState(0),[editing,setEditing]=useState('tasks'),[uploading,setUploading]=useState(false);
+  const [clock,setClock]=useState(()=>Date.now()),[actor,setActor]=useState(0),[bubble,setBubble]=useState('挑一件事开始吧。你交代的重要细节，我会替你留在这里。'),[notice,setNotice]=useState(''),[notification,setNotification]=useState('未启用'),[sound,setSound]=useState(false),[memoryText,setMemoryText]=useState(''),[priority,setPriority]=useState<Memory['priority']>('important'),[remindAt,setRemindAt]=useState(''),[editingMemory,setEditingMemory]=useState<Memory|null>(null),[showCompleted,setShowCompleted]=useState(false);
+  const [focusMinutes,setFocusMinutes]=useState(25),[focusSeconds,setFocusSeconds]=useState(0),[restMinutes,setRestMinutes]=useState(5),[restSeconds,setRestSeconds]=useState(0),[timingDirty,setTimingDirty]=useState(false);
+  const baseConfig=useRef(defaultConfig());
+  const saving=useRef(false),generation=useRef(0),offset=useRef(0),audio=useRef<AudioContext|null>(null),finishAttempt=useRef(0),mounted=useRef(true),timerInputsDirty=useRef(false),pendingMemory=useRef<{key:string;id:string}|null>(null),draftDirty=useRef(false);
+  const apply=useCallback((data:Workspace)=>{offset.current=data.serverNow-Date.now();setState(data);onConfig(data.config);if(!timerInputsDirty.current){setFocusMinutes(Math.floor(data.config.focusSeconds/60));setFocusSeconds(data.config.focusSeconds%60);setRestMinutes(Math.floor(data.config.restSeconds/60));setRestSeconds(data.config.restSeconds%60);}},[onConfig]);
+  const load=useCallback(async()=>{const serial=++generation.current;try{const response=await fetch(api,{cache:'no-store'});const data=await response.json() as Workspace & {error?:string;id:string};if(!mounted.current||serial!==generation.current)return;if(!response.ok){if(response.status===401){setState(null);onConfig(defaultConfig());}throw new Error(data.error||'暂时无法读取。');}apply(data);}catch(e){if(mounted.current)setMessage(e instanceof Error?e.message:'连接中断，请重试。');}},[apply,onConfig]);
+  useEffect(()=>{mounted.current=true;void load();const id=setInterval(()=>{if(!saving.current)void load();},20000);const focus=()=>{if(!saving.current)void load();};window.addEventListener('focus',focus);return()=>{mounted.current=false;generation.current++;clearInterval(id);window.removeEventListener('focus',focus);};},[load]);
+  useEffect(()=>{const id=setInterval(()=>setClock(Date.now()+offset.current),250);return()=>clearInterval(id);},[]);
+  useEffect(()=>{const guard=(e:BeforeUnloadEvent)=>{if(draftDirty.current||memoryText.trim()||timerInputsDirty.current){e.preventDefault();e.returnValue='';}};window.addEventListener('beforeunload',guard);return()=>window.removeEventListener('beforeunload',guard);},[memoryText]);
+  useEffect(()=>{if(!state?.config.rotate)return;const id=setInterval(()=>{if(document.visibilityState==='visible'&&!editor&&!memoryText&&!saving.current)setActor(a=>(a+1+Math.floor(Math.random()*4))%5);},60000);return()=>clearInterval(id);},[state?.config.rotate,editor,memoryText]);
+  useEffect(()=>()=>{void audio.current?.close();},[]);
+  useEffect(()=>{if(editor)document.getElementById('cp-editor-title')?.scrollIntoView({block:'start',behavior:'smooth'});},[editor]);
+  async function post(body:Record<string,unknown>,success=''){
+    if(saving.current)return null;saving.current=true;setBusy(true);generation.current++;setMessage('');
+    try{const response=await fetch(api,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const data=await response.json() as Workspace & {error?:string;id:string};if(!response.ok){if(response.status===401)setState(null);if(response.status===409)void load();throw new Error(data.error||'保存失败，输入已保留。');}if(mounted.current){apply(data);setMessage(success);}return data as Workspace;
+    }catch(e){if(mounted.current)setMessage(e instanceof Error?e.message:'网络中断，输入已保留。');return null;}finally{saving.current=false;if(mounted.current)setBusy(false);}
+  }
+  async function enableSound(){try{audio.current??=new AudioContext();await audio.current.resume();setSound(audio.current.state==='running');return audio.current.state==='running';}catch{setNotice('声音无法播放，到时仍会显示页面提醒。');return false;}}
+  function chime(){const ctx=audio.current;if(!ctx||ctx.state!=='running'){return;}for(let i=0;i<3;i++){const osc=ctx.createOscillator(),gain=ctx.createGain();osc.connect(gain);gain.connect(ctx.destination);osc.frequency.value=660+i*110;const start=ctx.currentTime+i*.22;gain.gain.setValueAtTime(.08,start);gain.gain.exponentialRampToValueAtTime(.001,start+.18);osc.start(start);osc.stop(start+.2);}}
+  function alertUser(text:string){setBubble(text);setNotice(text);chime();if('Notification' in window&&Notification.permission==='granted'){try{new Notification('Compass 提醒',{body:text,tag:'compass-reminder'});}catch{setNotice(text+'（浏览器通知不可用，请查看此处提醒）');}}}
+  async function enableNotifications(){if(!('Notification' in window)){setNotification('浏览器不支持通知');return;}try{const result=await Notification.requestPermission();setNotification(result==='granted'?'通知已启用':result==='denied'?'通知已被浏览器阻止':'暂未授权');}catch{setNotification('通知不可用');}}
+  async function timerCommand(command:string,phase:'focus'|'rest'='focus'){
+    if(!state)return;
+    if(command==='start'){if(timingDirty){setMessage('请先保存计时设置。');return;}await enableSound();}
+    const data=await post({action:'timer',command,version:state.timer.version,phase,seconds:phase==='focus'?state.config.focusSeconds:state.config.restSeconds,id:crypto.randomUUID()});
+    if(data){finishAttempt.current=0;if(command==='start')setBubble(phase==='focus'?'我在这里。现在只做眼前这一件事。':'伸展一下，喝口水，给自己一点休息。');}
+  }
+  // Only the server's successful compare-and-swap winner emits a completion alert.
+  useEffect(()=>{
+    if(!state||saving.current||clock<finishAttempt.current)return;
+    const event=state.alerts[0];
+    if(event){finishAttempt.current=clock+1500;const show=async()=>{let shown=false;try{shown=localStorage.getItem('compass-shown-alert')===event.id;}catch{}if(!shown){alertUser(event.text);try{localStorage.setItem('compass-shown-alert',event.id);}catch{}}await post({action:'ack-alert',id:event.id,version:0});};if(navigator.locks)void navigator.locks.request('compass-alert-display',{ifAvailable:true},lock=>lock?show():undefined);else void show();return;}
+    if(state.timer.status==='running'&&remaining(state.timer,clock)===0){finishAttempt.current=clock+5000;void post({action:'timer',command:'finish',version:state.timer.version});return;}
+    const due=[...state.dueMemories,...state.memories].find(m=>!m.done&&!m.notified&&m.remindAt!==null&&m.remindAt<=clock);
+    if(due){finishAttempt.current=clock+1500;void post({action:'memory-alert',id:due.id,version:due.version});}
+    // Render ticks reconcile absolute deadlines, never decrement stored duration.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[clock,state]);
+  function openEditor(id=view){if(!state)return;baseConfig.current=structuredClone(state.config);setDraft(structuredClone(state.config));setDraftVersion(state.configVersion);setEditing(state.config.sections.some(s=>s.id===id)?id:'tasks');draftDirty.current=false;setEditor(true);}
+  function changeDraft(next:WorkspaceConfig){draftDirty.current=true;setDraft(next);}
+  function patchSection(patch:Partial<Section>){changeDraft({...draft,sections:draft.sections.map(s=>s.id===editing?{...s,...patch}:s)});}
+  async function upload(file:File|undefined,portraitIndex?:number){
+    if(!file)return;if(!['image/png','image/jpeg','image/webp'].includes(file.type)||file.size>12_000_000){setMessage('请选择不超过 12 MB 的 PNG、JPEG 或 WebP 图片。');return;}
+    const target=editing;setUploading(true);setMessage('正在保存封面…');
+    try{const bitmap=await createImageBitmap(file);if(bitmap.width*bitmap.height>40_000_000){bitmap.close();throw new Error('图片像素过大，请选一张小一些的图片。');}const scale=Math.min(1,800/bitmap.width,800/bitmap.height),canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));canvas.getContext('2d')!.drawImage(bitmap,0,0,canvas.width,canvas.height);bitmap.close();const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(v=>v?resolve(v):reject(new Error('图片转换失败')),'image/png'));const response=await fetch('/api/compass/media',{method:'POST',headers:{'Content-Type':'image/png'},body:blob});const data=await response.json() as Workspace & {error?:string;id:string};if(!response.ok)throw new Error(data.error||'封面保存失败');draftDirty.current=true;setDraft(d=>({...d,sections:portraitIndex===undefined?d.sections.map(s=>s.id===target?{...s,cover:data.id}:s):d.sections,portraits:portraitIndex===undefined?d.portraits:d.portraits.map((p,i)=>i===portraitIndex?data.id:p)}));setMessage('封面已上传。预览后点击「保存全部设置」应用。');}catch(e){setMessage(e instanceof Error?e.message:'上传失败，原封面保留。');}finally{setUploading(false);}
+  }
+  async function saveConfig(){const clean={...draft,sections:draft.sections.map(s=>({...s,tags:s.tags.filter(Boolean)}))};if(await post({action:'config',config:clean,version:draftVersion},'板块设置已保存。')){draftDirty.current=false;setEditor(false);}}
+  async function saveTiming(){if(!state)return;const focus=focusMinutes*60+focusSeconds,rest=restMinutes*60+restSeconds;if(![focusMinutes,restMinutes,focusSeconds,restSeconds].every(Number.isInteger)||focusSeconds<0||focusSeconds>59||restSeconds<0||restSeconds>59||focus<1||rest<1||focus>21600||rest>21600){setMessage('每段时长为 1 秒至 6 小时，秒数填写 0–59。');return;}if(await post({action:'config',config:{...state.config,focusSeconds:focus,restSeconds:rest},version:state.configVersion},'计时设置已保存，下一轮生效。')){timerInputsDirty.current=false;setTimingDirty(false);}}
+  async function saveMemory(){if(!memoryText.trim())return;const at=remindAt?new Date(remindAt).getTime():null;if(at!==null&&!Number.isFinite(at)){setMessage('请选择有效的提醒时间。');return;}const key=JSON.stringify([memoryText,priority,at,editingMemory?.id]);if(pendingMemory.current?.key!==key)pendingMemory.current={key,id:editingMemory?.id||crypto.randomUUID()};const result=await post({action:'memory',id:pendingMemory.current.id,text:memoryText,priority,remindAt:at,done:editingMemory?.done||false,version:editingMemory?.version||0},'重要事项已记住。');if(result){setBubble('已记住：'+memoryText);setMemoryText('');setRemindAt('');setEditingMemory(null);pendingMemory.current=null;}}
+  function editMemory(m:Memory){setEditingMemory(m);setMemoryText(m.text);setPriority(m.priority);setRemindAt(m.remindAt?localDate(m.remindAt):'');}
+  if(!state)return <div className="cp-studio-status" role="status">{message||'正在准备你的板块…'}<button type="button" onClick={()=>void load()}>重新读取</button></div>;
+  const selected=draft.sections.find(s=>s.id===editing)!,current=state.config.sections.find(s=>s.id===view),timer=state.timer;
+  return <div className="cp-studio">
+    <div className="cp-toolbar"><span>我的功能板块 <small>{state.config.sections.length} 个</small></span><button type="button" onClick={()=>openEditor()} disabled={busy||editor}><Settings2 size={15}/>自定义板块</button></div>
+    <div className="cp-modules">{state.config.sections.map(section=><SectionCard key={section.id} section={section} active={view===section.id} onClick={()=>onView(section.id)}/>)}</div>
+    {notice&&<div className="cp-notice" role="alert"><Bell size={18}/><span>{notice}</span><button type="button" aria-label="关闭提醒" onClick={()=>setNotice('')}><X size={16}/></button></div>}
+    {view==='focus'&&<div className="cp-focus-panel">
+      <div className="cp-timer-face"><span>{timer.status==='idle'?current?.name:timer.phase==='focus'?'专注中':'休息中'} · {timer.status==='paused'?'已暂停':timer.status==='finished'?'已完成':timer.status==='idle'?'准备开始':'按自己的节奏'}</span><strong role="timer" aria-label="剩余时间">{timeLabel(timer.status==='idle'?state.config.focusSeconds*1000:remaining(timer,clock))}</strong><div className="cp-actions">
+        {(timer.status==='idle'||timer.status==='finished')&&<><button className="compass-save" disabled={busy||timingDirty} onClick={()=>void timerCommand('start','focus')}><Play size={16}/>开始专注</button><button disabled={busy||timingDirty} onClick={()=>void timerCommand('start','rest')}>开始休息</button></>}
+        {timer.status==='running'&&<button disabled={busy} onClick={()=>void timerCommand('pause')}><Pause size={16}/>暂停</button>}{timer.status==='paused'&&<button disabled={busy} onClick={()=>void timerCommand('resume')}><Play size={16}/>继续</button>}{timer.status!=='idle'&&<button disabled={busy} onClick={()=>void timerCommand('reset')}><RotateCcw size={15}/>结束本轮</button>}
+      </div><p>{timer.status==='finished'?'本轮已完成。由你选择开始下一段。':current?.description}</p></div>
+      <div className="cp-timer-settings"><h3>安排自己的节奏</h3>{[['专注',focusMinutes,focusSeconds,setFocusMinutes,setFocusSeconds],['休息',restMinutes,restSeconds,setRestMinutes,setRestSeconds]].map(([label,min,sec,setMin,setSec])=><div className="cp-duration" key={String(label)}><span>{String(label)}</span><input aria-label={label+'分钟'} type="number" min="0" max="360" value={min as number} disabled={busy} onChange={e=>{(setMin as (n:number)=>void)(Number(e.target.value));timerInputsDirty.current=true;setTimingDirty(true);}}/><span>分</span><input aria-label={label+'秒钟'} type="number" min="0" max="59" value={sec as number} disabled={busy} onChange={e=>{(setSec as (n:number)=>void)(Number(e.target.value));timerInputsDirty.current=true;setTimingDirty(true);}}/><span>秒</span></div>)}<button disabled={busy||!timingDirty} onClick={()=>void saveTiming()}>保存计时设置</button><div className="cp-reminder-controls"><button onClick={()=>void enableSound().then(ok=>{if(ok)chime();})}>{sound?'测试提醒声音':'启用提醒声音'}</button><button onClick={()=>void enableNotifications()}>启用浏览器通知</button><small>{notification}</small></div><p className="compass-subtle">刷新后恢复计时。保持网站打开可收到页面提醒；关闭网页或电脑休眠期间不保证准时通知，回来后会核对到期状态。</p></div>
+    </div>}
+    {(view==='companions'||view==='focus')&&<div className="cp-companion-panel"><div className="cp-companion-stage"><button type="button" className={'cp-actor cp-actor-'+actor} aria-label={state.config.companions[actor]+'，查看交代事项'} onClick={()=>setBubble(state.memories.some(m=>!m.done)?'还有事情等你：'+state.memories.find(m=>!m.done)!.text:'今天还没有待处理的交代。可以告诉我一件你想记住的小事。')}>{state.config.portraits[actor]?<img src={coverUrl(state.config.portraits[actor]!)} alt=""/>:<span>{state.config.companions[actor].slice(0,1)}</span>}</button><div className="cp-bubble"><small>{state.config.companions[actor]} · 互动伙伴</small><p>{bubble}</p><button type="button" onClick={()=>{setActor(a=>(a+1+Math.floor(Math.random()*4))%5);setBubble('换我陪你。重要事项都会保存在这里。');}}><Shuffle size={14}/>换个伙伴</button></div></div><div className="cp-actor-picker">{state.config.companions.map((name,i)=><button key={i} aria-pressed={actor===i} onClick={()=>setActor(i)}>{name}</button>)}<small>每分钟随机换班 · 可在自定义中关闭</small></div><p className="compass-subtle">伙伴会记住你保存的事项、展示待办并提醒计时；使用固定互动语句，不是 AI 对话。</p></div>}
+    {view==='companions'&&<div className="cp-memory-panel"><form onSubmit={e=>{e.preventDefault();void saveMemory();}}><h3>{editingMemory?'修改这件事':'交代一件重要的事'}</h3><textarea aria-label="重要事项内容" maxLength={2000} placeholder="例如：周五交方案前，先核对预算数字。可以写清楚人、时间和细节。" value={memoryText} disabled={busy} onChange={e=>setMemoryText(e.target.value)}/><div className="cp-memory-fields"><label>优先级<select value={priority} disabled={busy} onChange={e=>setPriority(e.target.value as Memory['priority'])}><option value="important">重要</option><option value="normal">普通</option></select></label><label>提醒时间（本机时区）<input type="datetime-local" disabled={busy} value={remindAt} onChange={e=>setRemindAt(e.target.value)}/></label><button className="compass-save" disabled={busy||!memoryText.trim()} type="submit">{editingMemory?'保存修改':'请记住这件事'}</button>{editingMemory&&<button type="button" disabled={busy} onClick={()=>{setEditingMemory(null);setMemoryText('');setRemindAt('');}}>取消修改</button>}</div></form>{editingMemory&&state.memories.find(m=>m.id===editingMemory.id)?.version!==editingMemory.version&&<div className="cp-feedback"><span>此事项已变化，输入仍保留。请核对后继续。</span><button onClick={()=>{const latest=state.memories.find(m=>m.id===editingMemory.id);if(window.confirm(latest?"最新内容："+latest.text+"。保留当前输入，并按最新版本保存？":"原事项已删除，将把当前输入另存为新事项。")){setEditingMemory(latest||null);pendingMemory.current=null;}}}>核对最新事项</button></div>}<div className="cp-memory-heading"><h3>已记住的事项</h3><label><input type="checkbox" checked={showCompleted} onChange={e=>setShowCompleted(e.target.checked)}/>显示已完成</label></div>{state.memories.filter(m=>showCompleted||!m.done).map(m=><article className={'cp-memory'+(m.done?' is-done':'')} key={m.id}><button type="button" className="cp-memory-check" aria-label={(m.done?'恢复：':'完成：')+m.text} disabled={busy} onClick={()=>void post({action:'memory',...m,done:!m.done},m.done?'事项已恢复。':'这件事已完成。')}><Check size={16}/></button><div><span>{m.priority==='important'?'重要':'普通'}{m.remindAt?' · '+new Date(m.remindAt).toLocaleString('zh-CN'):''}{m.notified?' · 提醒已生成':''}</span><p>{m.text}</p></div><button disabled={busy} onClick={()=>editMemory(m)}>编辑</button><button disabled={busy} onClick={()=>{if(window.confirm('删除这条重要事项？'))void post({action:'memory-delete',id:m.id,version:m.version},'事项已删除。');}}>删除</button></article>)}{!state.memories.length&&<p className="compass-empty">还没有交代事项。写下第一件，下次打开还会在。</p>}<p className="compass-subtle">显示最近 500 条。到期时提醒仍需保持网页打开。</p></div>}
+    {current&&!sectionIds.includes(current.id as typeof sectionIds[number])&&<article className="cp-custom-content"><h3>{current.name}</h3><p>{current.description||'点击编辑，写下这个自定义板块的内容。'}</p><button disabled={editor} onClick={()=>openEditor(current.id)}>编辑内容与封面</button></article>}
+    {message&&<div className="cp-feedback" role="status">{message}<button type="button" disabled={busy} onClick={()=>void load()}>重新读取</button></div>}
+    {editor&&<div className="cp-editor" role="dialog" aria-modal="false" aria-labelledby="cp-editor-title"><fieldset disabled={busy||uploading}><header><div><small>个性化设置</small><h3 id="cp-editor-title">让每个板块成为你的</h3></div><button aria-label="关闭设置" disabled={busy||uploading} onClick={()=>{if(!draftDirty.current||window.confirm('放弃未保存的板块设置？')){draftDirty.current=false;setEditor(false);}}}><X size={20}/></button></header><div className="cp-editor-body"><div className="cp-editor-fields"><label>Compass 名称<input maxLength={40} value={draft.title} onChange={e=>changeDraft({...draft,title:e.target.value})}/></label><label>选择板块<select value={editing} disabled={uploading} onChange={e=>setEditing(e.target.value)}>{draft.sections.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></label><label>板块名称<input maxLength={40} value={selected.name} onChange={e=>patchSection({name:e.target.value})}/></label><label>标签（用逗号分隔，最多 8 个）<input value={selected.tags.join('，')} onChange={e=>patchSection({tags:e.target.value.split(/[,，]/).map(s=>s.trim())})}/></label><label>说明／自定义内容<textarea maxLength={2000} value={selected.description} onChange={e=>patchSection({description:e.target.value})}/></label><div className="cp-cover-actions"><label className="cp-upload"><ImagePlus size={16}/>{uploading?'上传中…':'上传封面'}<input type="file" accept="image/png,image/jpeg,image/webp" disabled={uploading||busy} onChange={e=>{void upload(e.target.files?.[0]);e.target.value='';}}/></label>{selected.cover&&<button disabled={uploading} onClick={()=>patchSection({cover:null})}>移除封面</button>}</div><label>封面底色<select value={selected.color} onChange={e=>patchSection({color:e.target.value})}>{colors.map((color,i)=><option key={color} value={color}>{['鼠尾草','玫瑰','夜色','暖沙','丁香'][i]}</option>)}</select></label><div className="cp-actions"><button disabled={draft.sections.length>=18} onClick={()=>{const id=crypto.randomUUID();changeDraft({...draft,sections:[...draft.sections,{id,name:'我的新板块',description:'',tags:['自定义'],cover:null,color:'sage'}]});setEditing(id);}}><Plus size={15}/>新增自定义板块</button>{!sectionIds.includes(editing as typeof sectionIds[number])&&<button onClick={()=>{changeDraft({...draft,sections:draft.sections.filter(s=>s.id!==editing)});setEditing('tasks');}}>移除此板块</button>}</div></div><div className="cp-editor-preview"><small>板块实时预览</small><SectionCard section={selected}/><div className="cp-custom-preview"><h3>{selected.name}</h3><p>{selected.description}</p></div></div></div><details><summary>自定义习惯、每日自问、记录分类和伙伴名字</summary>{(['habits','questions','kinds','companions'] as const).map((key,index)=><fieldset key={key}><legend>{['小习惯名称','每日自问','记录分类名称','五位伙伴名字'][index]}</legend>{draft[key].map((v,i)=><label key={i}><span>{i+1}</span><input maxLength={key==='questions'?160:key==='companions'?24:40} value={v} onChange={e=>changeDraft({...draft,[key]:draft[key].map((old,n)=>n===i?e.target.value:old)})}/></label>)}</fieldset>)}<fieldset><legend>伙伴头像（未上传时显示名字）</legend>{draft.companions.map((name,i)=><div className="cp-portrait-setting" key={i}>{draft.portraits[i]&&<img src={coverUrl(draft.portraits[i]!)} alt={name}/>}<label className="cp-upload">{name} · 上传头像<input type="file" accept="image/png,image/jpeg,image/webp" onChange={e=>{void upload(e.target.files?.[0],i);e.target.value="";}}/></label>{draft.portraits[i]&&<button onClick={()=>changeDraft({...draft,portraits:draft.portraits.map((p,n)=>n===i?null:p)})}>移除</button>}</div>)}</fieldset><label><input type="checkbox" checked={draft.rotate} onChange={e=>changeDraft({...draft,rotate:e.target.checked})}/>伙伴每分钟随机换班</label></details><footer>{draftVersion!==state.configVersion&&<button onClick={()=>{if(window.confirm("将合并另一页面的修改；同一字段有冲突时保留你的草稿。请核对后再次保存。")){setDraft(mergeConfig(baseConfig.current,draft,state.config));baseConfig.current=structuredClone(state.config);setDraftVersion(state.configVersion);setMessage("已合并最新设置，请核对预览后保存。");}}}>合并最新设置，保留草稿</button>}<p>名称与封面可随时修改，历史记录仍归在原板块。</p><button className="compass-save" disabled={busy||uploading} onClick={()=>void saveConfig()}>保存全部设置</button></footer></fieldset></div>}
+  </div>;
+}
+
+
+
+
+
+
+
+
 ===== FILE: app/compass-today.css =====
 .compass-knowledge-tab[data-state=inactive]{display:none}
 .knowledge-center .knowledge-view-list{flex-wrap:wrap}
@@ -1491,10 +1684,15 @@ function safeDecodeURIComponent(value: string): string | null {
 ===== FILE: app/compass-today.tsx =====
 "use client";
 import { useCallback, useEffect, useRef, useState } from 'react';
+import CompassStudio from './compass-studio';
+import { defaultConfig } from '@/lib/compass-workspace';
 import { BookOpen, Check, Compass, ListTodo, NotebookPen, RefreshCw, Sprout } from 'lucide-react';
-import { compassHabits, compassKinds, compassQuestions, compassToday, type CompassKind, type CompassState } from '@/lib/compass-types';
+import { compassKinds, compassToday, type CompassKind, type CompassState } from '@/lib/compass-types';
 
 export default function CompassToday() {
+  const [custom,setCustom]=useState(defaultConfig);
+  const label=(id:string)=>custom.sections.find(s=>s.id===id)?.name||id;
+  const kindLabel=(id:string)=>custom.kinds[['Journal','Wins','Gratitude'].indexOf(id)]||id;
   const [date,setDate]=useState(compassToday),[view,setView]=useState('tasks');
   const [state,setState]=useState<CompassState|null>(null),[loading,setLoading]=useState(true),[busy,setBusy]=useState(false),[needsLogin,setNeedsLogin]=useState(false),[message,setMessage]=useState('');
   const [text,setText]=useState(''),[kind,setKind]=useState<CompassKind|'task'>('task'),[due,setDue]=useState(''),[showDone,setShowDone]=useState(false);
@@ -1531,24 +1729,24 @@ export default function CompassToday() {
   function changeDate(next:string){if(!next)return;setState(null);setLoading(true);setMessage('');setDate(next);}
   const tasks=(state?.tasks||[]).filter(task=>showDone||!task.done),canEdit=!!state&&!loading&&!busy&&!needsLogin;
   return <section className="compass-today" aria-labelledby="compass-today-title">
-    <header className="compass-heading"><div className="compass-title"><Compass size={28} aria-hidden="true"/><div><p>每日记录</p><h2 id="compass-today-title">Compass 今日</h2></div></div><div className="compass-date"><label htmlFor="compass-date">记录日期</label><input id="compass-date" type="date" min="2000-01-01" max="2099-12-31" value={date} disabled={busy||!!text.trim()||scoresDirty} onChange={e=>changeDate(e.target.value)}/><button type="button" disabled={busy||!!text.trim()||scoresDirty||date===compassToday()} onClick={()=>changeDate(compassToday())}>今天</button></div></header>
-    <p className="compass-intro">在这里记日记、清待办、记录小习惯。登录管理账号后，记录会保存到网站。</p>
+    <header className="compass-heading"><div className="compass-title"><Compass size={28} aria-hidden="true"/><div><p>每日记录</p><h2 id="compass-today-title">{custom.title}</h2></div></div><div className="compass-date"><label htmlFor="compass-date">记录日期</label><input id="compass-date" type="date" min="2000-01-01" max="2099-12-31" value={date} disabled={busy||!!text.trim()||scoresDirty} onChange={e=>changeDate(e.target.value)}/><button type="button" disabled={busy||!!text.trim()||scoresDirty||date===compassToday()} onClick={()=>changeDate(compassToday())}>今天</button></div></header>
+    <p className="compass-intro">让记录变成行动。定制你的板块，安排专注时间，把重要细节交给伙伴。</p>
     {needsLogin ? <div className="compass-signin"><NotebookPen size={25}/><div><h3>打开自己的每日记录</h3><p>日记、任务和评分仅网站管理账号可查看。网页记录独立保存，不会自动读取电脑里的笔记。</p></div><a href="/signin-with-chatgpt?return_to=%2F%23knowledge%3Fview%3Dcompass" target="_top">登录后使用</a></div> : <>
-      <div className="compass-workspace">
+      <CompassStudio view={view} onView={setView} onConfig={setCustom}/><div className="compass-workspace" hidden={!["tasks","journal","questions","habits"].includes(view)}>
         <div className="compass-primary">
           <form className="compass-capture" onSubmit={e=>{e.preventDefault();void capture();}}>
-            <div className="compass-capture-heading"><label htmlFor="compass-text">快速记一笔</label><select aria-label="Compass 记录类型" value={kind} disabled={!canEdit} onChange={e=>setKind(e.target.value as typeof kind)}><option value="task">待办事项</option>{Object.entries(compassKinds).map(([key,label])=><option key={key} value={key}>{label}</option>)}</select></div>
+            <div className="compass-capture-heading"><label htmlFor="compass-text">快速记一笔</label><select aria-label="Compass 记录类型" value={kind} disabled={!canEdit} onChange={e=>setKind(e.target.value as typeof kind)}><option value="task">{label("tasks")}</option>{Object.keys(compassKinds).map((key)=><option key={key} value={key}>{kindLabel(key)}</option>)}</select></div>
             <textarea id="compass-text" placeholder={loading?'正在读取记录…':'有什么需要记住？'} value={text} disabled={!canEdit} maxLength={4000} onChange={e=>setText(e.target.value)} onKeyDown={e=>{if(e.ctrlKey&&e.key==='Enter'){e.preventDefault();void capture();}}}/>
             <div className="compass-capture-bottom">{kind==='task'?<label>截止日期<input aria-label="Compass 任务截止日期" type="date" min="2000-01-01" max="2099-12-31" value={due} disabled={!canEdit} onChange={e=>setDue(e.target.value)}/></label>:<span>保存到 {date}</span>}<button className="compass-save" type="submit" disabled={!canEdit||!text.trim()}>{busy?'保存中…':'记下来'}</button></div>
           </form>
-          <div className="compass-tabs" role="group" aria-label="Compass 功能">{[{id:'tasks',label:'待办',icon:ListTodo},{id:'journal',label:'日记',icon:NotebookPen},{id:'questions',label:'每日自问',icon:BookOpen}].map(({id,label,icon:Icon})=><button type="button" key={id} aria-pressed={view===id} onClick={()=>setView(id)}><Icon size={16} aria-hidden="true"/>{label}</button>)}</div>
+          <div className="compass-tabs" role="group" aria-label="Compass 功能">{[{id:'tasks',label:label('tasks'),icon:ListTodo},{id:'journal',label:label('journal'),icon:NotebookPen},{id:'questions',label:label('questions'),icon:BookOpen}].map(({id,label,icon:Icon})=><button type="button" key={id} aria-pressed={view===id} onClick={()=>setView(id)}><Icon size={16} aria-hidden="true"/>{label}</button>)}</div>
           {loading?<p className="compass-empty" role="status">正在读取 Compass 记录…</p>:state&&<>
-            {view==='tasks'&&<div className="compass-list"><div className="compass-section-heading"><h3>任务收件箱 <small>{state.tasks.filter(t=>!t.done).length} 项待办</small></h3><label><input type="checkbox" checked={showDone} onChange={e=>setShowDone(e.target.checked)}/>已完成</label></div>{tasks.length?tasks.map(task=><label className={'compass-task'+(task.done?' is-done':'')} key={task.id}><input type="checkbox" checked={task.done} disabled={!canEdit} onChange={e=>void mutate({action:'toggle',id:task.id,done:e.target.checked,version:task.version},e.target.checked?'任务已完成。':'任务已恢复为待办。')}/><span>{task.text}{task.due&&<small className={!task.done&&task.due<compassToday()?'is-overdue':''}>截止 {task.due}</small>}</span></label>):<p className="compass-empty">{showDone?'还没有任务，在上方添加第一件事。':'当前没有待办。把下一件想做的事记下来。'}</p>}<p className="compass-subtle">待办跨日期保留，最多显示最近 500 项。</p></div>}
-            {view==='journal'&&<div className="compass-list"><div className="compass-section-heading"><h3>{date} 的片段</h3><span>{state.entries.length} 条</span></div>{state.entries.length?state.entries.map(entry=><article className="compass-entry" key={entry.id}><div><span>{compassKinds[entry.kind]}</span><time>{new Date(entry.created).toLocaleTimeString('zh-CN',{timeZone:'Asia/Taipei',hour:'2-digit',minute:'2-digit'})}</time></div><p>{entry.text}</p></article>):<p className="compass-empty">这一天还没有记录。选择「日记」「今日收获」或「感恩」，留下一段文字。</p>}{state.entries.length>=500&&<p className="compass-subtle">显示这一天最近 500 条记录。</p>}</div>}
-            {view==='questions'&&<form className="compass-questions" onSubmit={e=>{e.preventDefault();void mutate({action:'scores',scores,version:scoresVersion},'今日评分已保存。');}}><h3>今天，我尽力了吗？</h3><p>1–10 分，只衡量努力；没填的留空。</p>{compassQuestions.map((question,index)=><label key={question}><span>{question}</span><select aria-label={question} disabled={!canEdit} value={scores[index]??''} onChange={e=>{setScores(scores.map((score,i)=>i===index?(e.target.value?Number(e.target.value):null):score));setScoresDirty(true);}}><option value="">—</option>{Array.from({length:10},(_,i)=><option key={i} value={i+1}>{i+1}</option>)}</select></label>)}<div className="compass-score-actions"><button className="compass-save" type="submit" disabled={!canEdit||!scoresDirty}>保存今日评分</button>{scoresDirty&&<button type="button" disabled={busy} onClick={()=>{setScores(state.day.scores);setScoresVersion(state.day.version);setScoresDirty(false);}}>放弃未保存评分</button>}</div></form>}
+            {(view==='tasks'||view==='habits')&&<div className="compass-list"><div className="compass-section-heading"><h3>{label("tasks")} <small>{state.tasks.filter(t=>!t.done).length} 项待办</small></h3><label><input type="checkbox" checked={showDone} onChange={e=>setShowDone(e.target.checked)}/>已完成</label></div>{tasks.length?tasks.map(task=><label className={'compass-task'+(task.done?' is-done':'')} key={task.id}><input type="checkbox" checked={task.done} disabled={!canEdit} onChange={e=>void mutate({action:'toggle',id:task.id,done:e.target.checked,version:task.version},e.target.checked?'任务已完成。':'任务已恢复为待办。')}/><span>{task.text}{task.due&&<small className={!task.done&&task.due<compassToday()?'is-overdue':''}>截止 {task.due}</small>}</span></label>):<p className="compass-empty">{showDone?'还没有任务，在上方添加第一件事。':'当前没有待办。把下一件想做的事记下来。'}</p>}<p className="compass-subtle">待办跨日期保留，最多显示最近 500 项。</p></div>}
+            {view==='journal'&&<div className="compass-list"><div className="compass-section-heading"><h3>{date} 的片段</h3><span>{state.entries.length} 条</span></div>{state.entries.length?state.entries.map(entry=><article className="compass-entry" key={entry.id}><div><span>{kindLabel(entry.kind)}</span><time>{new Date(entry.created).toLocaleTimeString('zh-CN',{timeZone:'Asia/Taipei',hour:'2-digit',minute:'2-digit'})}</time></div><p>{entry.text}</p></article>):<p className="compass-empty">这一天还没有记录。选择「日记」「今日收获」或「感恩」，留下一段文字。</p>}{state.entries.length>=500&&<p className="compass-subtle">显示这一天最近 500 条记录。</p>}</div>}
+            {view==='questions'&&<form className="compass-questions" onSubmit={e=>{e.preventDefault();void mutate({action:'scores',scores,version:scoresVersion},'今日评分已保存。');}}><h3>{label("questions")}</h3><p>1–10 分，只衡量努力；没填的留空。</p>{custom.questions.map((question,index)=><label key={question}><span>{question}</span><select aria-label={question} disabled={!canEdit} value={scores[index]??''} onChange={e=>{setScores(scores.map((score,i)=>i===index?(e.target.value?Number(e.target.value):null):score));setScoresDirty(true);}}><option value="">—</option>{Array.from({length:10},(_,i)=><option key={i} value={i+1}>{i+1}</option>)}</select></label>)}<div className="compass-score-actions"><button className="compass-save" type="submit" disabled={!canEdit||!scoresDirty}>保存今日评分</button>{scoresDirty&&<button type="button" disabled={busy} onClick={()=>{setScores(state.day.scores);setScoresVersion(state.day.version);setScoresDirty(false);}}>放弃未保存评分</button>}</div></form>}
           </>}
         </div>
-        <aside className="compass-habits"><div className="compass-section-heading"><h3><Sprout size={18} aria-hidden="true"/>小习惯</h3><span>{state?.day.habits.filter(Boolean).length||0} / 3</span></div><p>{date} · 完成一件，点亮一件。</p>{compassHabits.map((habit,index)=><button type="button" key={habit} aria-pressed={state?.day.habits[index]||false} disabled={!canEdit||scoresDirty} onClick={()=>void mutate({action:'habit',index,value:!state!.day.habits[index],version:state!.day.version},state!.day.habits[index]?'已取消这次打卡。':'习惯已打卡。')}><span className="compass-habit-check">{state?.day.habits[index]&&<Check size={15}/>}</span>{habit}</button>)}<p className="compass-subtle">打卡与日记分开保存，可再次点击取消。填写评分时，请先保存评分。</p><div className="compass-day-summary"><strong>{state?.entries.length||0}</strong><span>这一天留下的片段</span><strong>{state?.day.scores.filter(s=>s!==null).length||0} / 6</strong><span>已回答的每日自问</span></div></aside>
+        <aside className="compass-habits"><div className="compass-section-heading"><h3><Sprout size={18} aria-hidden="true"/>{label("habits")}</h3><span>{state?.day.habits.filter(Boolean).length||0} / 3</span></div><p>{date} · 完成一件，点亮一件。</p>{custom.habits.map((habit,index)=><button type="button" key={habit} aria-pressed={state?.day.habits[index]||false} disabled={!canEdit||scoresDirty} onClick={()=>void mutate({action:'habit',index,value:!state!.day.habits[index],version:state!.day.version},state!.day.habits[index]?'已取消这次打卡。':'习惯已打卡。')}><span className="compass-habit-check">{state?.day.habits[index]&&<Check size={15}/>}</span>{habit}</button>)}<p className="compass-subtle">打卡与日记分开保存，可再次点击取消。填写评分时，请先保存评分。</p><div className="compass-day-summary"><strong>{state?.entries.length||0}</strong><span>这一天留下的片段</span><strong>{state?.day.scores.filter(s=>s!==null).length||0} / 6</strong><span>已回答的每日自问</span></div></aside>
       </div>
     </>}
     <div className="compass-status"><p role="status">{message||'网页记录独立保存。日记、习惯与评分按日期归档。'}</p><button type="button" disabled={busy||loading||scoresDirty} onClick={()=>{setLoading(true);setMessage('');void load();}}><RefreshCw size={14} aria-hidden="true"/>重新读取</button></div>
@@ -2588,6 +2786,7 @@ import "./atlas.css";
 import "./pro.css";
 import "./knowledge.css";
 import "./compass-today.css";
+import "./compass-studio.css";
 import "./theme.css";
 import "./snow.css";
 import "./music.css";
@@ -13012,6 +13211,10 @@ export function database(){if(!env.DB)throw new Error("Data storage is unavailab
 
 ===== FILE: db/schema.ts =====
 import { sqliteTable, text, integer, index, primaryKey } from "drizzle-orm/sqlite-core";
+export const compassWorkspace=sqliteTable('compass_workspace',{scope:text('scope').notNull(),key:text('key').notNull(),payload:text('payload').notNull(),version:integer('version').notNull()},t=>[primaryKey({columns:[t.scope,t.key]})]);
+export const compassAlerts=sqliteTable('compass_alerts',{scope:text('scope').notNull(),id:text('id').notNull(),text:text('text').notNull(),seen:integer('seen').notNull(),created:integer('created').notNull()},t=>[primaryKey({columns:[t.scope,t.id]}),index('idx_compass_alerts_unseen').on(t.scope,t.seen,t.created)]);
+export const compassMemories=sqliteTable('compass_memories',{scope:text('scope').notNull(),id:text('id').notNull(),text:text('text').notNull(),priority:text('priority').notNull(),done:integer('done').notNull(),remindAt:integer('remind_at'),notified:integer('notified').notNull(),version:integer('version').notNull(),created:integer('created').notNull()},t=>[primaryKey({columns:[t.scope,t.id]}),index('idx_compass_memories_scope_created').on(t.scope,t.done,t.created)]);
+export const compassMedia=sqliteTable('compass_media',{scope:text('scope').notNull(),id:text('id').notNull(),width:integer('width').notNull(),height:integer('height').notNull(),created:integer('created').notNull()},t=>[primaryKey({columns:[t.scope,t.id]})]);
 export const compassDays=sqliteTable('compass_days',{scope:text('scope').notNull(),date:text('date').notNull(),habits:text('habits').notNull(),scores:text('scores').notNull(),version:integer('version').notNull()},table=>[primaryKey({columns:[table.scope,table.date]})]);
 export const compassEntries=sqliteTable('compass_entries',{scope:text('scope').notNull(),id:text('id').notNull(),date:text('date').notNull(),kind:text('kind').notNull(),text:text('text').notNull(),created:integer('created').notNull()},table=>[primaryKey({columns:[table.scope,table.id]}),index('idx_compass_entries_day').on(table.scope,table.date,table.created)]);
 export const compassTasks=sqliteTable('compass_tasks',{scope:text('scope').notNull(),id:text('id').notNull(),text:text('text').notNull(),due:text('due'),done:integer('done').notNull(),version:integer('version').notNull(),created:integer('created').notNull()},table=>[primaryKey({columns:[table.scope,table.id]}),index('idx_compass_tasks_created').on(table.scope,table.created)]);
@@ -13320,6 +13523,53 @@ CREATE TABLE `compass_tasks` (
 );
 --> statement-breakpoint
 CREATE INDEX `idx_compass_tasks_created` ON `compass_tasks` (`scope`,`created`);
+
+
+===== FILE: drizzle/0015_glossy_randall_flagg.sql =====
+CREATE TABLE `compass_media` (
+	`scope` text NOT NULL,
+	`id` text NOT NULL,
+	`width` integer NOT NULL,
+	`height` integer NOT NULL,
+	`created` integer NOT NULL,
+	PRIMARY KEY(`scope`, `id`)
+);
+--> statement-breakpoint
+CREATE TABLE `compass_memories` (
+	`scope` text NOT NULL,
+	`id` text NOT NULL,
+	`text` text NOT NULL,
+	`priority` text NOT NULL,
+	`done` integer NOT NULL,
+	`remind_at` integer,
+	`notified` integer NOT NULL,
+	`version` integer NOT NULL,
+	`created` integer NOT NULL,
+	PRIMARY KEY(`scope`, `id`)
+);
+--> statement-breakpoint
+CREATE INDEX `idx_compass_memories_scope_created` ON `compass_memories` (`scope`,`done`,`created`);--> statement-breakpoint
+CREATE TABLE `compass_workspace` (
+	`scope` text NOT NULL,
+	`key` text NOT NULL,
+	`payload` text NOT NULL,
+	`version` integer NOT NULL,
+	PRIMARY KEY(`scope`, `key`)
+);
+
+
+
+===== FILE: drizzle/0016_icy_bullseye.sql =====
+CREATE TABLE `compass_alerts` (
+	`scope` text NOT NULL,
+	`id` text NOT NULL,
+	`text` text NOT NULL,
+	`seen` integer NOT NULL,
+	`created` integer NOT NULL,
+	PRIMARY KEY(`scope`, `id`)
+);
+--> statement-breakpoint
+CREATE INDEX `idx_compass_alerts_unseen` ON `compass_alerts` (`scope`,`seen`,`created`);
 
 
 ===== FILE: drizzle/meta/0000_snapshot.json =====
@@ -24593,6 +24843,3345 @@ CREATE INDEX `idx_compass_tasks_created` ON `compass_tasks` (`scope`,`created`);
 }
 
 
+===== FILE: drizzle/meta/0015_snapshot.json =====
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "74911779-11cc-425e-a465-5510fbb75e3e",
+  "prevId": "31e3ae0d-7ed3-45fb-a1aa-7885a5e4b60d",
+  "tables": {
+    "booking_requests": {
+      "name": "booking_requests",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "fingerprint": {
+          "name": "fingerprint",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "date": {
+          "name": "date",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "time": {
+          "name": "time",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "notes": {
+          "name": "notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "starts": {
+          "name": "starts",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ends": {
+          "name": "ends",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "notification": {
+          "name": "notification",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'pending'"
+        },
+        "ip_hash": {
+          "name": "ip_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created": {
+          "name": "created",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "idx_booking_range": {
+          "name": "idx_booking_range",
+          "columns": [
+            "starts",
+            "ends"
+          ],
+          "isUnique": false
+        },
+        "idx_booking_ip_created": {
+          "name": "idx_booking_ip_created",
+          "columns": [
+            "ip_hash",
+            "created"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "compass_days": {
+      "name": "compass_days",
+      "columns": {
+        "scope": {
+          "name": "scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "date": {
+          "name": "date",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "habits": {
+          "name": "habits",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "scores": {
+          "name": "scores",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "version": {
+          "name": "version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "compass_days_scope_date_pk": {
+          "columns": [
+            "scope",
+            "date"
+          ],
+          "name": "compass_days_scope_date_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "compass_entries": {
+      "name": "compass_entries",
+      "columns": {
+        "scope": {
+          "name": "scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "date": {
+          "name": "date",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "kind": {
+          "name": "kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "text": {
+          "name": "text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created": {
+          "name": "created",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "idx_compass_entries_day": {
+          "name": "idx_compass_entries_day",
+          "columns": [
+            "scope",
+            "date",
+            "created"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "compass_entries_scope_id_pk": {
+          "columns": [
+            "scope",
+            "id"
+          ],
+          "name": "compass_entries_scope_id_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "compass_media": {
+      "name": "compass_media",
+      "columns": {
+        "scope": {
+          "name": "scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "width": {
+          "name": "width",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "height": {
+          "name": "height",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created": {
+          "name": "created",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "compass_media_scope_id_pk": {
+          "columns": [
+            "scope",
+            "id"
+          ],
+          "name": "compass_media_scope_id_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "compass_memories": {
+      "name": "compass_memories",
+      "columns": {
+        "scope": {
+          "name": "scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "text": {
+          "name": "text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "priority": {
+          "name": "priority",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "done": {
+          "name": "done",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "remind_at": {
+          "name": "remind_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "notified": {
+          "name": "notified",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "version": {
+          "name": "version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created": {
+          "name": "created",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "idx_compass_memories_scope_created": {
+          "name": "idx_compass_memories_scope_created",
+          "columns": [
+            "scope",
+            "done",
+            "created"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "compass_memories_scope_id_pk": {
+          "columns": [
+            "scope",
+            "id"
+          ],
+          "name": "compass_memories_scope_id_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "compass_tasks": {
+      "name": "compass_tasks",
+      "columns": {
+        "scope": {
+          "name": "scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "text": {
+          "name": "text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "due": {
+          "name": "due",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "done": {
+          "name": "done",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "version": {
+          "name": "version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created": {
+          "name": "created",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "idx_compass_tasks_created": {
+          "name": "idx_compass_tasks_created",
+          "columns": [
+            "scope",
+            "created"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "compass_tasks_scope_id_pk": {
+          "columns": [
+            "scope",
+            "id"
+          ],
+          "name": "compass_tasks_scope_id_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "compass_workspace": {
+      "name": "compass_workspace",
+      "columns": {
+        "scope": {
+          "name": "scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "key": {
+          "name": "key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payload": {
+          "name": "payload",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "version": {
+          "name": "version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "compass_workspace_scope_key_pk": {
+          "columns": [
+            "scope",
+            "key"
+          ],
+          "name": "compass_workspace_scope_key_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "credit_accounts": {
+      "name": "credit_accounts",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "label": {
+          "name": "label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "balance": {
+          "name": "balance",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "unlimited": {
+          "name": "unlimited",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "observed_at": {
+          "name": "observed_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "credit_changes": {
+      "name": "credit_changes",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "account_id": {
+          "name": "account_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "direction": {
+          "name": "direction",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "amount": {
+          "name": "amount",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "usd_micros": {
+          "name": "usd_micros",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "before_balance": {
+          "name": "before_balance",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "after_balance": {
+          "name": "after_balance",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "observed_at": {
+          "name": "observed_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "classification": {
+          "name": "classification",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "idx_credit_changes_time": {
+          "name": "idx_credit_changes_time",
+          "columns": [
+            "observed_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "ledger_entries": {
+      "name": "ledger_entries",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "entry_date": {
+          "name": "entry_date",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "currency": {
+          "name": "currency",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "amount": {
+          "name": "amount",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "usd_micros": {
+          "name": "usd_micros",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "rate": {
+          "name": "rate",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "rate_date": {
+          "name": "rate_date",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "note": {
+          "name": "note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "ledger_sync": {
+      "name": "ledger_sync",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payload": {
+          "name": "payload",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "local_apps_relay": {
+      "name": "local_apps_relay",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "device_id": {
+          "name": "device_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "relay_url": {
+          "name": "relay_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "last_seen": {
+          "name": "last_seen",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "mezip_commands": {
+      "name": "mezip_commands",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "fingerprint": {
+          "name": "fingerprint",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "device_id": {
+          "name": "device_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "method": {
+          "name": "method",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "path": {
+          "name": "path",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "body": {
+          "name": "body",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "state": {
+          "name": "state",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires": {
+          "name": "expires",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "lease_until": {
+          "name": "lease_until",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "response_status": {
+          "name": "response_status",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "response_body": {
+          "name": "response_body",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "idx_mezip_commands_queue": {
+          "name": "idx_mezip_commands_queue",
+          "columns": [
+            "device_id",
+            "state",
+            "expires"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "mezip_connection": {
+      "name": "mezip_connection",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "device_id": {
+          "name": "device_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "online": {
+          "name": "online",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "last_seen": {
+          "name": "last_seen",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "microphone_rooms": {
+      "name": "microphone_rooms",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "owner": {
+          "name": "owner",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "receiver_hash": {
+          "name": "receiver_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "sender_hash": {
+          "name": "sender_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "offer": {
+          "name": "offer",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "answer": {
+          "name": "answer",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "microphone_rooms_owner_unique": {
+          "name": "microphone_rooms_owner_unique",
+          "columns": [
+            "owner"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "music_history": {
+      "name": "music_history",
+      "columns": {
+        "scope": {
+          "name": "scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "track_key": {
+          "name": "track_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payload": {
+          "name": "payload",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "last_played_at": {
+          "name": "last_played_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "idx_music_history_listener_time": {
+          "name": "idx_music_history_listener_time",
+          "columns": [
+            "scope",
+            "last_played_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "music_history_scope_track_key_pk": {
+          "columns": [
+            "scope",
+            "track_key"
+          ],
+          "name": "music_history_scope_track_key_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "music_listeners": {
+      "name": "music_listeners",
+      "columns": {
+        "scope": {
+          "name": "scope",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payload": {
+          "name": "payload",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "play_id": {
+          "name": "play_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "sequence": {
+          "name": "sequence",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "started_at": {
+          "name": "started_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "revision": {
+          "name": "revision",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "music_plays": {
+      "name": "music_plays",
+      "columns": {
+        "scope": {
+          "name": "scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "play_id": {
+          "name": "play_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "started_at": {
+          "name": "started_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "idx_music_plays_scope_started": {
+          "name": "idx_music_plays_scope_started",
+          "columns": [
+            "scope",
+            "started_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "music_plays_scope_play_id_pk": {
+          "columns": [
+            "scope",
+            "play_id"
+          ],
+          "name": "music_plays_scope_play_id_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "quota_accounts": {
+      "name": "quota_accounts",
+      "columns": {
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "hidden": {
+          "name": "hidden",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "quota_official_evidence": {
+      "name": "quota_official_evidence",
+      "columns": {
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payload": {
+          "name": "payload",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "observed_at": {
+          "name": "observed_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "quota_official_history": {
+      "name": "quota_official_history",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payload": {
+          "name": "payload",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "observed_at": {
+          "name": "observed_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "idx_quota_official_history_email_time": {
+          "name": "idx_quota_official_history_email_time",
+          "columns": [
+            "email",
+            "observed_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "quota_queries": {
+      "name": "quota_queries",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "state": {
+          "name": "state",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "reason": {
+          "name": "reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "requested_at": {
+          "name": "requested_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "started_at": {
+          "name": "started_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "finished_at": {
+          "name": "finished_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "lease_token": {
+          "name": "lease_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "lease_until": {
+          "name": "lease_until",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "verified_email": {
+          "name": "verified_email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "result_code": {
+          "name": "result_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "fields": {
+          "name": "fields",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'[]'"
+        }
+      },
+      "indexes": {
+        "idx_quota_queries_state_requested": {
+          "name": "idx_quota_queries_state_requested",
+          "columns": [
+            "state",
+            "requested_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "quota_query_control": {
+      "name": "quota_query_control",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "enabled": {
+          "name": "enabled",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 1
+        },
+        "interval_minutes": {
+          "name": "interval_minutes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 5
+        },
+        "worker_seen_at": {
+          "name": "worker_seen_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "last_attempt_at": {
+          "name": "last_attempt_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "snapshots": {
+      "name": "snapshots",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payload": {
+          "name": "payload",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "website_events": {
+      "name": "website_events",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "website_id": {
+          "name": "website_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "observed_at": {
+          "name": "observed_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "record_type": {
+          "name": "record_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'delivery'"
+        }
+      },
+      "indexes": {
+        "idx_website_events_link_time": {
+          "name": "idx_website_events_link_time",
+          "columns": [
+            "website_id",
+            "observed_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "website_sync": {
+      "name": "website_sync",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payload": {
+          "name": "payload",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "websites": {
+      "name": "websites",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "kind": {
+          "name": "kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "source": {
+          "name": "source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "first_seen": {
+          "name": "first_seen",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "last_seen": {
+          "name": "last_seen",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "hidden": {
+          "name": "hidden",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "customized": {
+          "name": "customized",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "box_name": {
+          "name": "box_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        }
+      },
+      "indexes": {
+        "websites_url_unique": {
+          "name": "websites_url_unique",
+          "columns": [
+            "url"
+          ],
+          "isUnique": true
+        },
+        "idx_websites_visible_recent": {
+          "name": "idx_websites_visible_recent",
+          "columns": [
+            "hidden",
+            "last_seen"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {}
+  }
+}
+
+
+===== FILE: drizzle/meta/0016_snapshot.json =====
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "32d3b0ff-98ec-4ca7-b01b-84272b009c3e",
+  "prevId": "74911779-11cc-425e-a465-5510fbb75e3e",
+  "tables": {
+    "booking_requests": {
+      "name": "booking_requests",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "fingerprint": {
+          "name": "fingerprint",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "date": {
+          "name": "date",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "time": {
+          "name": "time",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "notes": {
+          "name": "notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "starts": {
+          "name": "starts",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ends": {
+          "name": "ends",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "notification": {
+          "name": "notification",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'pending'"
+        },
+        "ip_hash": {
+          "name": "ip_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created": {
+          "name": "created",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "idx_booking_range": {
+          "name": "idx_booking_range",
+          "columns": [
+            "starts",
+            "ends"
+          ],
+          "isUnique": false
+        },
+        "idx_booking_ip_created": {
+          "name": "idx_booking_ip_created",
+          "columns": [
+            "ip_hash",
+            "created"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "compass_alerts": {
+      "name": "compass_alerts",
+      "columns": {
+        "scope": {
+          "name": "scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "text": {
+          "name": "text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "seen": {
+          "name": "seen",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created": {
+          "name": "created",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "idx_compass_alerts_unseen": {
+          "name": "idx_compass_alerts_unseen",
+          "columns": [
+            "scope",
+            "seen",
+            "created"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "compass_alerts_scope_id_pk": {
+          "columns": [
+            "scope",
+            "id"
+          ],
+          "name": "compass_alerts_scope_id_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "compass_days": {
+      "name": "compass_days",
+      "columns": {
+        "scope": {
+          "name": "scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "date": {
+          "name": "date",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "habits": {
+          "name": "habits",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "scores": {
+          "name": "scores",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "version": {
+          "name": "version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "compass_days_scope_date_pk": {
+          "columns": [
+            "scope",
+            "date"
+          ],
+          "name": "compass_days_scope_date_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "compass_entries": {
+      "name": "compass_entries",
+      "columns": {
+        "scope": {
+          "name": "scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "date": {
+          "name": "date",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "kind": {
+          "name": "kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "text": {
+          "name": "text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created": {
+          "name": "created",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "idx_compass_entries_day": {
+          "name": "idx_compass_entries_day",
+          "columns": [
+            "scope",
+            "date",
+            "created"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "compass_entries_scope_id_pk": {
+          "columns": [
+            "scope",
+            "id"
+          ],
+          "name": "compass_entries_scope_id_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "compass_media": {
+      "name": "compass_media",
+      "columns": {
+        "scope": {
+          "name": "scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "width": {
+          "name": "width",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "height": {
+          "name": "height",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created": {
+          "name": "created",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "compass_media_scope_id_pk": {
+          "columns": [
+            "scope",
+            "id"
+          ],
+          "name": "compass_media_scope_id_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "compass_memories": {
+      "name": "compass_memories",
+      "columns": {
+        "scope": {
+          "name": "scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "text": {
+          "name": "text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "priority": {
+          "name": "priority",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "done": {
+          "name": "done",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "remind_at": {
+          "name": "remind_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "notified": {
+          "name": "notified",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "version": {
+          "name": "version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created": {
+          "name": "created",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "idx_compass_memories_scope_created": {
+          "name": "idx_compass_memories_scope_created",
+          "columns": [
+            "scope",
+            "done",
+            "created"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "compass_memories_scope_id_pk": {
+          "columns": [
+            "scope",
+            "id"
+          ],
+          "name": "compass_memories_scope_id_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "compass_tasks": {
+      "name": "compass_tasks",
+      "columns": {
+        "scope": {
+          "name": "scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "text": {
+          "name": "text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "due": {
+          "name": "due",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "done": {
+          "name": "done",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "version": {
+          "name": "version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created": {
+          "name": "created",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "idx_compass_tasks_created": {
+          "name": "idx_compass_tasks_created",
+          "columns": [
+            "scope",
+            "created"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "compass_tasks_scope_id_pk": {
+          "columns": [
+            "scope",
+            "id"
+          ],
+          "name": "compass_tasks_scope_id_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "compass_workspace": {
+      "name": "compass_workspace",
+      "columns": {
+        "scope": {
+          "name": "scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "key": {
+          "name": "key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payload": {
+          "name": "payload",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "version": {
+          "name": "version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "compass_workspace_scope_key_pk": {
+          "columns": [
+            "scope",
+            "key"
+          ],
+          "name": "compass_workspace_scope_key_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "credit_accounts": {
+      "name": "credit_accounts",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "label": {
+          "name": "label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "balance": {
+          "name": "balance",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "unlimited": {
+          "name": "unlimited",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "observed_at": {
+          "name": "observed_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "credit_changes": {
+      "name": "credit_changes",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "account_id": {
+          "name": "account_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "direction": {
+          "name": "direction",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "amount": {
+          "name": "amount",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "usd_micros": {
+          "name": "usd_micros",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "before_balance": {
+          "name": "before_balance",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "after_balance": {
+          "name": "after_balance",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "observed_at": {
+          "name": "observed_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "classification": {
+          "name": "classification",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "idx_credit_changes_time": {
+          "name": "idx_credit_changes_time",
+          "columns": [
+            "observed_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "ledger_entries": {
+      "name": "ledger_entries",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "entry_date": {
+          "name": "entry_date",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "currency": {
+          "name": "currency",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "amount": {
+          "name": "amount",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "usd_micros": {
+          "name": "usd_micros",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "rate": {
+          "name": "rate",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "rate_date": {
+          "name": "rate_date",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "note": {
+          "name": "note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "ledger_sync": {
+      "name": "ledger_sync",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payload": {
+          "name": "payload",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "local_apps_relay": {
+      "name": "local_apps_relay",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "device_id": {
+          "name": "device_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "relay_url": {
+          "name": "relay_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "last_seen": {
+          "name": "last_seen",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "mezip_commands": {
+      "name": "mezip_commands",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "fingerprint": {
+          "name": "fingerprint",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "device_id": {
+          "name": "device_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "method": {
+          "name": "method",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "path": {
+          "name": "path",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "body": {
+          "name": "body",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "state": {
+          "name": "state",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires": {
+          "name": "expires",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "lease_until": {
+          "name": "lease_until",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "response_status": {
+          "name": "response_status",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "response_body": {
+          "name": "response_body",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "idx_mezip_commands_queue": {
+          "name": "idx_mezip_commands_queue",
+          "columns": [
+            "device_id",
+            "state",
+            "expires"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "mezip_connection": {
+      "name": "mezip_connection",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "device_id": {
+          "name": "device_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "online": {
+          "name": "online",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "last_seen": {
+          "name": "last_seen",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "microphone_rooms": {
+      "name": "microphone_rooms",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "owner": {
+          "name": "owner",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "receiver_hash": {
+          "name": "receiver_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "sender_hash": {
+          "name": "sender_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "offer": {
+          "name": "offer",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "answer": {
+          "name": "answer",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "microphone_rooms_owner_unique": {
+          "name": "microphone_rooms_owner_unique",
+          "columns": [
+            "owner"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "music_history": {
+      "name": "music_history",
+      "columns": {
+        "scope": {
+          "name": "scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "track_key": {
+          "name": "track_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payload": {
+          "name": "payload",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "last_played_at": {
+          "name": "last_played_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "idx_music_history_listener_time": {
+          "name": "idx_music_history_listener_time",
+          "columns": [
+            "scope",
+            "last_played_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "music_history_scope_track_key_pk": {
+          "columns": [
+            "scope",
+            "track_key"
+          ],
+          "name": "music_history_scope_track_key_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "music_listeners": {
+      "name": "music_listeners",
+      "columns": {
+        "scope": {
+          "name": "scope",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payload": {
+          "name": "payload",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "play_id": {
+          "name": "play_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "sequence": {
+          "name": "sequence",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "started_at": {
+          "name": "started_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "revision": {
+          "name": "revision",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "music_plays": {
+      "name": "music_plays",
+      "columns": {
+        "scope": {
+          "name": "scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "play_id": {
+          "name": "play_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "started_at": {
+          "name": "started_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "idx_music_plays_scope_started": {
+          "name": "idx_music_plays_scope_started",
+          "columns": [
+            "scope",
+            "started_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "music_plays_scope_play_id_pk": {
+          "columns": [
+            "scope",
+            "play_id"
+          ],
+          "name": "music_plays_scope_play_id_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "quota_accounts": {
+      "name": "quota_accounts",
+      "columns": {
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "hidden": {
+          "name": "hidden",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "quota_official_evidence": {
+      "name": "quota_official_evidence",
+      "columns": {
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payload": {
+          "name": "payload",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "observed_at": {
+          "name": "observed_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "quota_official_history": {
+      "name": "quota_official_history",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payload": {
+          "name": "payload",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "observed_at": {
+          "name": "observed_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "idx_quota_official_history_email_time": {
+          "name": "idx_quota_official_history_email_time",
+          "columns": [
+            "email",
+            "observed_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "quota_queries": {
+      "name": "quota_queries",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "state": {
+          "name": "state",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "reason": {
+          "name": "reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "requested_at": {
+          "name": "requested_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "started_at": {
+          "name": "started_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "finished_at": {
+          "name": "finished_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "lease_token": {
+          "name": "lease_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "lease_until": {
+          "name": "lease_until",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "verified_email": {
+          "name": "verified_email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "result_code": {
+          "name": "result_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "fields": {
+          "name": "fields",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'[]'"
+        }
+      },
+      "indexes": {
+        "idx_quota_queries_state_requested": {
+          "name": "idx_quota_queries_state_requested",
+          "columns": [
+            "state",
+            "requested_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "quota_query_control": {
+      "name": "quota_query_control",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "enabled": {
+          "name": "enabled",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 1
+        },
+        "interval_minutes": {
+          "name": "interval_minutes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 5
+        },
+        "worker_seen_at": {
+          "name": "worker_seen_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "last_attempt_at": {
+          "name": "last_attempt_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "snapshots": {
+      "name": "snapshots",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payload": {
+          "name": "payload",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "website_events": {
+      "name": "website_events",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "website_id": {
+          "name": "website_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "observed_at": {
+          "name": "observed_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "record_type": {
+          "name": "record_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'delivery'"
+        }
+      },
+      "indexes": {
+        "idx_website_events_link_time": {
+          "name": "idx_website_events_link_time",
+          "columns": [
+            "website_id",
+            "observed_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "website_sync": {
+      "name": "website_sync",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payload": {
+          "name": "payload",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "websites": {
+      "name": "websites",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "kind": {
+          "name": "kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "source": {
+          "name": "source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "first_seen": {
+          "name": "first_seen",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "last_seen": {
+          "name": "last_seen",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "hidden": {
+          "name": "hidden",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "customized": {
+          "name": "customized",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "box_name": {
+          "name": "box_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        }
+      },
+      "indexes": {
+        "websites_url_unique": {
+          "name": "websites_url_unique",
+          "columns": [
+            "url"
+          ],
+          "isUnique": true
+        },
+        "idx_websites_visible_recent": {
+          "name": "idx_websites_visible_recent",
+          "columns": [
+            "hidden",
+            "last_seen"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {}
+  }
+}
+
+
 ===== FILE: drizzle/meta/_journal.json =====
 {
   "version": "7",
@@ -24701,6 +28290,20 @@ CREATE INDEX `idx_compass_tasks_created` ON `compass_tasks` (`scope`,`created`);
       "version": "6",
       "when": 1790750932972,
       "tag": "0014_serious_jetstream",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "6",
+      "when": 1790765753978,
+      "tag": "0015_glossy_randall_flagg",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "6",
+      "when": 1790766579325,
+      "tag": "0016_icy_bullseye",
       "breakpoints": true
     }
   ]
@@ -25083,6 +28686,40 @@ export async function notifyBooking(booking: Booking, start = false) {
 
 
 
+===== FILE: lib/compass-auth.ts =====
+import { isOwner, websiteId } from './website-api';
+export const compassHeaders={'Cache-Control':'private, no-store',Vary:'Cookie, Authorization, OAI-Authenticated-User-Id, OAI-Authenticated-User-Email','X-Content-Type-Options':'nosniff'};
+export const compassReply=(body:unknown,status=200)=>Response.json(body,{status,headers:compassHeaders});
+export async function compassScope(request:Request){const id=request.headers.get('oai-authenticated-user-id');return id&&isOwner(request)?websiteId('compass:'+id):null;}
+
+
+
+===== FILE: lib/compass-png.ts =====
+// Accept bounded, 8-bit RGB/RGBA PNG only. Check CRCs and decompressed scanlines,
+// then discard metadata so uploads cannot carry HTML, SVG, or ancillary payloads.
+export async function cleanPng(bytes:Uint8Array){
+  if(bytes.length>3_000_000||bytes.length<57||![137,80,78,71,13,10,26,10].every((v,i)=>bytes[i]===v))throw new Error('Invalid PNG');
+  const view=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength),keep:Uint8Array[]=[bytes.slice(0,8)],idat:Uint8Array[]=[];
+  let p=8,width=0,height=0,channels=0,ended=false,seenData=false,dataEnded=false;
+  while(p<bytes.length){
+    if(p+12>bytes.length)throw new Error('Truncated PNG');const n=view.getUint32(p),type=new TextDecoder().decode(bytes.slice(p+4,p+8));if(n>bytes.length-p-12)throw new Error('Truncated chunk');
+    let crc=0xffffffff;for(let i=p+4;i<p+8+n;i++){crc^=bytes[i];for(let bit=0;bit<8;bit++)crc=(crc>>>1)^((crc&1)?0xedb88320:0);}if((crc^0xffffffff)>>>0!==view.getUint32(p+8+n))throw new Error('CRC');
+    if(p===8&&type!=='IHDR')throw new Error('Header');
+    if(type==='IHDR'){if(p!==8||n!==13)throw new Error('Header');width=view.getUint32(p+8);height=view.getUint32(p+12);channels=bytes[p+17]===6?4:bytes[p+17]===2?3:0;if(!width||!height||width>2400||height>2400||width*height>2_500_000||bytes[p+16]!==8||!channels||bytes[p+18]||bytes[p+19]||bytes[p+20])throw new Error('Dimensions');keep.push(bytes.slice(p,p+n+12));}
+    else if(type==='IDAT'){if(dataEnded)throw new Error('Data order');seenData=true;idat.push(bytes.slice(p+8,p+8+n));keep.push(bytes.slice(p,p+n+12));}
+    else if(type==='IEND'){if(n||!seenData||p+12!==bytes.length)throw new Error('End');keep.push(bytes.slice(p,p+12));ended=true;}
+    else {if(seenData)dataEnded=true;if(type[0]===type[0].toUpperCase())throw new Error('Unsupported chunk');}
+    p+=n+12;
+  }
+  if(!ended)throw new Error('Missing end');
+  const packed=new Blob(idat as BlobPart[]).stream().pipeThrough(new DecompressionStream('deflate')).getReader(),row=width*channels+1,expected=row*height;let total=0;
+  while(true){const {done,value}=await packed.read();if(done)break;for(let i=0;i<value.length;i++)if((total+i)%row===0&&value[i]>4)throw new Error('Filter');total+=value.length;if(total>expected){await packed.cancel();throw new Error('Pixel overflow');}}
+  if(total!==expected)throw new Error('Pixel length');
+  return {bytes:await new Blob(keep as BlobPart[]).arrayBuffer(),width,height};
+}
+
+
+
 ===== FILE: lib/compass-store.ts =====
 import { database } from '@/db/raw';
 import { emptyCompassDay, type CompassDay, type CompassEntry, type CompassState, type CompassTask } from './compass-types';
@@ -25123,6 +28760,93 @@ export function emptyCompassDay(): CompassDay { return { habits: [false,false,fa
 
 
 
+===== FILE: lib/compass-workspace.test.mjs =====
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {DatabaseSync} from 'node:sqlite';
+import {deflateSync} from 'node:zlib';
+import ts from 'typescript';
+const source=path=>readFileSync(new URL(path,import.meta.url),'utf8');
+const url=s=>'data:text/javascript;base64,'+Buffer.from(ts.transpileModule(s,{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}}).outputText).toString('base64');
+const types=url(source('./compass-types.ts'));
+const model=url(source('./compass-workspace.ts').replace("'./compass-types'",JSON.stringify(types)));
+const authBase=url(source('./website-api.ts').replace('import { env } from "cloudflare:workers";','const env={OWNER_EMAIL:"owner@example.test"};'));
+const auth=url(source('./compass-auth.ts').replace("'./website-api'",JSON.stringify(authBase)));
+const png=url(source('./compass-png.ts'));
+function route(path){return url(source(path).replace("import { database } from '@/db/raw';","const database=()=>globalThis.fixture;").replace("import { env } from 'cloudflare:workers';","const env={get BUCKET(){return globalThis.bucket;}};").replace("'@/lib/website-api'",JSON.stringify(authBase)).replace("'@/lib/compass-auth'",JSON.stringify(auth)).replace("'@/lib/compass-workspace'",JSON.stringify(model)).replace("'@/lib/compass-png'",JSON.stringify(png)));}
+const {GET,POST}=await import(route('../app/api/compass/workspace/route.ts'));
+const media=await import(route('../app/api/compass/media/route.ts'));
+const {defaultConfig,validConfig,emptyTimer,timerTransition,remaining,mergeConfig}=await import(model);
+const {cleanPng}=await import(png);
+function fixture(t){const db=new DatabaseSync(':memory:');db.exec(source('../drizzle/0015_glossy_randall_flagg.sql'));db.exec(source('../drizzle/0016_icy_bullseye.sql'));globalThis.fixture={async batch(statements){db.exec("BEGIN");try{const results=[];for(const s of statements)results.push(await s.run());db.exec("COMMIT");return results;}catch(e){db.exec("ROLLBACK");throw e;}},prepare(sql){let args=[];return {bind(...a){args=a;return this;},async first(){return db.prepare(sql).get(...args)||null;},async all(){return {results:db.prepare(sql).all(...args)};},async run(){return {meta:{changes:Number(db.prepare(sql).run(...args).changes)}};}};}};const objects=new Map();globalThis.bucket={async put(k,b){objects.set(k,b);},async get(k){return objects.has(k)?{body:objects.get(k)}:null;},async delete(k){objects.delete(k);}};t.after(()=>db.close());return {db,objects};}
+function req(body,options={}){const headers={'oai-authenticated-user-id':options.id||'test-owner','oai-authenticated-user-email':options.email||'owner@example.test',Origin:options.origin||'https://test.local','Content-Type':options.type||'application/json'};if(options.anonymous){delete headers['oai-authenticated-user-id'];delete headers['oai-authenticated-user-email'];}return new Request('https://test.local/api/compass/workspace'+(options.query||''),{method:body===undefined?'GET':'POST',headers,...(body===undefined?{}:{body:options.raw?body:JSON.stringify(body)})});}
+async function save(body,options){const r=await POST(req(body,options));return {status:r.status,data:await r.json()};}
+async function get(options){return (await GET(req(undefined,options))).json();}
+test('all workspace and media endpoints reject anonymous and non-owner; mutations reject foreign origin',async t=>{fixture(t);for(const o of [{anonymous:true},{email:'other@example.test'}]){assert.equal((await GET(req(undefined,o))).status,401);assert.equal((await POST(req({version:0},o))).status,401);assert.equal((await media.GET(req(undefined,o))).status,401);assert.equal((await media.POST(req({},o))).status,401);}assert.equal((await save({version:0},{origin:'https://evil.test'})).status,403);assert.equal((await media.POST(req({}, {origin:'https://evil.test'}))).status,403);});
+test('custom section names, labels and full text survive reads, preserve stable IDs, and are account isolated',async t=>{fixture(t);const config=defaultConfig();config.title='我的生活';config.sections[0].name='事业清单';config.sections[0].tags=['写作','重要'];config.habits[1]='晨跑';config.questions[0]='我的问题？';config.sections.push({id:crypto.randomUUID(),name:'我的创意',description:'长内容\n第二段',cover:null,color:'night',tags:['idea']});assert.equal((await save({action:'config',config,version:0})).status,200);assert.deepEqual((await get()).config,config);assert.equal((await get({id:'another-owner'})).config.title,'Compass 今日');assert.equal((await save({action:'config',config,version:0})).status,409);assert.equal((await save({action:'config',config:{...config,title:'新名称'},version:1})).status,200);});
+test('invalid names, tags, duplicate IDs, arrays, durations and cross-scope covers are rejected',async t=>{fixture(t);for(const mutate of [c=>c.habits=[],c=>c.title='',c=>c.sections.push(c.sections[0]),c=>c.sections[0].tags=['x'.repeat(25)],c=>c.restSeconds=0,c=>c.focusSeconds=1.5,c=>c.portraits=['x'],c=>c.sections[0].id='__proto__']){const config=defaultConfig();mutate(config);assert.equal(validConfig(config),false);assert.equal((await save({action:'config',config,version:0})).status,400);}const config=defaultConfig();config.sections[0].cover=crypto.randomUUID();assert.equal((await save({action:'config',config,version:0})).status,400);});
+test('timer uses absolute timestamps through pause, resume, sleep and completion',()=>{const id=crypto.randomUUID();let timer=timerTransition(emptyTimer(),'start',1000,{seconds:5,phase:'focus',id});assert.equal(remaining(timer,3100),2900);timer=timerTransition(timer,'pause',3100);assert.equal(remaining(timer,900000),2900);timer=timerTransition(timer,'resume',900000);assert.equal(timer.endAt,902900);assert.equal(timerTransition(timer,'finish',902899),null);timer=timerTransition(timer,'finish',999999);assert.equal(timer.status,'finished');assert.equal(timerTransition(timer,'finish',1000000),null);timer=timerTransition(timer,'start',1000000,{seconds:3,phase:'rest',id:crypto.randomUUID()});assert.equal(timer.endAt,1003000);assert.equal(timerTransition(timer,'start',1000000,{seconds:3,phase:'rest',id}),null);});
+test('timer API survives reload and only one client can finish or replace a session',async t=>{fixture(t);let now=Date.now();const real=Date.now;Date.now=()=>now;t.after(()=>Date.now=real);let result=await save({action:'timer',command:'start',phase:'focus',seconds:5,id:crypto.randomUUID(),version:0});assert.equal(result.status,200);assert.equal((await get()).timer.endAt,now+5000);assert.equal((await save({action:'timer',command:'pause',version:0})).status,409);now+=5000;const both=await Promise.all([save({action:'timer',command:'finish',version:1}),save({action:'timer',command:'finish',version:1})]);assert.equal(both.filter(r=>r.data.notify).length,1);assert.deepEqual(both.map(r=>r.status).sort(),[200,409]);assert.equal((await get()).timer.status,'finished');});
+test('memory CRUD, idempotent create, conflict, completion and remind claims preserve real records',async t=>{fixture(t);const memory={action:'memory',id:crypto.randomUUID(),text:'验收事项\n保留细节',priority:'important',done:false,remindAt:Date.now()-1000,version:0};assert.equal((await save(memory)).status,200);assert.equal((await save(memory)).status,200);assert.equal((await get()).memories.length,1);assert.equal((await save({...memory,text:'changed'})).status,409);const alerts=await Promise.all([save({action:'memory-alert',id:memory.id,version:1}),save({action:'memory-alert',id:memory.id,version:1})]);assert.equal(alerts.filter(r=>r.data.notify).length,1);assert.equal((await save({...memory,text:'修改细节',done:true,version:1})).status,200);assert.equal((await get()).memories[0].text,'修改细节');assert.equal((await get({id:'another-owner'})).memories.length,0);assert.equal((await save({action:'memory-delete',id:memory.id,version:1})).status,409);assert.equal((await save({action:'memory-delete',id:memory.id,version:2})).status,200);assert.equal((await get()).memories.length,0);});
+function chunk(type,data){const buf=Buffer.concat([Buffer.from(type),data]);let crc=0xffffffff;for(const b of buf){crc^=b;for(let i=0;i<8;i++)crc=(crc>>>1)^((crc&1)?0xedb88320:0);}const result=Buffer.alloc(data.length+12);result.writeUInt32BE(data.length);buf.copy(result,4);result.writeUInt32BE((crc^0xffffffff)>>>0,result.length-4);return result;}
+function image(width=2,height=2){const header=Buffer.alloc(13);header.writeUInt32BE(width);header.writeUInt32BE(height,4);header[8]=8;header[9]=6;return Buffer.concat([Buffer.from([137,80,78,71,13,10,26,10]),chunk('IHDR',header),chunk('tEXt',Buffer.from('fixture metadata')),chunk('IDAT',deflateSync(Buffer.alloc((width*4+1)*height))),chunk('IEND',Buffer.alloc(0))]);}
+test('upload validates real pixels, strips metadata, stores in R2 and prevents cross-account reads',async t=>{const f=fixture(t);const png=image();const result=await media.POST(req(png,{raw:true,type:'image/png'}));assert.equal(result.status,200);const {id}=await result.json();assert.equal(f.objects.size,1);const response=await media.GET(req(undefined,{query:'?id='+id}));assert.equal(response.status,200);assert.equal(response.headers.get('Content-Type'),'image/png');const stored=Buffer.from(await response.arrayBuffer());assert.equal(stored.includes(Buffer.from('fixture metadata')),false);assert.equal((await media.GET(req(undefined,{query:'?id='+id,id:'other-owner'}))).status,404);const config=defaultConfig();config.portraits[0]=id;config.sections[0].cover=id;assert.equal((await save({action:'config',config,version:0})).status,200);});
+test('spoofed PNG, SVG, CRC damage, excessive pixels and unavailable storage fail safely',async t=>{fixture(t);for(const bytes of [Buffer.from('<svg onload="alert(1)"/>'),Buffer.from('<html>'),Buffer.concat([image(),Buffer.from('extra')])]){assert.equal((await media.POST(req(bytes,{raw:true,type:'image/png'}))).status,400);}const bad=image();bad[30]^=1;await assert.rejects(()=>cleanPng(bad));await assert.rejects(()=>cleanPng(image(2401,1)));globalThis.bucket=undefined;assert.equal((await media.POST(req(image(),{raw:true,type:'image/png'}))).status,503);globalThis.fixture={prepare(){throw new Error('offline');}};assert.equal((await GET(req())).status,503);assert.equal((await save({action:'config',config:defaultConfig(),version:0})).status,503);});
+test('unseen alerts survive response loss until explicit acknowledgement and retain the completed phase',async t=>{fixture(t);let now=Date.now();const real=Date.now;Date.now=()=>now;t.after(()=>Date.now=real);await save({action:'timer',command:'start',phase:'focus',seconds:1,id:crypto.randomUUID(),version:0});now+=1000;await save({action:'timer',command:'finish',version:1});await save({action:'timer',command:'start',phase:'rest',seconds:3,id:crypto.randomUUID(),version:2});let state=await get();assert.equal(state.timer.phase,'rest');assert.equal(state.alerts.length,1);assert.match(state.alerts[0].text,/专注完成/);assert.equal((await get()).alerts.length,1);await save({action:'ack-alert',id:state.alerts[0].id,version:0});assert.equal((await get()).alerts.length,0);});
+test('due reminders are not hidden by the 500 most recent display records',async t=>{const {db}=fixture(t);await save({action:'memory',id:crypto.randomUUID(),text:'old due reminder',priority:'important',done:false,remindAt:Date.now()-1000,version:0});const scope=db.prepare('SELECT scope FROM compass_memories').get().scope;const insert=db.prepare('INSERT INTO compass_memories(scope,id,text,priority,done,remind_at,notified,version,created) VALUES(?,?,?,?,0,NULL,0,1,?)');for(let i=0;i<501;i++)insert.run(scope,crypto.randomUUID(),'new '+i,'normal',Date.now()+i+1000);const state=await get();assert.equal(state.memories.length,500);assert.equal(state.memories.some(m=>m.text==='old due reminder'),false);assert.equal(state.dueMemories[0].text,'old due reminder');});
+test('config rebase retains local edits and unrelated remote edits plus new custom cards',()=>{const base=defaultConfig(),draft=structuredClone(base),latest=structuredClone(base);draft.sections[0].name='local name';latest.sections[0].description='remote description';latest.title='remote title';latest.sections.push({id:crypto.randomUUID(),name:'remote card',description:'',color:'sage',tags:[],cover:null});const merged=mergeConfig(base,draft,latest);assert.equal(merged.sections[0].name,'local name');assert.equal(merged.sections[0].description,'remote description');assert.equal(merged.title,'remote title');assert.equal(merged.sections.length,7);assert.equal(validConfig(merged),true);});
+test('deleting a memory cancels its queued reminder but a stale deletion does not',async t=>{fixture(t);const id=crypto.randomUUID();await save({action:'memory',id,text:'cancel me',priority:'normal',done:false,remindAt:Date.now()-1000,version:0});await save({action:'memory-alert',id,version:1});assert.equal((await get()).alerts.length,1);assert.equal((await save({action:'memory-delete',id,version:0})).status,409);assert.equal((await get()).alerts.length,1);await save({action:'memory-delete',id,version:1});assert.equal((await get()).alerts.length,0);});
+
+
+
+
+===== FILE: lib/compass-workspace.ts =====
+import { compassHabits, compassQuestions } from './compass-types';
+export const sectionIds = ['tasks','journal','questions','habits','focus','companions'] as const;
+export type SectionId = typeof sectionIds[number];
+export type Section = { id:string; name:string; description:string; tags:string[]; cover:string|null; color:string };
+export type WorkspaceConfig = { title:string; sections:Section[]; habits:string[]; questions:string[]; kinds:string[]; companions:string[]; portraits:(string|null)[]; focusSeconds:number; restSeconds:number; rotate:boolean };
+export type Timer = { id:string; phase:'focus'|'rest'; status:'idle'|'running'|'paused'|'finished'; endAt:number; remainingMs:number; durationMs:number; version:number };
+export type Memory = { id:string; text:string; priority:'normal'|'important'; done:boolean; remindAt:number|null; notified:boolean; version:number; created:number };
+export type Workspace = { config:WorkspaceConfig; configVersion:number; timer:Timer; memories:Memory[]; dueMemories:Memory[]; alerts:{id:string;text:string}[]; serverNow:number; notify?:boolean };
+export const colors=['sage','rose','night','sand','lilac'] as const;
+export function defaultConfig():WorkspaceConfig { return { title:'Compass 今日', sections:[
+  ['tasks','下一件事','把想法落到行动。','行动'],['journal','一天的片段','记下收获，也留住微小的幸福。','记录'],['questions','与自己对话','用六个问题，回看今天的努力。','回顾'],['habits','小小坚持','完成一件，点亮一件。','习惯'],['focus','专注时光','一次只做一件事。','专注'],['companions','伙伴与重要事项','把细节交给这里，留出心力做事。','陪伴']
+].map(([id,name,description,tag],i)=>({id,name,description,tags:[tag],cover:null,color:colors[i%colors.length]})), habits:[...compassHabits],questions:[...compassQuestions],kinds:['日记','今日收获','感恩'],companions:['绯红','紫夜','墨绿','默白','暮酒'],portraits:[null,null,null,null,null],focusSeconds:1500,restSeconds:300,rotate:true }; }
+export function emptyTimer():Timer{return {id:'',phase:'focus',status:'idle',endAt:0,remainingMs:0,durationMs:0,version:0};}
+export const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const short=(v:unknown,max:number)=>typeof v==='string'&&v.trim().length>0&&v.length<=max;
+export function validConfig(value:unknown):value is WorkspaceConfig {
+  if(!value||typeof value!=='object')return false;const c=value as WorkspaceConfig;
+  if(!short(c.title,40)||!Array.isArray(c.sections)||c.sections.length<6||c.sections.length>18||new Set(c.sections.map(s=>s?.id)).size!==c.sections.length)return false;
+  if(!sectionIds.every(id=>c.sections.some(s=>s.id===id)))return false;
+  if(!c.sections.every(s=>s&&typeof s.id==='string'&&(sectionIds.includes(s.id as SectionId)||uuid.test(s.id))&&short(s.name,40)&&typeof s.description==='string'&&s.description.length<=2000&&Array.isArray(s.tags)&&s.tags.length<=8&&s.tags.every(t=>short(t,24))&&(s.cover===null||(typeof s.cover==='string'&&uuid.test(s.cover)))&&colors.includes(s.color as typeof colors[number])))return false;
+  for(const [list,count,max] of [[c.habits,3,40],[c.questions,6,160],[c.kinds,3,40],[c.companions,5,24]] as [string[],number,number][])if(!Array.isArray(list)||list.length!==count||!list.every(v=>short(v,max)))return false;
+  return Array.isArray(c.portraits)&&c.portraits.length===5&&c.portraits.every(p=>p===null||(typeof p==='string'&&uuid.test(p)))&&Number.isInteger(c.focusSeconds)&&c.focusSeconds>=1&&c.focusSeconds<=21600&&Number.isInteger(c.restSeconds)&&c.restSeconds>=1&&c.restSeconds<=21600&&typeof c.rotate==='boolean';
+}
+export function remaining(timer:Timer,now:number){return timer.status==='running'?Math.max(0,timer.endAt-now):timer.status==='paused'?timer.remainingMs:0;}
+export function mergeConfig(base:WorkspaceConfig,draft:WorkspaceConfig,latest:WorkspaceConfig):WorkspaceConfig {
+  const merge=<T extends object>(a:T,b:T,c:T):T=>Object.fromEntries(Object.keys(c).map(key=>[key,JSON.stringify(a[key as keyof T])===JSON.stringify(b[key as keyof T])?c[key as keyof T]:b[key as keyof T]])) as T;
+  const result=merge(base,draft,latest);
+  result.sections=latest.sections.filter(s=>!base.sections.some(b=>b.id===s.id)||draft.sections.some(d=>d.id===s.id)).map(s=>{const a=base.sections.find(b=>b.id===s.id),b=draft.sections.find(b=>b.id===s.id);return a&&b?merge(a,b,s):s;});
+  for(const s of draft.sections)if(!latest.sections.some(c=>c.id===s.id)&&!base.sections.some(c=>c.id===s.id))result.sections.push(s);
+  return result;
+}
+export function timerTransition(timer:Timer,action:string,now:number,options:{seconds?:number;phase?:string;id?:string}={}):Timer|null {
+  if(action==='start'){
+    if(!['idle','finished'].includes(timer.status)||!Number.isInteger(options.seconds)||options.seconds!<1||options.seconds!>21600||!['focus','rest'].includes(options.phase||'')||!uuid.test(options.id||''))return null;
+    return {id:options.id!,phase:options.phase as Timer['phase'],status:'running',endAt:now+options.seconds!*1000,remainingMs:options.seconds!*1000,durationMs:options.seconds!*1000,version:timer.version+1};
+  }
+  if(action==='pause'&&timer.status==='running'&&timer.endAt>now)return {...timer,status:'paused',remainingMs:remaining(timer,now),endAt:0,version:timer.version+1};
+  if(action==='resume'&&timer.status==='paused')return {...timer,status:'running',endAt:now+timer.remainingMs,version:timer.version+1};
+  if(action==='finish'&&timer.status==='running'&&timer.endAt<=now)return {...timer,status:'finished',remainingMs:0,version:timer.version+1};
+  if(action==='reset'&&timer.status!=='idle')return {...emptyTimer(),version:timer.version+1};
+  return null;
+}
+
+
+
 ===== FILE: lib/compass.test.mjs =====
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -25153,7 +28877,7 @@ test('unavailable storage gives a recoverable error without a false saved respon
 
 ===== FILE: lib/feature-source-catalog.json =====
 {
-  "release": "source-v2.0.0",
+  "release": "source-v2.0.1",
   "sections": [
     {
       "id": "tokens",
@@ -25328,6 +29052,48 @@ test('unavailable storage gives a recoverable error without a false saved respon
           "title": "标签归纳",
           "requirements": "维护内容标签、搜索和多条件筛选，重命名标签时保留内容关联",
           "path": "standalone/library"
+        },
+        {
+          "id": "knowledge-compass-tasks",
+          "title": "Compass 待办",
+          "requirements": "新增与完成待办，保留截止日期、跨日期记录和版本冲突处理",
+          "path": "app/compass-today.tsx"
+        },
+        {
+          "id": "knowledge-compass-journal",
+          "title": "Compass 日记",
+          "requirements": "按日期记录日记、收获和感恩，保存原文与时间并支持自定义分类名",
+          "path": "app/compass-today.tsx"
+        },
+        {
+          "id": "knowledge-compass-questions",
+          "title": "Compass 每日自问",
+          "requirements": "配置六个自问问题，逐项评分、保存和放弃未保存修改",
+          "path": "app/compass-today.tsx"
+        },
+        {
+          "id": "knowledge-compass-habits",
+          "title": "Compass 习惯打卡",
+          "requirements": "配置三个习惯，按日打卡与取消，防止覆盖正在编辑的评分",
+          "path": "app/compass-today.tsx"
+        },
+        {
+          "id": "knowledge-compass-focus",
+          "title": "Compass 专注计时",
+          "requirements": "配置专注与休息时间，启动、暂停、恢复和结束计时，按服务器时间恢复状态并提供通知",
+          "path": "app/compass-studio.tsx"
+        },
+        {
+          "id": "knowledge-compass-companions",
+          "title": "Compass 伙伴与重要事项",
+          "requirements": "切换互动伙伴，保存、编辑、完成和删除重要事项，配置优先级与提醒；伙伴采用固定互动语句，不能宣称为 AI 对话",
+          "path": "app/compass-studio.tsx"
+        },
+        {
+          "id": "knowledge-compass-customize",
+          "title": "Compass 板块自定义",
+          "requirements": "编辑标题、板块名称、说明、标签、颜色与图片，上传封面和头像，保留鉴权、并发版本与数据恢复",
+          "path": "app/compass-studio.tsx"
         }
       ]
     },
@@ -45973,7 +49739,7 @@ export default config;
 
 一个集用量统计、知识整理、本机工具、3D 地图和游戏于一体的个人工作台。
 
-[在线体验](https://codex-pulse-willow-0911.wozhe0196.chatgpt.site/) · [全功能源码包](https://github.com/zhanghaoquan631/codex-pulse/releases/tag/source-v2.0.0) · [提示词](docs/feature-prompts.md) · [运行导览](docs/full-source-guide.md)
+[在线体验](https://codex-pulse-willow-0911.wozhe0196.chatgpt.site/) · [全功能源码包](https://github.com/zhanghaoquan631/codex-pulse/releases/tag/source-v2.0.1) · [提示词](docs/feature-prompts.md) · [运行导览](docs/full-source-guide.md)
 
 ![地图与互动体验](docs/screenshots/maps.png)
 

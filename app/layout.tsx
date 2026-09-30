@@ -11,6 +11,7 @@ import "./atlas.css";
 import "./pro.css";
 import "./knowledge.css";
 import "./compass-today.css";
+import "./compass-studio.css";
 import "./theme.css";
 import "./snow.css";
 import "./music.css";

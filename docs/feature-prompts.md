@@ -6,7 +6,7 @@
 
 ### 用量总览
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/dashboard.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/tokens.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/dashboard.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/tokens.zip)
 
 ```text
 请实现“Token 统计”中的“用量总览”功能，交付可编辑源码和运行说明。
@@ -21,7 +21,7 @@
 
 ### 账号与额度
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/dashboard.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/tokens.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/dashboard.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/tokens.zip)
 
 ```text
 请实现“Token 统计”中的“账号与额度”功能，交付可编辑源码和运行说明。
@@ -36,7 +36,7 @@
 
 ### 额度账本
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/dashboard.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/tokens.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/dashboard.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/tokens.zip)
 
 ```text
 请实现“Token 统计”中的“额度账本”功能，交付可编辑源码和运行说明。
@@ -51,7 +51,7 @@
 
 ### 用量明细
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/dashboard.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/tokens.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/dashboard.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/tokens.zip)
 
 ```text
 请实现“Token 统计”中的“用量明细”功能，交付可编辑源码和运行说明。
@@ -66,7 +66,7 @@
 
 ### 连接与采集
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/dashboard.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/tokens.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/dashboard.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/tokens.zip)
 
 ```text
 请实现“Token 统计”中的“连接与采集”功能，交付可编辑源码和运行说明。
@@ -83,7 +83,7 @@
 
 ### 收藏管理
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/websites.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/websites.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/websites.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/websites.zip)
 
 ```text
 请实现“网站收藏”中的“收藏管理”功能，交付可编辑源码和运行说明。
@@ -98,7 +98,7 @@
 
 ### 历史补录
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/websites.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/websites.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/websites.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/websites.zip)
 
 ```text
 请实现“网站收藏”中的“历史补录”功能，交付可编辑源码和运行说明。
@@ -115,7 +115,7 @@
 
 ### 社区接入
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/betteropc-center.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/betteropc.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/betteropc-center.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/betteropc.zip)
 
 ```text
 请实现“BetterOPC”中的“社区接入”功能，交付可编辑源码和运行说明。
@@ -132,7 +132,7 @@
 
 ### 活动总览
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip-local.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip-local.zip)
 
 ```text
 请实现“ME.zip 记录”中的“活动总览”功能，交付可编辑源码和运行说明。
@@ -147,7 +147,7 @@
 
 ### 全局时间轴
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip-local.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip-local.zip)
 
 ```text
 请实现“ME.zip 记录”中的“全局时间轴”功能，交付可编辑源码和运行说明。
@@ -162,7 +162,7 @@
 
 ### X 行为
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip-local.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip-local.zip)
 
 ```text
 请实现“ME.zip 记录”中的“X 行为”功能，交付可编辑源码和运行说明。
@@ -177,7 +177,7 @@
 
 ### 观看记录
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip-local.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip-local.zip)
 
 ```text
 请实现“ME.zip 记录”中的“观看记录”功能，交付可编辑源码和运行说明。
@@ -192,7 +192,7 @@
 
 ### X 链接收集
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip-local.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip-local.zip)
 
 ```text
 请实现“ME.zip 记录”中的“X 链接收集”功能，交付可编辑源码和运行说明。
@@ -207,7 +207,7 @@
 
 ### 网页、文章与代码
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip-local.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip-local.zip)
 
 ```text
 请实现“ME.zip 记录”中的“网页、文章与代码”功能，交付可编辑源码和运行说明。
@@ -222,7 +222,7 @@
 
 ### 阅读与研究
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip-local.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip-local.zip)
 
 ```text
 请实现“ME.zip 记录”中的“阅读与研究”功能，交付可编辑源码和运行说明。
@@ -237,7 +237,7 @@
 
 ### 私人资料库
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip-local.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip-local.zip)
 
 ```text
 请实现“ME.zip 记录”中的“私人资料库”功能，交付可编辑源码和运行说明。
@@ -252,7 +252,7 @@
 
 ### 兴趣档案
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip-local.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip-local.zip)
 
 ```text
 请实现“ME.zip 记录”中的“兴趣档案”功能，交付可编辑源码和运行说明。
@@ -267,7 +267,7 @@
 
 ### 隐私设置
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip-local.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip-local.zip)
 
 ```text
 请实现“ME.zip 记录”中的“隐私设置”功能，交付可编辑源码和运行说明。
@@ -284,7 +284,7 @@
 
 ### Compass 今日
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/library) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/knowledge.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/library) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/knowledge.zip)
 
 ```text
 请实现“知识库”中的“Compass 今日”功能，交付可编辑源码和运行说明。
@@ -299,7 +299,7 @@
 
 ### 开源趋势
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/library) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/knowledge.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/library) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/knowledge.zip)
 
 ```text
 请实现“知识库”中的“开源趋势”功能，交付可编辑源码和运行说明。
@@ -314,7 +314,7 @@
 
 ### 灵感内容库
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/library) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/knowledge.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/library) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/knowledge.zip)
 
 ```text
 请实现“知识库”中的“灵感内容库”功能，交付可编辑源码和运行说明。
@@ -329,7 +329,7 @@
 
 ### 我的周刊
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/library) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/knowledge.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/library) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/knowledge.zip)
 
 ```text
 请实现“知识库”中的“我的周刊”功能，交付可编辑源码和运行说明。
@@ -344,7 +344,7 @@
 
 ### 素材箱
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/library) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/knowledge.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/library) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/knowledge.zip)
 
 ```text
 请实现“知识库”中的“素材箱”功能，交付可编辑源码和运行说明。
@@ -359,7 +359,7 @@
 
 ### 内容收集
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/library) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/knowledge.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/library) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/knowledge.zip)
 
 ```text
 请实现“知识库”中的“内容收集”功能，交付可编辑源码和运行说明。
@@ -374,7 +374,7 @@
 
 ### 文档与长图
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/library) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/knowledge.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/library) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/knowledge.zip)
 
 ```text
 请实现“知识库”中的“文档与长图”功能，交付可编辑源码和运行说明。
@@ -389,7 +389,7 @@
 
 ### 视频编辑
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/library) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/knowledge.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/library) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/knowledge.zip)
 
 ```text
 请实现“知识库”中的“视频编辑”功能，交付可编辑源码和运行说明。
@@ -404,7 +404,7 @@
 
 ### 录屏与直播
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/library) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/knowledge.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/library) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/knowledge.zip)
 
 ```text
 请实现“知识库”中的“录屏与直播”功能，交付可编辑源码和运行说明。
@@ -419,7 +419,7 @@
 
 ### 标签归纳
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/library) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/knowledge.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/library) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/knowledge.zip)
 
 ```text
 请实现“知识库”中的“标签归纳”功能，交付可编辑源码和运行说明。
@@ -432,11 +432,116 @@
 提供必要的数据库结构、接口、安装命令、失败与恢复说明。验证主要操作、断线、空状态、权限拒绝和手机布局。保留第三方许可与来源；此提示词根据现有功能整理，不宣称是原始对话的逐字记录。
 ```
 
+### Compass 待办
+
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/compass-today.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/knowledge.zip)
+
+```text
+请实现“知识库”中的“Compass 待办”功能，交付可编辑源码和运行说明。
+
+功能要求：新增与完成待办，保留截止日期、跨日期记录和版本冲突处理。
+
+沿用 Codex Pulse 的 React / TypeScript 工作台和该模块已有的独立服务边界；明确前端、API、数据存储、本机桥接和外部依赖。根据随附源码保留已有操作、错误处理与手机适配，不使用写死成功结果代替真实调用。
+个人数据与配置保持用户隔离，公开源码只放示例配置。凭据由部署者提供，禁止将作者的运行数据库、Cookie 或本机路径打包。需要屏幕、麦克风、文件或本机权限时由用户主动授权；变更数据时校验身份并处理重复请求。
+源码包含该功能所在模块及共享代码；独立服务需按随包说明配置。
+提供必要的数据库结构、接口、安装命令、失败与恢复说明。验证主要操作、断线、空状态、权限拒绝和手机布局。保留第三方许可与来源；此提示词根据现有功能整理，不宣称是原始对话的逐字记录。
+```
+
+### Compass 日记
+
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/compass-today.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/knowledge.zip)
+
+```text
+请实现“知识库”中的“Compass 日记”功能，交付可编辑源码和运行说明。
+
+功能要求：按日期记录日记、收获和感恩，保存原文与时间并支持自定义分类名。
+
+沿用 Codex Pulse 的 React / TypeScript 工作台和该模块已有的独立服务边界；明确前端、API、数据存储、本机桥接和外部依赖。根据随附源码保留已有操作、错误处理与手机适配，不使用写死成功结果代替真实调用。
+个人数据与配置保持用户隔离，公开源码只放示例配置。凭据由部署者提供，禁止将作者的运行数据库、Cookie 或本机路径打包。需要屏幕、麦克风、文件或本机权限时由用户主动授权；变更数据时校验身份并处理重复请求。
+源码包含该功能所在模块及共享代码；独立服务需按随包说明配置。
+提供必要的数据库结构、接口、安装命令、失败与恢复说明。验证主要操作、断线、空状态、权限拒绝和手机布局。保留第三方许可与来源；此提示词根据现有功能整理，不宣称是原始对话的逐字记录。
+```
+
+### Compass 每日自问
+
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/compass-today.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/knowledge.zip)
+
+```text
+请实现“知识库”中的“Compass 每日自问”功能，交付可编辑源码和运行说明。
+
+功能要求：配置六个自问问题，逐项评分、保存和放弃未保存修改。
+
+沿用 Codex Pulse 的 React / TypeScript 工作台和该模块已有的独立服务边界；明确前端、API、数据存储、本机桥接和外部依赖。根据随附源码保留已有操作、错误处理与手机适配，不使用写死成功结果代替真实调用。
+个人数据与配置保持用户隔离，公开源码只放示例配置。凭据由部署者提供，禁止将作者的运行数据库、Cookie 或本机路径打包。需要屏幕、麦克风、文件或本机权限时由用户主动授权；变更数据时校验身份并处理重复请求。
+源码包含该功能所在模块及共享代码；独立服务需按随包说明配置。
+提供必要的数据库结构、接口、安装命令、失败与恢复说明。验证主要操作、断线、空状态、权限拒绝和手机布局。保留第三方许可与来源；此提示词根据现有功能整理，不宣称是原始对话的逐字记录。
+```
+
+### Compass 习惯打卡
+
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/compass-today.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/knowledge.zip)
+
+```text
+请实现“知识库”中的“Compass 习惯打卡”功能，交付可编辑源码和运行说明。
+
+功能要求：配置三个习惯，按日打卡与取消，防止覆盖正在编辑的评分。
+
+沿用 Codex Pulse 的 React / TypeScript 工作台和该模块已有的独立服务边界；明确前端、API、数据存储、本机桥接和外部依赖。根据随附源码保留已有操作、错误处理与手机适配，不使用写死成功结果代替真实调用。
+个人数据与配置保持用户隔离，公开源码只放示例配置。凭据由部署者提供，禁止将作者的运行数据库、Cookie 或本机路径打包。需要屏幕、麦克风、文件或本机权限时由用户主动授权；变更数据时校验身份并处理重复请求。
+源码包含该功能所在模块及共享代码；独立服务需按随包说明配置。
+提供必要的数据库结构、接口、安装命令、失败与恢复说明。验证主要操作、断线、空状态、权限拒绝和手机布局。保留第三方许可与来源；此提示词根据现有功能整理，不宣称是原始对话的逐字记录。
+```
+
+### Compass 专注计时
+
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/compass-studio.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/knowledge.zip)
+
+```text
+请实现“知识库”中的“Compass 专注计时”功能，交付可编辑源码和运行说明。
+
+功能要求：配置专注与休息时间，启动、暂停、恢复和结束计时，按服务器时间恢复状态并提供通知。
+
+沿用 Codex Pulse 的 React / TypeScript 工作台和该模块已有的独立服务边界；明确前端、API、数据存储、本机桥接和外部依赖。根据随附源码保留已有操作、错误处理与手机适配，不使用写死成功结果代替真实调用。
+个人数据与配置保持用户隔离，公开源码只放示例配置。凭据由部署者提供，禁止将作者的运行数据库、Cookie 或本机路径打包。需要屏幕、麦克风、文件或本机权限时由用户主动授权；变更数据时校验身份并处理重复请求。
+源码包含该功能所在模块及共享代码；独立服务需按随包说明配置。
+提供必要的数据库结构、接口、安装命令、失败与恢复说明。验证主要操作、断线、空状态、权限拒绝和手机布局。保留第三方许可与来源；此提示词根据现有功能整理，不宣称是原始对话的逐字记录。
+```
+
+### Compass 伙伴与重要事项
+
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/compass-studio.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/knowledge.zip)
+
+```text
+请实现“知识库”中的“Compass 伙伴与重要事项”功能，交付可编辑源码和运行说明。
+
+功能要求：切换互动伙伴，保存、编辑、完成和删除重要事项，配置优先级与提醒；伙伴采用固定互动语句，不能宣称为 AI 对话。
+
+沿用 Codex Pulse 的 React / TypeScript 工作台和该模块已有的独立服务边界；明确前端、API、数据存储、本机桥接和外部依赖。根据随附源码保留已有操作、错误处理与手机适配，不使用写死成功结果代替真实调用。
+个人数据与配置保持用户隔离，公开源码只放示例配置。凭据由部署者提供，禁止将作者的运行数据库、Cookie 或本机路径打包。需要屏幕、麦克风、文件或本机权限时由用户主动授权；变更数据时校验身份并处理重复请求。
+源码包含该功能所在模块及共享代码；独立服务需按随包说明配置。
+提供必要的数据库结构、接口、安装命令、失败与恢复说明。验证主要操作、断线、空状态、权限拒绝和手机布局。保留第三方许可与来源；此提示词根据现有功能整理，不宣称是原始对话的逐字记录。
+```
+
+### Compass 板块自定义
+
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/compass-studio.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/knowledge.zip)
+
+```text
+请实现“知识库”中的“Compass 板块自定义”功能，交付可编辑源码和运行说明。
+
+功能要求：编辑标题、板块名称、说明、标签、颜色与图片，上传封面和头像，保留鉴权、并发版本与数据恢复。
+
+沿用 Codex Pulse 的 React / TypeScript 工作台和该模块已有的独立服务边界；明确前端、API、数据存储、本机桥接和外部依赖。根据随附源码保留已有操作、错误处理与手机适配，不使用写死成功结果代替真实调用。
+个人数据与配置保持用户隔离，公开源码只放示例配置。凭据由部署者提供，禁止将作者的运行数据库、Cookie 或本机路径打包。需要屏幕、麦克风、文件或本机权限时由用户主动授权；变更数据时校验身份并处理重复请求。
+源码包含该功能所在模块及共享代码；独立服务需按随包说明配置。
+提供必要的数据库结构、接口、安装命令、失败与恢复说明。验证主要操作、断线、空状态、权限拒绝和手机布局。保留第三方许可与来源；此提示词根据现有功能整理，不宣称是原始对话的逐字记录。
+```
+
 ## 我的书架
 
 ### 浏览书架
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/bookshelf) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/bookshelf.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/bookshelf) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/bookshelf.zip)
 
 ```text
 请实现“我的书架”中的“浏览书架”功能，交付可编辑源码和运行说明。
@@ -451,7 +556,7 @@
 
 ### 后台管理
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/bookshelf) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/bookshelf.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/bookshelf) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/bookshelf.zip)
 
 ```text
 请实现“我的书架”中的“后台管理”功能，交付可编辑源码和运行说明。
@@ -466,7 +571,7 @@
 
 ### 手机上传与电子书
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/bookshelf) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/bookshelf.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/bookshelf) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/bookshelf.zip)
 
 ```text
 请实现“我的书架”中的“手机上传与电子书”功能，交付可编辑源码和运行说明。
@@ -483,7 +588,7 @@
 
 ### 登录与账号
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“登录与账号”功能，交付可编辑源码和运行说明。
@@ -498,7 +603,7 @@
 
 ### 个人空间
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“个人空间”功能，交付可编辑源码和运行说明。
@@ -513,7 +618,7 @@
 
 ### 作品与游戏
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“作品与游戏”功能，交付可编辑源码和运行说明。
@@ -528,7 +633,7 @@
 
 ### 无限画廊
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/gallery) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/gallery) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“无限画廊”功能，交付可编辑源码和运行说明。
@@ -543,7 +648,7 @@
 
 ### 纸上赛车
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/racing) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/racing) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“纸上赛车”功能，交付可编辑源码和运行说明。
@@ -558,7 +663,7 @@
 
 ### 预约工作室
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/BookingStudio.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/BookingStudio.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“预约工作室”功能，交付可编辑源码和运行说明。
@@ -573,7 +678,7 @@
 
 ### 电脑与手机上传
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/SessionImageUpload.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/SessionImageUpload.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“电脑与手机上传”功能，交付可编辑源码和运行说明。
@@ -588,7 +693,7 @@
 
 ### 照片记忆游戏
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/PhotoMemoryGame.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/PhotoMemoryGame.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“照片记忆游戏”功能，交付可编辑源码和运行说明。
@@ -603,7 +708,7 @@
 
 ### 光标特效
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/CursorEffects.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/CursorEffects.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“光标特效”功能，交付可编辑源码和运行说明。
@@ -618,7 +723,7 @@
 
 ### 打字文本
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/TextType.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/TextType.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“打字文本”功能，交付可编辑源码和运行说明。
@@ -633,7 +738,7 @@
 
 ### 滚动展开
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/ScrollExpand.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/ScrollExpand.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“滚动展开”功能，交付可编辑源码和运行说明。
@@ -648,7 +753,7 @@
 
 ### 波动失真
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/RippleDistortion.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/RippleDistortion.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“波动失真”功能，交付可编辑源码和运行说明。
@@ -663,7 +768,7 @@
 
 ### 弹性网格
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/ElasticMesh.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/ElasticMesh.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“弹性网格”功能，交付可编辑源码和运行说明。
@@ -678,7 +783,7 @@
 
 ### 半色调揭示
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/HalftoneReveal.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/HalftoneReveal.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“半色调揭示”功能，交付可编辑源码和运行说明。
@@ -693,7 +798,7 @@
 
 ### 轨道图像
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/OrbitImages.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/OrbitImages.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“轨道图像”功能，交付可编辑源码和运行说明。
@@ -708,7 +813,7 @@
 
 ### 翻滚轮播
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/TumbleCarousel.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/TumbleCarousel.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“翻滚轮播”功能，交付可编辑源码和运行说明。
@@ -723,7 +828,7 @@
 
 ### 扭曲卡片
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/WarpedCard.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/WarpedCard.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“扭曲卡片”功能，交付可编辑源码和运行说明。
@@ -738,7 +843,7 @@
 
 ### 彩色边缘卡片
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/ChromaCard.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/ChromaCard.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“彩色边缘卡片”功能，交付可编辑源码和运行说明。
@@ -753,7 +858,7 @@
 
 ### 环形图库
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/CircleGallery.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/CircleGallery.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“环形图库”功能，交付可编辑源码和运行说明。
@@ -768,7 +873,7 @@
 
 ### 图片对比滑块
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/ComparisonSlider.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/ComparisonSlider.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“图片对比滑块”功能，交付可编辑源码和运行说明。
@@ -783,7 +888,7 @@
 
 ### 渐变模糊
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/GradualBlur.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/GradualBlur.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“渐变模糊”功能，交付可编辑源码和运行说明。
@@ -798,7 +903,7 @@
 
 ### 完整分割图像
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/CompleteSplitImage.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/CompleteSplitImage.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“完整分割图像”功能，交付可编辑源码和运行说明。
@@ -813,7 +918,7 @@
 
 ### 点击火花
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/ClickSpark.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/ClickSpark.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“点击火花”功能，交付可编辑源码和运行说明。
@@ -828,7 +933,7 @@
 
 ### 磁吸交互
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/Magnet.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/Magnet.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“磁吸交互”功能，交付可编辑源码和运行说明。
@@ -843,7 +948,7 @@
 
 ### 贴纸揭开
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/StickerPeel.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/StickerPeel.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“贴纸揭开”功能，交付可编辑源码和运行说明。
@@ -858,7 +963,7 @@
 
 ### 十字准星
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/Crosshair.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/Crosshair.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“十字准星”功能，交付可编辑源码和运行说明。
@@ -873,7 +978,7 @@
 
 ### 遮罩标题
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/MaskedHeading.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/MaskedHeading.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“遮罩标题”功能，交付可编辑源码和运行说明。
@@ -888,7 +993,7 @@
 
 ### 三维字母切换
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/LetterSwap3D.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/LetterSwap3D.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“三维字母切换”功能，交付可编辑源码和运行说明。
@@ -903,7 +1008,7 @@
 
 ### 模糊高亮
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/BlurHighlight.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/BlurHighlight.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“模糊高亮”功能，交付可编辑源码和运行说明。
@@ -918,7 +1023,7 @@
 
 ### 文本散射
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/TextScatter.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/TextScatter.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“文本散射”功能，交付可编辑源码和运行说明。
@@ -933,7 +1038,7 @@
 
 ### 文字掉落
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/FallingText.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/FallingText.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“文字掉落”功能，交付可编辑源码和运行说明。
@@ -948,7 +1053,7 @@
 
 ### 水彩背景
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/Watercolor.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/Watercolor.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“水彩背景”功能，交付可编辑源码和运行说明。
@@ -963,7 +1068,7 @@
 
 ### 线框球导航
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/WireframeBall.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/WireframeBall.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“线框球导航”功能，交付可编辑源码和运行说明。
@@ -978,7 +1083,7 @@
 
 ### 深度卡片
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/DepthCard.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/DepthCard.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“深度卡片”功能，交付可编辑源码和运行说明。
@@ -993,7 +1098,7 @@
 
 ### 透镜翻转轮播
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/LenticularCarousel.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/LenticularCarousel.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“透镜翻转轮播”功能，交付可编辑源码和运行说明。
@@ -1008,7 +1113,7 @@
 
 ### 翻页图库
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/PageFlip.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/PageFlip.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“翻页图库”功能，交付可编辑源码和运行说明。
@@ -1023,7 +1128,7 @@
 
 ### 视差轮播
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/ParallaxCarousel.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/ParallaxCarousel.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“视差轮播”功能，交付可编辑源码和运行说明。
@@ -1038,7 +1143,7 @@
 
 ### 视差卡片工作室
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/ParallaxCardsStudio.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/ParallaxCardsStudio.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“视差卡片工作室”功能，交付可编辑源码和运行说明。
@@ -1053,7 +1158,7 @@
 
 ### 胶片图库工作室
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/ReelGalleryStudio.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/ReelGalleryStudio.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“胶片图库工作室”功能，交付可编辑源码和运行说明。
@@ -1068,7 +1173,7 @@
 
 ### 滚动堆叠工作室
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/ScrollStackStudio.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/ScrollStackStudio.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“滚动堆叠工作室”功能，交付可编辑源码和运行说明。
@@ -1083,7 +1188,7 @@
 
 ### 渐变轮播工作室
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/GradientCarouselStudio.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/GradientCarouselStudio.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“渐变轮播工作室”功能，交付可编辑源码和运行说明。
@@ -1098,7 +1203,7 @@
 
 ### 液态切换工作室
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/LiquidSwapStudio.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/LiquidSwapStudio.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“液态切换工作室”功能，交付可编辑源码和运行说明。
@@ -1113,7 +1218,7 @@
 
 ### 像素切换工作室
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/PixelSwapStudio.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/PixelSwapStudio.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“像素切换工作室”功能，交付可编辑源码和运行说明。
@@ -1128,7 +1233,7 @@
 
 ### 变换工作室
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/MagicTransformStudio.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/MagicTransformStudio.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“变换工作室”功能，交付可编辑源码和运行说明。
@@ -1143,7 +1248,7 @@
 
 ### 弹窗卡片工作室
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/ModalCardsStudio.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/ModalCardsStudio.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“弹窗卡片工作室”功能，交付可编辑源码和运行说明。
@@ -1158,7 +1263,7 @@
 
 ### 像素显影
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/PixelReveal.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/PixelReveal.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“像素显影”功能，交付可编辑源码和运行说明。
@@ -1173,7 +1278,7 @@
 
 ### 悬停像素
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/PixelateHover.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/PixelateHover.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“悬停像素”功能，交付可编辑源码和运行说明。
@@ -1188,7 +1293,7 @@
 
 ### 旋转卡片
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/RotatingCards.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/RotatingCards.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“旋转卡片”功能，交付可编辑源码和运行说明。
@@ -1203,7 +1308,7 @@
 
 ### 着色器卡片
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/ShaderCard.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/ShaderCard.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“着色器卡片”功能，交付可编辑源码和运行说明。
@@ -1218,7 +1323,7 @@
 
 ### 着色器显影
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/ShaderReveal.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/ShaderReveal.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“着色器显影”功能，交付可编辑源码和运行说明。
@@ -1233,7 +1338,7 @@
 
 ### 倾斜名片
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/CreditCard.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/CreditCard.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“倾斜名片”功能，交付可编辑源码和运行说明。
@@ -1248,7 +1353,7 @@
 
 ### 个人漂浮墙
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/PersonalDriftWallStudio.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/PersonalDriftWallStudio.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“个人漂浮墙”功能，交付可编辑源码和运行说明。
@@ -1263,7 +1368,7 @@
 
 ### 无限图库
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/InfiniteGallerySection.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/InfiniteGallerySection.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“无限图库”功能，交付可编辑源码和运行说明。
@@ -1278,7 +1383,7 @@
 
 ### 关系图工作室
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/SimpleGraphStudio.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/mezip.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip/apps/main/src/SimpleGraphStudio.jsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/mezip.zip)
 
 ```text
 请实现“ME·zip Pro”中的“关系图工作室”功能，交付可编辑源码和运行说明。
@@ -1295,7 +1400,7 @@
 
 ### 票据收件箱
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local/services/finance-mobile-bridge) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/finance.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local/services/finance-mobile-bridge) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/finance.zip)
 
 ```text
 请实现“票据收件箱”中的“票据收件箱”功能，交付可编辑源码和运行说明。
@@ -1310,7 +1415,7 @@
 
 ### 财务账单
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local/services/finance-mobile-bridge) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/finance.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local/services/finance-mobile-bridge) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/finance.zip)
 
 ```text
 请实现“票据收件箱”中的“财务账单”功能，交付可编辑源码和运行说明。
@@ -1325,7 +1430,7 @@
 
 ### 商家分析
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local/services/finance-mobile-bridge) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/finance.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local/services/finance-mobile-bridge) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/finance.zip)
 
 ```text
 请实现“票据收件箱”中的“商家分析”功能，交付可编辑源码和运行说明。
@@ -1340,7 +1445,7 @@
 
 ### 手机拍照上传
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local/services/finance-mobile-bridge) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/finance.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local/services/finance-mobile-bridge) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/finance.zip)
 
 ```text
 请实现“票据收件箱”中的“手机拍照上传”功能，交付可编辑源码和运行说明。
@@ -1357,7 +1462,7 @@
 
 ### 商品商城
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/shop) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/shop.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/shop) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/shop.zip)
 
 ```text
 请实现“我的小店”中的“商品商城”功能，交付可编辑源码和运行说明。
@@ -1372,7 +1477,7 @@
 
 ### 订单查询
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/shop) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/shop.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/shop) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/shop.zip)
 
 ```text
 请实现“我的小店”中的“订单查询”功能，交付可编辑源码和运行说明。
@@ -1387,7 +1492,7 @@
 
 ### 店铺管理
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/shop) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/shop.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/shop) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/shop.zip)
 
 ```text
 请实现“我的小店”中的“店铺管理”功能，交付可编辑源码和运行说明。
@@ -1402,7 +1507,7 @@
 
 ### 重置日历与通知
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/shop) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/shop.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/shop) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/shop.zip)
 
 ```text
 请实现“我的小店”中的“重置日历与通知”功能，交付可编辑源码和运行说明。
@@ -1513,7 +1618,7 @@
 
 ### 开发总览
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local/services/github-workspace) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/github.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local/services/github-workspace) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/github.zip)
 
 ```text
 请实现“GitHub 工作台”中的“开发总览”功能，交付可编辑源码和运行说明。
@@ -1528,7 +1633,7 @@
 
 ### 仓库管理
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local/services/github-workspace) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/github.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local/services/github-workspace) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/github.zip)
 
 ```text
 请实现“GitHub 工作台”中的“仓库管理”功能，交付可编辑源码和运行说明。
@@ -1543,7 +1648,7 @@
 
 ### 代码片段
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local/services/github-workspace) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/github.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local/services/github-workspace) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/github.zip)
 
 ```text
 请实现“GitHub 工作台”中的“代码片段”功能，交付可编辑源码和运行说明。
@@ -1558,7 +1663,7 @@
 
 ### 开发任务
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local/services/github-workspace) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/github.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local/services/github-workspace) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/github.zip)
 
 ```text
 请实现“GitHub 工作台”中的“开发任务”功能，交付可编辑源码和运行说明。
@@ -1573,7 +1678,7 @@
 
 ### 开发活动
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local/services/github-workspace) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/github.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local/services/github-workspace) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/github.zip)
 
 ```text
 请实现“GitHub 工作台”中的“开发活动”功能，交付可编辑源码和运行说明。
@@ -1590,7 +1695,7 @@
 
 ### 屏幕录制
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local/apps/web) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/media.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local/apps/web) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/media.zip)
 
 ```text
 请实现“录制与截图库”中的“屏幕录制”功能，交付可编辑源码和运行说明。
@@ -1605,7 +1710,7 @@
 
 ### 视频资料库
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local/apps/web) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/media.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local/apps/web) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/media.zip)
 
 ```text
 请实现“录制与截图库”中的“视频资料库”功能，交付可编辑源码和运行说明。
@@ -1620,7 +1725,7 @@
 
 ### 截图资料库
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local/apps/web) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/media.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/standalone/mezip-local/apps/web) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/media.zip)
 
 ```text
 请实现“录制与截图库”中的“截图资料库”功能，交付可编辑源码和运行说明。
@@ -1637,7 +1742,7 @@
 
 ### 选歌与播放
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/music-center.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/music.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/music-center.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/music.zip)
 
 ```text
 请实现“音乐空间”中的“选歌与播放”功能，交付可编辑源码和运行说明。
@@ -1652,7 +1757,7 @@
 
 ### 播放历史
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/music-center.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/music.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/music-center.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/music.zip)
 
 ```text
 请实现“音乐空间”中的“播放历史”功能，交付可编辑源码和运行说明。
@@ -1667,7 +1772,7 @@
 
 ### 音乐来源站
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/music-center.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/music.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/music-center.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/music.zip)
 
 ```text
 请实现“音乐空间”中的“音乐来源站”功能，交付可编辑源码和运行说明。
@@ -1682,7 +1787,7 @@
 
 ### 手机麦克风
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/music-center.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/music.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/music-center.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/music.zip)
 
 ```text
 请实现“音乐空间”中的“手机麦克风”功能，交付可编辑源码和运行说明。
@@ -1699,7 +1804,7 @@
 
 ### 预约日期与时段
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/booking-center.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/booking.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/booking-center.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/booking.zip)
 
 ```text
 请实现“预约系统”中的“预约日期与时段”功能，交付可编辑源码和运行说明。
@@ -1714,7 +1819,7 @@
 
 ### 预约管理
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/booking-center.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/booking.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/booking-center.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/booking.zip)
 
 ```text
 请实现“预约系统”中的“预约管理”功能，交付可编辑源码和运行说明。
@@ -1729,7 +1834,7 @@
 
 ### 邮件确认
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/booking-center.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/booking.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/booking-center.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/booking.zip)
 
 ```text
 请实现“预约系统”中的“邮件确认”功能，交付可编辑源码和运行说明。
@@ -1746,7 +1851,7 @@
 
 ### 电脑体检
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/integration/qduo-windows) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/qduo.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/integration/qduo-windows) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/qduo.zip)
 
 ```text
 请实现“QDuo Windows”中的“电脑体检”功能，交付可编辑源码和运行说明。
@@ -1761,7 +1866,7 @@
 
 ### 清理与文件
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/integration/qduo-windows) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/qduo.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/integration/qduo-windows) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/qduo.zip)
 
 ```text
 请实现“QDuo Windows”中的“清理与文件”功能，交付可编辑源码和运行说明。
@@ -1776,7 +1881,7 @@
 
 ### 文本工具
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/integration/qduo-windows) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/qduo.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/integration/qduo-windows) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/qduo.zip)
 
 ```text
 请实现“QDuo Windows”中的“文本工具”功能，交付可编辑源码和运行说明。
@@ -1791,7 +1896,7 @@
 
 ### 客户端与配对
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/integration/qduo-windows) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/qduo.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/integration/qduo-windows) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/qduo.zip)
 
 ```text
 请实现“QDuo Windows”中的“客户端与配对”功能，交付可编辑源码和运行说明。
@@ -1806,7 +1911,7 @@
 
 ### 已安装应用
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/qduo-center.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/qduo.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/qduo-center.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/qduo.zip)
 
 ```text
 请实现“QDuo Windows”中的“已安装应用”功能，交付可编辑源码和运行说明。
@@ -1821,7 +1926,7 @@
 
 ### 运行进程
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/qduo-center.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/qduo.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/qduo-center.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/qduo.zip)
 
 ```text
 请实现“QDuo Windows”中的“运行进程”功能，交付可编辑源码和运行说明。
@@ -1836,7 +1941,7 @@
 
 ### 启动项
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/qduo-center.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/qduo.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/qduo-center.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/qduo.zip)
 
 ```text
 请实现“QDuo Windows”中的“启动项”功能，交付可编辑源码和运行说明。
@@ -1851,7 +1956,7 @@
 
 ### 大文件列表
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/qduo-center.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/qduo.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/qduo-center.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/qduo.zip)
 
 ```text
 请实现“QDuo Windows”中的“大文件列表”功能，交付可编辑源码和运行说明。
@@ -1866,7 +1971,7 @@
 
 ### 安全清理
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/qduo-safety.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/qduo.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/qduo-safety.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/qduo.zip)
 
 ```text
 请实现“QDuo Windows”中的“安全清理”功能，交付可编辑源码和运行说明。
@@ -1881,7 +1986,7 @@
 
 ### 文件与图片浏览
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/qduo-safety.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/qduo.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/qduo-safety.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/qduo.zip)
 
 ```text
 请实现“QDuo Windows”中的“文件与图片浏览”功能，交付可编辑源码和运行说明。
@@ -1896,7 +2001,7 @@
 
 ### Windows 防护状态
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/qduo-safety.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/qduo.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app/qduo-safety.tsx) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/qduo.zip)
 
 ```text
 请实现“QDuo Windows”中的“Windows 防护状态”功能，交付可编辑源码和运行说明。
@@ -1913,7 +2018,7 @@
 
 ### 主题与手机布局
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/core.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/core.zip)
 
 ```text
 请实现“界面与通用工具”中的“主题与手机布局”功能，交付可编辑源码和运行说明。
@@ -1928,7 +2033,7 @@
 
 ### 阅读笔与交互
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/core.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/core.zip)
 
 ```text
 请实现“界面与通用工具”中的“阅读笔与交互”功能，交付可编辑源码和运行说明。
@@ -1943,7 +2048,7 @@
 
 ### 登录与权限
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/core.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/core.zip)
 
 ```text
 请实现“界面与通用工具”中的“登录与权限”功能，交付可编辑源码和运行说明。
@@ -1958,7 +2063,7 @@
 
 ### 源码与提示词
 
-[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.0/core.zip)
+[源码](https://github.com/zhanghaoquan631/codex-pulse/tree/main/app) · [模块 ZIP](https://github.com/zhanghaoquan631/codex-pulse/releases/download/source-v2.0.1/core.zip)
 
 ```text
 请实现“界面与通用工具”中的“源码与提示词”功能，交付可编辑源码和运行说明。
