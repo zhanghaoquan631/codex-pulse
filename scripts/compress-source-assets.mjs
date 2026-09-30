@@ -9,7 +9,11 @@ for(const {id} of manifest){
  if(!/^[a-z0-9-]+$/.test(id))throw Error('Invalid source asset ID');
  const plain=fs.readFileSync(path.join(source,`${id}.txt`));
  const gzip=fs.readFileSync(path.join(output,`${id}.txt.gz`));
- if(!gunzipSync(gzip).equals(plain))throw Error('Source compression changed content: '+id);
+ const expanded=gunzipSync(gzip);
+ // Git may convert text snapshots to CRLF on Windows; the gzip stays binary.
+ // Compare UTF-8 content with only CRLF normalized, retaining every other byte.
+ const normalize=(bytes)=>Buffer.from(bytes.toString('utf8').replace(/\r\n/g,'\n'),'utf8');
+ if(!expanded.equals(plain)&&!normalize(expanded).equals(normalize(plain)))throw Error('Source compression changed content: '+id);
  const target=path.join(output,`${id}.txt`);
  if(path.dirname(target)!==output)throw Error('Invalid source asset path');
  fs.rmSync(target,{force:true});
