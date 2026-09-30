@@ -1,0 +1,27 @@
+{
+  "name": "chaoshan-3d-atlas-v5",
+  "version": "5.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5242 --strictPort",
+    "build": "vite build",
+    "test": "node --test scripts/atlas.test.mjs scripts/terrain-paving.test.mjs scripts/setting-performance.test.mjs scripts/detail-viewer.test.mjs scripts/living-world.test.mjs scripts/population.test.mjs scripts/regional-facts.test.mjs scripts/solar-lighting.test.mjs",
+    "test:browser": "node scripts/audit-all.mjs",
+    "test:details": "node scripts/audit-detail-viewer.mjs",
+    "check": "node scripts/check-syntax.mjs",
+    "prepare:reference": "node scripts/prepare-reference.mjs",
+    "prepare:map": "node scripts/build-map.mjs"
+  },
+  "dependencies": {
+    "lucide": "^0.468.0",
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "@mapbox/vector-tile": "2.0.4",
+    "pbf": "4.0.1",
+    "playwright": "^1.55.1",
+    "pngjs": "7.0.0",
+    "vite": "6.4.3"
+  }
+}

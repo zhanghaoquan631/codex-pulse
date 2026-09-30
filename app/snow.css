@@ -1,0 +1,43 @@
+.snow-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.snow-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: var(--theme-field);
+  color: var(--theme-ink-muted);
+  flex-shrink: 0;
+}
+
+.snow-control[data-enabled="true"] { color: var(--theme-ink); }
+.snow-control label { display: inline-flex; align-items: center; gap: 5px; font-size: 14px; cursor: pointer; }
+.snow-control .snow-switch { width: 32px; height: 20px; background: var(--input); }
+.snow-control .snow-switch[data-state="checked"] { background: #8b6caf; }
+.snow-control .snow-switch [data-slot="switch-thumb"] { width: 16px; height: 16px; background: #fff; }
+.snow-control .snow-switch[data-state="unchecked"] [data-slot="switch-thumb"] { transform: translateX(1px); }
+.snow-control .snow-switch[data-state="checked"] [data-slot="switch-thumb"] { transform: translateX(13px); }
+
+@media (max-width: 600px) {
+  .snow-control { min-height: 44px; padding: 0 7px; gap: 6px; }
+  .snow-control label span { display: none; }
+  .snow-control .snow-switch { position: relative; }
+  .snow-control .snow-switch::before { content: ""; position: absolute; inset: -12px 0; }
+}
+
+@media (max-width: 380px) {
+  .console-header { gap: 8px; }
+  .console-breadcrumb { gap: 0; }
+  .console-breadcrumb strong { display: none; }
+}
+
+@media print { .snow-canvas, .snow-control { display: none; } }

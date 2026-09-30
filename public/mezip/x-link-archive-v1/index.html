@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#07131b" />
+    <meta name="description" content="ME.zip X 链接收集：无需 API，在本机保存 X 链接与主要作用。" />
+    <title>ME.zip · X 链接收集</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: Inter, "PingFang SC", "Microsoft YaHei", sans-serif;
+        --bg: #071016;
+        --panel: #0e1b23;
+        --panel-2: #12252f;
+        --border: #23414c;
+        --text: #eef8fb;
+        --muted: #96b2bb;
+        --accent: #80d4e8;
+        --accent-strong: #45b9d8;
+        --danger: #ff9eaa;
+      }
+
+      * { box-sizing: border-box; }
+      body { min-width: 320px; margin: 0; color: var(--text); background: radial-gradient(circle at 80% 0%, #16485a 0, transparent 34%), var(--bg); }
+      button, input, textarea { font: inherit; }
+      button { cursor: pointer; }
+      a { color: var(--accent); }
+      .page { width: min(1120px, 100%); min-height: 100vh; margin: 0 auto; padding: clamp(18px, 4vw, 52px); }
+      .hero { display: flex; align-items: end; justify-content: space-between; gap: 24px; padding: clamp(22px, 4vw, 42px); border: 1px solid #326476; border-radius: 28px; background: linear-gradient(135deg, #102b37, #0c171e 68%); box-shadow: 0 26px 70px #0008, inset 0 1px #ffffff14; }
+      .eyebrow { margin: 0 0 10px; color: var(--accent); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; }
+      h1, h2, h3, p { margin: 0; }
+      h1 { font-size: clamp(2rem, 5vw, 4rem); letter-spacing: -.05em; }
+      .hero-copy { max-width: 660px; }
+      .hero-copy > p:not(.eyebrow) { margin-top: 12px; color: var(--muted); line-height: 1.75; }
+      .x-mark { display: grid; place-items: center; width: 78px; height: 78px; flex: 0 0 auto; border: 1px solid #80d4e888; border-radius: 24px; color: #dff9ff; background: #153847; box-shadow: 0 0 38px #45b9d844; font-size: 42px; font-weight: 800; }
+      .notice { margin: 18px 0 0; padding: 12px 14px; border-left: 2px solid var(--accent); color: #b7d0d7; background: #0e2730aa; line-height: 1.6; }
+      .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, .72fr); gap: 18px; margin-top: 18px; }
+      .panel { padding: clamp(18px, 3vw, 28px); border: 1px solid var(--border); border-radius: 22px; background: color-mix(in srgb, var(--panel) 94%, transparent); box-shadow: inset 0 1px #ffffff0d, 0 18px 46px #0005; }
+      .panel-heading { display: flex; align-items: start; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+      .panel-heading h2 { font-size: 1.35rem; }
+      .panel-heading p { margin-top: 6px; color: var(--muted); font-size: .86rem; line-height: 1.55; }
+      form { display: grid; gap: 14px; }
+      label { display: grid; gap: 7px; color: #d9edf1; font-size: .9rem; }
+      input, textarea { width: 100%; border: 1px solid #2d5260; border-radius: 12px; color: var(--text); background: #08151b; outline: 0; }
+      input { min-height: 46px; padding: 0 13px; }
+      textarea { min-height: 128px; padding: 12px 13px; resize: vertical; line-height: 1.6; }
+      .entry-source { color: #9ed8e5; font-size: .8rem; }
+      input:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px #80d4e822; }
+      .form-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+      .primary, .secondary { min-height: 42px; padding: 0 17px; border-radius: 999px; }
+      .primary { border: 1px solid #9be6f5; color: #05202a; background: var(--accent); font-weight: 700; }
+      .primary:hover { background: #a9effa; }
+      .secondary { border: 1px solid #3b6470; color: #d5edf2; background: transparent; }
+      .secondary:hover { border-color: var(--accent); background: #80d4e814; }
+      .status { min-height: 22px; color: #a7dce8; font-size: .85rem; line-height: 1.5; }
+      .status.error { color: var(--danger); }
+      .search { margin-bottom: 14px; }
+      .saved-list { display: grid; gap: 11px; }
+      .empty { padding: 24px 0 8px; color: var(--muted); line-height: 1.65; }
+      .entry { display: grid; gap: 11px; padding: 16px; border: 1px solid #2a4a55; border-radius: 16px; background: linear-gradient(135deg, #11262f, #0b171d); }
+      .entry-top { display: flex; align-items: start; justify-content: space-between; gap: 14px; }
+      .entry h3 { min-width: 0; overflow: hidden; font-size: 1rem; text-overflow: ellipsis; white-space: nowrap; }
+      .entry time { flex: 0 0 auto; color: var(--muted); font-size: .76rem; }
+      .entry-purpose { color: #d3e7eb; line-height: 1.65; white-space: pre-wrap; }
+      .entry-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+      .entry-tags span { padding: 3px 8px; border: 1px solid #3b6774; border-radius: 999px; color: #bceaf3; background: #12313b; font-size: .74rem; }
+      .entry-link { overflow-wrap: anywhere; font-size: .84rem; }
+      .entry-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+      .entry-actions button { min-height: 32px; padding: 0 11px; border: 1px solid #315966; border-radius: 999px; color: #c6e2e8; background: transparent; font-size: .8rem; }
+      .entry-actions button:hover { border-color: var(--accent); background: #80d4e814; }
+      .entry-actions .delete { color: var(--danger); border-color: #793d4d; }
+      .privacy { display: grid; align-content: start; gap: 12px; }
+      .privacy ul { display: grid; gap: 10px; margin: 0; padding-left: 19px; color: var(--muted); line-height: 1.6; }
+      .back { display: inline-flex; margin-top: 18px; color: var(--muted); text-decoration: none; }
+      .back:hover { color: var(--accent); }
+      @media (max-width: 800px) { .hero { align-items: start; } .layout { grid-template-columns: 1fr; } }
+      @media (max-width: 520px) { .page { padding: 12px; } .hero { padding: 20px; border-radius: 22px; } .x-mark { width: 58px; height: 58px; border-radius: 17px; font-size: 30px; } .entry-top { display: grid; gap: 5px; } }
+    </style>
+    <link rel="stylesheet" href="../x-local-capture-v7/pulse-theme.css">
+</head>
+  <body>
+    <main class="page" data-no-api="true">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">ME.ZIP / X LINK ARCHIVE</p>
+          <h1>X 链接收集</h1>
+          <p>复制一条 X 链接，写下它的主要作用或你想记住的原因，然后保存到自己的本机档案。</p>
+        </div>
+        <div class="x-mark" aria-hidden="true">𝕏</div>
+      </header>
+      <p class="notice">无需登录 X。记录由这台电脑的 ME.zip 保存，通过你的 Codex Pulse 账号访问，不会发布到 X。</p>
+      <div class="layout">
+        <section class="panel" aria-labelledby="add-title">
+          <div class="panel-heading"><div><p class="eyebrow">SAVE A LINK</p><h2 id="add-title">保存新的 X 链接</h2><p>把复制的帖子、文章或视频链接粘贴进来。</p></div></div>
+          <form id="link-form">
+            <label> X 链接
+              <input id="x-url" name="url" type="url" inputmode="url" autocomplete="off" placeholder="https://x.com/..." required />
+            </label>
+            <label>主要作用 / 备注
+              <textarea id="x-purpose" name="purpose" maxlength="1200" placeholder="例如：记录这个产品的交互思路，之后做功能区时参考。" required></textarea>
+            </label>
+            <label>名称（可选）
+              <input id="x-title" name="title" type="text" maxlength="120" placeholder="例如：功能区设计参考" />
+            </label>
+            <label>发布者 / 作者（可选）
+              <input id="x-author" name="author" type="text" maxlength="300" placeholder="例如：@handle 或作者名称" />
+            </label>
+            <label>主题标签（可选）
+              <input id="x-tags" name="tags" type="text" maxlength="500" placeholder="例如：AI, 设计, 灵感" />
+            </label>
+            <div class="form-actions"><button class="primary" type="submit">保存到本机</button><button class="secondary" id="clear-form" type="button">清空</button><span class="status" id="form-status" role="status"></span></div>
+          </form>
+        </section>
+        <aside class="panel privacy" aria-labelledby="privacy-title">
+          <div class="panel-heading"><div><p class="eyebrow">LOCAL ONLY</p><h2 id="privacy-title">保存规则</h2></div></div>
+          <ul><li>只接受 X / Twitter 域名链接。</li><li>保存的是链接和你的备注，不读取推文内容。</li><li>通过此网站连接同一台电脑，无需重新填写本机地址。</li><li>删除只移除当前浏览器的清单，不会删除 X 原帖或电脑上的 Capture 历史。</li></ul>
+            <a class="back" href="/mezip/x-local-capture-v7/index.html#timeline">← 返回 X 本地监控</a>
+        </aside>
+      </div>
+      <section class="panel" style="margin-top:18px" aria-labelledby="saved-title">
+        <div class="panel-heading"><div><p class="eyebrow">YOUR PRIVATE LIST</p><h2 id="saved-title">已保存的链接</h2><p id="saved-count">当前浏览器本机清单</p></div></div>
+        <input class="search" id="search" type="search" autocomplete="off" placeholder="搜索链接、名称或主要作用" aria-label="搜索已保存的 X 链接" />
+        <div class="saved-list" id="saved-list" aria-live="polite"></div>
+      </section>
+    </main>
+    <script type="text/mezip-deferred" data-src="../x-local-capture-v7/pulse-shell.js"></script>
+  <script type="text/mezip-deferred">
+      (() => {
+        const storageKey = 'mezip.x-link-archive.v1';
+        const sharedStorageKey = 'mezip.x-link-archive.shared.v1';
+        const deletedStorageKey = 'mezip.x-link-archive.deleted.v1';
+        const captureStorageKey = 'mezip.x.local.capture.browser.v3';
+        const bridgeApi = window.localStorage.getItem('mezip.x.local.capture.api') || 'http://127.0.0.1:4319';
+        const form = document.querySelector('#link-form');
+        const urlInput = document.querySelector('#x-url');
+        const purposeInput = document.querySelector('#x-purpose');
+        const titleInput = document.querySelector('#x-title');
+        const authorInput = document.querySelector('#x-author');
+        const tagsInput = document.querySelector('#x-tags');
+        const status = document.querySelector('#form-status');
+        const list = document.querySelector('#saved-list');
+        const search = document.querySelector('#search');
+        const count = document.querySelector('#saved-count');
+        let deletedLinks = readDeletedLinks();
+        let entries = readEntries();
+        let privateItems = [];
+
+        function linkKey(item) { return item.sourceEventId || `${item.url}|${item.purpose}|${item.title || ''}`; }
+        function readDeletedLinks() { try { const value = JSON.parse(localStorage.getItem(deletedStorageKey) || '[]'); return Array.isArray(value) ? value.filter((item) => typeof item === 'string') : []; } catch { return []; } }
+        function readEntries() {
+          try {
+            const shared = JSON.parse(localStorage.getItem(sharedStorageKey) || '[]');
+            const legacy = JSON.parse(localStorage.getItem(storageKey) || '[]');
+            const all = [...(Array.isArray(shared) ? shared : []), ...(Array.isArray(legacy) ? legacy : [])].filter((item) => item && typeof item.id === 'string' && typeof item.url === 'string' && typeof item.purpose === 'string');
+            const seen = new Set();
+            return all.filter((item) => { const key = linkKey(item); if (deletedLinks.includes(key) || seen.has(key)) return false; seen.add(key); return true; }).map((item) => ({ ...item, author: item.author || item.authorHandle || '', tags: Array.isArray(item.tags) ? item.tags : [] }));
+          } catch { return []; }
+        }
+
+        function writeEntries() {
+          localStorage.setItem(storageKey, JSON.stringify(entries));
+          localStorage.setItem(sharedStorageKey, JSON.stringify(entries));
+          localStorage.setItem(deletedStorageKey, JSON.stringify(deletedLinks));
+        }
+
+        async function syncEntryToBridge(entry) {
+          try {
+            const response = await fetch(`${bridgeApi}/v1/x/local-capture/events`, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ actionType: 'copied_link', postUrl: entry.url, authorHandle: entry.author || null, pageTitle: entry.title || null, note: entry.purpose || null, tags: entry.tags || [], source: 'MANUAL_IMPORT' }) });
+            if (!response.ok) return null;
+            const payload = await response.json();
+            return payload?.data?.event || null;
+          } catch { return null; /* localStorage remains the offline source of truth */ }
+        }
+
+        async function hydrateFromBridge() {
+          try {
+            const response = await fetch(`${bridgeApi}/v1/x/local-capture/timeline?limit=100`, { credentials: 'include' });
+            if (!response.ok) return;
+            const payload = await response.json();
+            (payload?.data?.events || []).filter((event) => event.actionType === 'copied_link' || event.actionType === 'manual_save').forEach((event) => {
+              const key = event.id;
+              const legacyKey = `${event.postUrl}|${event.note || ''}|${event.pageTitle || ''}`;
+              if (deletedLinks.includes(key) || deletedLinks.includes(legacyKey)) return;
+              const existing = entries.find((item) => item.sourceEventId === event.id || (item.url === event.postUrl && item.purpose === (event.note || '') && item.title === (event.pageTitle || '')));
+              const next = { id: existing?.id || event.id, sourceEventId: event.id, url: event.postUrl, purpose: event.note || '', title: event.pageTitle || '', author: event.authorHandle || '', tags: event.tags || [], createdAt: Date.parse(event.createdAt || event.capturedAt) || Date.now() };
+              if (existing) Object.assign(existing, next); else entries.push(next);
+            });
+            const libraryResponse = await fetch(`${bridgeApi}/v1/x/local-capture/private-library`, { credentials: 'include' });
+            if (libraryResponse.ok) privateItems = (await libraryResponse.json())?.data?.items || [];
+            writeEntries();
+            render();
+          } catch { /* bridge is optional; local-only mode remains usable */ }
+        }
+
+        function validXUrl(raw) {
+          try {
+            const value = new URL(raw.trim());
+            const host = value.hostname.toLowerCase();
+            if (!['x.com', 'www.x.com', 'twitter.com', 'www.twitter.com', 'mobile.twitter.com'].includes(host)) return null;
+            if (value.pathname === '/' || value.pathname.length < 2) return null;
+            return value.href;
+          } catch { return null; }
+        }
+
+        function setStatus(message, isError = false) {
+          status.textContent = message;
+          status.classList.toggle('error', isError);
+        }
+
+        function escapeText(value) { return String(value); }
+
+        function privateForEntry(entry) {
+          const sourceId = entry.sourceEventId || entry.postId || entry.url;
+          return privateItems.find((item) => item.sourceUrl === entry.url || item.sourceId === sourceId) || null;
+        }
+
+        function writeLocalPrivateItem(entry) {
+          let parsed = {};
+          try { parsed = JSON.parse(localStorage.getItem(captureStorageKey) || '{}'); } catch { parsed = {}; }
+          const items = Array.isArray(parsed.privateLibrary) ? parsed.privateLibrary : [];
+          const existing = items.find((item) => item.sourceUrl === entry.url);
+          if (existing) return existing;
+          const now = new Date().toISOString();
+          const item = { id: `library-${Date.now()}-${Math.random().toString(16).slice(2)}`, ownerId: 'browser-local', userId: 'browser-local', sourceType: 'X_POST', sourcePlatform: 'X', sourceId: entry.sourceEventId || entry.url, sourceUrl: entry.url, title: entry.title || null, content: null, authorName: null, authorHandle: null, authorAvatar: null, media: [], thumbnail: null, publishedAt: null, savedAt: now, createdAt: now, updatedAt: now, tags: entry.tags || [], note: entry.purpose || null, collectionId: null, privacy: 'PRIVATE', metadata: { sourceEventId: entry.sourceEventId || null, source: 'X_LINK_ARCHIVE' } };
+          parsed.privateLibrary = [item, ...items];
+          localStorage.setItem(captureStorageKey, JSON.stringify(parsed));
+          return item;
+        }
+
+        async function addToPrivateLibrary(entry, button) {
+          button.disabled = true;
+          try {
+            if (!entry.sourceEventId) {
+              const sourceEvent = await syncEntryToBridge(entry);
+              if (sourceEvent?.id) { entry.sourceEventId = sourceEvent.id; writeEntries(); }
+            }
+            if (entry.sourceEventId) {
+              const response = await fetch(`${bridgeApi}/v1/x/local-capture/private-library`, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ postUrl: entry.url, sourceEventId: entry.sourceEventId, pageTitle: entry.title || null, note: entry.purpose || null, tags: entry.tags || [] }) });
+              if (!response.ok) throw new Error('私人资料库保存失败');
+              const item = (await response.json())?.data?.item;
+              if (item) privateItems = [item, ...privateItems.filter((candidate) => candidate.id !== item.id && candidate.sourceUrl !== item.sourceUrl)];
+              setStatus('已加入私人资料库；原链接记录仍然保留。');
+            } else {
+              const item = writeLocalPrivateItem(entry);
+              privateItems = [item, ...privateItems.filter((candidate) => candidate.sourceUrl !== item.sourceUrl)];
+              setStatus('桥接暂不可用，已先保存在当前浏览器的私人资料库。');
+            }
+            render();
+          } catch (error) {
+            button.disabled = false;
+            setStatus(error instanceof Error ? error.message : '私人资料库保存失败。', true);
+          }
+        }
+
+        function render() {
+          const query = search.value.trim().toLowerCase();
+          const visible = entries.filter((entry) => [entry.title, entry.purpose, entry.url, ...(entry.tags || [])].some((value) => value.toLowerCase().includes(query)));
+          count.textContent = `本机保存 ${entries.length} 条${query ? ` · 当前显示 ${visible.length} 条` : ''}`;
+          list.replaceChildren();
+          if (visible.length === 0) {
+            const empty = document.createElement('p');
+            empty.className = 'empty';
+            empty.textContent = entries.length === 0 ? '还没有保存内容。复制一条 X 链接，写下它的主要作用后即可放在这里。' : '没有符合搜索条件的链接。';
+            list.append(empty);
+            return;
+          }
+          visible.sort((a, b) => b.createdAt - a.createdAt).forEach((entry) => {
+            const article = document.createElement('article');
+            article.className = 'entry';
+            const top = document.createElement('div');
+            top.className = 'entry-top';
+            const heading = document.createElement('h3');
+            heading.textContent = escapeText(entry.title || '未命名 X 链接');
+            const time = document.createElement('time');
+            time.dateTime = new Date(entry.createdAt).toISOString();
+            time.textContent = new Intl.DateTimeFormat('zh-CN', { dateStyle: 'medium' }).format(new Date(entry.createdAt));
+            top.append(heading, time);
+          const source = document.createElement('p');
+          source.className = 'entry-source';
+          source.textContent = `来源：X${entry.author ? ` · 发布者：${entry.author}` : ''}`;
+          const purpose = document.createElement('p');
+            purpose.className = 'entry-purpose';
+            purpose.textContent = escapeText(entry.purpose);
+            const tags = document.createElement('div');
+            tags.className = 'entry-tags';
+            (entry.tags || []).forEach((tag) => { const chip = document.createElement('span'); chip.textContent = `#${tag}`; tags.append(chip); });
+            const link = document.createElement('a');
+            link.className = 'entry-link';
+            link.href = entry.url;
+            link.target = '_blank';
+            link.rel = 'noreferrer noopener';
+            link.textContent = entry.url;
+            const actions = document.createElement('div');
+            actions.className = 'entry-actions';
+            const copy = document.createElement('button');
+            copy.type = 'button'; copy.textContent = '复制链接';
+            copy.addEventListener('click', async () => { try { await navigator.clipboard.writeText(entry.url); setStatus('链接已复制。'); } catch { setStatus('浏览器未允许复制，请手动复制链接。', true); } });
+            const library = privateForEntry(entry);
+            const addPrivate = document.createElement('button');
+            addPrivate.type = 'button';
+            addPrivate.textContent = library ? '✓ 已加入私人资料库' : '★ 加入私人资料库';
+            addPrivate.disabled = Boolean(library);
+            addPrivate.addEventListener('click', () => void addToPrivateLibrary(entry, addPrivate));
+            if (library) {
+              const viewLibrary = document.createElement('a');
+              viewLibrary.className = 'entry-link';
+              viewLibrary.href = '/mezip/x-local-capture-v7/index.html#special';
+              viewLibrary.textContent = '查看私人资料库';
+              actions.append(viewLibrary);
+            }
+            const remove = document.createElement('button');
+            remove.type = 'button'; remove.className = 'delete'; remove.textContent = '删除本机记录';
+            remove.addEventListener('click', () => { deletedLinks = [...new Set([...deletedLinks, linkKey(entry)])]; entries = entries.filter((item) => item.id !== entry.id); writeEntries(); render(); setStatus('已删除这条本机记录。'); });
+            actions.append(copy, addPrivate, remove);
+            article.append(top, source, purpose, tags, link, actions);
+            list.append(article);
+          });
+        }
+
+        form.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          const url = validXUrl(urlInput.value);
+          const purpose = purposeInput.value.trim();
+          if (!url) { setStatus('请输入有效的 X / Twitter 链接。', true); return; }
+          if (!purpose) { setStatus('请写下这条链接的主要作用。', true); purposeInput.focus(); return; }
+          const tags = [...new Set(tagsInput.value.split(',').map((tag) => tag.trim()).filter(Boolean))];
+          const entry = { id: `${Date.now()}-${Math.random().toString(36).slice(2)}`, url, purpose, title: titleInput.value.trim(), author: authorInput.value.trim(), tags, createdAt: Date.now() };
+          deletedLinks = deletedLinks.filter((key) => key !== linkKey(entry));
+          entries.push(entry);
+          writeEntries();
+          const sourceEvent = await syncEntryToBridge(entry);
+          if (sourceEvent?.id) { entry.sourceEventId = sourceEvent.id; writeEntries(); }
+          form.reset(); render(); setStatus('已保存到当前浏览器本机，并同步到兴趣标签与已保存链接。');
+        });
+        document.querySelector('#clear-form').addEventListener('click', () => { form.reset(); setStatus(''); });
+        search.addEventListener('input', render);
+        render();
+        void hydrateFromBridge();
+      })();
+    </script>
+  <script src="/mezip/remote-adapter.js"></script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f5f0df">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f5f0df'/%3E%3Ctext x='5' y='26' font-size='27' fill='%23243d79'%3E行%3C/text%3E%3C/svg%3E">
+  <title>潮汕行旅 · 十二地墨潮</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./sketch-typography.css">
+  <link rel="stylesheet" href="./mission-hud.css">
+  <link rel="stylesheet" href="./record-book.css">
+  <link rel="stylesheet" href="./chapter-briefing.css">
+  <link rel="stylesheet" href="./gear-panels.css">
+  <link rel="stylesheet" href="./chapter-journey.css">
+  <link rel="stylesheet" href="./story-book.css">
+  <link rel="stylesheet" href="./appearance-panel.css">
+  <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<link rel="stylesheet" href="./mission-tracking.css"><link rel="stylesheet" href="./tactical-controls.css">
+<link rel="stylesheet" href="./card-tilt.css">
+<link rel="stylesheet" href="./optics.css">
+<link rel="stylesheet" href="./animal-field-guide.css">
+<link rel="stylesheet" href="./mobile.css">
+</head>
+<body class="ink-world">
+  <canvas id="game-canvas" aria-label="潮汕行旅三维游戏场景"></canvas>
+  <div id="world-labels" aria-hidden="true"></div>
+  <div id="damage-vignette" aria-hidden="true"></div>
+  <header class="topbar">
+    <a href="/local-apps/chaoshan-atlas/index.html" id="map-return" class="map-return"><span>←</span> 潮汕地图</a>
+    <div class="brand"><span class="seal">行</span><span>潮汕行旅<small>十二地墨潮</small></span></div>
+    <div class="top-actions"><button id="sound-toggle" class="quiet" aria-label="切换音效">音效 · 关</button><button id="save-export" class="quiet">导出存档</button><button id="menu-toggle" class="quiet" hidden>暂停 <kbd>Esc</kbd></button></div>
+  </header>
+
+  <main id="camp" class="camp-layer">
+    <section class="camp-panel" aria-labelledby="camp-title">
+      <div class="eyebrow"><i></i> 行前营地 <span>12 地区 · 12 章节</span></div>
+      <div class="camp-heading"><div><h1 id="camp-title">沿海而行，<br>过境有故事。</h1><p>主动来袭 · 侦探字谜 · 双半密码 · 远途决战</p></div><span class="large-seal">潮<br>汕</span></div>
+      <div id="save-recovery" class="notice" role="status" hidden></div>
+      <div id="chapter-grid" class="chapter-grid"></div>
+      <div class="camp-bottom"><p>进度保存在当前浏览器，原电脑的本机存档不会自动迁移。动物精灵按需载入公开素材 CDN。<br>十二地区已串成完整行旅，难度逐章递增。<br><span>依据公开地图缩尺；室内、道路宽度与高差为游戏设计。</span><br><a href="./MAP-SOURCES.html" target="_blank" rel="noopener">地点依据与改编说明</a> · 街巷数据 <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap contributors · ODbL</a><br><a href="./PLAYTEST.html" target="_blank" rel="noopener">玩法与设计思路</a> · <a href="./project-guide/CHAPTERS-V19.html" target="_blank" rel="noopener">关卡与推进目标对比</a></p><div class="camp-start-actions"><button id="camp-view-toggle" class="quiet" data-view-toggle>切换第三人称 <kbd>V</kbd></button><button id="camp-start" class="primary">启程 <span>→</span></button></div></div>
+    </section>
+    <aside class="traveller-panel"><div class="eyebrow light">旅人行装</div><h2>墨线为身，<br>持枪向前行。</h2><div class="traveller-mark">旅</div><div id="camp-stats" class="camp-stats"></div><div id="camp-loadout" class="camp-loadout"></div><button id="camp-pending-loadout" class="outlined" hidden>领取通关行装</button><button id="camp-shop" class="outlined">逛逛行商铺 <span>↗</span></button><p>击败墨灵赚取铜钱与经验，<br>解开字谜，带着行装进入下一章。</p></aside>
+  </main>
+
+  <section id="play-hud" class="play-hud" hidden aria-label="游戏状态">
+    <div id="kill-objective" class="kill-objective"><span>本关击杀目标</span><strong><b id="kill-current">0</b><i> / </i><b id="kill-target">18</b></strong><div class="kill-track"><i id="kill-fill"></i></div><p id="kill-remaining">还需击杀 18 只</p></div>
+    <div id="mission-announcement" class="mission-announcement" role="status" hidden></div>
+    <div class="view-controls"><button id="view-toggle" class="quiet" data-view-toggle aria-pressed="false">切换第三人称 <kbd>V</kbd></button><button id="look-lock" class="quiet">点击锁定鼠标</button><details id="camera-settings" class="camera-settings"><summary>镜头设置</summary><div class="camera-settings-panel"><label for="camera-look-mode">鼠标控制</label><select id="camera-look-mode"><option value="follow">跟随鼠标（推荐）</option><option value="drag">按住拖动</option></select><label for="camera-distance">镜头远近 <output id="camera-distance-value">5.4 米</output></label><input id="camera-distance" type="range" min="2.8" max="9" step="0.2" value="5.4"><label for="camera-fov">视野范围 <output id="camera-fov-value">72°</output></label><input id="camera-fov" type="range" min="55" max="95" step="1" value="72"><button id="camera-turn-around" class="quiet">快速回身 180° <kbd>T</kbd></button><button id="camera-reset" class="quiet">回到行进方向 <kbd>R</kbd></button><small>移动鼠标环视，T 快速回身。Esc 暂停后也可调整灵敏度；滚轮调整镜头。</small></div></details></div><div id="crosshair" class="crosshair" aria-hidden="true"><i></i></div><div id="view-hint" class="view-hint"></div>
+    <div id="weather-card" class="weather-card" role="status"><b id="weather-name">晴天</b><span id="weather-detail">天气会自然变化</span></div>
+    <div id="enemy-intel" class="enemy-intel" hidden></div>
+    <div class="hunt-strip"><b id="hunt-pressure">墨潮 1 阶</b><span id="hunt-status">来袭倒计时</span><button id="riddle-open" class="quiet">线索册 <kbd>Q</kbd></button></div>
+    <button id="run-lock" class="quiet run-lock" aria-pressed="false">锁定奔跑 <kbd>Caps</kbd></button>
+    <div id="supply-bar" class="supply-bar" aria-label="随身补给"><button data-supply="bomb"><kbd>B</kbd> 炸弹 <b id="bomb-count">0</b></button><button data-supply="medkit"><kbd>K</kbd> 药包 <b id="medkit-count">0</b></button><button data-supply="molotov"><kbd>M</kbd> 燃烧瓶 <b id="molotov-count">0</b></button><button data-supply="smoke"><kbd>O</kbd> 烟雾 <b id="smoke-count">0</b></button></div>
+    <div class="location-card"><div id="level-region" class="eyebrow"></div><h1 id="level-title"></h1><p id="level-subtitle"></p><ol id="objectives"></ol></div>
+    <div class="status-card"><div class="player-summary"><span class="mini-seal">旅</span><div><strong id="player-level"></strong><span id="player-coins"></span></div><span id="save-indicator">已存档</span></div><div class="meter-row"><span>体力</span><div class="meter health"><i id="hp-fill"></i></div><b id="hp-text"></b></div><div class="meter-row"><span>气力</span><div class="meter stamina"><i id="stamina-fill"></i></div><b id="stamina-text"></b></div><div class="meter-row"><span>经验</span><div class="meter xp"><i id="xp-fill"></i></div><b id="xp-text"></b></div></div>
+    <div id="boss-hud" class="boss-hud" hidden><div><span id="boss-name"></span><b id="boss-health"></b></div><div class="meter boss"><i id="boss-fill"></i></div></div>
+    <div id="escort-hud" class="escort-hud" hidden></div>
+    <div class="minimap-shell"><canvas id="minimap" width="240" height="240" aria-label="关卡小地图：紫色问号为谜语线索，旗帜为任务房"></canvas><button id="tactical-open" class="quiet">任务地图 <kbd>Tab</kbd></button><span><em>?</em> 谜语线索 <b id="map-scale"></b></span></div>
+    <div id="interaction" class="interaction"><kbd>E</kbd><span>探索场景</span></div>
+    <div class="bottom-bar"><div id="weapon-slots" class="weapon-slots"></div><button id="potion-button" class="potion-button"><kbd>H</kbd><span>工夫茶 <b id="potion-count"></b></span></button><div class="key-help"><span><kbd>WASD</kbd> 移动 <kbd>准星</kbd> 瞄准 <kbd>点击 / Space</kbd> 攻击</span><span><kbd>Shift</kbd> 疾行 <kbd>J</kbd> 跳跃 <kbd>鼠标</kbd> 环视 <kbd>T</kbd> 回身 <kbd>Caps</kbd> 自动跑 <kbd>V</kbd> 人称切换</span></div></div>
+  </section>
+
+  <section id="touch-controls" class="touch-controls" hidden aria-label="触屏游戏控制"><div class="dpad"><button data-hold="up" class="up" aria-label="前进">↑</button><button data-hold="left" class="left" aria-label="向左">←</button><button data-hold="down" class="down" aria-label="后退">↓</button><button data-hold="right" class="right" aria-label="向右">→</button></div><div class="touch-actions"><button data-hold="sprint">疾行</button><button data-hold="jump">跳跃</button><button data-hold="interact">互动</button><button data-hold="attack" class="attack">攻击</button></div></section>
+
+  <div id="modal-layer" class="modal-layer" hidden>
+    <section id="tactical-panel" class="dialog tactical-dialog" hidden role="dialog" aria-modal="true" aria-labelledby="tactical-title"><div class="dialog-heading"><div><div class="eyebrow">调查与行进路线</div><h2 id="tactical-title">任务地图</h2></div><button id="tactical-close" class="close" aria-label="关闭地图">×</button></div><canvas id="tactical-canvas" width="1000" height="660" aria-label="完整任务地图"></canvas><div class="map-legend"><span>紫色 谜 · 猜谜点 / 字母 · 掉落卡</span><span>旗帜 · 任务房</span><span>红色 ▲ · 高处怪物</span><span>↑ · 上楼入口 / + · 楼上补给</span><span>商 · 行商 / × · 行商遇难</span><span>安 · 避难处 / 绿点 · 跟随者</span><span>证 · 地区调查 / N · 调查笔记</span><span>蓝色箭头 · 你的位置</span></div><p id="tactical-note"></p><button id="map-open-riddle" class="outlined dark">打开线索册 · 推理谜底</button></section>
+    <section id="pause-panel" class="dialog narrow" hidden role="dialog" aria-modal="true" aria-labelledby="pause-title"><div class="eyebrow">歇一歇，再启程</div><h2 id="pause-title">行旅暂停</h2><p id="pause-reason">当前关卡与开门状态会留在这里。</p><div class="dialog-actions vertical"><button id="resume" class="primary">继续行旅 →</button><button id="pause-camp" class="outlined dark">返回行前营地</button></div><small>回到营地后重新进入关卡，会重新开始本关。</small></section>
+    <section id="shop-panel" class="dialog shop-dialog" hidden role="dialog" aria-modal="true" aria-labelledby="shop-title"><div class="dialog-heading"><div><div class="eyebrow">一间行商铺</div><h2 id="shop-title">好兵器，也要称手。</h2></div><button id="shop-close" class="close" aria-label="关闭商店">×</button></div><div class="shop-balance">身上铜钱 <b id="shop-coins"></b><span>购入兵器后自动装备</span></div><div id="shop-items" class="shop-items"></div><p class="shop-note">交易时战斗暂停。已拥有的兵器可随时切换；工夫茶回复 65 点体力。</p></section>
+    <section id="result-panel" class="dialog narrow" hidden role="dialog" aria-modal="true" aria-labelledby="result-title"><div id="result-eyebrow" class="eyebrow"></div><div id="result-symbol" class="result-symbol"></div><h2 id="result-title"></h2><p id="result-description"></p><div id="result-stats" class="result-stats"></div><div class="dialog-actions vertical"><button id="result-primary" class="primary"></button><button id="result-camp" class="outlined dark">回营地整理行装</button></div></section>
+    <section id="riddle-panel" class="dialog riddle-dialog" hidden role="dialog" aria-modal="true" aria-labelledby="riddle-title"><div class="dialog-heading"><div><div class="eyebrow">侦探线索册</div><h2 id="riddle-title">把碎片，拼成答案。</h2></div><button id="riddle-close" class="close" aria-label="关闭线索册">×</button></div><p id="riddle-key-status"></p><blockquote id="riddle-prompt"></blockquote><div class="riddle-letters" id="riddle-letters" aria-label="已发现的字母"></div><p id="riddle-progress" class="riddle-help"></p><button type="button" id="riddle-go-map" class="quiet">在地图上查看猜谜点 →</button><section id="riddle-hints" class="riddle-hints" aria-label="分步推理提示"><p id="riddle-hint-text" role="status"></p><button type="button" id="riddle-hint-next" class="quiet">给我一点提示</button></section><form id="riddle-form"><label for="riddle-answer">谜底英文单词</label><div class="riddle-answer-row"><input id="riddle-answer" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="24" placeholder="输入你的推理"><button class="primary" type="submit">验证 →</button></div></form><p id="riddle-result" role="status"></p><small>击败野怪随机掉落字母卡，靠近拾取；凑齐后停止掉落。随时输入或点字母卡排列，草稿会保留；回到地图「谜」标记验证，解谜并收齐路标符片，才能获得密码半钥。</small></section>
+  </div>
+  <div id="toasts" class="toasts" role="status" aria-live="polite"></div>
+  <div id="weather-flash" aria-hidden="true"></div>
+  <div id="loading" class="loading"><span class="seal">行</span><h2>铺开一卷潮汕</h2><p id="loading-message">准备场景与行装…</p></div>
+  <noscript>此游戏需要启用 JavaScript。</noscript>
+  <script type="module" src="./main.mjs"></script>
+</body>
+</html>

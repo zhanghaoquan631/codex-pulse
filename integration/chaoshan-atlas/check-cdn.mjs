@@ -1,0 +1,22 @@
+import { readFile, writeFile } from 'node:fs/promises';
+import { resolve, dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
+const here = dirname(fileURLToPath(import.meta.url));
+const source = resolve(process.argv[2] || 'C:/Users/your-user/Documents/Codex/2026-08-25/new-chat/outputs/chaoshan-3d-atlas-v5');
+const samples = ['shuangsheng-linger', '01-toothless-v3', 'byte-bunny', 'clawd', 'weichong'];
+const results = await Promise.all(samples.map(async id => {
+  const manifest = JSON.parse(await readFile(join(source, 'adventure/assets/desktop-animals', id, 'manifest.json'), 'utf8'));
+  const url = manifest.source.spritesheetUrl;
+  const response = await fetch(url, { headers: { Origin: 'https://example.com' }, signal: AbortSignal.timeout(30000) });
+  if (!response.ok) throw new Error(`${id}: HTTP ${response.status}`);
+  const bytes = Buffer.from(await response.arrayBuffer());
+  const remoteHash = createHash('sha256').update(bytes).digest('hex');
+  const localBytes = await readFile(join(source, 'adventure/assets/desktop-animals', id, 'spritesheet.webp'));
+  const localHash = createHash('sha256').update(localBytes).digest('hex');
+  const cors = response.headers.get('access-control-allow-origin');
+  if (remoteHash !== localHash || remoteHash !== manifest.sha256 || cors !== '*') throw new Error(`${id}: original byte identity/CORS validation failed`);
+  return { id, url, bytes: bytes.length, sha256: remoteHash, cors, matchesOriginal: true };
+}));
+await writeFile(join(here, 'cdn-verification.json'), JSON.stringify({ checkedAt: new Date().toISOString(), results }, null, 2) + '\n');
+console.log(JSON.stringify(results, null, 2));

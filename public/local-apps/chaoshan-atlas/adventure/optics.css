@@ -1,0 +1,17 @@
+.optic-controls{position:absolute;bottom:100px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:18;pointer-events:auto}
+.optic-controls button{padding:9px 12px;background:#faf3e5ed;color:#24416e;border:1px solid #7b8ba0;font-size:12px}
+.optic-controls button[aria-pressed=true]{background:#304e6e;color:#fff5df}
+.optic-controls button:disabled{opacity:.45}.optic-controls small{align-self:center;max-width:155px;font-size:10px;background:#fff4dfd9;padding:4px}
+.optic-overlay{position:absolute;inset:0;pointer-events:none;z-index:-1}
+.optic-overlay[data-zoom='2'],.optic-overlay[data-zoom='4']{background:radial-gradient(circle at center,transparent 0,transparent min(28dvh,34vw),#1824356b min(29dvh,35vw),#17202b91 100%)}
+.optic-ring{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(58dvh,70vw);height:min(58dvh,70vw);border:2px solid #253c56a8;border-radius:50%;box-shadow:0 0 0 5px #f6ecd830}
+.optic-overlay[data-zoom='1'] .optic-ring{width:88px;height:88px;border-color:#3e5d6b55;box-shadow:none;border-radius:22%}
+.optic-ring:before,.optic-ring:after{content:'';position:absolute;background:#36505a85}.optic-ring:before{left:50%;height:25%;width:1px;bottom:0}.optic-ring:after{top:50%;width:25%;height:1px;right:0}
+.optic-overlay[data-zoom='1'] .optic-ring:before,.optic-overlay[data-zoom='1'] .optic-ring:after{display:none}
+.optic-ring span{position:absolute;bottom:14%;left:0;width:100%;text-align:center;font:12px monospace;color:#36505a}
+.optic-overlay[data-zoom='1'] .optic-ring span{bottom:-26px}
+body.ink-world .crosshair{z-index:17;--reticle-size:1;transform:translate(-50%,-50%) scale(var(--reticle-size))}
+body.ink-world[data-aiming=true] .crosshair:before,body.ink-world[data-aiming=true] .crosshair:after{display:none}
+body.ink-world[data-aiming=true] .crosshair i{inset:9px;background:#e53329;border-radius:50%;box-shadow:0 0 2px #fff8de}
+.camera-settings-panel .optic-note{line-height:1.6;display:block;margin:8px 0}
+@media(max-width:760px){.optic-controls{bottom:294px;gap:4px;left:10px;transform:none}.optic-controls button{font-size:10px;padding:7px 9px}.optic-controls small{display:none}}

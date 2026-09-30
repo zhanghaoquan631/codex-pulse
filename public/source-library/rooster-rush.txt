@@ -1,0 +1,965 @@
+# Codex Pulse source bundle
+
+Project: rooster-rush
+
+The sections below contain actual editable code, not a repository URL. Restore the relative paths after each ===== FILE: marker. Download the ZIP to preserve file boundaries and data.
+
+The original map examples and the deployed runtime are both retained and identified separately. Geographic data and binary assets are in the ZIP, not this clipboard text. Restricted character assets and unlicensed image collections are not redistributed. The default traveler remains playable; third-party sprite providers can be configured independently.
+
+Run the hosted static game from the ZIP root using python -m http.server 8080, then open the project path below. Map examples: cd examples/<map>; npm ci; npm run dev.
+
+
+
+===== FILE: public/games/rooster-rush/app.js =====
+import * as THREE from './vendor/three.module.js';
+import {createRooster,createEnemy,createMushroom,createRocket,createCoop} from './assets.js';
+import {GameEngine} from './engine.js';
+
+import { announceState } from './pulse-bridge.js';
+
+const $=id=>document.getElementById(id), root=$('game');
+const input={left:false,right:false,jumpPressed:false,jumpHeld:false};
+let engine, renderer, scene, camera, rooster, rocket, coop, world, scenery;
+let stickPointer=null,jumpPointer=null,lastViewportWidth=innerWidth;
+const isHandheld=()=>matchMedia('(max-width:1100px) and (pointer:coarse)').matches||innerWidth<=600;
+let paused=false, intro=0, introDone=false, soundEnabled=false, audioContext, hudCache='';
+let best=0, toastTimer, previousFocus, cameraX=0, cameraY=0, lastTime=0, accumulator=0;
+try{best=Number(sessionStorage.getItem('rooster-rush-local-best'))||0;}catch{}
+const objects=new Map(), pools=new Map(), particles=[];
+const boxGeometry=new THREE.BoxGeometry(1,1,1), sphereGeometry=new THREE.SphereGeometry(1,12,8);
+const materials={};
+function mat(color,options={}){const key=color+JSON.stringify(options);return materials[key]??=new THREE.MeshStandardMaterial({color,roughness:.85,...options});}
+function box(w,h,d,color,x=0,y=0,z=0){const m=new THREE.Mesh(boxGeometry,mat(color));m.scale.set(w,h,d);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;return m;}
+function ball(x,y,z,sx,sy,sz,color){const m=new THREE.Mesh(sphereGeometry,mat(color));m.position.set(x,y,z);m.scale.set(sx,sy,sz);return m;}
+function labelTexture(text,bg,color){const c=document.createElement('canvas');c.width=c.height=128;const ctx=c.getContext('2d');ctx.fillStyle=bg;ctx.fillRect(0,0,128,128);ctx.strokeStyle=color;ctx.lineWidth=4;ctx.strokeRect(7,7,114,114);ctx.font='bold 84px Georgia';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=color;ctx.fillText(text,64,66);const tx=new THREE.CanvasTexture(c);tx.colorSpace=THREE.SRGBColorSpace;return tx;}
+const questionMaterial=new THREE.MeshStandardMaterial({map:labelTexture('?','#edbf68','#93572a'),roughness:.8});
+const usedMaterial=mat('#b79463');
+const coinFace=new THREE.MeshStandardMaterial({map:labelTexture('AI','#d6a12a','#85510f'),metalness:.55,roughness:.4});
+const coinEdge=mat('#b87b13',{metalness:.6,roughness:.4});
+const coinGeo=new THREE.CylinderGeometry(.31,.31,.105,24), coinRingGeo=new THREE.TorusGeometry(.273,.018,5,24);
+function makeCoin(){const g=new THREE.Group(), c=new THREE.Mesh(coinGeo,[coinEdge,coinFace,coinFace]);c.rotation.x=Math.PI/2;g.add(c);for(const z of [-.057,.057]){const ring=new THREE.Mesh(coinRingGeo,coinEdge);ring.position.z=z;g.add(ring);}return g;}
+function makeSolid(s){const g=new THREE.Group();if(s.kind==='ground'){
+  g.add(box(s.w,s.h,2,'#704323',0,-s.h/2,0));g.add(box(s.w,.16,2.08,'#935e3d',0,-.06,0));g.add(box(s.w,.13,.06,'#57331f',0,-.3,1.03));g.add(box(s.w,.055,.08,'#925f36',0,-.39,1.05));
+  const seams=Math.min(9,Math.floor(s.w/3));for(let i=1;i<=seams;i++)g.add(box(.025,s.h-.4,.015,'#684121',-s.w/2+s.w*i/(seams+1),-s.h/2-.2,1.009));
+}else if(s.kind==='pipe'){
+  const cylinder=new THREE.CylinderGeometry(s.w*.48,s.w*.48,s.h,24),tube=new THREE.Mesh(cylinder,mat('#568751'));
+  tube.position.y=-s.h/2;tube.castShadow=true;tube.receiveShadow=true;g.add(tube);g.userData.ownedGeometries=[cylinder];
+  const lipGeo=new THREE.CylinderGeometry(s.w*.57,s.w*.57,.32,24),lip=new THREE.Mesh(lipGeo,mat('#739d62'));lip.position.y=-.16;g.add(lip);g.userData.ownedGeometries.push(lipGeo);
+  const holeGeo=new THREE.CircleGeometry(s.w*.39,24),hole=new THREE.Mesh(holeGeo,mat('#29432c'));hole.rotation.x=-Math.PI/2;hole.position.y=.005;g.add(hole);g.userData.ownedGeometries.push(holeGeo);
+}else if(s.kind==='question'){
+  const q=new THREE.Mesh(boxGeometry,[mat('#c69046'),mat('#c69046'),mat('#f3d49a'),mat('#b7823f'),questionMaterial,questionMaterial]);q.scale.set(s.w,s.h,1.1);q.position.y=-s.h/2;q.castShadow=q.receiveShadow=true;g.add(q);g.userData.cube=q;
+}else if(s.kind==='brick'){
+  g.add(box(s.w,s.h,1.2,'#b67746',0,-s.h/2));for(let i=1;i<3;i++)g.add(box(s.w,.025,.025,'#765130',0,-s.h*i/3,.615));for(const [x,y] of [[0,-s.h/6],[-s.w/4,-s.h/2],[s.w/4,-s.h/2],[0,-s.h*5/6]])g.add(box(.023,s.h/3,.025,'#765130',x,y,.615));
+}else{g.add(box(s.w,s.h,2,'#dfc39a',0,-s.h/2));g.add(box(s.w+.07,.13,2.07,'#f2e0bc',0,-.035));}
+return g;}
+
+function buildScenery(){scenery=new THREE.Group();scene.add(scenery);
+  const hillColors=['#d5bba0','#bea17a'];
+  for(let layer=0;layer<2;layer++)for(let i=0;i<12;i++){
+    const g=new THREE.Group(), w=8+(i*7%9),h=.5+(i*11%5)*.22,shape=new THREE.Shape();shape.moveTo(-w,-6);shape.lineTo(-w,0);shape.bezierCurveTo(-w*.5,h*1.1,w*.4,h*1.12,w,0);shape.lineTo(w,-6);shape.closePath();const mesh=new THREE.Mesh(new THREE.ShapeGeometry(shape),new THREE.MeshBasicMaterial({color:hillColors[layer]}));g.add(mesh);g.position.set(i*18-60,-2.4,-16+layer*8);g.userData={baseX:g.position.x,parallax:layer===0?.17:.33,span:216};scenery.add(g);
+  }
+  const cloudMaterial=new THREE.MeshBasicMaterial({color:'#e3e2df'});
+  for(let i=0;i<9;i++){const g=new THREE.Group(),width=1.4+(i*3%4)*.27;for(let j=0;j<5;j++){const puff=ball((j-2)*.65,(j%3)*.2,0,width*.6,.5+(j%2)*.2,.3,'#e4e3de');puff.material=cloudMaterial;g.add(puff);}g.position.set(i*15-45,10+(i*7%4),-22);g.userData={baseX:g.position.x,parallax:.12,cloud:true,span:135};scenery.add(g);}
+}
+
+function init(){
+  try{renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance'});}catch(error){$('load-error').hidden=false;announceState('error');console.error(error);return;}
+  renderer.setPixelRatio(Math.min(devicePixelRatio,isHandheld()?1.5:2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.9;renderer.setClearColor(0x000000,0);$('scene').appendChild(renderer.domElement);
+  scene=new THREE.Scene();camera=new THREE.PerspectiveCamera(36,innerWidth/innerHeight,.1,200);
+  scene.add(new THREE.HemisphereLight('#fff4da','#a57854',2.25));
+  const sun=new THREE.DirectionalLight('#fff3d4',3);sun.position.set(-6,16,12);sun.castShadow=true;sun.shadow.mapSize.set(isHandheld()?1024:2048,isHandheld()?1024:2048);Object.assign(sun.shadow.camera,{left:-24,right:24,top:16,bottom:-15,near:1,far:65});sun.shadow.bias=-.0008;sun.shadow.normalBias=.03;scene.add(sun);scene.add(sun.target);scene.userData.sun=sun;
+  world=new THREE.Group();scene.add(world);buildScenery();rooster=createRooster();scene.add(rooster);rocket=createRocket();rocket.scale.setScalar(2.15);scene.add(rocket);rocket.visible=false;coop=createCoop();coop.position.set(-11,0,-.2);coop.rotation.y=.4;world.add(coop);
+  engine=new GameEngine({onEvent:handleEvent});engine.best=best;root.classList.add('intro');resize();bindControls();syncWorld();
+  if(new URLSearchParams(location.search).has('test'))window.__game={engine,input,skipIntro:finishIntro,reset:resetGame,snapshot:()=>({score:engine.score,lives:engine.lives,status:engine.status,player:{...engine.player},boostTime:engine.boostTime,paused,drawCalls:renderer.info.render.calls,objects:objects.size}),renderer};
+  renderer.domElement.addEventListener('pointerdown',()=>root.focus({preventScroll:true}));
+  announceState('ready');
+  requestAnimationFrame(frame);
+}
+
+function finishIntro(){introDone=true;intro=5;root.classList.remove('intro');$('intro-bubble').hidden=true;}
+function resetGame(){closeModal(true);clearInput();clearTimeout(toastTimer);$('toast').classList.remove('show');for(const q of particles)scene.remove(q.m);particles.length=0;for(const el of document.querySelectorAll('.flying-coin')){el.getAnimations().forEach(a=>a.cancel());el.remove();}for(const obj of objects.values()){world.remove(obj);obj.userData.ownedGeometries?.forEach(g=>g.dispose());}objects.clear();engine.reset();root.dataset.playing='false';engine.best=best;paused=false;finishIntro();cameraX=engine.player.x;cameraY=0;$('begin-hint').hidden=false;syncWorld();updateHUD();root.focus({preventScroll:true});}
+function clearInput(){input.left=input.right=input.jumpPressed=input.jumpHeld=false;for(const [id,pointer] of [['joystick',stickPointer],['jump',jumpPointer]]){const el=$(id);if(pointer!==null&&el.hasPointerCapture(pointer))el.releasePointerCapture(pointer);}stickPointer=jumpPointer=null;$('stick').style.transform='';}
+function startGame(){finishIntro();engine.start();root.dataset.playing='true';$('begin-hint').hidden=true;root.focus({preventScroll:true});}
+function jump(){startGame();input.jumpPressed=true;input.jumpHeld=true;}
+function showToast(text){$('toast').textContent=text;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),1800);}
+function handleEvent(e){
+  if(e.type==='coin'){burst(e.x,e.y,0,'#f6bd3f',5);flyCoin(e.x,e.y);beep(900,1400,.06);}
+  if(e.type==='jump'){beep(220,420,.13);}
+  if(e.type==='bump'){const solid=engine.solids.find(s=>Math.abs(s.x-e.x)<.8&&s.kind!=='ground');const obj=solid&&objects.get('s'+solid.id);if(obj)obj.userData.bump=.16;beep(170,90,.09);}
+  if(e.type==='stomp'){burst(e.x,e.y,.1,'#dbb67b',10);beep(130,360,.1);}
+  if(e.type==='grow'){showToast('MUSHROOM!  ·  SIZE UP');burst(e.x,e.y,.1,'#d35442',16);beep(300,1000,.32);}
+  if(e.type==='hit'){showToast('OUCH!  ·  KEEP GOING');beep(250,65,.26);}
+  if(e.type==='death'){showToast(`${engine.lives} ${engine.lives===1?'LIFE':'LIVES'} LEFT`);beep(300,70,.35);}
+  if(e.type==='boost'){showToast('✦  ROCKET BOOST');beep(180,1100,.55);}
+  if(e.type==='boostend')showToast('NICE FLIGHT!');
+  if(e.type==='gameover'){beep(300,50,.6);setTimeout(()=>{if(engine.status==='gameover')showEnd(false);},300);}
+  if(e.type==='win'){showEnd(true);beep(500,1400,.5);}
+}
+function beep(start,end,duration){if(!soundEnabled)return;try{audioContext??=new AudioContext();if(audioContext.state==='suspended')audioContext.resume();const oscillator=audioContext.createOscillator(),gain=audioContext.createGain(),now=audioContext.currentTime;oscillator.type='sine';oscillator.frequency.setValueAtTime(start,now);oscillator.frequency.exponentialRampToValueAtTime(end,now+duration);gain.gain.setValueAtTime(.045,now);gain.gain.exponentialRampToValueAtTime(.001,now+duration);oscillator.connect(gain).connect(audioContext.destination);oscillator.start();oscillator.stop(now+duration);}catch{}}
+function burst(x,y,z,color,count){for(let i=0;i<count;i++){const m=new THREE.Mesh(sphereGeometry,mat(color));m.scale.setScalar(.04+Math.random()*.035);m.position.set(x,y,z);scene.add(m);particles.push({m,vx:(Math.random()-.5)*4,vy:2+Math.random()*3,vz:(Math.random()-.5)*2,life:.55});}}
+function flyCoin(x,y){if(!camera)return;const point=new THREE.Vector3(x,y,0).project(camera),sx=(point.x+1)/2*root.clientWidth,sy=(1-point.y)/2*root.clientHeight,rect=$('score-pill').getBoundingClientRect(),dx=rect.left+rect.width/2-sx,dy=rect.top+rect.height/2-sy;
+  const el=document.createElement('span');el.className='flying-coin';el.textContent='AI';el.style.left=sx+'px';el.style.top=sy+'px';root.appendChild(el);el.animate([{transform:'translate(-50%,-50%) rotate(0deg) scale(1)',opacity:1},{transform:`translate(calc(-50% + ${dx*.45}px),calc(-50% + ${dy*.6-65}px)) rotate(250deg) scale(.9)`,opacity:1},{transform:`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px)) rotate(540deg) scale(.35)`,opacity:0}],{duration:680,easing:'cubic-bezier(.3,.05,.4,1)'}).onfinish=()=>{el.remove();$('score-pill').animate([{transform:'scale(1.12)'},{transform:'scale(1)'}],{duration:200});};}
+
+function getObject(key,kind,build){let obj=objects.get(key);if(!obj){obj=pools.get(kind)?.pop()||build();obj.userData.poolKind=kind;objects.set(key,obj);world.add(obj);}return obj;}
+function syncWorld(){const alive=new Set();
+  for(const s of engine.solids){const key='s'+s.id;alive.add(key);const obj=getObject(key,'solid:'+s.id,()=>makeSolid(s));obj.position.set(s.x,s.y+(obj.userData.bump||0),0);if(s.used&&obj.userData.cube)obj.userData.cube.material=usedMaterial;}
+  for(const c of engine.coins){if(!c.active)continue;const key='c'+c.id;alive.add(key);const obj=getObject(key,'coin',makeCoin);obj.position.set(c.x,c.y+Math.sin(engine.time*2.7+c.x)*.08,.08);obj.rotation.y=engine.time*1.9+c.x*.15;}
+  for(const e of engine.enemies){if(!e.alive)continue;const key='e'+e.id;alive.add(key);const obj=getObject(key,'enemy:'+e.type,()=>createEnemy(e.type));obj.position.set(e.x,e.y,0);obj.rotation.y=e.vx>=0?0:Math.PI;obj.rotation.z=Math.sin(engine.time*10+e.x)*.04;obj.scale.y=1+Math.sin(engine.time*10)*.025;}
+  for(const m of engine.mushrooms){if(!m.active)continue;const key='m'+m.id;alive.add(key);const obj=getObject(key,'mushroom',createMushroom);obj.position.set(m.x,m.y,0);}
+  for(const [key,obj] of objects){if(alive.has(key))continue;world.remove(obj);objects.delete(key);const kind=obj.userData.poolKind;if(kind.startsWith('solid:')){obj.userData.ownedGeometries?.forEach(g=>g.dispose());continue;}const pool=pools.get(kind)||[];if(pool.length<60)pool.push(obj);pools.set(kind,pool);}
+}
+
+function updateHUD(){const score=engine.score,boosted=engine.boostTime>0,cache=[score,engine.lives,engine.player.big,engine.boostGoal,engine.boostCharge,Math.floor(engine.boostTime*10)].join(':');if(cache===hudCache)return;hudCache=cache;$('score').textContent=String(score).padStart(4,'0');if(score>best){best=score;try{sessionStorage.setItem('rooster-rush-local-best',String(best));}catch{}}$('best').textContent=String(best).padStart(4,'0');$('percent').textContent=Math.min(100,Math.round(score/100));$('lives').innerHTML=Array.from({length:3},(_,i)=>`<span style="opacity:${i<engine.lives?1:.2}">♥</span>`).join('');$('lives').setAttribute('aria-label',`${engine.lives} lives remaining`);$('charge').textContent=boosted?'BOOST':`${Math.floor(engine.boostCharge)}/${engine.boostGoal}`;$('meter-fill').style.width=(boosted?engine.boostTime/5:engine.boostCharge/engine.boostGoal)*100+'%';$('meter-fill').style.background=boosted?'#e4a123':'#22180f';$('big-tag').hidden=!engine.player.big;}
+function showModal(id){previousFocus=document.activeElement;paused=true;clearInput();$('modal-layer').hidden=false;for(const el of document.querySelectorAll('.modal'))el.hidden=el.id!==id;$(id).querySelector('button')?.focus();}
+function closeModal(force=false){if($('modal-layer').hidden)return;if(engine.status==='gameover'&&force!==true)return;if(engine.status==='won')engine.status='playing';$('modal-layer').hidden=true;clearInput();paused=false;root.focus({preventScroll:true});}
+function showEnd(won){$('end-title').textContent=won?'You’re hired.':'Game over.';$('end-eyebrow').textContent=won?'10,000 POINTS. ONE VERY GOOD CHICKEN.':'ONE MORE RUN?';$('end-copy').textContent=won?'You did it! 10,000 points and a very impressive résumé. careers@notrealcompany.com — a fictional company, a very real achievement.':`You scored ${engine.score.toLocaleString()} points. Best this session: ${best.toLocaleString()}. The next adventure is one jump away.`;$('continue').hidden=!won;$('restart').textContent=won?'New adventure ↗':'Try again ↗';showModal('end-modal');}
+function bindControls(){
+  $('start').onclick=()=>{jump();setTimeout(()=>input.jumpHeld=false,130);};$('reset').onclick=resetGame;$('mobile-reset').onclick=resetGame;$('help').onclick=()=>{finishIntro();showModal('help-modal');};document.querySelector('.close').onclick=closeModal;$('restart').onclick=resetGame;$('continue').onclick=()=>{engine.status='playing';closeModal();};$('resume').onclick=closeModal;$('pause').onclick=()=>{finishIntro();paused?closeModal():showModal('pause-modal');};$('sound').onclick=()=>{soundEnabled=!soundEnabled;$('sound').textContent=soundEnabled?'♫':'♪';$('sound').setAttribute('aria-label',soundEnabled?'Mute sound':'Enable sound');beep(660,880,.12);root.focus({preventScroll:true});};
+  window.addEventListener('keydown',e=>{const keys=['ArrowLeft','ArrowRight','ArrowUp','Space','KeyA','KeyD','KeyW','KeyP','KeyR','Escape'];if(!keys.includes(e.code))return;if(e.target instanceof HTMLButtonElement&&e.code==='Space')return;e.preventDefault();if(e.repeat)return;if(e.code==='Escape'){if(!$('modal-layer').hidden&&engine.status!=='gameover')closeModal();return;}if(e.code==='KeyR'){resetGame();return;}if(e.code==='KeyP'){paused?closeModal():showModal('pause-modal');return;}if(paused)return;if(['ArrowLeft','KeyA'].includes(e.code)){startGame();input.left=true;}if(['ArrowRight','KeyD'].includes(e.code)){startGame();input.right=true;}if(['ArrowUp','KeyW','Space'].includes(e.code))jump();});
+  window.addEventListener('keyup',e=>{if(['ArrowLeft','KeyA'].includes(e.code))input.left=false;if(['ArrowRight','KeyD'].includes(e.code))input.right=false;if(['ArrowUp','KeyW','Space'].includes(e.code))input.jumpHeld=false;});
+  window.addEventListener('blur',()=>{clearInput();if(engine.status==='playing'&&!paused)showModal('pause-modal');});document.addEventListener('visibilitychange',()=>{if(document.hidden){clearInput();if(engine.status==='playing'&&!paused)showModal('pause-modal');}});
+  const stick=$('joystick');const moveStick=e=>{const r=stick.getBoundingClientRect(),dx=Math.max(-30,Math.min(30,e.clientX-r.left-r.width/2));$('stick').style.transform=`translateX(${dx}px)`;input.left=dx<-8;input.right=dx>8;};stick.onpointerdown=e=>{e.preventDefault();if(paused||stickPointer!==null)return;startGame();stickPointer=e.pointerId;stick.setPointerCapture(stickPointer);moveStick(e);};stick.onpointermove=e=>{if(!paused&&e.pointerId===stickPointer)moveStick(e);};const release=e=>{if(e.pointerId!==stickPointer)return;stickPointer=null;input.left=input.right=false;$('stick').style.transform='';};stick.onpointerup=release;stick.onpointercancel=release;stick.onlostpointercapture=release;
+  $('jump').onpointerdown=e=>{e.preventDefault();if(paused||jumpPointer!==null)return;jumpPointer=e.pointerId;$('jump').setPointerCapture(jumpPointer);jump();};for(const type of ['pointerup','pointercancel','lostpointercapture'])$('jump').addEventListener(type,e=>{if(e.pointerId===jumpPointer){jumpPointer=null;input.jumpHeld=false;}});
+  $('modal-layer').addEventListener('keydown',e=>{if(e.key!=='Tab')return;const list=[...document.querySelector('.modal:not([hidden])').querySelectorAll('button:not([hidden])')];if(e.shiftKey&&document.activeElement===list[0]){e.preventDefault();list.at(-1).focus();}else if(!e.shiftKey&&document.activeElement===list.at(-1)){e.preventDefault();list[0].focus();}});
+  window.addEventListener('resize',()=>{if(isHandheld()&&Math.abs(innerWidth-lastViewportWidth)>2){clearInput();if(engine.status==='playing'&&!paused)showModal('pause-modal');}lastViewportWidth=innerWidth;resize();});
+}
+function resize(){if(!renderer)return;const w=root.clientWidth,h=root.clientHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();const mobile=isHandheld();root.classList.toggle('mobile-game',mobile);$('begin-hint').innerHTML=mobile?'<span>点击右下角「跳跃」开始</span>':'<kbd>SPACE</kbd><span>TO BEGIN</span>';if(mobile){$('start').textContent='开始游戏';$('help').textContent='玩法';$('reset').textContent='重开';$('jump').textContent='跳跃';$('pause').setAttribute('aria-label','暂停游戏');$('resume').textContent='继续游戏';$('restart').textContent='再玩一次';$('continue').textContent='继续游戏';$('modal-title').textContent='移动、跳跃、收集金币';$('pause-title').textContent='休息一下';}if(coop)coop.position.x=w/h<.85?-3:-11;}
+function smooth(a,b,t){return a+(b-a)*(1-Math.exp(-t));}
+function frame(now){requestAnimationFrame(frame);const dt=Math.min(.05,(now-lastTime)/1000||0);lastTime=now;if(document.hidden)return;
+  if(!introDone){intro+=dt;if(intro>3.7)finishIntro();}
+  if(!paused&&introDone){accumulator+=dt;while(accumulator>=1/120){engine.step(1/120,input);input.jumpPressed=false;accumulator-=1/120;}}
+  syncWorld();updateHUD();const p=engine.player,mobile=camera.aspect<.85;
+  const desiredScale=(p.big?1.44:.96),targetX=p.x+(mobile?4.3:1.15);
+  cameraX=smooth(cameraX,targetX,dt*5);cameraY=smooth(cameraY,Math.max(0,p.y-(mobile?2.5:3.4))*.65,dt*3);
+  let cz=mobile?41.7:25.9,lookY=(mobile?10.24:7.49)+cameraY;
+  camera.fov=mobile?42:36;camera.position.set(cameraX,lookY+cz*.0875,cz);camera.lookAt(cameraX,lookY,0);
+  rooster.position.set(p.x,p.y,0);rooster.scale.setScalar(smooth(rooster.scale.x,desiredScale,dt*12));let heading=p.facing<0?Math.PI:0;rooster.rotation.y=smooth(rooster.rotation.y,heading,dt*14);rooster.rotation.z=smooth(rooster.rotation.z,p.grounded?Math.sin(engine.time*13)*Math.min(Math.abs(p.vx)*.008,.05):-.1*(p.facing||1),dt*9);
+  rooster.visible=p.invincible<=0||Math.floor(engine.time*12)%2===0;
+  const parts=rooster.userData,run=Math.min(1,Math.abs(p.vx)/4),swing=Math.sin(engine.time*17)*.65*run;
+  if(parts.leftLeg)parts.leftLeg.rotation.z=swing;if(parts.rightLeg)parts.rightLeg.rotation.z=-swing;
+  if(parts.leftWing)parts.leftWing.rotation.x=p.grounded?.08:Math.sin(engine.time*24)*.5;if(parts.rightWing)parts.rightWing.rotation.x=p.grounded?-.08:-Math.sin(engine.time*24)*.5;
+  if(!introDone){const t=Math.max(0,Math.min(1,(intro-2)/1.7)),ease=t*t*(3-2*t);world.visible=t>0;scenery.visible=t>0;const introZ=mobile?15:9.3;camera.position.set(0,4.2*(1-ease)+(lookY+cz*.0875)*ease,introZ*(1-ease)+cz*ease);camera.lookAt(cameraX*ease,3.9*(1-ease)+lookY*ease,0);rooster.position.set(p.x,2.3*(1-ease),0);rooster.scale.setScalar(2.05*(1-ease)+desiredScale*ease);rooster.rotation.y=-Math.PI/2*(1-ease);$('intro-bubble').style.opacity=String(1-Math.min(1,t*2));}else{world.visible=scenery.visible=true;}
+  camera.updateProjectionMatrix();const sun=scene.userData.sun;sun.position.x=cameraX-6;sun.target.position.set(cameraX,0,0);rocket.visible=engine.boostTime>0;rocket.position.set(p.x,p.y-.85,0);if(rocket.visible){rooster.rotation.z=-.14;if(Math.random()<.5)burst(p.x-1.55,p.y-.4,0,'#efa842',1);}
+  for(const obj of scenery.children){const data=obj.userData,base=data.baseX+cameraX*data.parallax;obj.position.x=base+Math.floor((cameraX-base+data.span/2)/data.span)*data.span;}
+  for(const obj of objects.values())if(obj.userData.bump)obj.userData.bump=Math.max(0,obj.userData.bump-dt*.6);
+  for(let i=particles.length-1;i>=0;i--){const q=particles[i];q.life-=dt;q.vy-=dt*12;q.m.position.x+=q.vx*dt;q.m.position.y+=q.vy*dt;q.m.position.z+=q.vz*dt;q.m.scale.multiplyScalar(Math.max(.85,1-dt*2));if(q.life<=0){scene.remove(q.m);particles.splice(i,1);}}
+  renderer.render(scene,camera);
+}
+init();
+
+
+
+===== FILE: public/games/rooster-rush/assets.js =====
+import * as THREE from './vendor/three.module.js';
+
+// Original, self-contained clay characters. No downloaded character assets.
+export const palette = Object.freeze({
+  cream: 0xfff3d7, white: 0xfffbef, red: 0xf54b35, orange: 0xffad35,
+  teal: 0x235e59, tealLight: 0x3f8171, ink: 0x253c37, wood: 0xb7733d,
+  tan: 0xf5cc84, green: 0x69ac55, roof: 0xd34b38,
+});
+
+const materials = new Map();
+const templates = new Map();
+const geometry = {
+  sphere: new THREE.SphereGeometry(1, 20, 14),
+  box: new THREE.BoxGeometry(1, 1, 1),
+  cylinder: new THREE.CylinderGeometry(1, 1, 1, 14),
+  cone: new THREE.ConeGeometry(1, 1, 14),
+  cap: new THREE.SphereGeometry(1, 24, 12, 0, Math.PI * 2, 0, Math.PI * 0.56),
+};
+
+function mat(color, roughness = 0.78, metalness = 0) {
+  const key = `${color}-${roughness}-${metalness}`;
+  if (!materials.has(key)) materials.set(key, new THREE.MeshStandardMaterial({ color, roughness, metalness }));
+  return materials.get(key);
+}
+
+function part(parent, shape, color, position, scale, rotation = [0, 0, 0], material) {
+  const mesh = new THREE.Mesh(geometry[shape] || shape, material || mat(color));
+  mesh.position.set(...position);
+  mesh.scale.set(...scale);
+  mesh.rotation.set(...rotation);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  parent.add(mesh);
+  return mesh;
+}
+
+function ball(parent, color, position, scale, rotation) {
+  return part(parent, 'sphere', color, position, scale, rotation);
+}
+
+function group(parent, position = [0, 0, 0]) {
+  const node = new THREE.Group();
+  node.position.set(...position);
+  if (parent) parent.add(node);
+  return node;
+}
+
+// Merge a rigid subassembly into one draw call per material, while leaving the
+// parent pivot intact. A non-indexed buffer also keeps this independent of addons.
+function bake(rigid) {
+  rigid.updateMatrixWorld(true);
+  const inverseRoot = rigid.matrixWorld.clone().invert();
+  const buckets = new Map();
+  const originals = [];
+  rigid.traverse(node => {
+    if (!node.isMesh) return;
+    const transformed = (node.geometry.index ? node.geometry.toNonIndexed() : node.geometry.clone());
+    transformed.applyMatrix4(new THREE.Matrix4().multiplyMatrices(inverseRoot, node.matrixWorld));
+    if (!buckets.has(node.material)) buckets.set(node.material, []);
+    buckets.get(node.material).push(transformed);
+    originals.push(node);
+  });
+  for (const mesh of originals) mesh.removeFromParent();
+  for (const [material, pieces] of buckets) {
+    const merged = new THREE.BufferGeometry();
+    for (const attribute of ['position', 'normal', 'uv']) {
+      const length = pieces.reduce((n, item) => n + (item.attributes[attribute]?.array.length || 0), 0);
+      if (!length || pieces.some(item => !item.attributes[attribute])) continue;
+      const values = new Float32Array(length);
+      let offset = 0;
+      for (const piece of pieces) {
+        values.set(piece.attributes[attribute].array, offset);
+        offset += piece.attributes[attribute].array.length;
+      }
+      merged.setAttribute(attribute, new THREE.BufferAttribute(values, attribute === 'uv' ? 2 : 3));
+    }
+    merged.computeBoundingSphere();
+    const mesh = new THREE.Mesh(merged, material);
+    mesh.castShadow = mesh.receiveShadow = true;
+    rigid.add(mesh);
+    for (const piece of pieces) piece.dispose();
+  }
+  return rigid;
+}
+
+function eyes(parent, x, y, spread, size = .074) {
+  for (const side of [-1, 1]) {
+    ball(parent, palette.white, [x, y, side * spread], [size * 1.16, size * 1.24, size * .53]);
+    ball(parent, palette.ink, [x + size * .32, y + size * .02, side * (spread + size * .37)], [size * .58, size * .76, size * .3]);
+    ball(parent, 0xffffff, [x + size * .5, y + size * .31, side * (spread + size * .64)], [size * .16, size * .19, size * .09]);
+  }
+}
+
+function groundModel(model) {
+  const floor = new THREE.Box3().setFromObject(model).min.y;
+  model.traverse(node => { if (node.isMesh) node.geometry.translate(0, -floor, 0); });
+  return model;
+}
+
+export function createRooster() {
+  const rooster = group();
+  rooster.name = 'Rooster';
+  const body = group(rooster, [0, .69, 0]);
+  ball(body, 0xe7e7d9, [-.065, .02, 0], [.53, .6, .44], [0, 0, -.04]);
+  ball(body, 0xf1f0e3, [.17, .1, 0], [.39, .5, .405]);
+  // A compact, pale feather fan follows the plump body close to the ground.
+  for (const [x, y, z, tilt, color] of [
+    [-.6, -.34, -.13, 1.75, 0xc8d0c6],
+    [-.64, -.28, .005, 1.72, 0xdfe3d5],
+    [-.6, -.35, .14, 1.78, 0xd4dacd],
+  ]) {
+    ball(body, color, [x, y, z], [.085, .235, .09], [.14 * Math.sign(z), 0, tilt]);
+  }
+  ball(body, palette.teal, [-.47, -.36, -.12], [.09, .1, .045], [0, 0, .7]);
+  bake(body);
+
+  const head = group(rooster, [.25, 1.055, 0]);
+  ball(head, 0xf1f0e3, [0, .045, 0], [.265, .285, .26]);
+  ball(head, 0xf1f0e3, [-.16, -.08, 0], [.28, .275, .27]);
+  for (const [x, y, radius] of [[-.25, .365, .092], [-.15, .44, .107], [-.04, .395, .086]]) {
+    ball(head, 0xbb241b, [x, y, 0], [radius, radius * 1.22, .082]);
+  }
+  // A rounded upper beak with a distinct lower lip.
+  part(head, 'cone', 0xe99926, [.335, -.105, 0], [.11, .285, .142], [0, 0, -Math.PI / 2]);
+  ball(head, 0xd68922, [.29, -.17, 0], [.115, .042, .118]);
+  for (const side of [-1, 1]) {
+    ball(head, 0xbb241b, [.21, -.235, side * .055], [.052, .085, .048], [0, 0, -.16]);
+    ball(head, 0xe7dcc0, [.13, -.105, side * .235], [.075, .045, .025]);
+  }
+  eyes(head, .18, .105, .227, .079);
+  for (const side of [-1, 1]) {
+    ball(head, palette.ink, [.164, .221, side * .215], [.079, .025, .025], [side * .12, 0, -.4]);
+  }
+  bake(head);
+
+  const leftWing = group(rooster, [.16, .79, .385]);
+  const rightWing = group(rooster, [.16, .79, -.385]);
+  for (const [wing, side] of [[leftWing, 1], [rightWing, -1]]) {
+    ball(wing, 0xd8dcd0, [-.055, -.14, 0], [.225, .27, .102], [0, side * .08, -.28]);
+    for (let i = 0; i < 3; i++) {
+      ball(wing, 0xe9e9db, [-.12 + i * .075, -.265 + i * .026, side * .035], [.068, .115, .075], [0, 0, -.35]);
+    }
+    bake(wing);
+  }
+
+  const leftLeg = group(rooster, [0, .19, .21]);
+  const rightLeg = group(rooster, [0, .19, -.21]);
+  for (const leg of [leftLeg, rightLeg]) {
+    part(leg, 'cylinder', 0xe6a335, [0, -.065, 0], [.039, .15, .039]);
+    ball(leg, 0xe6a335, [.045, -.145, 0], [.125, .045, .077]);
+    for (const side of [-1, 0, 1]) {
+      ball(leg, 0xe6a335, [.11, -.155, side * .047], [.115, .035, .03], [0, side * -.16, 0]);
+    }
+    bake(leg);
+  }
+  rooster.userData = { body, leftWing, rightWing, leftLeg, rightLeg, head };
+  return rooster;
+}
+
+export function createEnemy(type = 'goomba') {
+  const cacheKey = `enemy:${type}`;
+  if (templates.has(cacheKey)) return templates.get(cacheKey).clone();
+  const enemy = group();
+  enemy.name = type;
+  if (type === 'koopa' || type === 'turtle') {
+    ball(enemy, palette.tan, [0, .26, 0], [.31, .23, .27]);
+    ball(enemy, 0xffedba, [-.07, .27, 0], [.34, .1, .3]);
+    ball(enemy, 0x477d48, [-.075, .38, 0], [.33, .26, .28]);
+    ball(enemy, 0x80b85d, [-.09, .46, 0], [.255, .21, .22]);
+    ball(enemy, palette.tan, [.29, .44, 0], [.19, .225, .17]);
+    ball(enemy, palette.tan, [.44, .375, 0], [.15, .095, .145]);
+    for (const x of [-.22, .16]) for (const z of [-.205, .205]) {
+      ball(enemy, 0xe8ae53, [x, .1, z], [.13, .1, .11]);
+    }
+    for (const side of [-1, 1]) {
+      ball(enemy, 0xfbedb4, [-.1, .49, side * .218], [.018, .125, .017], [.3, 0, -.4]);
+    }
+    eyes(enemy, .35, .49, .15, .061);
+  } else if (type === 'spiky' || type === 'spike') {
+    ball(enemy, 0x576679, [0, .33, 0], [.31, .29, .28]);
+    ball(enemy, 0xa6a7b2, [.185, .285, 0], [.19, .19, .235]);
+    for (let i = 0; i < 8; i++) {
+      const a = -Math.PI * .4 + i * Math.PI * 1.65 / 7;
+      const x = Math.cos(a) * .28;
+      const y = .33 + Math.sin(a) * .25;
+      const spike = part(enemy, 'cone', 0xffeccb, [x, y, 0], [.076, .24, .075]);
+      spike.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(Math.cos(a), Math.sin(a), 0));
+    }
+    for (const side of [-1, 1]) {
+      for (let i = 0; i < 3; i++) {
+        const spike = part(enemy, 'cone', 0xffeccb, [-.18 + i * .14, .42, side * .26], [.065, .19, .065]);
+        spike.rotation.x = side * Math.PI * .37;
+      }
+      ball(enemy, 0x3d4658, [-.07, .07, side * .2], [.17, .07, .095]);
+    }
+    eyes(enemy, .27, .355, .16, .062);
+  } else {
+    ball(enemy, 0xf2d9a7, [0, .265, 0], [.23, .22, .22]);
+    part(enemy, 'cap', 0xb66a39, [0, .4, 0], [.4, .33, .34]);
+    ball(enemy, 0xd4874a, [-.05, .49, 0], [.31, .23, .28]);
+    for (const side of [-1, 1]) {
+      ball(enemy, 0x70442e, [.03, .07, side * .195], [.2, .075, .12], [0, side * -.14, 0]);
+      ball(enemy, 0xffe9bb, [.24, .36, side * .15], [.058, .09, .042]);
+      ball(enemy, palette.ink, [.28, .365, side * .169], [.024, .047, .023]);
+      ball(enemy, 0x774629, [.255, .465, side * .146], [.071, .025, .046], [side * .18, 0, -.22]);
+    }
+  }
+  bake(enemy);
+  groundModel(enemy);
+  enemy.userData.type = type;
+  templates.set(cacheKey, enemy);
+  return enemy.clone();
+}
+
+export function createMushroom() {
+  if (templates.has('mushroom')) return templates.get('mushroom').clone();
+  const mushroom = group();
+  mushroom.name = 'Power mushroom';
+  ball(mushroom, palette.cream, [0, .25, 0], [.18, .235, .17]);
+  part(mushroom, 'cap', palette.red, [0, .38, 0], [.37, .3, .34]);
+  ball(mushroom, palette.white, [0, .65, 0], [.1, .035, .09]);
+  for (let i = 0; i < 5; i++) {
+    const a = i * Math.PI * 2 / 5;
+    const spot = ball(mushroom, palette.white, [Math.sin(a) * .25, .525, Math.cos(a) * .225], [.076, .073, .025]);
+    spot.rotation.y = a;
+    spot.rotation.x = -.55;
+  }
+  for (const z of [-.065, .065]) ball(mushroom, palette.ink, [.164, .28, z], [.015, .045, .018]);
+  groundModel(bake(mushroom));
+  templates.set('mushroom', mushroom);
+  return mushroom.clone();
+}
+
+export function createRocket() {
+  if (templates.has('rocket')) return templates.get('rocket').clone();
+  const rocket = group();
+  rocket.name = 'Rocket';
+  part(rocket, 'cylinder', 0xfff2cb, [0, .18, 0], [.155, .58, .155], [0, 0, -Math.PI / 2]);
+  part(rocket, 'cone', palette.red, [.39, .18, 0], [.157, .26, .157], [0, 0, -Math.PI / 2]);
+  part(rocket, 'cylinder', palette.teal, [-.29, .18, 0], [.12, .08, .12], [0, 0, -Math.PI / 2]);
+  for (const side of [-1, 1]) {
+    ball(rocket, palette.red, [-.17, .18, side * .16], [.16, .04, .13], [0, side * -.4, 0]);
+    ball(rocket, 0x80c3c4, [.075, .18, side * .147], [.08, .08, .018]);
+  }
+  part(rocket, 'box', palette.red, [-.19, .35, 0], [.2, .19, .044], [0, 0, -.3]);
+  part(rocket, 'cone', 0xffb638, [-.53, .18, 0], [.104, .36, .104], [0, 0, Math.PI / 2]);
+  part(rocket, 'cone', 0xfff0a0, [-.43, .18, 0], [.066, .2, .066], [0, 0, Math.PI / 2]);
+  groundModel(bake(rocket));
+  templates.set('rocket', rocket);
+  return rocket.clone();
+}
+
+export function createCoop() {
+  const coop = group();
+  coop.name = 'Finish chicken coop';
+  part(coop, 'box', 0x82502c, [0, .865, 0], [2.04, 1.61, 1.55]);
+  // Broad weathered boards, divided by fine dark battens.
+  for (let i = 0; i < 6; i++) {
+    part(coop, 'box', i % 2 ? 0xa36534 : 0xaa6c39, [-.86 + i * .345, .865, .79], [.33, 1.61, .04]);
+    part(coop, 'box', 0x683d24, [-1.025 + i * .345, .86, .827], [.028, 1.64, .037]);
+  }
+  for (const side of [-1, 1]) {
+    for (let i = 0; i < 5; i++) {
+      part(coop, 'box', i % 2 ? 0xa36534 : 0xaa6c39, [side * 1.035, .865, -.624 + i * .31], [.038, 1.61, .295]);
+      part(coop, 'box', 0x683d24, [side * 1.061, .86, -.775 + i * .31], [.031, 1.64, .027]);
+    }
+    part(coop, 'box', 0x59331e, [side * 1.04, .865, .823], [.07, 1.69, .08]);
+  }
+  // The entrance sits low under an unpainted, narrow wooden lintel.
+  part(coop, 'box', 0x221a10, [.09, .53, .836], [.575, 1.025, .048]);
+  for (const side of [-1, 1]) part(coop, 'box', 0x57381e, [.09 + side * .322, .545, .877], [.052, 1.08, .071]);
+  part(coop, 'box', 0x57381e, [.09, 1.083, .878], [.704, .06, .071]);
+  part(coop, 'box', 0x51321b, [0, .047, 0], [2.22, .094, 1.78]);
+  part(coop, 'box', 0x684125, [.09, .034, 1.045], [.71, .067, .47]);
+  part(coop, 'box', 0x663a22, [0, 1.66, 0], [2.2, .095, 1.75]);
+
+  // Four planar roof faces meet in one peak, like a little farm pavilion.
+  const roofGeometry = new THREE.ConeGeometry(1, 1, 4).rotateY(Math.PI / 4).toNonIndexed();
+  roofGeometry.computeVertexNormals();
+  part(coop, roofGeometry, 0xa71920, [0, 2.135, 0], [1.77, .9, 1.44]);
+  part(coop, 'box', 0x74151a, [0, 1.691, 0], [2.52, .055, 2.049]);
+  // Small circular vent on the front wall, with a simple dark cross frame.
+  part(coop, 'cylinder', 0x51371f, [-.59, 1.16, .838], [.151, .036, .151], [Math.PI / 2, 0, 0]);
+  part(coop, 'cylinder', 0x181c13, [-.59, 1.16, .865], [.123, .028, .123], [Math.PI / 2, 0, 0]);
+  part(coop, 'box', 0x916034, [-.59, 1.16, .887], [.024, .256, .025]);
+  part(coop, 'box', 0x916034, [-.59, 1.16, .889], [.256, .024, .025]);
+  // A modest dark weathervane replaces the bright finish flag.
+  part(coop, 'cylinder', 0x4b2921, [0, 2.8, 0], [.021, .48, .021]);
+  ball(coop, 0x572921, [0, 2.59, 0], [.05, .055, .05]);
+  ball(coop, 0x572921, [0, 3.05, 0], [.075, .068, .039]);
+  ball(coop, 0x692b20, [.065, 3.09, 0], [.038, .04, .031]);
+  part(coop, 'cone', 0x4b2921, [-.062, 3.065, 0], [.049, .092, .032], [0, 0, -.7]);
+  return bake(coop);
+}
+
+
+
+===== FILE: public/games/rooster-rush/engine.js =====
+// Independent platform-game simulation. All positions use world units; +Y is up.
+// Actors use foot positions, coins use centers, and solid Y is its top surface.
+const approach = (n, target, delta) => n < target ? Math.min(n + delta, target) : Math.max(n - delta, target);
+
+export class GameEngine {
+  constructor({ onEvent = () => {}, seed = 21 } = {}) {
+    this.onEvent = onEvent;
+    this.seed = seed;
+    this.best = 0;
+    this.reset();
+  }
+
+  reset() {
+    this._rng = (this.seed >>> 0) || 21;
+    this._id = 0;
+    this.solids = [];
+    this.coins = [];
+    this.enemies = [];
+    this.mushrooms = [];
+    this.player = { x: 0, y: 0, vx: 0, vy: 0, big: false, grounded: true, facing: 1, invincible: 0, width: .9, height: 1.6 };
+    this.score = 0;
+    this.lives = 3;
+    this.boostTime = 0;
+    this.boostCharge = 0;
+    this.boostGoal = 200;
+    this.status = 'ready';
+    this.maxX = 0;
+    this.time = 0;
+    this._safeX = 0;
+    this._safeY = 0;
+    this._jumpBuffer = 0;
+    this._coyote = .1;
+    this._won = false;
+    this._end = 16;
+    this._level = 0;
+    this._chunk = 0;
+    this._solid(1, 0, 30, 10, 'ground');
+    this._coin(2.8, 2.2);
+    this._generateAhead();
+    return this;
+  }
+
+  start() {
+    if (this.status === 'ready') this.status = 'playing';
+    return this;
+  }
+
+  _random() {
+    let x = this._rng;
+    x ^= x << 13; x ^= x >>> 17; x ^= x << 5;
+    this._rng = x >>> 0;
+    return this._rng / 4294967296;
+  }
+
+  _solid(x, y, w, h, kind) {
+    const s = { id: ++this._id, x, y, w, h, kind, used: false };
+    this.solids.push(s);
+    return s;
+  }
+
+  _coin(x, y) {
+    this.coins.push({ id: ++this._id, x, y, active: true });
+  }
+
+  _enemy(x, type = 'goomba', direction = -1, y = 0) {
+    const speed = type === 'koopa' ? 2.9 : type === 'spiky' ? 1.1 : 1.7;
+    this.enemies.push({ id: ++this._id, x, y, vx: direction * speed, vy: 0, type, alive: true });
+  }
+
+  _emit(type, x = this.player.x, y = this.player.y, value) {
+    const event = { type, x, y };
+    if (value !== undefined) event.value = value;
+    this.onEvent(event);
+  }
+
+  _addScore(value) {
+    this.score += value;
+    this.best = Math.max(this.best, this.score);
+    this.boostCharge += value;
+    this._maybeBoost();
+    if (this.score >= 10000 && !this._won) {
+      this._won = true;
+      this.status = 'won';
+      this._emit('win');
+    }
+  }
+
+  _maybeBoost() {
+    if (this.boostTime > 0 || this.boostCharge < this.boostGoal) return;
+    this.boostCharge -= this.boostGoal;
+    this.boostGoal = 300;
+    this.boostTime = 5;
+    this.player.vy = 0;
+    this.player.grounded = false;
+    this._emit('boost');
+  }
+
+  _generateAhead() {
+    while (this._end < this.player.x + 128) {
+      const x = this._end, y = this._level;
+      const ground = (offset, width, top = y) => this._solid(x + offset + width / 2, top, width, 10 + top, 'ground');
+      const line = (offset, count, top = y + 2.2, spacing = 1.6) => {
+        for (let j = 0; j < count; j++) this._coin(x + offset + j * spacing, top);
+      };
+      const arc = (offset, span, count, top = y + 2) => {
+        for (let j = 0; j < count; j++) {
+          const t = j / (count - 1);
+          this._coin(x + offset + t * span, top + Math.sin(t * Math.PI) * 1.6);
+        }
+      };
+      // Two generous opening stretches teach movement before the terrain alternates.
+      if (this._chunk === 0) {
+        ground(0, 16);
+        const block = this._solid(18, 4.5, 1.4, 1.4, 'question');
+        block.reward = 'mushroom';
+        line(4, 3);
+        this._enemy(24, 'goomba');
+      } else {
+        const sequence = ['steps', 'platform', 'gap', 'tower', 'reward', 'pipe', 'double', 'enemies', 'steps', 'flat'];
+        const kind = sequence[(this._chunk - 1) % sequence.length];
+        if (kind === 'steps') {
+          const up = y < .1;
+          for (let j = 0; j < 8; j++) {
+            const top = Math.max(0, y + (up ? 1 : -1) * Math.floor(j / 2) * 1.2);
+            ground(j * 2, 2, top);
+            if (j % 2) this._coin(x + j * 2 + 1, top + 2.2);
+          }
+          this._level = up ? y + 3.6 : Math.max(0, y - 3.6);
+        } else if (kind === 'gap') {
+          const gap = this._random() < .5 ? 2 : 4;
+          const first = (16 - gap) / 2;
+          ground(0, first); ground(first + gap, first);
+          arc(first - .4, gap + .8, 3);
+          line(1.5, 2);
+        } else if (kind === 'double') {
+          ground(0, 4); ground(12, 4);
+          this._solid(x + 8, y + 2.6, 4, .6, 'platform');
+          arc(3.5, 3, 3, y + 2.4); arc(9.5, 3, 3, y + 2.4);
+          line(7, 2, y + 4.8);
+        } else {
+          ground(0, 16);
+          if (kind === 'platform') {
+            this._solid(x + 8, y + 3.4, 6, .6, 'platform');
+            arc(5.5, 5, 4, y + 5.2);
+          } else if (kind === 'tower') {
+            this._solid(x + 5, y + 2, 2, 2, 'ground');
+            this._coin(x + 5, y + 4.2);
+            line(9, 3);
+          } else if (kind === 'reward') {
+            for (let j = 0; j < 3; j++) {
+              const block = this._solid(x + 6 + j * 1.4, y + 4.5, 1.4, 1.4, j === 1 ? 'question' : 'brick');
+              block.reward = j === 1 ? 'mushroom' : 'coin';
+            }
+            line(1.5, 2); line(11, 2);
+          } else if (kind === 'pipe') {
+            this._solid(x + 8, y + 2.2, 1.7, 2.2, 'pipe');
+            this._coin(x + 8, y + 4.4);
+            line(2, 3);
+            this._enemy(x + 12, 'koopa', -1, y);
+          } else if (kind === 'enemies') {
+            this._enemy(x + 6, 'goomba', -1, y);
+            this._enemy(x + 12, this._random() < .5 ? 'koopa' : 'spiky', -1, y);
+            this.mushrooms.push({ id: ++this._id, x: x + 3, y: y + .1, vx: 3, vy: 0, active: true });
+            line(2, 5);
+          } else line(3, 5);
+        }
+      }
+      this._end = x + 16;
+      this._chunk++;
+    }
+  }
+
+  step(dt, input = {}) {
+    if (this.status !== 'playing' || !Number.isFinite(dt) || dt <= 0) return;
+    // Fixed-size substeps prevent tunneling and keep the controls frame-rate independent.
+    let remaining = Math.min(dt, .12);
+    if (input.jumpPressed) this._jumpBuffer = .12;
+    while (remaining > 1e-8 && this.status === 'playing') {
+      const delta = Math.min(remaining, 1 / 120);
+      this._step(delta, input);
+      remaining -= delta;
+    }
+    this._generateAhead();
+    this._prune();
+  }
+
+  _step(dt, input) {
+    const p = this.player;
+    p.height = p.big ? 2.4 : 1.6;
+    p.width = .9;
+    this.time += dt;
+    p.invincible = Math.max(0, p.invincible - dt);
+    this._jumpBuffer = Math.max(0, this._jumpBuffer - dt);
+    this._coyote = p.grounded ? .1 : Math.max(0, this._coyote - dt);
+
+    this._maybeBoost();
+    if (this.boostTime > 0) {
+      this.boostTime = Math.max(0, this.boostTime - dt);
+      p.vx = 24.7;
+      p.facing = 1;
+      p.grounded = false;
+      const ahead = this.solids.filter(s => s.x + s.w / 2 >= p.x - 1 && s.x - s.w / 2 <= p.x + 12);
+      const top = ahead.length ? Math.max(...ahead.map(s => s.y)) : this._safeY;
+      const target = top + 2.3;
+      const oldY = p.y;
+      p.y += (target - p.y) * (1 - Math.exp(-5 * dt));
+      p.vy = (p.y - oldY) / dt;
+      p.x += p.vx * dt;
+      this._collectCoins(true);
+      this._updateEnemies(dt, oldY, true);
+      this._updateMushrooms(dt);
+      if (this.boostTime <= 0) {
+        p.vx = 9.5;
+        p.vy = 1;
+        p.invincible = Math.max(p.invincible, 1);
+        this._emit('boostend');
+      }
+    } else {
+      const direction = Number(Boolean(input.right)) - Number(Boolean(input.left));
+      p.vx = approach(p.vx, direction * 9.5, (direction ? 70 : 18) * dt);
+      if (direction) p.facing = direction;
+      if (this._jumpBuffer > 0 && this._coyote > 0) {
+        p.vy = 19.5;
+        p.grounded = false;
+        this._jumpBuffer = 0;
+        this._coyote = 0;
+        this._emit('jump');
+      }
+      // Releasing early cuts upward momentum; holding sustains the full four-unit jump.
+      if (!input.jumpHeld && p.vy > 8) p.vy = 8;
+      p.vy -= 45 * dt;
+      const oldX = p.x, oldY = p.y;
+      this._movePlayer(dt, oldX, oldY);
+      this._collectCoins(false);
+      this._updateEnemies(dt, oldY);
+      this._updateMushrooms(dt);
+      if (p.y < -7) this._loseLife();
+    }
+    this.maxX = Math.max(this.maxX, p.x);
+    if (p.grounded && p.x >= this._safeX) {
+      const safeGround = this.solids.find(s => s.kind === 'ground' && Math.abs(s.y - p.y) < .05 && p.x > s.x - s.w / 2 + 1 && p.x < s.x + s.w / 2 - 1);
+      if (safeGround) { this._safeX = p.x; this._safeY = p.y; }
+    }
+  }
+
+  _movePlayer(dt, oldX, oldY) {
+    const p = this.player, half = p.width / 2;
+    p.x += p.vx * dt;
+    for (const s of this.solids) {
+      if (p.y >= s.y - .015 || p.y + p.height <= s.y - s.h + .015) continue;
+      const left = s.x - s.w / 2, right = s.x + s.w / 2;
+      if (p.x + half <= left || p.x - half >= right) continue;
+      if (oldX + half <= left + .02 && p.vx > 0) { p.x = left - half; p.vx = 0; }
+      else if (oldX - half >= right - .02 && p.vx < 0) { p.x = right + half; p.vx = 0; }
+    }
+    p.y += p.vy * dt;
+    p.grounded = false;
+    for (const s of this.solids) {
+      if (p.x + half <= s.x - s.w / 2 + .015 || p.x - half >= s.x + s.w / 2 - .015) continue;
+      const bottom = s.y - s.h;
+      if (p.vy <= 0 && oldY >= s.y - .025 && p.y <= s.y) {
+        p.y = s.y; p.vy = 0; p.grounded = true;
+      } else if (p.vy > 0 && oldY + p.height <= bottom + .025 && p.y + p.height >= bottom) {
+        p.y = bottom - p.height;
+        p.vy = -.2;
+        this._bump(s);
+      }
+    }
+  }
+
+  _bump(s) {
+    this._emit('bump', s.x, s.y);
+    s.bumpTime = this.time;
+    if ((s.kind === 'question' || s.kind === 'brick') && !s.used) {
+      s.used = true;
+      if (s.reward === 'coin' || (s.kind === 'brick' && !s.reward)) {
+        this._addScore(10);
+        this._emit('coin', s.x, s.y + 1, 10);
+      } else {
+        this.mushrooms.push({ id: ++this._id, x: s.x, y: s.y + .05, vx: 3, vy: 3, active: true });
+      }
+    }
+  }
+
+  _collectCoins(magnet) {
+    const p = this.player;
+    for (const c of this.coins) {
+      if (!c.active) continue;
+      const dx = Math.abs(c.x - p.x), dy = Math.abs(c.y - (p.y + p.height * .5));
+      const caught = magnet
+        ? c.x <= p.x + 1.2 && Math.hypot(dx, dy) < 9
+        : dx < p.width / 2 + .3 && dy < p.height / 2 + .24;
+      if (caught) {
+        c.active = false;
+        this._addScore(10);
+        this._emit('coin', c.x, c.y, 10);
+      }
+    }
+  }
+
+  _floorAt(x, y, margin = 0) {
+    return this.solids.find(s => x >= s.x - s.w / 2 + margin && x <= s.x + s.w / 2 - margin && Math.abs(y - s.y) < .15);
+  }
+
+  _updateEnemies(dt, oldPlayerY, boosting = false) {
+    const p = this.player;
+    for (const e of this.enemies) {
+      if (!e.alive || Math.abs(e.x - p.x) > 45) continue;
+      if (!this._floorAt(e.x + Math.sign(e.vx) * .55, e.y)) e.vx *= -1;
+      e.x += e.vx * dt;
+      const height = e.type === 'koopa' ? 1.08 : .68;
+      if (boosting) {
+        if (Math.abs(p.x - e.x) < 1.8 && Math.abs(p.y - e.y) < 8) {
+          e.alive = false;
+          e.diedAt = this.time;
+          this._addScore(100);
+          this._emit('stomp', e.x, e.y, 100);
+        }
+        continue;
+      }
+      if (Math.abs(p.x - e.x) > p.width / 2 + .34 || p.y >= e.y + height || p.y + p.height <= e.y) continue;
+      if (p.vy < 0 && oldPlayerY >= e.y + height - .18 && e.type !== 'spiky') {
+        e.alive = false;
+        e.diedAt = this.time;
+        p.y = e.y + height;
+        p.vy = 12;
+        p.grounded = false;
+        this._addScore(100);
+        this._emit('stomp', e.x, e.y, 100);
+      } else if (p.invincible <= 0) {
+        this._hurt(e.x);
+        return;
+      }
+    }
+  }
+
+  _updateMushrooms(dt) {
+    const p = this.player;
+    for (const m of this.mushrooms) {
+      if (!m.active) continue;
+      const oldY = m.y, oldX = m.x;
+      m.x += m.vx * dt;
+      for (const s of this.solids) {
+        if (m.y >= s.y - .02 || m.y + .8 <= s.y - s.h + .02) continue;
+        const left = s.x - s.w / 2, right = s.x + s.w / 2;
+        if (m.x + .35 <= left || m.x - .35 >= right) continue;
+        if (oldX + .35 <= left + .03 && m.vx > 0) { m.x = left - .35; m.vx *= -1; }
+        else if (oldX - .35 >= right - .03 && m.vx < 0) { m.x = right + .35; m.vx *= -1; }
+      }
+      m.vy = (m.vy || 0) - 35 * dt;
+      m.y += m.vy * dt;
+      for (const s of this.solids) {
+        if (m.x + .3 < s.x - s.w / 2 || m.x - .3 > s.x + s.w / 2) continue;
+        if (m.vy <= 0 && oldY >= s.y - .01 && m.y <= s.y) { m.y = s.y; m.vy = 0; }
+      }
+      if (m.y < -8) m.active = false;
+      if (Math.abs(m.x - p.x) < p.width / 2 + .38 && m.y < p.y + p.height && m.y + .65 > p.y) {
+        m.active = false;
+        p.big = true;
+        p.height = 2.4;
+        p.width = .9;
+        p.invincible = Math.max(p.invincible, .6);
+        this._addScore(50);
+        this._emit('grow', m.x, m.y, 50);
+      }
+    }
+  }
+
+  _hurt(sourceX) {
+    const p = this.player;
+    if (p.invincible > 0 || this.boostTime > 0) return;
+    if (p.big) {
+      p.big = false;
+      p.height = 1.6;
+      p.width = .9;
+      p.invincible = 1.4;
+      p.vx = p.x < sourceX ? -3 : 3;
+      p.vy = 4;
+      p.grounded = false;
+      this._emit('hit');
+    } else this._loseLife();
+  }
+
+  _loseLife() {
+    const p = this.player;
+    this.lives = Math.max(0, this.lives - 1);
+    this._emit('death');
+    this.boostTime = 0;
+    if (this.lives === 0) {
+      this.status = 'gameover';
+      this._emit('gameover');
+      return;
+    }
+    p.x = this._safeX;
+    p.y = this._safeY + .02;
+    p.vx = 0; p.vy = 0;
+    p.big = false; p.height = 1.6; p.width = .9;
+    p.grounded = true;
+    p.invincible = 1.4;
+    this._jumpBuffer = 0;
+  }
+
+  _prune() {
+    const cutoff = this.maxX - 65;
+    // Keep the respawn checkpoint and leftmost available terrain consistent.
+    this.solids = this.solids.filter(s => s.x + s.w / 2 > cutoff);
+    this.coins = this.coins.filter(c => c.x > cutoff);
+    this.enemies = this.enemies.filter(e => e.x > cutoff);
+    this.mushrooms = this.mushrooms.filter(m => m.x > cutoff && m.active);
+    const first = this.solids.find(s => s.kind === 'ground');
+    if (first) {
+      const left = first.x - first.w / 2 + .5;
+      if (this.player.x < left) { this.player.x = left; this.player.vx = Math.max(0, this.player.vx); }
+      if (this._safeX < left) { this._safeX = left + .5; this._safeY = first.y; }
+    }
+  }
+}
+
+
+
+===== FILE: public/games/rooster-rush/index.html =====
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#fbd9b0"><title>Rooster Rush · Play</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='52' font-size='52'%3E🐓%3C/text%3E%3C/svg%3E"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="mobile.css"></head>
+<body>
+<main id="game" tabindex="-1" aria-label="Rooster Rush 3D platform game">
+  <div id="scene" aria-hidden="true"></div>
+  <div class="topbar"><span class="wordmark">rr.</span><span class="bar-name">Rooster Rush</span><span class="divider"></span><button id="sound" class="icon-button" aria-label="Enable sound" title="Sound">♪</button><button id="pause" class="icon-button" aria-label="Pause game" title="Pause (P)">Ⅱ</button><button id="mobile-reset" class="icon-button mobile-reset" aria-label="重新开始" title="重新开始">↺</button></div>
+  <section class="hero interface">
+    <div class="eyebrow"><i></i> SECTION №21 · HELP THE ROOSTER GET HIRED</div>
+    <h1><span>Hit 10k <span class="title-coin" aria-label="coins">AI</span></span><em>We’re hiring.</em></h1>
+    <p>A chicken on a rocket, real physics, real magnet coins, very real obstacles. Cross <b>10,000 points</b> and a hiring email pops up.<br><i>(The company isn’t real. The points are.)</i></p>
+    <div class="hero-buttons"><button id="start" class="primary">Start playing</button><button id="help">How to play</button><button id="reset" class="subtle" title="Reset run (R)">↺ Reset</button></div>
+  </section>
+  <aside class="hud interface" aria-label="Game statistics"><div class="hud-row"><div id="lives" class="pill hearts" aria-label="3 lives remaining">♥ ♥ ♥</div><div class="pill rocket-meter"><span>♧</span><span class="meter-track"><span id="meter-fill"></span></span><span id="charge">0/200</span></div><div id="score-pill" class="pill score"><i></i><span class="score-label">SCORE</span><strong id="score">0000</strong></div></div><div class="best">BEST <span id="best">0000</span><span id="big-tag" hidden>BIG</span></div></aside>
+  <div class="progress interface"><span id="percent">0</span><small>%</small></div>
+  <div id="intro-bubble"><span>AI got me fired.</span><span>Help me find a job!</span></div>
+  <div id="begin-hint" class="interface"><kbd>SPACE</kbd><span>TO BEGIN</span></div>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <div class="touch-controls interface"><div id="joystick" aria-label="Drag to run" role="group"><span id="stick"></span></div><button id="jump" aria-label="Jump, hold for higher jump">JUMP</button></div>
+  <div id="modal-layer" hidden><section id="help-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden><button class="close" aria-label="Close">×</button><span class="eyebrow">HOW TO PLAY</span><h2 id="modal-title">The whole hero is the game.</h2><ul><li><kbd>← →</kbd><span>左右奔跑 · A / D 也可以</span></li><li><kbd>Space</kbd><span>跳跃；按住跳得更高，松开提前落下</span></li><li><kbd>Grab</kbd><span>金币加分，蘑菇变大，从上方踩掉敌人</span></li><li><kbd>Boost</kbd><span>每收集 200 金币分，火箭自动起飞</span></li><li><kbd>P / R</kbd><span>暂停 / 重新开始；小心尖刺和深坑</span></li></ul><p class="modal-note">手机拖动左侧摇杆移动，按住右侧 JUMP 跳跃。最高分保存在当前浏览器会话。</p></section>
+  <section id="end-modal" class="modal end-modal" role="dialog" aria-modal="true" aria-labelledby="end-title" hidden><span id="end-eyebrow" class="eyebrow">ONE MORE RUN?</span><h2 id="end-title">Game over.</h2><p id="end-copy"></p><div class="hero-buttons"><button id="restart" class="primary">Try again ↗</button><button id="continue" hidden>Keep playing</button></div></section>
+  <section id="pause-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="pause-title" hidden><span class="eyebrow">TAKE A BREATHER</span><h2 id="pause-title">A little chicken break.</h2><button id="resume" class="primary">Resume playing →</button></section></div>
+  <div id="load-error" hidden><h2>3D view could not start</h2><p>Please enable WebGL in your browser and reload this page.</p></div>
+</main><script type="module" src="app.js"></script>
+</body></html>
+
+
+
+===== FILE: public/games/rooster-rush/mobile.css =====
+.mobile-reset{display:none}
+@media(pointer:coarse) and (max-width:1100px),(max-width:600px){
+  #game{height:100dvh}
+  .topbar{top:max(8px,env(safe-area-inset-top));gap:6px;padding:4px 8px 4px 12px;max-width:calc(100% - 24px)}
+  .icon-button{width:44px;height:44px;flex-shrink:0;font-size:24px}
+  .mobile-reset{display:block}
+  .touch-controls{display:flex;position:absolute;z-index:15;left:max(18px,env(safe-area-inset-left));right:max(18px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom));justify-content:space-between;align-items:center;pointer-events:none}
+  #joystick{width:100px;height:100px;display:grid;place-items:center;border-radius:50%;border:1px solid #93765560;background:#fff7e566;backdrop-filter:blur(6px);pointer-events:auto;touch-action:none}
+  #stick{width:48px;height:48px;border-radius:50%;background:#91775966;border:1px solid #7d654866}
+  #jump{width:94px;height:94px;pointer-events:auto;touch-action:none;background:var(--ink);color:#fff0d5;font-size:16px;letter-spacing:0;font-weight:600}
+  .hud{top:calc(max(8px,env(safe-area-inset-top)) + 68px);left:max(16px,env(safe-area-inset-left));right:max(16px,env(safe-area-inset-right))}
+  .hud-row{justify-content:flex-end;gap:6px}
+  .best,.rocket-meter{font-size:12px;letter-spacing:0}
+  .hero{top:150px;left:18px;right:18px;width:auto}
+  .hero p,.hero>.eyebrow{display:none}
+  .hero h1{font-size:clamp(30px,8vw,45px);margin:14px 0}
+  .hero-buttons button{font-size:14px;min-height:44px}
+  #game[data-playing=true] .hero{display:none}
+  #begin-hint{top:auto;bottom:calc(max(18px,env(safe-area-inset-bottom)) + 116px);font-size:14px;white-space:nowrap}
+  .progress{display:none}
+  #modal-layer{padding:max(16px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+  .modal{max-height:calc(100dvh - 32px);overflow:auto;padding:24px;font-size:16px}
+  .modal button{min-width:44px;min-height:44px;font-size:16px}
+  .modal ul,.modal-note{font-size:14px}
+  .modal li{margin:12px 0}
+}
+@media(pointer:coarse) and (max-width:1100px) and (max-height:500px){
+  .bar-name,.divider,.wordmark{display:none}
+  .topbar{left:auto;right:max(10px,env(safe-area-inset-right));transform:none}
+  .hud{top:max(12px,env(safe-area-inset-top));left:max(14px,env(safe-area-inset-left));right:auto;text-align:left}
+  .best{margin-top:6px}
+  .hero{top:70px;width:55%;left:max(20px,env(safe-area-inset-left))}
+  .hero h1{font-size:30px;margin:10px 0}
+  #joystick,#jump{width:76px;height:76px}
+  #stick{width:38px;height:38px}
+  #begin-hint{bottom:100px}
+  #toast{top:45%;font-size:12px}
+}
+
+
+
+===== FILE: public/games/rooster-rush/pulse-bridge.js =====
+let state = 'loading';
+export function announceState(next) {
+  state = next;
+  if (window.parent !== window) window.parent.postMessage({type:'pulse-rooster-state',state}, window.location.origin);
+}
+window.addEventListener('message', event => {
+  if (event.origin === window.location.origin && event.source === window.parent && event.data?.type === 'pulse-rooster-ping') announceState(state);
+});
+window.addEventListener('error', () => announceState('error'));
+window.addEventListener('unhandledrejection', () => announceState('error'));
+
+
+
+===== FILE: public/games/rooster-rush/style.css =====
+@font-face{font-family:Playfair;src:url('./vendor/playfair-normal.woff2')}@font-face{font-family:Playfair;src:url('./vendor/playfair-italic.woff2');font-style:italic}@font-face{font-family:Fredoka;src:url('./vendor/fredoka.woff2');font-weight:600}
+:root{color-scheme:light;--ink:#22180f;--muted:#7f705a;--border:#d4b99170;--glass:#fff5df8c;--red:#c7423e}*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden}body{color:var(--ink);font-family:Arial,sans-serif;background:#fff2de}button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}button:focus-visible{outline:2px solid #a4492e;outline-offset:5px}button{border:1px solid var(--border);background:var(--glass);border-radius:100px;padding:12px 22px;font-size:13px;transition:transform .16s,background .16s}button:hover{background:#fff8ec;transform:translateY(-1px)}button:active{transform:translateY(1px)}button.primary{background:#22180f;color:#fff6e7;border-color:#22180f}.primary:hover{background:#4b3020}button.subtle{background:transparent;font-size:12px;color:var(--muted)}[hidden]{display:none!important}#game{height:100dvh;width:100%;position:relative;overflow:hidden;background:linear-gradient(#fbd9b0,#fff2de 65%)}#scene{position:absolute;inset:0}#scene canvas{display:block;width:100%;height:100%;touch-action:none}.topbar{position:absolute;z-index:12;top:14px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:13px;padding:5px 10px 5px 16px;border-radius:30px;background:#fff9edc9;backdrop-filter:blur(12px);font-size:12px}.wordmark{font-family:Playfair;font-size:26px;font-style:italic;font-weight:bold;line-height:1}.divider{height:16px;width:1px;background:var(--border)}.icon-button{border:0;padding:2px;width:26px;height:26px;font-size:18px;background:transparent;color:#7d7669}.hero{position:absolute;top:6vh;left:3.9vw;width:min(640px,53vw);pointer-events:none}.eyebrow{display:inline-flex;gap:8px;align-items:center;font-size:10px;letter-spacing:1.7px;font-weight:600;line-height:1.6;color:var(--muted)}.hero>.eyebrow{border:1px solid var(--border);border-radius:50px;background:var(--glass);padding:4px 13px}.eyebrow i{width:6px;height:6px;border-radius:50%;background:var(--red)}h1{font-family:Playfair,Georgia,serif;font-size:clamp(46px,8.9vw,112px);font-weight:500;line-height:.98;letter-spacing:-.035em;margin:26px 0 18px}h1>span,h1 em{display:block;white-space:nowrap}h1 em{font-weight:500}.title-coin{display:inline-flex;font-family:Playfair;font-size:.39em;letter-spacing:-.05em;font-weight:bold;justify-content:center;align-items:center;height:1.85em;width:1.7em;vertical-align:.22em;transform:rotate(-13deg);border:5px solid #885013;border-radius:50%;background:radial-gradient(circle at 34% 28%,#e1ad35,#b37a17 65%,#8e560b);color:#774008;box-shadow:inset 0 0 0 3px #b17616,inset 0 0 0 5px #915707,3px 5px 3px #9c652542;text-shadow:1px 1px #e8b852}.hero p{font-size:clamp(13px,1.22vw,17px);line-height:1.62;color:var(--muted);max-width:510px;margin:20px 0 24px}.hero p b{color:var(--ink)}.hero-buttons{display:flex;gap:12px;flex-wrap:wrap;pointer-events:auto}.hud{position:absolute;top:6vh;right:4.4vw;text-align:right;pointer-events:none}.hud-row{display:flex;gap:10px;align-items:center}.pill{border:1px solid var(--border);background:var(--glass);border-radius:100px;display:flex;gap:10px;align-items:center;backdrop-filter:blur(12px)}.hearts{padding:6px 10px;color:var(--red);font-size:18px;letter-spacing:2px;white-space:nowrap}.rocket-meter{font-size:9px;padding:8px 12px;font-weight:600;letter-spacing:1px}.meter-track{width:80px;height:5px;border-radius:4px;background:#8d775a40;overflow:hidden}#meter-fill{display:block;width:0;height:100%;background:var(--ink);transition:width .15s}.score{padding:10px 17px;font-size:12px;letter-spacing:1px}.score i{width:8px;height:8px;background:#f2b23a;border-radius:100px;box-shadow:0 0 10px #ff8e1f}.score-label{color:var(--muted);font-size:10px}.best{margin-top:14px;margin-right:12px;font-size:9px;letter-spacing:1.7px;color:var(--muted);font-weight:600}#big-tag{color:#fff4dc;background:var(--red);padding:4px 7px;border-radius:20px;margin-left:10px}.progress{position:absolute;right:4.4vw;top:45%;color:#22180f35;font-family:Playfair;font-size:clamp(70px,15.3vw,208px);letter-spacing:-.045em;line-height:1;pointer-events:none}.progress small{font-size:.53em}#begin-hint{position:absolute;top:64%;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:9px;font-size:10px;letter-spacing:1.8px;font-weight:600;color:var(--muted);background:#fff5df80;border:1px solid var(--border);border-radius:40px;padding:8px 13px;pointer-events:none}kbd{font:600 10px Arial,sans-serif;letter-spacing:1px;border:1px solid var(--border);border-radius:5px;padding:4px 7px;background:#fff6e060;white-space:nowrap}#intro-bubble{position:absolute;z-index:20;top:58%;left:50%;transform:translateX(-50%);padding:25px 50px;background:#faf1dc;border:4px solid #d9b27c;border-radius:34px;box-shadow:0 14px 0 -6px #d9b27c,0 22px 36px -18px #3c1e0a59;font:600 clamp(22px,3vw,42px)/1.2 Fredoka,sans-serif;text-align:center;color:#3b2515;white-space:nowrap;transition:opacity .3s,translate .3s}#intro-bubble:before{content:'';position:absolute;left:50%;top:-18px;width:26px;height:26px;background:#faf1dc;border-left:4px solid #d9b27c;border-top:4px solid #d9b27c;transform:translateX(-50%) rotate(45deg)}#intro-bubble span{display:block}.interface{transition:opacity .7s,translate .7s}.intro .interface{opacity:0;pointer-events:none}.intro .topbar{opacity:0}#toast{position:absolute;top:20%;left:50%;transform:translate(-50%,-15px);opacity:0;border:1px solid var(--border);background:#fff3dddc;backdrop-filter:blur(16px);padding:14px 25px;border-radius:50px;font-size:12px;font-weight:600;letter-spacing:2px;transition:.3s;pointer-events:none;z-index:25}#toast.show{opacity:1;transform:translate(-50%,0)}.touch-controls{display:none}#modal-layer{position:absolute;inset:0;z-index:50;display:grid;place-items:center;background:#56341a12;backdrop-filter:blur(5px)}.modal{position:relative;width:min(480px,90vw);border:1px solid #c5a98177;border-radius:24px;padding:32px;background:#fff4e2ec;box-shadow:0 28px 70px #5838142b}.modal h2{font:500 30px/1.15 Playfair,Georgia,serif;letter-spacing:-.5px;margin:9px 0 24px}.close{position:absolute;right:16px;top:14px;width:30px;height:30px;padding:0;font-size:24px;border:0;background:transparent}.modal ul{list-style:none;padding:0;font-size:12px;line-height:1.7;color:#7a6751}.modal li{display:flex;align-items:center;gap:15px;margin:17px 0}.modal li kbd{min-width:56px;text-align:center}.modal-note{border-top:1px solid var(--border);padding-top:18px;font-size:11px;line-height:1.7;color:var(--muted)}.end-modal h2{font-size:55px;font-style:italic}.end-modal p{font-size:14px;line-height:1.8;color:var(--muted)}#load-error{position:absolute;inset:0;padding:20vh 10vw;background:#fff2de;z-index:100}
+@media(max-width:900px){.hud{top:72px;right:20px}.hero{top:65px;left:25px}.hero>.eyebrow{font-size:8px}.hero h1{font-size:8.6vw}.hero p{font-size:13px}.score{padding:8px 12px}.meter-track{width:45px}.hud-row{gap:6px}.touch-controls{display:flex;position:absolute;bottom:25px;left:24px;right:24px;justify-content:space-between;align-items:center;pointer-events:none;z-index:15}#joystick{width:100px;height:100px;border-radius:50%;border:1px solid #93765560;background:#fff7e540;backdrop-filter:blur(6px);display:grid;place-items:center;pointer-events:auto;touch-action:none}#stick{width:48px;height:48px;border-radius:50%;background:#91775966;border:1px solid #7d654866;box-shadow:0 4px 8px #684c2626}#jump{width:94px;height:94px;background:var(--ink);color:#fff0d5;font-size:12px;font-weight:600;letter-spacing:2px;pointer-events:auto;touch-action:none;box-shadow:0 8px 20px #42280e40}.topbar{gap:10px}.progress{top:46%}}
+@media(max-width:600px){.topbar{top:12px}.hero{left:18px;top:160px;width:93vw}.hero>.eyebrow{font-size:8px;padding:3px 9px;letter-spacing:1.2px}h1,.hero h1{font-size:clamp(33px,9vw,52px);line-height:.98;letter-spacing:-.035em;margin:15px 0 20px}.title-coin{border-width:2px}.hero p{display:none}.hero-buttons{gap:8px}.hero-buttons button{font-size:11px;padding:9px 15px}.hero-buttons button.subtle{font-size:10px;padding:9px 12px}.hud{top:75px;right:16px}.pill{gap:7px}.hearts{padding:5px 8px;font-size:14px;letter-spacing:0}.score{font-size:10px;padding:8px 12px}.score-label{display:none}.rocket-meter{font-size:8px;padding:7px 10px}.best{font-size:8px;margin-top:9px}.progress{display:none}#begin-hint{top:52%;font-size:9px;padding:7px 10px}#intro-bubble{top:52%;font-size:22px;padding:17px 24px;border-radius:24px}#toast{top:40%;font-size:10px;max-width:90%;white-space:nowrap}.modal{padding:26px}.modal h2{font-size:25px}.end-modal h2{font-size:45px}}
+.flying-coin{position:absolute;z-index:24;pointer-events:none;width:26px;height:28px;border-radius:50%;border:2px solid #925c14;background:#d5a230;color:#85510f;display:grid;place-items:center;font:bold 11px Georgia;box-shadow:inset 0 0 0 2px #e4b957}.bar-name{white-space:nowrap}
+@media(prefers-reduced-motion:reduce){*,*:before{transition:none!important}}
+.intro .interface,.intro .topbar{visibility:hidden}.intro .interface *{pointer-events:none!important}#game:focus{outline:none}
+@media(max-width:600px){#begin-hint{top:auto;bottom:32%}}
+@media(max-height:500px) and (min-width:601px){.hero{top:45px;left:24px;width:60vw}.hero h1{font-size:46px;margin:12px 0 14px}.hero p{display:none}.hero>.eyebrow{font-size:8px}.hero-buttons button{padding:8px 15px;font-size:11px}.hud{top:55px;right:20px}.progress{font-size:110px;top:35%}.touch-controls{bottom:12px}#joystick{width:70px;height:70px}#jump{width:70px;height:70px;font-size:10px}#stick{width:36px;height:36px}#begin-hint{top:59%;font-size:8px}}

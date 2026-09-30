@@ -1,0 +1,18 @@
+{
+  "baselineHash": "b78981934e80ccdf4f2f2c59e0d43dbeb8ae30e7d56173e9cb2370ad997d006f",
+  "runtimeName": "index-community-13f5ca70f400.js",
+  "entry": {
+    "file": "community-UjFXiNTQ.js",
+    "name": "pulse-entry",
+    "src": "pulse-entry.mjs",
+    "isEntry": true,
+    "css": [
+      "community-qW3q_Tcb.css"
+    ]
+  },
+  "base": "/local-apps/chaoshan-atlas/",
+  "contentSnapshot": "2026-09-26",
+  "communities": 24,
+  "policies": 439,
+  "activities": 2
+}

@@ -1,0 +1,7 @@
+# Pinned and generated map bytes are content-addressed; preserve their SHA-256.
+integration/chaoshan-atlas/runtime-baseline.js -text
+public/local-apps/chaoshan-atlas/assets/index-responsive-*.js -text
+public/local-apps/chaoshan-atlas/assets/index-community-*.js -text
+public/local-apps/chaoshan-atlas/community/** -text
+public/local-apps/chaoshan-atlas/lighting/** -text
+integration/atlas-lighting/source/** -text

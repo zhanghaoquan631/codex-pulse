@@ -1,0 +1,2 @@
+/* Keep the return action available during the existing map's startup overlay. */
+.opc-map-dock{z-index:25}

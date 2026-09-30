@@ -1,0 +1,45 @@
+SEOUL 3D ATLAS — DATA AND SOFTWARE ATTRIBUTIONS
+
+Map geometry and buildings: © OpenStreetMap contributors, made available through OpenFreeMap and OpenMapTiles.
+OpenStreetMap data is available under the Open Database License (ODbL) 1.0:
+https://www.openstreetmap.org/copyright
+https://opendatacommons.org/licenses/odbl/1-0/
+This derived map database is offered under ODbL 1.0 as well. The processed vector snapshot is 2026-08-30.
+Download /data/seoul.json and /data/buildings.bin to obtain the derived data.
+The binary building format is little-endian float32: [x_km, z_km, width_km, depth_km, angle_radians, height_m], repeated for each building.
+Projection origin and coordinate scale are in seoul.json meta. Building heights can be source estimates; footprints are simplified oriented boxes.
+
+District boundary source: southkorea/seoul-maps / Statistics Korea (KOSTAT), 2013.
+https://github.com/southkorea/seoul-maps
+Historical boundaries are shown as optional reference boundaries.
+
+Elevation: Mapzen / AWS Terrain Tiles.
+Global ETOPO1 terrain data: U.S. National Oceanic and Atmospheric Administration.
+Global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey.
+https://registry.opendata.aws/terrain-tiles/
+https://github.com/tilezen/joerd/blob/master/docs/attribution.md
+Elevation is smoothed, shorelines are flattened for display, and vertical scale is exaggerated by 4.
+
+Three.js r180 / OrbitControls — MIT license follows.
+
+The MIT License
+
+Copyright © 2010-2025 three.js authors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.

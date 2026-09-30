@@ -1,0 +1,11 @@
+{
+  ".build/runtime.js": {
+    "file": "atlas-lighting-DQ3uShyK.js",
+    "name": "runtime",
+    "src": ".build/runtime.js",
+    "isEntry": true,
+    "css": [
+      "atlas-lighting-DqhZHFM6.css"
+    ]
+  }
+}

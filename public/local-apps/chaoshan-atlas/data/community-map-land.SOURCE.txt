@@ -1,0 +1,15 @@
+Natural Earth 1:110m land polygons, public domain.
+Downloaded 2026-09-26 from the upstream Natural Earth Vector repository:
+https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_land.geojson
+Source and terms:
+https://www.naturalearthdata.com/downloads/110m-physical-vectors/110m-land/
+https://www.naturalearthdata.com/about/terms-of-use/
+
+The file is stored without modification as community-map-land.geojson.
+It provides a coarse coastline fallback under interactive street tiles.
+No administrative borders are drawn. It is not suitable for navigation or surveying.
+
+OpenStreetMap tiles are requested on demand from tile.openstreetmap.org;
+they are not prefetched or bulk downloaded. Attribution is visible in the map.
+Community coordinates remain exactly as provided by the BetterOPC snapshot;
+the source coordinate reference system is unknown.

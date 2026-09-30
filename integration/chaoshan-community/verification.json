@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "base": "http://127.0.0.1:43912",
+  "places": 266,
+  "customPlaces": 1,
+  "paused": {
+    "before": 2.115900000000002,
+    "after": 2.115900000000002
+  },
+  "errors": [],
+  "bad": []
+}

@@ -1,0 +1,15 @@
+/* Two separate layout rows: their paint and pointer regions cannot overlap. */
+.pulse-edge-scene{position:relative;isolation:isolate;width:100%;min-width:0;overflow:hidden;border-bottom:1px dashed var(--border);margin:0 0 28px}
+.pulse-edge-scene--cat{height:112px}
+.pulse-edge-scene--town{container-type:inline-size;margin:36px 0 0}
+.pulse-edge-scene__frame{display:block;width:100%;height:100%;border:0;background:transparent}
+.pulse-edge-scene--town>.pulse-edge-scene__frame{height:auto;aspect-ratio:2560 / 692}
+.console-content>footer{margin-top:0}
+@container(max-width:719px){.pulse-edge-scene--town>.pulse-edge-scene__frame{height:230px;aspect-ratio:auto}}
+@media(max-width:640px){.pulse-edge-scene--cat{height:106px;margin-bottom:22px}}
+
+/* The streetlamp retains the reference's third display setting. */
+:root[data-pulse-theme="eink"]{color-scheme:light;--background:#d5d5d5;--foreground:#222;--card:#e8e8e8;--border:#999;--theme-field:#ccc;--theme-surface:#e8e8e8;--theme-ink:#222}
+:root[data-pulse-theme="eink"] body{background:#d5d5d5}
+:root[data-pulse-theme="eink"] body::after{content:"";position:fixed;inset:0;pointer-events:none;backdrop-filter:grayscale(1);z-index:10000}
+:root[data-pulse-theme="eink"] .console-header{background:#d5d5d5}

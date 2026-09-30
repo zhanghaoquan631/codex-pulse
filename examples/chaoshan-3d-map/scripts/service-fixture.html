@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Service architecture inspection</title><style>body{margin:0}canvas{display:block}</style></head><body><script type="module">
+import * as THREE from 'three';
+import {serviceBuilding} from '../service-buildings.mjs';
+import {services,addServiceSigns} from '../neighborhood-services.mjs';
+const scene=new THREE.Scene();scene.background=new THREE.Color('#b1c6c7');
+const camera=new THREE.OrthographicCamera(-4,4,3,-3,.1,100);camera.position.set(3,5,7);camera.lookAt(0,.2,0);
+const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(1);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;document.body.append(renderer.domElement);
+scene.add(new THREE.HemisphereLight('#ffffff','#647b65',2));const sun=new THREE.DirectionalLight('#fff0d3',3);sun.position.set(-3,8,5);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);sun.shadow.camera.left=-5;sun.shadow.camera.right=5;sun.shadow.camera.top=5;sun.shadow.camera.bottom=-5;sun.shadow.normalBias=.02;scene.add(sun);
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(30,30),new THREE.MeshStandardMaterial({color:'#93afa0',roughness:1}));ground.rotation.x=-Math.PI/2;ground.position.y=-.015;ground.receiveShadow=true;scene.add(ground);
+const materials=new Map(),geometry={box:new THREE.BoxGeometry(1,1,1),sphere:new THREE.SphereGeometry(.5,12,8),cylinder:new THREE.CylinderGeometry(.5,.5,1,16)},variant=Number(new URL(location.href).searchParams.get('variant')||0);
+const models=[];
+const collection=new URL(location.href).searchParams.get('collection');
+const types=collection==='homes'?['home','home','home','home']:collection==='street'?['florist','grocery','soup','noodles']:collection==='civic'?['school','warehouse','police','supermarket']:['school','warehouse','supermarket','coffee'];
+for(const [i,type] of types.entries()){
+ const local=new THREE.Group();local.position.set((i%2-.5)*2.4,0,(Math.floor(i/2)-.5)*2.3);scene.add(local);
+ const service=services.find(s=>s[0]===type),program=serviceBuilding(service,{size:1,height:1,variant:collection==='homes'?i+variant:variant,residential:type==='home',setting:collection==='homes'?'dune':undefined});
+ for(const p of program.parts){if(!materials.has(p.color))materials.set(p.color,new THREE.MeshStandardMaterial({color:p.color,roughness:.85}));const m=new THREE.Mesh(geometry[p.shape],materials.get(p.color));m.position.set(p.x,p.y,p.z);m.rotation.y=p.turn;m.scale.set(p.w,p.h,p.d);m.castShadow=true;m.receiveShadow=true;local.add(m);}
+ addServiceSigns(local,[{...program.sign,angle:0,service}]);models.push(local);
+}
+const resize=()=>{const mobile=innerWidth<600,half=mobile?4.9:3.2;camera.position.set(mobile?0:3,5,mobile?8:7);camera.lookAt(0,.2,0);camera.left=-half*innerWidth/innerHeight;camera.right=-camera.left;camera.top=half;camera.bottom=-half;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.render(scene,camera);};addEventListener('resize',resize);resize();window.serviceAudit={ready:true,framed(){return models.every(g=>{const b=new THREE.Box3().setFromObject(g);for(const x of [b.min.x,b.max.x])for(const y of [b.min.y,b.max.y])for(const z of [b.min.z,b.max.z]){const p=new THREE.Vector3(x,y,z).project(camera);if(Math.abs(p.x)>.98||Math.abs(p.y)>.98)return false;}return true;});}};
+</script></body></html>

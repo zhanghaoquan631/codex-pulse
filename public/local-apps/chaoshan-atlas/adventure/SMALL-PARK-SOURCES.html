@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>小公园：地点依据与改编说明</title>
+<style>
+:root{color-scheme:light}*{box-sizing:border-box}body{margin:0;background:#f5f0e2;color:#253859;font:16px/1.85 system-ui,"Microsoft YaHei",sans-serif}main{max-width:920px;margin:auto;padding:36px 24px 80px}nav{font-size:14px;margin-bottom:26px}h1{font-size:clamp(25px,5vw,36px);line-height:1.4;border-bottom:2px solid #253859;padding-bottom:18px}h2{font-size:23px;margin-top:42px}p{margin:17px 0}a{color:#225ca0;text-underline-offset:3px}a:focus-visible{outline:2px solid #225ca0;outline-offset:4px}code{font-size:.87em;overflow-wrap:anywhere;background:#24385b0b;padding:2px 4px;border-radius:3px}pre{overflow:auto;background:#fff9;padding:16px;border:1px solid #25385930;font-size:13px;line-height:1.6}pre code{padding:0;background:none}blockquote{margin:22px 0;padding:12px 20px;background:#fff8;border-left:3px solid #536d8f}.table-scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;vertical-align:top;border-bottom:1px solid #25385930;padding:12px}th{background:#2538590d}td:first-child{min-width:120px}p,td{overflow-wrap:anywhere}@media(max-width:500px){main{padding:22px 18px 50px}body{font-size:15px}h2{font-size:21px}}
+</style></head><body><main><nav><a href="./">← 返回关卡营地</a></nav>
+<h1>第一章小公园：空间依据与数据来源</h1>
+<p>本说明对应《潮汕行旅·四境试炼》第一章“骑楼寻迹”。资料核对日期为 2026-09-12。第一章采用中山纪念亭周边真实五路关系，再为步行、探索和战斗缩短路线；不沿用地图入口场景的八等分放射示意布局。</p>
+<p>地图入口仍使用已有 <code>placeId: small-park</code> 和地点锚点 <code>[116.66945, 23.35785]</code>（经度、纬度）。这个锚点用于地点识别与进入章节，不代表此前示意路网已经过测绘。章节内街巷关系另据以下官方资料与 OpenStreetMap（OSM）道路几何校正。</p>
+<h2>五条有来源的空间事实</h2>
+<p>1. <strong>中山纪念亭处于五个路口的交汇处。</strong> 汕头市政府网站所载资料明确列出升平西路、升平东路、国平北路、国平南路和安平路。OSM 纪念亭轮廓的中心约为 WGS84 经度 <code>116.669452</code>、纬度 <code>23.357849</code>。这里可作为街区的空间定位中心。<a href="https://www.shantou.gov.cn/cnst/ztzl/zyjhjs/content/post_2517236.html">汕头市政府：五条道路名称</a>、<a href="https://www.openstreetmap.org/way/532956287">OSM 中山纪念亭，way 532956287</a></p>
+<p>2. <strong>五条道路的方向和弯折不同。</strong> OSM 折线显示：国平北大致向北；升平西从亭旁向西，远段渐偏西南；升平东先向东，再在民族路附近转向东南；安平路从亭南侧逐渐弯向西南。南偏东的道路在本次 OSM 数据中未标名称，其与“国平南路”的对应由官方五路名单和位置关系推定，未把缺失标签伪装成已标注名称。<a href="https://www.openstreetmap.org/way/147149284">国平北，way 147149284</a>、<a href="https://www.openstreetmap.org/way/532956289">升平西，way 532956289</a>、<a href="https://www.openstreetmap.org/way/586781359">升平东，way 586781359</a>、<a href="https://www.openstreetmap.org/way/147133469">安平路，way 147133469</a>、<a href="https://www.openstreetmap.org/way/147133472">南偏东道路，way 147133472</a></p>
+<p>3. <strong>南生百货是亭西南侧的高楼地标。</strong> OSM 建筑轮廓中心距亭中心约 40 米，位于安平路弯道西侧。官方资料记载该楼位于安平、国平路交汇处，楼高七层；2017 年修缮后的主色为黄色，三、四层阳台为深绿色。楼层采用官方记载，未将 OSM 的 <code>level=6</code> 当成六层建筑。游戏可通过高楼轮廓、窗格和少量颜色提示地标，立面细部并非测绘复原。<a href="https://www.shantou.gov.cn/hqsyq/hqxx/content/post_2199904.html">汕头市政府：南生百货建筑资料</a>、<a href="https://www.openstreetmap.org/way/532956292">OSM 百货大楼，way 532956292</a></p>
+<p>4. <strong>亭西北侧存在可形成回路的真实街巷关系。</strong> 同平路位于国平路西侧，两路大致平行；北侧的旧公园前路横向相连，南侧接升平路。按 OSM 几何估算，这一街块为百米量级。游戏内若将其压缩为可绕行支路，属于以真实拓扑为依据的关卡设计；具体开门点、任务商铺和敌人位置不是现实标注。<a href="https://www.openstreetmap.org/way/532956319">同平路，way 532956319</a>、<a href="https://www.openstreetmap.org/way/147149273">旧公园前路，way 147149273</a></p>
+<p>5. <strong>核心广场紧凑，周围是连续骑楼与横向街巷。</strong> OSM 绘制的亭平面约 9 米见方，周围铺装步行区域横跨约 28–29 米。这些是根据地图轮廓估算的尺寸，不是现场量测，也不能据此确定屋顶大小和高度。官方资料描述了连续骑楼、人行遮蔽空间，以及主街和横向次街交织的关系；它们是柱廊、转角和街道围合的依据。<a href="https://www.openstreetmap.org/way/582929162">OSM 核心步行区域，way 582929162</a>、<a href="https://www.shantou.gov.cn/hqsyq/hqxx/content/post_2199904.html">汕头市政府：骑楼空间与街网</a></p>
+<h2>坐标、缩尺与实现对应</h2>
+<p>以下参数已与场景实现方确认，并核对 <code>small-park-scene.mjs</code> 中的 <code>PARK_ORIGIN</code>、<code>PARK_SCALE</code>、<code>PARK_BOUNDS</code>、<code>projectSmallPark()</code> 与 <code>road()</code>。原始选取的 OSM 对象随包保存在 <code>small-park-osm-data.mjs</code>。资料使用 WGS84 经纬度；上述现实距离估算与关卡内距离需要区分。</p>
+<div class="table-scroll"><table><tr><th>参数</th><th>当前记录</th></tr><tr><td>地图入口锚点</td><td>经度 116.66945、纬度 23.35785；保留已有地点识别</td></tr><tr><td>关卡投影原点</td><td>经度 116.669452、纬度 23.357849；亭中心置于 <code>(x,z)=(0,0)</code></td></tr><tr><td>投影方式</td><td>以原点纬度计算经度方向长度的局部等距圆柱近似；半径参数 <code>R=6378137</code> 米，公式见下</td></tr><tr><td>X/Z 朝向</td><td>东为 <code>+X</code>，北为 <code>−Z</code>；<code>Y</code> 为向上</td></tr><tr><td>水平缩尺</td><td><code>s=0.5</code>；按投影约 2 米的地理平面距离对应 1 个关卡单位。人物与建筑高度未统一按此比例缩小</td></tr><tr><td>关卡边界</td><td><code>x∈[−66,76]</code>、<code>z∈[−66,58]</code>；场景平面为 142×124 个关卡单位</td></tr><tr><td>道路取段</td><td>对原始连续折线逐段做矩形裁切，保留范围内的原拐点和边界交点；未将各路改成等角度直线</td></tr><tr><td>道路宽度</td><td>游戏取值：国平北与南支路 4.8，升平东、西与安平路 5.2；同平路、旧公园前路 4.5；环亭连接 3.5。均为关卡单位，并非已核实的现实道路宽度</td></tr><tr><td>广场与地标轮廓</td><td>步行区域、亭平面及南生百货平面按源坐标投影；亭屋顶、柱、门和立面由程序化几何重构</td></tr><tr><td>建筑高度</td><td>南生百货表现为七层、高 16.1 个关卡单位；这是游戏建模参数，不能反推真实楼高。周边骑楼和任务店铺亦为重构</td></tr></table></div>
+<p>令 <code>λ</code>、<code>φ</code> 为以度表示的经度、纬度，<code>λ₀=116.669452</code>、<code>φ₀=23.357849</code>，<code>r=π/180</code>、<code>R=6378137</code>、<code>s=0.5</code>：</p>
+<pre><code>x = (λ − λ₀) × r × R × cos(φ₀ × r) × s
+z = −(φ − φ₀) × r × R × s</code></pre>
+<p>五支路采用 way <code>147149284 / 532956289 / 586781359 / 147133469 / 147133472</code>；西北回路采用 <code>532956319 / 147149273</code>，环亭连接采用 <code>532956290</code>。南侧未标名道路在关卡里显示为“南支路”，保留其位置关系而不将推定路名冒充确定标签。仅选取这些局部道路，不包含安平路远段的完整通行路线。</p>
+<p>本节确认的是源数据与代码转换关系，不构成该版本已完成浏览器通关验收的声明；玩法和截图验证以对应 <code>qa/</code> 记录为准。</p>
+<h2>数据记录与署名</h2>
+<p>OSM 数据通过公开 Overpass API 读取；用于本次核对的响应时间戳为 <code>2026-09-11T18:13:02Z</code>。数据元素使用 <code>type: way</code>、<code>id</code>、<code>tags</code> 与 <code>geometry: [{lat, lon}, ...]</code> 结构。查询范围为北纬 23.356–23.360、东经 116.667–116.672；另取核心区所有道路以补足未标名南侧道路。查询返回完整 way，因此部分折线超出查询框。OSM 是持续编辑的开放数据库，今后打开对象页面时几何或标签可能已更新。</p>
+<p>可在 <a href="https://overpass-turbo.eu/">Overpass Turbo</a> 中使用以下只读查询重新获取本说明涉及的对象。重新查询的结果反映查询时的数据，不保证与本次记录完全相同。</p>
+<pre><code>[out:json][timeout:25];
+way(id:532956287,582929162,532956290,147149284,532956289,
+       586781359,147133469,147133472,532956292,
+       532956319,147149273);
+out geom;</code></pre>
+<p>第一章使用的道路与地标轮廓数据署名如下：</p>
+<blockquote>街巷及部分地标轮廓数据 © OpenStreetMap contributors，采用 Open Database License（ODbL）1.0。数据经局部投影、取段与游戏化缩尺处理。</blockquote>
+<p><a href="https://www.openstreetmap.org/copyright">OpenStreetMap 版权及来源说明</a> · <a href="https://opendatacommons.org/licenses/odbl/1-0/">ODbL 1.0 许可证全文</a></p>
+<p>OSM 署名适用于相应地图数据，不代表人物、战斗规则、任务、程序化模型或整部游戏由 OSM 提供。游戏中的简短署名可使用“街巷数据 © OpenStreetMap contributors（ODbL）”，并链接至 OSM 版权页。OSM 官方指引允许游戏在启动页、游戏画面、菜单、制作名单等合适位置提供可读署名，并在适当位置提供完整来源与许可证信息；本说明提供该详细信息。<a href="https://osmfoundation.org/wiki/Licence/Attribution_Guidelines#Computer_games_and_simulations">OSMF：游戏与模拟的署名指引</a></p>
+<h2>真实性边界</h2>
+<p>这是一处以真实街巷关系为依据的纸笔冒险关卡，不是 1∶1 数字孪生或现实导航工具。道路方位、地标相对位置、部分平面轮廓有资料依据；人物大小、道路宽度、建筑高度表现、门洞、室内、任务、战斗、可攀爬物及阻挡边界包含原创游戏设计。未逐栋确认真实出入口与内部结构，不能据游戏判断现实通行条件。</p>
+<p>官方页面用于核对事实，未复制其照片、长文或建筑模型。手绘外观、程序化人物、怪物、武器和游戏机制由本项目实现，未复制 Doodle District 的完整源码或模型。第一章的地理资料更新不会自动证明其他三章完成了同等精度的实地复原；十二地区扩展仍是独立的后续计划。</p>
+</main></body></html>

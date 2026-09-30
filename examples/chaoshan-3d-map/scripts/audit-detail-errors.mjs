@@ -1,0 +1,33 @@
+import {chromium} from 'playwright';
+import assert from 'node:assert/strict';
+const browser=await chromium.launch({headless:true,channel:'msedge'});
+try{
+ const page=await browser.newPage();
+ await page.route('**/__detail-errors',r=>r.fulfill({contentType:'text/html',body:'<html><body><button id="entry">Open</button></body></html>'}));
+ await page.goto('http://127.0.0.1:5242/__detail-errors');
+ await page.evaluate(async()=>{const {createPlaceDetailViewer}=await import('/place-detail-viewer.mjs');window.viewer=createPlaceDetailViewer();});
+ let failCatalog=true;
+ await page.route('**/data/detail-photos.json',route=>failCatalog?route.fulfill({status:503,body:'Unavailable'}):route.continue());
+ await page.locator('#entry').focus();
+ await page.evaluate(()=>window.viewer.open({id:'guangji',name:'广济桥',description:'韩江上的广济桥'}));
+ await page.locator('.photo-retry').waitFor({state:'visible'});assert.match(await page.locator('.photo-status').textContent(),/无法读取/);
+ failCatalog=false;await page.locator('.photo-retry').click();await page.waitForFunction(()=>document.querySelector('.photo-zoom img')?.naturalWidth>0);
+ await page.keyboard.press('Escape');assert.equal(await page.evaluate(()=>document.activeElement.id),'entry');console.log('PASS catalog failure retry and focus restoration');
+ let failImage=true;
+ await page.route('**/photos/small-park-user.jpg',route=>failImage?route.abort():route.continue());
+ await page.evaluate(()=>window.viewer.open({id:'small-park',name:'小公园'}));await page.locator('.photo-retry').waitFor({state:'visible'});
+ assert.match(await page.locator('.photo-status').textContent(),/无法加载/);failImage=false;await page.locator('.photo-retry').click();await page.waitForFunction(()=>document.querySelector('.photo-zoom img')?.naturalWidth>0);
+ await page.keyboard.press('Escape');console.log('PASS image failure and explicit retry');
+ const catalog=await page.evaluate(()=>fetch('/data/detail-photos.json').then(r=>r.json()));
+ const beef=catalog['牛肉丸'].photos[0].src;
+ await page.route('**'+beef,async route=>{await new Promise(r=>setTimeout(r,800));await route.continue();});
+ await page.evaluate(()=>window.viewer.open({id:'food-0',kind:'food',name:'汕头美食',dishes:['牛肉丸','蚝烙']}));
+ await page.locator('.detail-dishes button').filter({hasText:'蚝烙'}).click();
+ await page.waitForFunction(()=>document.querySelector('.photo-zoom img')?.naturalWidth>0&&document.querySelector('.photo-zoom img').alt==='潮汕蚝烙');await page.waitForTimeout(1000);
+ assert.equal(await page.locator('#photo-detail-title').textContent(),'蚝烙');assert.equal(await page.locator('.photo-zoom img').getAttribute('alt'),'潮汕蚝烙');
+ console.log('PASS stale image request cannot replace the chosen dish');
+ await page.keyboard.press('Escape');
+ await page.evaluate(()=>window.viewer.open({name:'未收录地点',description:'地点原有介绍'}));await page.waitForTimeout(100);
+ assert.match(await page.locator('.photo-status').textContent(),/暂未收录/);assert.equal(await page.locator('.photo-zoom img').count(),0);
+ assert.equal(await page.locator('.detail-copy p').first().textContent(),'地点原有介绍');console.log('PASS missing photo is explicit, never substituted');
+}finally{await browser.close();}

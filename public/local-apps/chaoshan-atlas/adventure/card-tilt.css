@@ -1,0 +1,13 @@
+/* Card transforms leave grid footprints and all original controls intact. */
+.ink-tilt-card{--card-tilt-x:0deg;--card-tilt-y:0deg;--card-tilt-scale:1;--card-light-x:50%;--card-light-y:50%;position:relative;transform:perspective(850px) rotateZ(var(--card-rest-rotation,0deg)) rotateX(var(--card-tilt-x)) rotateY(var(--card-tilt-y)) scale(var(--card-tilt-scale));transform-origin:center;transition:box-shadow .2s,border-color .2s,background-color .2s;isolation:isolate}
+.ink-tilt-card::after{content:'';position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:radial-gradient(ellipse at var(--card-light-x) var(--card-light-y),#fff9df70,transparent 68%);opacity:0;transition:opacity .2s;z-index:1}
+.ink-tilt-active{will-change:transform;box-shadow:0 9px 18px -12px #203b5460}
+.ink-tilt-active::after{opacity:.55}
+.ink-tilt-hud.ink-tilt-card{position:absolute}
+.evacuation-card.ink-tilt-hud{position:fixed}
+.left-field-notes .ink-tilt-hud{position:relative!important;inset:auto!important}
+#kill-objective.ink-tilt-card{--card-rest-rotation:-.6deg}
+.ink-tilt-hud.ink-tilt-active{box-shadow:2px 3px 8px #243d7910}
+.ink-tilt-hud.ink-tilt-active::after{opacity:.18}
+@media(max-width:760px){body.ink-world #play-hud .left-field-notes #weather-card{top:239px!important}}
+@media(max-width:760px),(hover:none),(pointer:coarse),(prefers-reduced-motion:reduce){.ink-tilt-card{transform:rotateZ(var(--card-rest-rotation,0deg));transition:none}.ink-tilt-card::after{display:none}.ink-tilt-active{will-change:auto;box-shadow:none}}

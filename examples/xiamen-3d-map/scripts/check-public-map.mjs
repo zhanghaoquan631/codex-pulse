@@ -1,0 +1,30 @@
+import assert from 'node:assert/strict';
+import {mkdir,writeFile} from 'node:fs/promises';
+import {chromium} from 'playwright';
+import {PNG} from 'pngjs';
+const url=process.argv[2]||'https://xiamen-3d-map.wozhe0196.chatgpt.site/';
+const out='qa/public-map',report={url,errors:[]};await mkdir(out,{recursive:true});
+const browser=await chromium.launch({channel:'msedge',headless:true});
+try{
+ const page=await browser.newPage({viewport:{width:390,height:844}});page.setDefaultTimeout(60000);
+ page.on('pageerror',error=>report.errors.push(error.message));
+ const start=Date.now(),response=await page.goto(url);assert.equal(response.status(),200);
+ await page.waitForFunction(()=>window.xiamenAtlas?.getState().ready,null,{timeout:180000});await page.waitForTimeout(2500);report.readyMs=Date.now()-start;
+ report.overview=await page.evaluate(()=>{const s=window.xiamenOverview();return {total:s.total,island:s.island};});
+ assert.deepEqual(report.overview,{total:131,island:79});
+ report.city=await page.evaluate(()=>{const c=window.xiamenCityLife();return {infill:c.infill,cells:c.cells,people:c.people,cars:c.cars,venues:c.venues,areas:c.scenes.length};});assert.ok(report.city.infill>15000);assert.ok(report.city.cells>300);assert.equal(report.city.areas,12);
+ const compact=()=>page.evaluate(()=>{const s=window.xiamenAtlas.getState();return {tour:s.tour,travel:s.travel.tour,hotels:s.travel.hotels,location:s.travel.location.enabled};});
+ assert.equal((await compact()).hotels,129);assert.equal((await compact()).location,false);
+ const cluster=page.locator('.overview-label:not([hidden])').filter({hasText:'鼓浪屿'}).first();
+ const handle=await cluster.elementHandle();await page.waitForTimeout(700);assert.equal(await handle.evaluate(node=>node.isConnected),true);
+ await cluster.click();assert.equal(await page.locator('.catalog-row').count(),79);await page.getByRole('button',{name:'关闭地点目录',exact:true}).click();
+ await page.click('#overview-catalog');assert.equal(await page.locator('.catalog-row').count(),131);await page.getByRole('button',{name:'关闭地点目录',exact:true}).click();
+ await page.screenshot({path:out+'/phone-overview.png'});
+ await page.click('#island-tour-launch');let state=await compact();assert.equal(state.tour.total,79);assert.equal(state.travel.total,79);assert.ok(state.tour.running&&state.travel.running);
+ await page.click('#tour');state=await compact();assert.equal(state.travel.running,false);const elapsed=state.tour.elapsed;await page.waitForTimeout(900);assert.equal((await compact()).tour.elapsed,elapsed);
+ await page.click('#travel-next');assert.equal((await compact()).tour.index,(state.tour.index+1)%79);await page.click('#travel-close');
+ await page.click('#travel-docks');await page.locator('[data-place=dongdu]').click();await page.waitForTimeout(2000);await page.screenshot({path:out+'/phone-dongdu.png'});
+ const png=PNG.sync.read(await page.locator('#viewport canvas').screenshot()),colors=new Set();for(let i=0;i<png.data.length;i+=40)colors.add(`${png.data[i]>>3},${png.data[i+1]>>3},${png.data[i+2]>>3}`);assert.ok(colors.size>100);report.colors=colors.size;
+ const changed=await page.locator('#viewport canvas').evaluate(async canvas=>{const c=document.createElement('canvas');c.width=180;c.height=120;const ctx=c.getContext('2d');const snap=()=>new Promise(resolve=>requestAnimationFrame(()=>{ctx.drawImage(canvas,0,0,180,120);resolve(ctx.getImageData(0,0,180,120).data);}));const a=await snap();await new Promise(r=>setTimeout(r,1200));const b=await snap();let n=0;for(let i=0;i<a.length;i+=4)if(Math.abs(a[i]-b[i])+Math.abs(a[i+1]-b[i+1])+Math.abs(a[i+2]-b[i+2])>12)n++;return n;});assert.ok(changed>0);report.movingPixels=changed;
+ assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),390);assert.equal(report.errors.length,0);report.passed=true;
+}finally{await writeFile(out+'/report.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report));await browser.close();}

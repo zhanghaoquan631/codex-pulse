@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#fbd9b0"><title>Rooster Rush · Play</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='52' font-size='52'%3E🐓%3C/text%3E%3C/svg%3E"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="mobile.css"></head>
+<body>
+<main id="game" tabindex="-1" aria-label="Rooster Rush 3D platform game">
+  <div id="scene" aria-hidden="true"></div>
+  <div class="topbar"><span class="wordmark">rr.</span><span class="bar-name">Rooster Rush</span><span class="divider"></span><button id="sound" class="icon-button" aria-label="Enable sound" title="Sound">♪</button><button id="pause" class="icon-button" aria-label="Pause game" title="Pause (P)">Ⅱ</button><button id="mobile-reset" class="icon-button mobile-reset" aria-label="重新开始" title="重新开始">↺</button></div>
+  <section class="hero interface">
+    <div class="eyebrow"><i></i> SECTION №21 · HELP THE ROOSTER GET HIRED</div>
+    <h1><span>Hit 10k <span class="title-coin" aria-label="coins">AI</span></span><em>We’re hiring.</em></h1>
+    <p>A chicken on a rocket, real physics, real magnet coins, very real obstacles. Cross <b>10,000 points</b> and a hiring email pops up.<br><i>(The company isn’t real. The points are.)</i></p>
+    <div class="hero-buttons"><button id="start" class="primary">Start playing</button><button id="help">How to play</button><button id="reset" class="subtle" title="Reset run (R)">↺ Reset</button></div>
+  </section>
+  <aside class="hud interface" aria-label="Game statistics"><div class="hud-row"><div id="lives" class="pill hearts" aria-label="3 lives remaining">♥ ♥ ♥</div><div class="pill rocket-meter"><span>♧</span><span class="meter-track"><span id="meter-fill"></span></span><span id="charge">0/200</span></div><div id="score-pill" class="pill score"><i></i><span class="score-label">SCORE</span><strong id="score">0000</strong></div></div><div class="best">BEST <span id="best">0000</span><span id="big-tag" hidden>BIG</span></div></aside>
+  <div class="progress interface"><span id="percent">0</span><small>%</small></div>
+  <div id="intro-bubble"><span>AI got me fired.</span><span>Help me find a job!</span></div>
+  <div id="begin-hint" class="interface"><kbd>SPACE</kbd><span>TO BEGIN</span></div>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <div class="touch-controls interface"><div id="joystick" aria-label="Drag to run" role="group"><span id="stick"></span></div><button id="jump" aria-label="Jump, hold for higher jump">JUMP</button></div>
+  <div id="modal-layer" hidden><section id="help-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden><button class="close" aria-label="Close">×</button><span class="eyebrow">HOW TO PLAY</span><h2 id="modal-title">The whole hero is the game.</h2><ul><li><kbd>← →</kbd><span>左右奔跑 · A / D 也可以</span></li><li><kbd>Space</kbd><span>跳跃；按住跳得更高，松开提前落下</span></li><li><kbd>Grab</kbd><span>金币加分，蘑菇变大，从上方踩掉敌人</span></li><li><kbd>Boost</kbd><span>每收集 200 金币分，火箭自动起飞</span></li><li><kbd>P / R</kbd><span>暂停 / 重新开始；小心尖刺和深坑</span></li></ul><p class="modal-note">手机拖动左侧摇杆移动，按住右侧 JUMP 跳跃。最高分保存在当前浏览器会话。</p></section>
+  <section id="end-modal" class="modal end-modal" role="dialog" aria-modal="true" aria-labelledby="end-title" hidden><span id="end-eyebrow" class="eyebrow">ONE MORE RUN?</span><h2 id="end-title">Game over.</h2><p id="end-copy"></p><div class="hero-buttons"><button id="restart" class="primary">Try again ↗</button><button id="continue" hidden>Keep playing</button></div></section>
+  <section id="pause-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="pause-title" hidden><span class="eyebrow">TAKE A BREATHER</span><h2 id="pause-title">A little chicken break.</h2><button id="resume" class="primary">Resume playing →</button></section></div>
+  <div id="load-error" hidden><h2>3D view could not start</h2><p>Please enable WebGL in your browser and reload this page.</p></div>
+</main><script type="module" src="app.js"></script>
+</body></html>

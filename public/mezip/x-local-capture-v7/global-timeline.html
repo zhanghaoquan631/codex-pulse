@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ME.zip 全局行为时间轴">
+  <title>ME.zip · 全局行为时间轴</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./global-timeline.css">
+  <link rel="stylesheet" href="./pulse-theme.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="rail">
+      <a class="brand" href="./index.html#overview" aria-label="ME.zip 本地监控系统"><span class="brand-mark">ME<span>.zip</span></span><small>GLOBAL MEMORY</small></a>
+      <nav aria-label="全局行为导航">
+        <a href="./index.html#overview">⌂<span>总览</span></a>
+        <a class="active" href="./global-timeline.html">◷<span>全局行为时间轴</span></a>
+        <a href="./index.html#timeline">𝕏<span>X 行为时间轴</span></a>
+        <a href="./watch.html">▶<span>观看记录</span></a>
+        <a href="./resources.html">▤<span>网页 / 文章 / 代码</span></a>
+        <a href="./reading.html">◉<span>阅读 / 研究历史</span></a>
+        <a href="./index.html#special">★<span>私人资料库</span></a>
+      </nav>
+      <div class="rail-foot"><span class="status-dot"></span><span>GLOBAL TIMELINE</span></div>
+    </aside>
+    <main class="main">
+      <header class="topbar"><div><p class="eyebrow">LOCAL / GLOBAL TIMELINE</p><h1>全局行为时间轴</h1><p class="lede">把不同模块的真实行为按时间合并，不改变原来的 X 时间轴。</p></div><div class="top-actions"><span id="global-status" class="pill pill-muted">正在读取…</span><button id="global-retry" class="button button-quiet" type="button">重新读取</button></div></header>
+      <section class="global-intro panel"><div><strong>一份时间轴，多个真实来源</strong><p>X 点赞 / 收藏 / 浏览、真实视频播放、资源保存，以及从 ME.zip 明确打开网页、文章、代码或 X 链接都会分别标注来源。</p></div><span class="pill pill-green">不读取浏览器历史</span></section>
+      <section class="global-filters panel"><div id="global-filter-tabs" class="global-filter-tabs"><button class="active" data-filter="all">全部</button><button data-filter="X">𝕏 X</button><button data-filter="WATCH">▶ 观看</button><button data-filter="RESOURCE_SAVED">▤ 保存资源</button><button data-filter="RESOURCE_OPENED">↗ 打开资源</button></div><div class="global-filter-row"><input id="global-search" type="search" placeholder="搜索标题、来源、作者、链接或描述" aria-label="搜索全局行为"><span id="global-count" class="pill pill-muted global-count">0 条</span></div></section>
+      <section id="global-loading" class="empty panel"><strong>正在读取全局行为…</strong><span>只从 ME.zip 本地桥接服务读取。</span></section>
+      <section id="global-error" class="empty panel hidden" role="alert"></section>
+      <section id="global-list" class="global-timeline hidden"></section>
+      <section class="global-boundary panel"><div class="card-head"><div><h2>记录边界</h2><p>全局时间轴不会扩大原有采集权限。</p></div></div><ul><li>不会扫描 Edge / Chrome 的浏览器历史、密码或 Cookie。</li><li>“保存资源”与“明确打开资源”是两种不同事件。</li><li>观看只来自真实播放器上报的播放进度；打开视频页面不等于观看。</li><li>X 模块仍可在原来的 X 行为时间轴中单独查看。</li></ul></section>
+    </main>
+  </div>
+  <script type="text/mezip-deferred" data-src="./pulse-shell.js"></script>
+  <script type="text/mezip-deferred" data-src="./global-timeline-app.js"></script>
+<script src="/mezip/remote-adapter.js"></script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+import assert from 'node:assert/strict';
+import {readFile,mkdir,writeFile} from 'node:fs/promises';
+import {chromium} from 'playwright';
+import {PNG} from 'pngjs';
+import {createTravelRouter} from '../travel-routing.mjs';
+import {buildDirections,routeProgress,turnBetween} from '../walking-guidance.mjs';
+import {travelPlaces} from '../travel-data.mjs';
+const n=(id,x,y)=>[id,118+x/100000,24.44+y/100000];
+const synthetic={bbox:[117,24,119,25],nodes:[n('A',0,0),n('B',100,0),n('C',200,0),n('D',100,100),n('E',200,100)],ways:[{nodes:['A','B'],name:'起点路',kind:'footway'},{nodes:['B','C'],kind:'steps'},{nodes:['B','D','E','C'],name:'绕行路',kind:'footway'}]};
+const syntheticRouter=createTravelRouter(synthetic),a=synthetic.nodes[0].slice(1),c=synthetic.nodes[2].slice(1);
+const direct=syntheticRouter.walk(a,c),detour=syntheticRouter.walk(a,c,{avoidSteps:true});
+assert.equal(direct.stairsSections,1);assert.equal(detour.stairsSections,0);assert.ok(detour.meters>direct.meters);
+assert.ok(direct.directions.some(d=>d.kind==='steps'));
+assert.equal(turnBetween({from:[0,0],to:[0,1]},{from:[0,1],to:[1,1]}),'右转');
+assert.equal(turnBetween({from:[0,0],to:[0,1]},{from:[0,1],to:[-1,1]}),'左转');
+assert.equal(routeProgress({legs:[direct]},{ll:a,accuracy:80}).status,'uncertain');
+assert.equal(routeProgress({legs:[direct]},{ll:a,accuracy:5},'stale').status,'uncertain');
+assert.equal(routeProgress({legs:[direct]},{ll:a,accuracy:5}).status,'on-route');
+assert.equal(routeProgress({legs:[direct]},{ll:[a[0],a[1]+.005],accuracy:5}).status,'off-route');
+const reverse=syntheticRouter.walk(c,a);assert.equal(reverse.stairsSections,1);assert.ok(reverse.points[0][0]>reverse.points.at(-1)[0]);
+const same=syntheticRouter.walk(a,a);assert.equal(same.meters,0);assert.equal(buildDirections([]).length,0);
+const network=JSON.parse(await readFile('public/data/travel-network.json','utf8')),router=createTravelRouter(network),place=id=>travelPlaces.find(p=>p.id===id),from=place('sanqiutian'),to=place('bagua');
+const route=router.walk(from.access||from.ll,to.access||to.ll);assert.ok(route.directions.length>3);assert.ok(route.stairsSections>0);
+const avoided=router.walk(from.access||from.ll,to.access||to.ll,{avoidSteps:true});assert.equal(avoided.stairsSections,0);
+const neicuo=place('neicuo'),named=router.walk(from.access||from.ll,neicuo.access||neicuo.ll);
+assert.ok(named.directions.some(d=>d.name==='康泰路'));
+const browser=await chromium.launch({channel:'msedge',headless:true,args:['--enable-webgl','--ignore-gpu-blocklist']});
+const page=await browser.newPage({viewport:{width:1440,height:960}}),errors=[],out='qa/walking-detail',report={directMeters:direct.meters,detourMeters:detour.meters,islandRouteMeters:route.meters,stairs:route.stairsSections};await mkdir(out,{recursive:true});page.on('pageerror',e=>errors.push(e.message));
+await page.addInitScript(()=>{let callback;Object.defineProperty(navigator,'geolocation',{value:{watchPosition(success){callback=success;return 0;},clearWatch(){callback=null;}}});window.fix=(ll,accuracy=5)=>callback?.({timestamp:Date.now(),coords:{longitude:ll[0],latitude:ll[1],accuracy,speed:1,heading:90}});});
+try{
+ await page.goto('http://127.0.0.1:5243/');await page.waitForFunction(()=>window.xiamenAtlas?.getState().ready);
+ await page.locator('#travel-locate').click();await page.locator('#travel-destination').selectOption('bagua');await page.locator('#travel-plan').click();
+ await page.waitForSelector('[data-walk-step]');assert.ok(await page.locator('[data-walk-step]').count()>3);assert.match(await page.locator('.walking-summary').innerText(),/楼梯/);
+ await page.waitForTimeout(1400);report.roadLabels=await page.locator('.walking-map-label:visible').allTextContents();await page.screenshot({path:out+'/route-desktop.png'});
+ const stair=page.locator('[data-walk-step]').filter({hasText:'楼梯'}).first();await stair.click();await page.waitForTimeout(1200);await page.screenshot({path:out+'/stair-closeup.png'});
+ await page.locator('#walking-avoid-steps').check();assert.equal(await page.locator('[data-walk-step]').count(),0);await page.locator('#travel-plan').click();await page.waitForSelector('[data-walk-step]');assert.equal(await page.locator('[data-walk-step]').filter({hasText:'楼梯'}).count(),0);
+ await page.locator('#walking-avoid-steps').uncheck();const livePoint=route.points[Math.floor(route.points.length*.55)];
+ await page.locator('#travel-location-enabled').check();await page.evaluate(ll=>fix(ll),route.points[0]);await page.locator('#travel-plan').click();
+ await page.waitForSelector('#confirm-ashore');assert.equal(await page.locator('[data-walk-step]').count(),0);await page.locator('#confirm-ashore').click();await page.waitForSelector('[data-walk-step]');report.shoreConfirmation=true;
+ await page.evaluate(ll=>fix(ll),livePoint);await page.locator('#travel-plan').click();await page.waitForSelector('[data-walk-step]');await page.evaluate(ll=>fix(ll),livePoint);assert.match(await page.locator('.walking-live').innerText(),/当前参考/);
+ await page.evaluate(ll=>fix(ll,100),livePoint);assert.match(await page.locator('.walking-live').innerText(),/精度不足/);
+ for(const [width,height] of [[390,844],[320,740],[844,390]]){
+  await page.setViewportSize({width,height});await page.locator('[data-walk-step]').first().scrollIntoViewIfNeeded();await page.waitForTimeout(500);
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),width);
+  const button=await page.locator('[data-walk-step]').first().evaluate(e=>({client:e.clientWidth,scroll:e.scrollWidth}));assert.ok(button.scroll<=button.client+1);
+  const png=PNG.sync.read(await page.locator('#viewport canvas').screenshot()),colors=new Set();for(let i=0;i<png.data.length;i+=24)colors.add(`${png.data[i]>>3},${png.data[i+1]>>3},${png.data[i+2]>>3}`);assert.ok(colors.size>100);
+  await page.screenshot({path:`${out}/mobile-${width}.png`});
+ }
+ await page.setViewportSize({width:1440,height:960});await page.locator('#render-quality').selectOption('high');await page.waitForTimeout(800);report.pixelRatio=await page.evaluate(()=>window.xiamenAtlas.getState().sky.light.pixelRatio);assert.ok(report.pixelRatio>=1.5);
+ await page.locator('[data-time-choice="night"]').click();await page.waitForFunction(()=>!window.xiamenAtlas.getState().sky.transitioning,{},{timeout:30000});await page.screenshot({path:out+'/night.png'});
+ report.errors=errors;assert.equal(errors.length,0);
+}finally{report.result=await page.locator('.route-result').textContent().catch(()=>null);report.errors=errors;await page.screenshot({path:out+'/last-state.png'});await writeFile(out+'/report.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));await browser.close();}

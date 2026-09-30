@@ -1,0 +1,102 @@
+{
+  "鼓浪屿": {
+    "src": "/photos/01.jpg",
+    "alt": "鼓浪屿实景照片",
+    "caption": "Gulangyu Island from Zhongshan Road, Xiamen",
+    "author": "Slyronit",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Gulangyu_Island_from_Zhongshan_Road,_Xiamen.jpg",
+    "change": "Wikimedia Commons 缩略图，未作额外修改"
+  },
+  "中山路": {
+    "src": "/photos/02.jpg",
+    "alt": "中山路实景照片",
+    "caption": "Panorama of Zhongshan Road, Xiamen",
+    "author": "Slyronit",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Panorama_of_Zhongshan_Road,_Xiamen.jpg",
+    "change": "Wikimedia Commons 缩略图，未作额外修改"
+  },
+  "沙坡尾": {
+    "src": "/photos/03.jpg",
+    "alt": "沙坡尾实景照片",
+    "caption": "Fishing boats in Shapowei, Xiamen",
+    "author": "mojojo.cn",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Fishing_boats_in_Shapowei,_Xiamen.jpg",
+    "change": "Wikimedia Commons 缩略图，未作额外修改"
+  },
+  "演武大桥观景平台": {
+    "src": "/photos/04.jpg",
+    "alt": "演武大桥观景平台实景照片",
+    "caption": "Night view of Xiamen Yanwu Bridge 20230826 01",
+    "author": "JULIANISME",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Night_view_of_Xiamen_Yanwu_Bridge_20230826_01.jpg",
+    "change": "Wikimedia Commons 缩略图，未作额外修改"
+  },
+  "厦门大学": {
+    "src": "/photos/05.jpg",
+    "alt": "厦门大学实景照片",
+    "caption": "Panoramatic view of xiamen university at sunset",
+    "author": "Ratvirgin",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Panoramatic_view_of_xiamen_university_at_sunset.jpg",
+    "change": "Wikimedia Commons 缩略图，未作额外修改"
+  },
+  "南普陀寺": {
+    "src": "/photos/06.jpg",
+    "alt": "南普陀寺实景照片",
+    "caption": "Nanputuo Temple, Xiamen",
+    "author": "Slyronit",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Nanputuo_Temple,_Xiamen.jpg",
+    "change": "Wikimedia Commons 缩略图，未作额外修改"
+  },
+  "厦门园林植物园": {
+    "src": "/photos/07.jpg",
+    "alt": "厦门园林植物园实景照片",
+    "caption": "Photo taken in the \"Rainforest\" area of Xiamen Botanical Garden, depicting artificially sprayed mist across water",
+    "author": "Metacladistics",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Photo_taken_in_the_%22Rainforest%22_area_of_Xiamen_Botanical_Garden,_depicting_artificially_sprayed_mist_across_water.jpg",
+    "change": "Wikimedia Commons 缩略图，未作额外修改"
+  },
+  "环岛路": {
+    "src": "/photos/08.jpg",
+    "alt": "环岛路实景照片",
+    "caption": "20230131 Huandao Road, Xiamen",
+    "author": "Windmemories",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:20230131_Huandao_Road,_Xiamen.jpg",
+    "change": "Wikimedia Commons 缩略图，未作额外修改"
+  },
+  "曾厝垵": {
+    "src": "/photos/09.jpg",
+    "alt": "曾厝垵实景照片",
+    "caption": "曾厝垵092633",
+    "author": "Augustohai",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:%E6%9B%BE%E5%8E%9D%E5%9E%B5092633.jpg",
+    "change": "Wikimedia Commons 缩略图，未作额外修改"
+  },
+  "集美学村": {
+    "src": "/photos/10.jpg",
+    "alt": "集美学村实景照片",
+    "caption": "Jimei School Village 20250717",
+    "author": "水餃喵",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Jimei_School_Village_20250717.jpg",
+    "change": "Wikimedia Commons 缩略图，未作额外修改"
+  }
+}

@@ -1,0 +1,18 @@
+.pulse-fullscreen-control { position: relative; flex: none; }
+.pulse-fullscreen-toggle { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 36px; padding: 7px 11px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); color: var(--foreground); font: inherit; font-size: 14px; white-space: nowrap; cursor: pointer; }
+.pulse-fullscreen-toggle:hover, .pulse-fullscreen-toggle[aria-pressed=true] { background: var(--secondary); color: var(--secondary-foreground); }
+.pulse-fullscreen-toggle:disabled { opacity: .6; cursor: wait; }
+.pulse-fullscreen-toggle:focus-visible, .pulse-fullscreen-notice button:focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; }
+.pulse-fullscreen-toggle svg { flex: none; }
+.pulse-fullscreen-notice { position: absolute; top: calc(100% + 10px); right: 0; z-index: 60; display: flex; align-items: flex-start; gap: 10px; width: min(320px, calc(100vw - 32px)); padding: 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--popover); color: var(--popover-foreground); box-shadow: 0 8px 24px #0002; font-size: 14px; line-height: 1.7; }
+.pulse-fullscreen-notice button { flex: none; display: grid; place-items: center; width: 26px; height: 26px; border: 0; border-radius: 5px; background: transparent; color: inherit; cursor: pointer; }
+html:fullscreen { overflow-y: auto; background: var(--background); }
+html:fullscreen .console-content { max-width: none; }
+html:fullscreen .console-header { position: sticky; top: 0; z-index: 15; }
+html:-webkit-full-screen { overflow-y: auto; background: var(--background); }
+html:-webkit-full-screen .console-content { max-width: none; }
+html:-webkit-full-screen .console-header { position: sticky; top: 0; z-index: 15; }
+@media (max-width: 1100px) {
+  .pulse-fullscreen-toggle { width: 34px; padding: 7px; }
+  .pulse-fullscreen-toggle > span { display: none; }
+}

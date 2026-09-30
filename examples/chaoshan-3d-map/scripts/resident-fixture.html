@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Resident outfit inspection</title><style>body{margin:0}canvas{display:block}</style></head><body><script type="module">
+import * as THREE from 'three';
+import {person,sign} from '../scene-miniatures.mjs';
+const scene=new THREE.Scene();scene.background=new THREE.Color('#aec3be');
+const camera=new THREE.OrthographicCamera(-6,6,4,-4,.1,100);camera.position.set(0,0,20);
+const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(1);document.body.append(renderer.domElement);
+scene.add(new THREE.HemisphereLight('#ffffff','#637a70',2));const sun=new THREE.DirectionalLight('#fff0df',2.4);sun.position.set(-4,6,7);scene.add(sun);
+const types=['student','shopkeeper','chef','office','senior','courier','medic','officer'];
+const actors=types.map((outfit,i)=>{const group=new THREE.Group();scene.add(group);const actor=person(group,i,{outfit,scale:1});sign(group,outfit,0,-.45,0,1.85,.30);return {group,actor};});
+function tick(t){actors.forEach(({actor},i)=>{actor.pose(t,i%3===0?'wave':i%3===1?'talk':'look');actor.root.rotation.y=.12;});renderer.render(scene,camera);}
+function resize(){const cols=innerWidth<600?2:4,rows=8/cols;
+ actors.forEach(({group},i)=>group.position.set((i%cols-(cols-1)/2)*2.5,((rows-1)/2-Math.floor(i/cols))*3.5-1,0));
+ const half=Math.max(rows*3.5/2+.3,(cols*2.5/2+.2)*innerHeight/innerWidth);camera.top=half;camera.bottom=-half;camera.left=-half*innerWidth/innerHeight;camera.right=-camera.left;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);tick(0);
+}
+addEventListener('resize',resize);resize();window.residentAudit={tick,types,ready:true,framed:()=>actors.every(({group})=>{const b=new THREE.Box3().setFromObject(group);return [b.min,b.max].every(p=>{const q=p.clone().project(camera);return Math.abs(q.x)<.99&&Math.abs(q.y)<.99;});})};
+</script></body></html>

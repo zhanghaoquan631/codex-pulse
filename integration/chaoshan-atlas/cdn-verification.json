@@ -1,0 +1,45 @@
+{
+  "checkedAt": "2026-09-19T16:19:24.206Z",
+  "results": [
+    {
+      "id": "shuangsheng-linger",
+      "url": "https://assets.petdex.dev/pets/shuangsheng-linger-7d5ed5f6f3b3/sprite.webp",
+      "bytes": 3204010,
+      "sha256": "acaab5481c89e6192fab962a427ca5c9b909f7a08b24b9f78f0c6c1781f219da",
+      "cors": "*",
+      "matchesOriginal": true
+    },
+    {
+      "id": "01-toothless-v3",
+      "url": "https://assets.petdex.dev/pets/01-toothless-v3-1c4503bb65ae/sprite.webp",
+      "bytes": 232238,
+      "sha256": "effc23ba4413f5c43edc0dbdd14ec6a0305190b8a729a37867dd02b6e25c72c1",
+      "cors": "*",
+      "matchesOriginal": true
+    },
+    {
+      "id": "byte-bunny",
+      "url": "https://assets.petdex.dev/curated/byte-bunny/spritesheet.webp",
+      "bytes": 1572650,
+      "sha256": "75da0d1a94f2933de217702a385d72acb8501aec24eacceddd44bed212a30e34",
+      "cors": "*",
+      "matchesOriginal": true
+    },
+    {
+      "id": "clawd",
+      "url": "https://assets.petdex.dev/pets/clawd-5bd4ce5a96a1/sprite.png",
+      "bytes": 1938068,
+      "sha256": "14c7e3d1473708eb546d64065b9736f65eef6319a82f79696585f5418fb81cdf",
+      "cors": "*",
+      "matchesOriginal": true
+    },
+    {
+      "id": "weichong",
+      "url": "https://assets.petdex.dev/pets/weichong-6b1b252331e2/sprite.webp",
+      "bytes": 2653650,
+      "sha256": "4b490d844074bf0d8692774a15636e0da39997a464f7083db2bb938fb9d3b719",
+      "cors": "*",
+      "matchesOriginal": true
+    }
+  ]
+}

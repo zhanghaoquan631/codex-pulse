@@ -1,0 +1,138 @@
+{
+  "origin": [
+    118.11500000000001,
+    24.5
+  ],
+  "sx": 101.29688867397678,
+  "sz": 111.32,
+  "bbox": [
+    117.98,
+    24.38,
+    118.25,
+    24.62
+  ],
+  "buildingCount": 144,
+  "generatedAt": "2026-09-27T14:48:00.913Z",
+  "vectorSource": "https://tiles.openfreemap.org/planet/20260913_164504_pt/{z}/{x}/{y}.pbf",
+  "elevationSource": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+  "buildingCoverage": "5x5 zoom-14 tiles around each of 12 tourism representative points; OpenStreetMap coverage varies",
+  "actualData": true,
+  "mainlandContext": {
+    "file": "mainland-buildings.json",
+    "snapshot": "2026-09-13",
+    "verifiedZoom14Tiles": 169,
+    "footprintRecords": 8857,
+    "roadSegments": 29065,
+    "landUsePolygons": 2808,
+    "heightLimitations": "Provider-default heights are not surveyed building heights."
+  },
+  "cityLife": {
+    "placement": "Illustrative infill constrained by mapped urban land use, water, roads and source footprints.",
+    "surveyed": false,
+    "liveCrowds": false,
+    "realShopLocations": false,
+    "infillHeight": "Exaggerated display heights, not surveyed elevations."
+  },
+  "roadSegments": 5227,
+  "waterPolygons": 728,
+  "boundaryLines": 107,
+  "terrainSamples": 68121,
+  "regions": [
+    {
+      "name": "鼓浪屿",
+      "en": "Gulangyu",
+      "ll": [
+        118.063,
+        24.447
+      ]
+    },
+    {
+      "name": "中山路",
+      "en": "Zhongshan Road",
+      "ll": [
+        118.076,
+        24.454
+      ]
+    },
+    {
+      "name": "沙坡尾",
+      "en": "Shapowei",
+      "ll": [
+        118.087,
+        24.441
+      ]
+    },
+    {
+      "name": "演武大桥观景平台",
+      "en": "Yanwu Bridge",
+      "ll": [
+        118.086,
+        24.435
+      ]
+    },
+    {
+      "name": "厦门大学",
+      "en": "Xiamen University",
+      "ll": [
+        118.101,
+        24.438
+      ]
+    },
+    {
+      "name": "南普陀寺",
+      "en": "Nanputuo Temple",
+      "ll": [
+        118.0965,
+        24.438
+      ]
+    },
+    {
+      "name": "厦门园林植物园",
+      "en": "Botanical Garden",
+      "ll": [
+        118.105,
+        24.452
+      ]
+    },
+    {
+      "name": "曾厝垵",
+      "en": "Zengcuoan",
+      "ll": [
+        118.126,
+        24.429
+      ]
+    },
+    {
+      "name": "黄厝海滩",
+      "en": "Huangcuo Beach",
+      "ll": [
+        118.169,
+        24.434
+      ]
+    },
+    {
+      "name": "环岛路",
+      "en": "Huandao Road",
+      "ll": [
+        118.146,
+        24.427
+      ]
+    },
+    {
+      "name": "集美学村",
+      "en": "Jimei School Village",
+      "ll": [
+        118.1,
+        24.574
+      ]
+    },
+    {
+      "name": "海沧湾",
+      "en": "Haicang Bay",
+      "ll": [
+        118.034,
+        24.484
+      ]
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+.token-sections {
+  min-width: 0;
+  gap: 0;
+}
+
+.token-section-tabs {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: flex-start !important;
+  align-items: stretch !important;
+  flex-wrap: wrap;
+  width: fit-content;
+  max-width: 100%;
+  height: auto !important;
+  padding: 5px;
+  gap: 4px;
+  margin-bottom: 28px;
+  background: var(--secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.token-section-tabs [data-slot="tabs-trigger"] {
+  flex: 0 1 auto;
+  width: auto !important;
+  min-height: 44px;
+  height: auto;
+  padding: 10px 18px;
+  justify-content: center !important;
+  gap: 8px;
+  border: 0;
+  border-radius: 8px;
+  font-size: .875rem;
+  color: var(--muted-foreground);
+}
+
+.token-section-tabs [data-slot="tabs-trigger"][data-state="active"] {
+  background: var(--accent);
+  color: var(--accent-foreground);
+  box-shadow: none;
+  font-weight: 600;
+}
+
+.token-section-tabs [data-slot="tabs-trigger"]::after {
+  display: none;
+}
+
+.token-section-tabs [data-slot="tabs-trigger"]:hover {
+  color: var(--foreground);
+}
+
+.token-section-tabs [data-slot="tabs-trigger"]:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.token-section-tabs [data-slot="tabs-trigger"] svg {
+  width: 17px;
+  height: 17px;
+}
+
+@media (max-width: 600px) {
+  .token-section-tabs {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    margin-bottom: 23px;
+  }
+
+  .token-section-tabs [data-slot="tabs-trigger"] {
+    padding: 10px 8px;
+  }
+
+  .console-breadcrumb .token-breadcrumb {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

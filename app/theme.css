@@ -1,0 +1,252 @@
+/* The light palette remains the existing Pulse palette. */
+:root {
+  --theme-field: #eeedf1;
+  --theme-surface: #fff;
+  --theme-ink: #252329;
+  --theme-ink-muted: #939099;
+  --theme-shadow: 0 1px 2px #0000000f, 0 1px 3px #0000000a, inset 0 0 0 1px #00000004;
+}
+
+.theme-toggle {
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: repeat(2, 32px);
+  align-items: center;
+  height: 36px;
+  padding: 2px;
+  border-radius: 999px;
+  background: var(--theme-field);
+  flex-shrink: 0;
+  isolation: isolate;
+}
+.theme-toggle-thumb {
+  position: absolute;
+  inset: 2px auto 2px 2px;
+  width: 32px;
+  border-radius: 999px;
+  background: var(--theme-surface);
+  box-shadow: var(--theme-shadow);
+  transform: translateX(0);
+  transition: transform 200ms cubic-bezier(.23, 1, .32, 1);
+  pointer-events: none;
+}
+.theme-toggle[data-theme="dark"] .theme-toggle-thumb { transform: translateX(32px); }
+.theme-toggle button {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--theme-ink-muted);
+  padding: 0;
+  transition: color 150ms ease;
+  touch-action: manipulation;
+}
+.theme-toggle button:hover, .theme-toggle button[aria-pressed="true"] { color: var(--theme-ink); }
+.theme-toggle button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.theme-toggle svg { display: block; }
+
+/* Explicit theme choice wins over the operating system and legacy palettes. */
+:root[data-pulse-theme="dark"] {
+  color-scheme: dark;
+  --background: #131315;
+  --foreground: #eeeeef;
+  --card: #1c1c1f;
+  --card-foreground: #eeeeef;
+  --popover: #232326;
+  --popover-foreground: #eeeeef;
+  --primary: #e7def5;
+  --primary-foreground: #231b2e;
+  --secondary: #29272e;
+  --secondary-foreground: #e1dee7;
+  --muted: #28272c;
+  --muted-foreground: #aaa6b2;
+  --accent: #352e43;
+  --accent-foreground: #e2d3f6;
+  --border: #343239;
+  --input: #44414b;
+  --ring: #bfa0e3;
+  --sidebar: #19191c;
+  --sidebar-foreground: #e1dee7;
+  --sidebar-accent: #352e43;
+  --sidebar-accent-foreground: #e2d3f6;
+  --sidebar-border: #343239;
+  --theme-field: #262629;
+  --theme-surface: #3a3a3e;
+  --theme-ink: #eeeeef;
+  --theme-ink-muted: #85858d;
+  --theme-shadow: inset 0 1px 0 #ffffff0a, 0 1px 3px #00000040;
+}
+
+/* A single root scopes these overrides to the dashboard, never to embedded apps. */
+:root[data-pulse-theme="dark"] {
+  body, .console-header { background: var(--background); color: var(--foreground); }
+  .console-header, .console-sidebar { border-color: var(--border); }
+  .console-sidebar { background: var(--sidebar); }
+  .console-brand { color: var(--foreground); }
+  .console-brand small, .sidebar-section-label, .sidebar-version,
+  .console-breadcrumb, .console-breadcrumb > svg, .header-date { color: var(--muted-foreground); }
+  .console-breadcrumb strong { color: var(--foreground); }
+  .console-logo, .profile-mark { background: var(--accent); color: var(--accent-foreground); border-color: var(--border); }
+  .console-nav [data-slot="tabs-trigger"] { color: #b6b1be; }
+  .console-nav [data-slot="tabs-trigger"]:hover, .sidebar-toggle:hover { background: var(--secondary); color: var(--foreground); }
+  .console-nav [data-slot="tabs-trigger"][data-state="active"] { background: var(--accent) !important; color: var(--accent-foreground) !important; }
+  .sidebar-toggle, .mobile-close { color: #b4a1c6; }
+  .sidebar-note { background: #273026; color: #b8c7ac; }
+  .sidebar-note strong, .sidebar-note > svg { color: #d0dfc1; }
+  .sidebar-note p, .sidebar-status { color: #aabd9c; }
+  .sidebar-status.offline { color: #d1b589; }
+  .sidebar-backdrop { background: #0009; }
+  .console-header .refresh { background: var(--card); border-color: var(--border); color: #c4b3d6; }
+  .console-header .refresh:hover { background: var(--secondary); color: var(--foreground); }
+  .export-report { background: #e1d7ee; color: #28212e; }
+  .export-report:hover { background: #f1eafa; }
+  .export-report:disabled { background: #35313c; color: #928c9c; }
+
+  .console-content {
+    h1, h2, h3, .website-title h2, .activity-canvas-header h2,
+    .activity-gate h2, .activity-offline h3 { color: var(--foreground); }
+    .intro-description, .eyebrow, .section-description, .section-title > span,
+    .summary-caption, .summary-card .token-amount > small, .token-amount.is-compact > small,
+    .cache-exact, .ranking-copy small, .model-row > small, .chart-note, .notice, .empty,
+    .usage-context, .chart-labels, .chart-empty, .trend-total > span, .trend-total strong small,
+    .heatmap-weekdays, .heatmap-legend, .heatmap-legend small, .heatmap-history-note,
+    .daily-table th, .daily-table td > small, .record-row small, .record-head,
+    .account-usage-head, .help p, .settings-panel dt, .settings-panel dl > div,
+    footer, .footer-sep { color: var(--muted-foreground); }
+    .token-amount > strong, .token-amount.is-compact > strong, .cache-percentage,
+    .trend-total strong, .ledger-summary strong, .ledger-summary > div:first-child strong,
+    .ledger-summary > div:last-child strong { color: var(--foreground); }
+    .summary-label, .summary-label svg, .model-row span, .model-row strong,
+    .ranking-copy strong, .account-email, .account-usage-row, .daily-table, .record-row,
+    .help h3, .account-filter, .settings-panel dd, .ranking-value { color: #c8c3ce; }
+    .token-amount > strong > em, .cache-percentage em, .summary-pending { color: #bfb0cf; }
+
+    .panel, .summary-card, .summary-card.total-card, .date-range,
+    .account-filter select, .heatmap-month-control button {
+      background: var(--card); color: #c8c3ce; border-color: var(--border);
+    }
+    .summary-card, .panel { box-shadow: inset 0 0 0 1px #ffffff05; }
+    .cache-summary { background: #352c48; }
+    .lifetime-card { background: #2b3526; }
+    .cache-summary .summary-caption, .cache-exact { color: #c2addd; }
+    .lifetime-card .summary-caption, .lifetime-card .token-amount > small { color: #b3c3a6; }
+    .date-range { color: var(--muted-foreground); }
+    .period-selector { background: #252329; }
+    .period-selector button { color: #aaa4b3; }
+    .period-selector button:hover { background: #302c36; color: var(--foreground); }
+    .period-selector button[aria-pressed="true"] { background: #40364e; color: #eadff7; }
+    .model-meter, .ranking-meter { background: #2d2834; }
+    .model-meter i { background: #a78bc6; }
+    .model-row:nth-child(3n) .model-meter i { background: #79628f; }
+    .model-row:nth-child(3n+1) .model-meter i { background: #87a967; }
+    .ranking-meter i { background: #aa8ec8; }
+    .ranking-avatar, .account-email > i { background: #382d44; color: #d0b6ec; }
+    .ranking-row:nth-child(3n+2) .ranking-avatar { background: #2f3827; color: #b8c99e; }
+    .ranking-row:nth-child(3n) .ranking-avatar { background: #3b3029; color: #d3b698; }
+    .ranking-row:hover, .ranking-row[aria-pressed="true"],
+    .account-usage-row.selected, button.account-usage-row:hover { background: #2b2533; }
+    .grid-lines { color: var(--muted-foreground); background: repeating-linear-gradient(to bottom, transparent 0, transparent calc(50% - 1px), #343039 calc(50% - 1px), #343039 50%); }
+    .bar { background: #a98bc9; }
+    .bar-slot:nth-child(3n) .bar { background: #7b658f; }
+    .bar-slot:hover .bar { background: #ceb2ec; }
+    .heatmap-month-control select { color: #c8b8da; }
+    .heatmap-cell, .heatmap-cell[data-level="0"], .heatmap-legend i[data-level="0"] { background: #2b2632; color: #beb3ca; }
+    .heatmap-cell.heatmap-blank { background: #222025; }
+    .heatmap-cell[data-level="1"], .heatmap-legend i[data-level="1"] { background: #433450; color: #ddd0e9; }
+    .heatmap-cell[data-level="2"], .heatmap-legend i[data-level="2"] { background: #624678; color: #f1e6fa; }
+    .heatmap-cell[data-level="3"], .heatmap-legend i[data-level="3"] { background: #8963a6; color: #fff; }
+    .heatmap-cell[data-level="4"], .heatmap-legend i[data-level="4"] { background: #c4a3e2; color: #261b30; }
+    .ranking-note, .account-usage-row, .account-usage-total, .daily-table td, .daily-table th,
+    .record-row, .settings-panel dl > div, footer { border-color: var(--border); }
+    .ranking-note { color: var(--muted-foreground); }
+
+    .library-button, .library-search, .website-card, .ledger-summary > div, .ledger-table-wrap,
+    .activity-private, .activity-workspace, .activity-canvas-header, .activity-gate {
+      background: var(--card); border-color: var(--border); color: #c8c3ce;
+    }
+    .library-button:hover, .icon-button:hover { background: var(--secondary); }
+    .library-button.primary { background: #dacce9; border-color: #dacce9; color: #292031; }
+    .library-button.primary:hover { background: #ecdef9; }
+    .library-search input, .library-fields input, .library-fields select, .ledger-table select { color: var(--foreground); }
+    .library-fields input, .library-fields select, .ledger-table select { background: #242127; border-color: #48414f; }
+    .library-search input::placeholder, .library-fields input:disabled { color: #9c94a6; }
+    .library-status, .library-status > span:last-child, .library-empty, .library-empty p,
+    .website-url, .website-card-foot span, .website-card-foot time, .website-count,
+    .website-kind, .website-kind.developed, .local-website, .website-title svg, .icon-button,
+    .library-fields label, .library-filters button, .library-filters span, .library-pagination span,
+    .ledger-summary span, .ledger-summary small, .ledger-summary > div:first-child span,
+    .ledger-summary > div:first-child small, .ledger-summary > div:last-child span,
+    .ledger-summary > div:last-child small, .ledger-account small, .ledger-account time,
+    .ledger-table th, .ledger-table small, .ledger-explanation { color: var(--muted-foreground); }
+    .website-card:hover { border-color: #806496; box-shadow: 0 6px 24px #0002; }
+    .website-card-foot, .ledger-account, .ledger-table th, .ledger-table td { border-color: var(--border); }
+    .website-title:hover h2, .ledger-view .notice a { color: #d7b3f5; }
+    .website-icon, .library-filters button[aria-pressed="true"], .activity-gate-symbol { background: var(--accent); color: var(--accent-foreground); }
+    .library-empty { background: #1c1b20; border-color: #47404e; }
+    .library-message { background: #30273b; border-color: #554062; color: #d4c1e5; }
+    .delete-confirm { border-color: #855463; color: #efb4c2; }
+    .ledger-summary > div:first-child { background: #352c48; }
+    .ledger-summary > div:last-child { background: #2b3526; }
+    .ledger-account, .ledger-account strong, .ledger-table td, .rate-preview { color: #c8c3ce; }
+    .pending-reason { color: #dfc192; }
+
+    .activity-intro h1 > span, .activity-subtitle, .activity-connection,
+    .activity-connection-name strong, .activity-connection-name > span:last-child,
+    .activity-connection-detail time, .activity-icon-button, .activity-open-link,
+    .activity-module-group > p, .activity-module-group button, .activity-module-group button > svg,
+    .activity-nav-note, .activity-canvas-header > div > p, .activity-canvas-header > div > span,
+    .activity-frame-loading svg, .activity-offline > svg, .activity-offline small,
+    .activity-offline p, .activity-footnote, .activity-footnote a, .activity-gate > svg,
+    .activity-gate .eyebrow, .activity-gate > p:not(.eyebrow) { color: var(--muted-foreground); }
+    .is-online .activity-connection-name strong { color: #b1c695; }
+    .activity-connection, .activity-module-nav, .activity-nav-note,
+    .activity-canvas-header, .activity-open-link { border-color: var(--border); }
+    .activity-module-nav { background: #19181d; scrollbar-color: #51435e #19181d; }
+    .activity-canvas, .activity-frame-loading, .activity-offline { background: #17151b; color: var(--muted-foreground); }
+    .activity-module-group button:hover, .activity-icon-button:hover,
+    .activity-open-link:hover { background: var(--secondary); color: var(--foreground); border-color: var(--border); }
+    .activity-module-group button.selected, .activity-module-group button.selected > svg { background: var(--accent); border-color: var(--accent); color: var(--accent-foreground); }
+
+    .shop-open, .shop-sections button, .shop-loading a, .atlas-open, .atlas-loading a,
+    .pro-shortcut, .pro-info-card { background: var(--card); border-color: var(--border); color: #d1c6dc; }
+    .shop-sections button[aria-pressed="true"] { background: var(--accent); border-color: #6d5287; color: var(--accent-foreground); }
+    .shop-section-icon, .shop-sections button[aria-pressed="true"] .shop-section-icon,
+    .atlas-features span, .pro-shortcut-icon, .pro-info-icon { background: #302738; border-color: #45334f; color: #bda4d3; }
+    .atlas-features span:nth-child(2), .pro-status, .pro-shortcut.green .pro-shortcut-icon { background: #2a3225; border-color: #3d4b32; color: #b2c698; }
+    .shop-sections small, .shop-frame-heading, .shop-loading p, .shop-footnote,
+    .atlas-loading p, .atlas-footnote, .atlas-footnote a, .pro-cloud-label,
+    .pro-kicker, .pro-login-copy > p:last-child, .pro-login-note, .pro-shortcut-top,
+    .pro-shortcut > strong, .pro-shortcut > p, .pro-shortcut-action,
+    .pro-info-card p, .pro-local-card a { color: #b4a8c0; }
+    .shop-loading, .atlas-loading, .local-app-overlay { background: #19171bf5; color: #d3c8de; }
+    .local-app-overlay p { color: var(--muted-foreground); }
+    .shop-frame-wrap, .atlas-frame-wrap, .local-app-frame-wrap { background: var(--card); border-color: var(--border); }
+    .pro-login-card { background: #30263f; border-color: #483456; color: #e1ceef; }
+    .pro-brand-icon { background: #4b375c; color: #e3c5ff; }
+    .pro-brand b { border-color: #85639e; }
+    .pro-login-copy h2, .pro-shortcut h2, .pro-info-card h2 { color: var(--foreground); }
+    .pro-primary-link { background: #dac7ed; border-color: #dac7ed; color: #2f203b; }
+    .pro-primary-link:hover { background: #ecdcfb; }
+    .pro-shortcut:hover { border-color: #78548f; }
+  }
+}
+
+/* Keep both targets comfortable to tap while preserving the reference proportions. */
+@media (pointer: coarse) {
+  .theme-toggle { grid-template-columns: repeat(2, 40px); height: 44px; }
+  .theme-toggle button { width: 40px; height: 40px; }
+  .theme-toggle-thumb { width: 40px; }
+  .theme-toggle[data-theme="dark"] .theme-toggle-thumb { transform: translateX(40px); }
+}
+@media (max-width: 430px) {
+  .console-header-actions { gap: 6px; }
+  .export-report span { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle-thumb, .theme-toggle button { transition: none; }
+}

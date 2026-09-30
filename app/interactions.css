@@ -1,0 +1,120 @@
+/* Current isablyns recipes: grey card wash, blue titles, stamped cursor,
+   0.99 card / 0.92 tool press, 480ms travelling arrows, and icon morphs.
+   Animation stays on icons and actual controls; page ancestors never move. */
+:root {
+  --pulse-motion-blue: #0033ff;
+  --pulse-motion-wash: rgb(0 0 0 / 5%);
+  --pulse-motion-quart: cubic-bezier(.25,1,.5,1);
+  --pulse-motion-expo: cubic-bezier(.16,1,.3,1);
+}
+:root[data-pulse-theme=dark] { --pulse-motion-blue: #a9b8ff; --pulse-motion-wash: rgb(255 255 255 / 6%); }
+:root[data-pulse-theme=eink] { --pulse-motion-blue: #252525; }
+.pulse-hover-card { transition: background-color 180ms var(--pulse-motion-quart), border-color 180ms var(--pulse-motion-quart), box-shadow 220ms var(--pulse-motion-quart); }
+.pulse-hover-card :is(h2,h3,.section-title strong) { transition: color 160ms var(--pulse-motion-quart); }
+.pulse-control { transition: color 180ms var(--pulse-motion-quart), background-color 180ms var(--pulse-motion-quart), scale 160ms var(--pulse-motion-quart); }
+.pulse-control:not(:disabled,[aria-disabled=true]):active { scale: .96; }
+.pulse-control:is(.icon-button,.refresh,.sidebar-toggle,.activity-icon-button,.pulse-sound-toggle):not(:disabled):active { scale: .92; }
+.pulse-control:is(.pro-shortcut,.website-title,.knowledge-entry):active { scale: .99; }
+.pulse-control:focus-visible { outline: 2px solid var(--pulse-motion-blue); outline-offset: 3px; }
+.pulse-hover-card:focus-within { background-color: var(--pulse-motion-wash); border-color: color-mix(in srgb,var(--pulse-motion-blue) 30%,var(--border)); }
+.pulse-hover-card:focus-within :is(h2,h3) { color: var(--pulse-motion-blue); }
+.console-content .pulse-hover-card:focus-within :is(h2,h3) { color: var(--pulse-motion-blue); }
+.pulse-control svg:not(.quota-spinning),.pulse-hover-card :is(.website-icon,.box-symbol,.knowledge-feature-icon,.pro-shortcut-icon,.music-mark,.pro-brand-icon) {
+  transform-origin: center; transition: transform 320ms var(--pulse-motion-expo), color 180ms var(--pulse-motion-quart);
+}
+.pulse-cursor-tip {
+  position: fixed; top: 0; left: 0; z-index: 11000;
+  padding: 5px 9px 4px; border-radius: 3px;
+  background: var(--foreground,#252329); color: var(--background,#fff);
+  font-family: inherit; font-size: 11px; font-weight: 600; letter-spacing: .08em;
+  white-space: nowrap; pointer-events: none; opacity: 0; scale: .92;
+  transform-origin: center;
+  transition: opacity 140ms var(--pulse-motion-quart),scale 180ms var(--pulse-motion-expo);
+}
+.pulse-cursor-tip.is-on { opacity: 1; scale: 1; }
+[data-pulse-cursor-on][data-pulse-cursor-on], [data-pulse-cursor-on][data-pulse-cursor-on] * { cursor: none !important; }
+@keyframes pulse-arrow-out {
+  0%,100% { transform: none; opacity: 1; }
+  45% { transform: translate(11px,-11px); opacity: 0; }
+  55% { transform: translate(-11px,11px); opacity: 0; }
+}
+@keyframes pulse-arrow-forward {
+  0%,100% { transform: none; opacity: 1; }
+  45% { transform: translateX(11px); opacity: 0; }
+  55% { transform: translateX(-11px); opacity: 0; }
+}
+@keyframes pulse-icon-bob {
+  0%,100% { transform: none; }
+  32% { transform: translateY(-3px) rotate(-8deg) scale(1.14); }
+  65% { transform: translateY(1px) rotate(5deg) scale(1.05); }
+}
+@keyframes pulse-icon-turn { to { transform: rotate(180deg); } }
+@keyframes pulse-check-draw { from { stroke-dashoffset: 30; } to { stroke-dashoffset: 0; } }
+@media (hover:hover) and (pointer:fine) {
+  .pulse-hover-card:hover { background-color: var(--pulse-motion-wash); border-color: color-mix(in srgb,var(--pulse-motion-blue) 30%,var(--border)); }
+  .pulse-hover-card:hover :is(h2,h3) { color: var(--pulse-motion-blue); }
+  .console-content .pulse-hover-card:hover :is(h2,h3) { color: var(--pulse-motion-blue); }
+  .pulse-control:not(:disabled,[aria-disabled=true],.primary,.knowledge-primary,.pro-primary-link):hover { color: var(--pulse-motion-blue); }
+  .pulse-control:not(:disabled,[aria-disabled=true]):hover > svg:not(.quota-spinning,.box-chevron) { transform: scale(1.14) rotate(-6deg); }
+  .pulse-control:not(:disabled,[aria-disabled=true]):hover svg:is(.lucide-external-link,.lucide-arrow-up-right) { animation: pulse-arrow-out 480ms var(--pulse-motion-quart); }
+  .pulse-control:not(:disabled,[aria-disabled=true]):hover svg:is(.lucide-chevron-right,.lucide-arrow-right) { animation: pulse-arrow-forward 480ms var(--pulse-motion-quart); }
+  .pulse-control:not(:disabled,[aria-disabled=true]):hover svg.lucide-refresh-cw { animation: pulse-icon-turn 480ms var(--pulse-motion-expo); }
+  .pulse-control:not(:disabled,[aria-disabled=true]):hover svg:is(.lucide-gamepad-2,.lucide-headphones,.lucide-map-pinned,.lucide-zap,.lucide-library,.lucide-sparkles) { animation: pulse-icon-bob 560ms var(--pulse-motion-expo); }
+  .pulse-hover-card:hover :is(.website-icon,.box-symbol,.knowledge-feature-icon,.pro-shortcut-icon,.music-mark,.pro-brand-icon) { transform: scale(1.2) rotate(4deg); }
+  .pulse-hover-card:nth-child(even):hover :is(.website-icon,.box-symbol,.knowledge-feature-icon,.pro-shortcut-icon) { transform: scale(1.2) rotate(-5deg); }
+  :is(.record-row:not(.record-head),.model-row,.box-link,.box-timeline li,.ledger-account,.ledger-table tbody tr,.daily-table tbody tr,.settings-panel dl>div,.knowledge-steps li):hover { background-color: var(--pulse-motion-wash); }
+  :is(.bar-slot,.heatmap-cell:not(.heatmap-blank)):hover { filter: brightness(1.12); outline: 2px solid var(--pulse-motion-blue); outline-offset: 2px; }
+  .atlas-features>span:hover svg,.rooster-guide kbd:hover { animation: pulse-icon-bob 560ms var(--pulse-motion-expo); }
+}
+.shop-password-copy .lucide-check polyline { stroke-dasharray: 30; animation: pulse-check-draw 340ms var(--pulse-motion-expo) both; }
+.website-box .box-content { animation:pulse-box-open 380ms var(--pulse-motion-expo); }
+@keyframes pulse-box-open { from{opacity:0;translate:0 6px}to{opacity:1;translate:0 0} }
+.pulse-sound-toggle { display: grid; place-items: center; width: 32px; height: 32px; flex: none; border: 0; border-radius: 6px; background: var(--theme-field); color: var(--theme-ink); }
+.pulse-sound-toggle[aria-pressed=false] { color: var(--theme-ink-muted); }
+.pulse-sound-toggle svg { animation: pulse-icon-bob 320ms var(--pulse-motion-expo); }
+/* The dock's current theme unfolds into two alternative choices. */
+.theme-toggle.pulse-theme-dock { display: flex; width: auto; height: 38px; padding: 3px; gap: 0; border-radius: 8px; background: transparent; transition: background 420ms var(--pulse-motion-quart); }
+.pulse-theme-dock.is-open { background: var(--theme-field); }
+.pulse-theme-dock button { width: 32px; height: 32px; border-radius: 5px; }
+.pulse-theme-current { background: var(--theme-surface) !important; color: var(--theme-ink) !important; box-shadow: var(--theme-shadow); }
+.pulse-theme-current svg { position: absolute; opacity: 0; transform: scale(.5); transition: opacity 260ms var(--pulse-motion-expo), transform 260ms var(--pulse-motion-expo); }
+.pulse-theme-current svg.is-current { opacity: 1; transform: scale(1); }
+.pulse-theme-tray { display: grid; grid-template-columns: 0px; transition: grid-template-columns 640ms cubic-bezier(.22,1,.36,1); }
+.pulse-theme-dock.is-open .pulse-theme-tray { grid-template-columns: 64px; }
+.pulse-theme-tray>div { display: flex; min-width: 0; overflow: hidden; }
+.pulse-theme-tray button { flex: none; }
+.pulse-theme-tray button[data-current=true] { display: none; }
+.pulse-pen-tools { position: relative; flex: none; }
+.pulse-pen { display:grid;place-items:center;width:32px;height:32px;border:0;border-radius:6px;background:var(--theme-field);color:var(--theme-ink); }
+.pulse-pen>svg { transition:transform 320ms var(--pulse-motion-expo); }
+.pulse-pen[aria-pressed=true]>svg { transform:rotate(-38deg); }
+.pulse-pen.did-ink>svg { animation:pulse-pen-scribble 420ms var(--pulse-motion-quart); }
+.pulse-pen-palette { position:absolute;right:0;top:calc(100% + 10px);z-index:80;display:flex;align-items:center;gap:3px;padding:6px;border-radius:8px;background:var(--theme-surface);box-shadow:0 4px 22px #0002; }
+.pulse-pen-palette button { display:grid;place-items:center;width:32px;height:32px;flex:none;border:0;border-radius:5px;background:transparent;color:var(--pulse-dab); }
+.pulse-pen-palette button[aria-pressed=true] { background:var(--theme-field); }
+.pulse-pen-palette path { fill:none;stroke:currentColor;stroke-width:4;stroke-linecap:round; }
+.pulse-pen-palette>span { position:absolute;right:0;top:100%;font-size:10px;line-height:1.7;white-space:nowrap;color:var(--muted-foreground);background:var(--theme-surface);padding:2px 7px;border-radius:4px; }
+.pulse-pen-mode .pulse-readable,.pulse-pen-mode .pulse-readable * { cursor:var(--pulse-pen-cursor)!important; }
+.pulse-ink-stroke { position:fixed;z-index:9990;pointer-events:none;border-radius:1px; }
+::highlight(pulse-ink-azure) { background-color:rgb(0 51 255 / 18%); }
+::highlight(pulse-ink-sun) { background-color:rgb(233 185 54 / 46%); }
+::highlight(pulse-ink-rose) { background-color:rgb(220 128 152 / 26%); }
+::highlight(pulse-ink-mint) { background-color:rgb(103 185 154 / 27%); }
+@keyframes pulse-pen-scribble { 0%,100%{transform:rotate(-38deg)}35%{transform:translate(-2px,1px) rotate(-54deg)}70%{transform:translate(2px,-1px) rotate(-28deg)} }
+@media (hover:hover) and (pointer:fine) {
+  .pulse-theme-dock .pulse-theme-current:hover svg.is-current { transform: scale(1.14); }
+  .pulse-theme-tray button:hover { background: color-mix(in srgb,var(--theme-ink) 7%,transparent); }
+  .pulse-pen:not([aria-pressed=true]):hover>svg { transform:translateY(-1px) rotate(-14deg); }
+  .pulse-pen-palette button:hover { background:var(--theme-field); }
+}
+@media (max-width:640px) {
+  .pulse-sound-toggle { width: 30px; height: 34px; }
+  .pulse-theme-tray { position:absolute;right:0;top:calc(100% + 8px);z-index:80;border-radius:6px;background:var(--theme-surface);box-shadow:0 4px 22px #0002; }
+}
+@media (max-width:430px) { .console-breadcrumb>span,.console-breadcrumb>strong,.console-breadcrumb>svg { display:none; } }
+@media (prefers-reduced-motion:reduce) {
+  .pulse-hover-card,.pulse-hover-card *, .pulse-control,.pulse-control svg,.pulse-theme-dock,.pulse-theme-tray,.pulse-theme-current svg { transition: none !important; animation: none !important; }
+  .pulse-control:active { scale: 1 !important; }
+  .pulse-cursor-tip { transition: opacity 120ms linear; scale: 1; }
+  .pulse-control svg:not(.quota-spinning,.box-chevron),.pulse-hover-card :is(.website-icon,.box-symbol,.knowledge-feature-icon,.pro-shortcut-icon,.music-mark,.pro-brand-icon) { transform: none !important; }
+}

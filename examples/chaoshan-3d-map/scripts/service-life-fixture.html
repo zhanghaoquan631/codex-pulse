@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Service Life Visual Audit</title>
+<style>html,body{margin:0;width:100%;height:100%;overflow:hidden}canvas{display:block;width:100%;height:100%}</style>
+<script type="module">
+import * as THREE from 'three';
+import {services,addServiceSigns} from '../neighborhood-services.mjs';
+import {serviceBuilding} from '../service-buildings.mjs';
+import {addServiceResident} from '../service-life.mjs';
+import {material} from '../scene-miniatures.mjs';
+import {batchStatic} from '../static-batch.mjs';
+const renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(1);renderer.shadowMap.enabled=true;document.body.append(renderer.domElement);
+const scene=new THREE.Scene();scene.background=new THREE.Color('#cbd6ce');scene.add(new THREE.HemisphereLight('#ffffff','#688e78',2));
+const light=new THREE.DirectionalLight('#fff2d4',3);light.position.set(-2,5,4);light.castShadow=true;scene.add(light);
+const camera=new THREE.OrthographicCamera(-.83*innerWidth/innerHeight,.83*innerWidth/innerHeight,.83,-.83,.01,20);camera.position.set(1.4,1.7,2.7);camera.lookAt(0,.39,.05);
+const type=new URL(location.href).searchParams.get('service')||'coffee',variant=Number(new URL(location.href).searchParams.get('variant')||0),service=services.find(s=>s[0]===type),program=serviceBuilding(service,{size:1,height:.9,low:true,residential:true,variant,setting:'fishing'});
+const group=new THREE.Group();scene.add(group);
+for(const p of program.parts){const geometry=p.shape==='sphere'?new THREE.SphereGeometry(.5,12,8):p.shape==='cylinder'?new THREE.CylinderGeometry(.5,.5,1,12):new THREE.BoxGeometry();const mesh=new THREE.Mesh(geometry,material(p.color));mesh.position.set(p.x,p.y,p.z);mesh.scale.set(p.w,p.h,p.d);mesh.rotation.y=p.turn;group.add(mesh);}
+const s=program.sign;addServiceSigns(group,[{...s,angle:0,service}]);
+const floor=new THREE.Mesh(new THREE.BoxGeometry(1.5,.018,1.5),material('#8da98e'));floor.position.y=-.01;group.add(floor);
+const actor=addServiceResident(group,{service,program},0);batchStatic(group);
+window.serviceFixture={actor,program,renderer,tick(t){actor.ambientUpdate(t);renderer.render(scene,camera);return {position:actor.root.position.toArray(),state:actor.root.userData.state};}};
+window.serviceFixture.tick(12);
+</script></html>

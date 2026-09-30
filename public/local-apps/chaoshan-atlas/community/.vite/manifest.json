@@ -1,0 +1,11 @@
+{
+  "pulse-entry.mjs": {
+    "file": "community-UjFXiNTQ.js",
+    "name": "pulse-entry",
+    "src": "pulse-entry.mjs",
+    "isEntry": true,
+    "css": [
+      "community-qW3q_Tcb.css"
+    ]
+  }
+}

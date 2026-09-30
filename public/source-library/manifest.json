@@ -1,0 +1,26 @@
+[
+  {
+    "id": "chaoshan-map",
+    "files": 316,
+    "textBytes": 8021006,
+    "zipBytes": 49140580
+  },
+  {
+    "id": "chaoshan-adventure",
+    "files": 1719,
+    "textBytes": 4162446,
+    "zipBytes": 12823083
+  },
+  {
+    "id": "rooster-rush",
+    "files": 15,
+    "textBytes": 68934,
+    "zipBytes": 493195
+  },
+  {
+    "id": "xiamen-map",
+    "files": 188,
+    "textBytes": 797470,
+    "zipBytes": 18306470
+  }
+]

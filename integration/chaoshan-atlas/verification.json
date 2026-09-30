@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "files": 3419,
+  "totalMiB": 154.01,
+  "animals": 1593,
+  "moduleImports": 224,
+  "localReferences": 309,
+  "issues": []
+}

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+ <meta name="theme-color" content="#e6ede7"><title>厦门 · XIAMEN 3D Atlas v1</title>
+ <link rel="icon" href="data:,">
+</head>
+<body data-time="day">
+ <main id="viewport" aria-label="厦门三维地图" tabindex="0"></main><div id="labels" aria-label="地图地名"></div><div class="vignette" aria-hidden="true"></div>
+ <header class="brand"><div class="eyebrow">FUJIAN <span>·</span> SPATIAL ATLAS</div><h1>厦门<span class="brand-en">XIAMEN</span><span class="seal">3D</span><span class="atlas-version">v1</span></h1><p>沿着江河，走向山海。</p></header>
+ <div class="top-actions"><div class="time-switch glass" role="group" aria-label="时间"><button data-time-choice="morning" aria-pressed="false">清晨</button><button data-time-choice="day" class="selected" aria-pressed="true">晴日</button><button data-time-choice="sunset" aria-pressed="false">暮色</button><button data-time-choice="night" aria-pressed="false">星夜</button></div><button id="info" class="icon-button glass" aria-label="地图资料">i</button></div>
+ <aside class="explore glass" id="explore" aria-label="探索厦门"><div class="explore-heading"><h2>想去哪里看看？</h2><button id="close-explore" aria-label="关闭地区列表">×</button></div><div class="select-wrap"><label for="district">厦门地区</label><select id="district"><option value="">选择一个地区</option></select></div><div class="section-label"><span>EXPLORE XIAMEN</span><span id="place-count"></span></div><nav id="places" aria-label="地区入口"></nav><div class="explore-foot"><span class="legend-line"></span>OSM 行政边界<button id="boundaries" aria-pressed="false">显示</button></div></aside>
+ <div class="map-controls"><button id="north" class="compass" aria-label="朝向正北"><span>N</span><svg viewBox="0 0 36 44" aria-hidden="true"><path d="M18 3 30 37 18 30 6 37Z" fill="currentColor"/><path d="M18 3v27l12 7Z" fill="currentColor" opacity=".25"/></svg></button><div class="zoom-control glass"><button id="zoom-in" aria-label="放大">+</button><button id="zoom-out" aria-label="缩小">−</button></div></div>
+ <div class="location-card glass" id="location-card" aria-live="polite"><div class="location-overline"><span id="location-en">A REGION IN MINIATURE</span><span id="location-index">XIAMEN</span></div><h2 id="location-name">厦门，一览山海</h2><p id="location-description">海岛、老街与海岸，十二处旅游入口</p><div id="location-coordinates">24.5000° N · 118.1150° E</div></div>
+ <div class="bottom-center"><nav class="toolbar glass" aria-label="地图工具">
+ <button id="home" class="toolbar-item" title="厦门全景"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-8h6v8"/></svg><span>厦门全景</span></button>
+ <button id="open-explore" class="toolbar-item mobile-only" aria-expanded="false" aria-controls="explore"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM8 4v16M11 8h6M11 12h6M11 16h4"/></svg><span>探索</span></button>
+ <button id="tour" class="toolbar-item tour-button" aria-pressed="false"><svg id="play-icon" viewBox="0 0 24 24"><path d="m9 5 11 7-11 7Z"/></svg><span id="tour-text">自动巡游</span></button><span class="toolbar-divider"></span>
+ <button id="view-mode" class="toolbar-item" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="m3 8 9-5 9 5-9 5ZM3 12l9 5 9-5M3 16l9 5 9-5"/></svg><span id="view-text">平面视图</span></button>
+ <button id="toggle-labels" class="toolbar-item active" aria-pressed="true"><svg viewBox="0 0 24 24"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/></svg><span>地名</span></button>
+ <button id="fullscreen" class="toolbar-item"><svg viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg><span>全屏</span></button><div id="tour-progress" aria-hidden="true"></div>
+ </nav></div>
+ <footer><div><span class="footer-line"></span>地理数据 · 示意街景 · 地形 4×</div><button id="credits">数据来源与范围</button></footer><div id="toast" role="status" hidden></div>
+ <div id="loading" role="status"><div class="loading-mark">厦门</div><p id="loading-text">正在展开山海与城市</p><div class="loading-line"><span id="loading-bar"></span></div><button id="retry" hidden>重新载入</button></div>
+ <dialog id="about"><div class="dialog-top"><span class="eyebrow">ABOUT THIS ATLAS · v1</span><button id="close-about" aria-label="关闭资料">×</button></div><h2>厦门，一座山海微缩地图</h2>
+ <p>地形、道路、水系与建筑轮廓来自公开地图。城区已补充详细建筑轮廓与路网；缺少高度的建筑采用展示高度。城市用地内新增楼群、街边餐饮、行人和车辆为示意补景，不代表实测建筑、真实商户位置或实时客流。地形高度放大四倍并作局部平滑，地标细部、补景民居、人物与植被为微缩表达，不代表实测建筑或真实入口。</p>
+ <p>地图数据采用2026年9月13日的OSM快照，并非实时卫星或完整三维扫描；数据缺失地区仍有艺术补景。地点目录不是所有地点的穷尽清单，通行、预约与开放需现场核对。边界线不能用于测绘或行政认定。</p>
+ <dl><div><dt>地图与建筑</dt><dd><a href="https://openfreemap.org/">OpenFreeMap</a> / <a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a> · ODbL 1.0</dd></div><div><dt>地形</dt><dd><a href="https://registry.opendata.aws/terrain-tiles/">Mapzen / AWS Terrain Tiles</a> · SRTM 等高程资料</dd></div><div><dt>参考实现</dt><dd><a href="https://seoul-3d-atlas.synabreu.chatgpt.site/">Seoul 3D Atlas v1.3</a> 的界面与渲染结构，沿用用户本地潮汕项目的界面与渲染流程，厦门适配。</dd></div><div><dt>数据文件</dt><dd><a href="/data/xiamen.json" download>厦门地形与道路</a> · <a href="/data/buildings.bin" download>基础建筑</a> · <a href="/data/island-detail.json" download>鼓浪屿街巷与地被</a> · <a href="/data/provenance.json">数据范围</a> · <a href="/REFERENCE-LICENSES.txt">来源声明</a></dd></div></dl><p class="about-note">地图使用公开数据快照。人物与船只为演示动画，不是实时交通或实时卫星影像。</p></dialog>
+ <noscript>请启用 JavaScript 以显示三维地图。</noscript><script type="module" src="/app.js"></script>
+</body></html>

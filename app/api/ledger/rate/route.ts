@@ -1,0 +1,2 @@
+import {exchangeRate} from "@/lib/ledger";
+export async function GET(request:Request){try{const url=new URL(request.url),currency=(url.searchParams.get("currency")||"").toUpperCase(),date=url.searchParams.get("date")||"";return Response.json(await exchangeRate(currency,date),{headers:{"Cache-Control":"public, max-age=3600"}});}catch(error){return Response.json({error:error instanceof Error?error.message:"汇率暂时无法读取"},{status:503});}}

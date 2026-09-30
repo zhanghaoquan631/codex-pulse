@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,"><title>Urban architecture inspection</title><style>body{margin:0}canvas{display:block}</style></head><body><script type="module">
+import * as THREE from 'three';
+import {URBAN_STYLES,urbanPrototype,urbanFacadeMaterial} from '../urban-architecture.mjs';
+const scene=new THREE.Scene();scene.background=new THREE.Color('#acbec1');
+const renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setPixelRatio(1);document.body.append(renderer.domElement);
+const camera=new THREE.OrthographicCamera(-.3,.3,.24,-.24,.001,100),meshes=[];
+scene.add(new THREE.HemisphereLight('#ffffff','#738b79',2));const sun=new THREE.DirectionalLight('#fff4df',2.5);sun.position.set(-3,5,4);scene.add(sun);
+for(const [i,style] of URBAN_STYLES.entries()){
+ const mesh=new THREE.InstancedMesh(urbanPrototype(style),urbanFacadeMaterial(style),1),dummy=new THREE.Object3D();
+ dummy.position.set((i%3-1)*.13,0,(Math.floor(i/3)-.5)*.15);dummy.scale.set(.078,.11+i%3*.02,.078);dummy.updateMatrix();mesh.setMatrixAt(0,dummy.matrix);mesh.setColorAt(0,new THREE.Color('#f0f4ee'));mesh.computeBoundingSphere();scene.add(mesh);meshes.push(mesh);
+}
+let rear=false,plain=false;
+const draw=()=>{const half=innerWidth<600?.33:.24;camera.left=-half*innerWidth/innerHeight;camera.right=-camera.left;camera.top=half;camera.bottom=-half;camera.position.set(rear?-.3:.3,.40,rear?-.5:.5);camera.lookAt(0,.05,0);camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.render(scene,camera);};
+addEventListener('resize',draw);draw();
+window.urbanAudit={ready:true,draw,view(value){rear=value;draw();},plain(value){plain=value;meshes.forEach((m,i)=>m.material=plain?new THREE.MeshStandardMaterial({vertexColors:true,roughness:.88}):urbanFacadeMaterial(URBAN_STYLES[i]));draw();},framed(){return meshes.every(m=>{const b=new THREE.Box3().setFromObject(m);for(const x of [b.min.x,b.max.x])for(const y of [b.min.y,b.max.y])for(const z of [b.min.z,b.max.z]){const p=new THREE.Vector3(x,y,z).project(camera);if(Math.abs(p.x)>.98||Math.abs(p.y)>.98)return false;}return true;});}};
+</script></body></html>

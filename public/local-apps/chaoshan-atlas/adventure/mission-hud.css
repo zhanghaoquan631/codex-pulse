@@ -1,0 +1,40 @@
+/* Mission paper stays beside the action; the full map pauses play. */
+.kill-objective{position:absolute;top:74px;left:24px;width:230px;padding:12px 15px;background:#f9f3e5ee;color:#243d79;border:1.5px solid #243d7977;box-shadow:3px 4px 0 #243d7915;transform:rotate(-.6deg)}
+.kill-objective>span{font-size:13px;letter-spacing:2px;font-weight:700}
+.kill-objective strong{display:block;font:700 39px/1.2 "Sketch Han",monospace;margin:5px 0}
+.kill-objective strong i{font-size:24px;font-style:normal;color:#7d8393}
+.kill-objective #kill-target{font-size:27px;color:#68758d}
+.kill-track{height:7px;background:#243d791b;overflow:hidden;border-radius:1px}
+.kill-track i{display:block;height:100%;width:0;background:#b5543e;transition:width .2s}
+.kill-objective p{font-size:12px;line-height:1.6;margin-top:7px;color:#a64b37}
+.kill-objective.complete{border-color:#69846e}.kill-objective.complete .kill-track i{background:#69846e}.kill-objective.complete p{color:#4a725a}
+.kill-objective.punch #kill-current{display:inline-block;animation:quota-count .26s ease-out}
+@keyframes quota-count{40%{transform:scale(1.24);color:#bd5135}}
+body.ink-world[data-view] .location-card{top:239px;width:230px}
+body.ink-world .weather-card{top:419px;max-width:230px}
+body.ink-world .minimap-shell{top:218px;width:148px}
+body.ink-world .minimap-shell canvas{width:144px;height:144px;border-radius:4px}
+.minimap-shell #tactical-open{display:block;width:100%;min-height:34px;margin-top:4px;font-size:12px;pointer-events:auto}
+.minimap-shell>span{display:block;text-align:center;font-size:11px;padding-top:4px}.minimap-shell em{font-style:normal;color:#7a438c;font-weight:bold}
+.mission-announcement{position:absolute;top:26%;left:50%;transform:translateX(-50%) rotate(-1deg);padding:16px 26px;max-width:calc(100% - 36px);background:#fff2d6ef;border:2px solid #a77936;color:#74531f;box-shadow:5px 5px 0 #75571a20;text-align:center;font:700 25px/1.6 "Sketch Han",sans-serif;pointer-events:none;z-index:18}
+.tactical-dialog{width:min(1050px,96vw);padding:23px;max-height:92dvh;overflow:auto}
+.tactical-dialog .dialog-heading{margin-bottom:12px}.tactical-dialog h2{font-size:28px}
+#tactical-canvas{width:100%;height:auto;max-height:56dvh;object-fit:contain;border:1px solid #243d7955;display:block;background:#f4efdf}
+.map-legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin:13px 0;font-size:12px}.map-legend span:first-child{color:#794394}.map-legend span:nth-child(2){color:#967127}.map-legend span:nth-child(3){color:#aa443b}
+#tactical-note{font-size:13px;line-height:1.6;margin:10px 0}
+#map-open-riddle{font-size:13px;padding:10px 15px}
+.camera-settings-panel{max-height:65dvh;overflow:auto}
+@media(max-width:1000px) and (min-width:761px){body.ink-world .weather-card{top:436px}.hunt-strip{top:178px}body.ink-world .boss-hud{top:225px}.view-controls #look-lock{display:none}}
+@media(max-width:760px){
+ .kill-objective{left:10px;top:67px;width:184px;padding:9px 11px}.kill-objective>span{font-size:11px}.kill-objective strong{font-size:34px;line-height:1.12;margin:5px 0}.kill-objective #kill-target{font-size:23px}.kill-objective p{font-size:10px;margin-top:5px;line-height:1.4}
+ body.ink-world[data-view] .location-card{display:none}
+ body.ink-world .weather-card{top:193px;left:10px;max-width:187px;padding:5px 8px;font-size:11px}
+ body.ink-world .minimap-shell{top:179px;right:12px;width:88px}.minimap-shell #tactical-open{font-size:10px;min-height:29px;padding:4px}
+ body.ink-world .minimap-shell canvas{width:84px;height:84px}.minimap-shell>span{font-size:9px}.minimap-shell kbd{display:none}
+ body.ink-world .view-controls{top:223px;left:10px;gap:5px}.camera-settings summary{padding:9px 7px;font-size:11px}
+ .hunt-strip{top:315px;font-size:10px}body.ink-world .boss-hud{top:362px}
+ .mission-announcement{top:42%;width:max-content;font-size:18px;padding:11px 18px}
+ .tactical-dialog{padding:15px}.tactical-dialog h2{font-size:21px}#tactical-canvas{max-height:48dvh}.map-legend{gap:6px 12px;font-size:10px}#tactical-note{font-size:12px}
+}
+@media(max-height:650px) and (min-width:761px){body.ink-world .weather-card{top:403px}.kill-objective{padding:8px 12px}.kill-objective strong{font-size:31px}body.ink-world[data-view] .location-card{top:214px}.location-card ol{font-size:10px!important}.tactical-dialog{padding:14px}.tactical-dialog h2{font-size:21px}#tactical-canvas{max-height:49dvh}}
+@media(prefers-reduced-motion:reduce){.kill-objective.punch #kill-current{animation:none}.kill-track i{transition:none}}

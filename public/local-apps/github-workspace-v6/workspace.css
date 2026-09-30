@@ -1,0 +1,59 @@
+.v6-connection-note {
+  display: grid;
+  gap: 0.8rem;
+  margin: 1rem 0;
+  padding: 1.25rem;
+  border: 1px solid rgba(139, 92, 246, 0.28);
+  border-radius: 1rem;
+  background: rgba(14, 17, 24, 0.88);
+}
+
+.v6-connection-note strong {
+  color: #f0f3f6;
+}
+.v6-connection-note span {
+  color: #8b949e;
+  line-height: 1.6;
+}
+.v6-connection-note .landing-actions {
+  margin-top: 0.25rem;
+}
+.v6-runtime-error {
+  margin: 1.5rem;
+}
+
+.v6-heatmap-axis {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: -0.2rem 0 0.55rem;
+  color: #8b949e;
+  font-size: 0.68rem;
+}
+
+.v5-heatmap span:focus-visible {
+  outline: 2px solid #f0f3f6;
+  outline-offset: 2px;
+}
+
+.v6-heatmap-tooltip {
+  position: fixed;
+  z-index: 20;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid rgba(139, 92, 246, 0.45);
+  border-radius: 0.45rem;
+  color: #f0f3f6;
+  background: #10131a;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.36);
+  font-size: 0.72rem;
+  pointer-events: none;
+}
+
+@media (max-width: 680px) {
+  .v6-heatmap-axis {
+    font-size: 0.61rem;
+  }
+  .v6-heatmap-axis span:nth-child(2) {
+    display: none;
+  }
+}

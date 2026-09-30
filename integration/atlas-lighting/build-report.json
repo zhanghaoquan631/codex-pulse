@@ -1,0 +1,60 @@
+{
+  "release": "2026-09-27",
+  "baseline": "assets/index-community-13f5ca70f400.js",
+  "baselineHash": "13f5ca70f400e6a4fc5e97a1fe18f463f44663e955cc2fe33c39cf7df37b03ee",
+  "entry": {
+    "file": "atlas-lighting-DQ3uShyK.js",
+    "name": "runtime",
+    "src": ".build/runtime.js",
+    "isEntry": true,
+    "css": [
+      "atlas-lighting-DqhZHFM6.css"
+    ]
+  },
+  "sources": {
+    "index.html": "10be769b97f111faad9bba98669ba17875e76176c395af8dd9b0d39e51e6d4f2",
+    "living-sky.mjs": "b56afee1f42ba1cdc834373ff9623cafaf2508a40bec0cfee0502a53f065a867",
+    "living-world.css": "03e50488e143cb34548978c6f39339ba2060687956248dc4a3b039ef9ed084c1",
+    "night-sky.mjs": "7129599596e4f3bb66d52e363446c32152ebf24423dc5eed82e0f85fde3c0e89",
+    "photographic-sky.mjs": "77418e50d587d73626868f04032ecd5848cbe865e10bc2324f5c1e3c28878cb3",
+    "scene-tools.mjs": "188136f9cb745df7ae2b01b357857d097441b7032c43071ebb4f6366a407e409",
+    "solar-lighting.mjs": "c6e33e282da3bf01b94935507601110474118fcfb6964370a8255b61691b5dc3"
+  },
+  "changes": [
+    "function Jr",
+    "function nh",
+    "function pulsePrepareRender",
+    "const t=Math.min((i-S0)/1e3,.05);",
+    "else if(Zs&&!Us){",
+    "if(Zs){const n=i-Js;",
+    "if(!Us){for(const n of ky)",
+    "Us||(Ge+=t)",
+    "si.update(i,Us)",
+    "bi.update(Ge)",
+    "bi = y5({ scene: ge, camera: Kt, sun: qe, hemisphere: Vs, setPeriod: o => Jr(o, !0), reducedMotion: ",
+    "sky: bi == null ? void 0 : bi.getState()"
+  ],
+  "preserved": [
+    "community portal",
+    "custom markers",
+    "rankings",
+    "policies",
+    "adventure",
+    "cooperative startup",
+    "population limits",
+    "visibility pause",
+    "detail LOD"
+  ],
+  "features": [
+    "four periods",
+    "12-second transitions",
+    "moving sun",
+    "starry sky",
+    "tree and building shadows",
+    "three quality modes",
+    "pause",
+    "ambient audio",
+    "PNG capture",
+    "clean view"
+  ]
+}

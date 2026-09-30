@@ -1,0 +1,70 @@
+.explore{overflow-y:auto;overscroll-behavior:contain}
+
+/* Keep navigation usable as regional collections grow. */
+.explore{overflow:hidden!important}
+.explore>*:not(#places){flex-shrink:0}
+.explore>#places{flex:1 1 auto;min-height:120px;max-height:none!important;scrollbar-gutter:stable}
+.feature-tabs{max-height:94px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#94aaa0 transparent;gap:3px;padding-bottom:6px}
+.feature-tabs button{padding:7px 4px;min-height:32px}
+.place-search{width:100%;height:36px;border:1px solid var(--line);border-radius:4px;background:var(--glass);color:var(--ink);font:inherit;font-size:13px;padding:7px 10px;margin:0 0 9px;min-width:0}
+.place-search::placeholder{color:var(--muted)}
+.place-empty{font-size:13px;color:var(--muted);margin:8px 0 14px}
+.place-empty[hidden]{display:none}
+.explore .select-wrap{margin-bottom:12px;padding:8px 10px}
+.explore h2{margin-bottom:12px}
+.life-options{gap:8px;padding:8px 0}
+.location-card{max-height:calc(100dvh - 210px);overflow-y:auto;scrollbar-width:thin}
+.location-card h2{overflow-wrap:anywhere}
+.location-more>summary{display:none}
+body .map-label{max-width:min(220px,calc(100vw - 32px));white-space:normal;overflow-wrap:anywhere;text-align:center}
+body[data-time=night] .feature-tabs button[aria-pressed=true]{background:#327c71}
+body[data-time=night] .place-search{border-color:#709c9366}
+@media(max-width:650px){
+ .explore{max-height:calc(100dvh - 220px)}
+ .explore>#places{min-height:110px}
+ .feature-tabs{max-height:76px}
+ .location-card{max-height:calc(100dvh - 350px)}
+}
+.explore>#places{min-height:140px}
+.feature-tabs{display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid #63746640;padding:0 0 10px;margin-bottom:8px}
+.feature-tabs button{flex:1;border:0;background:transparent;color:inherit;padding:9px 4px;font:inherit;font-size:12px;border-radius:4px;cursor:pointer}
+.feature-tabs button[aria-pressed=true]{background:#526a5b;color:#fff}
+.explore:has([data-category="island"][aria-pressed="true"], [data-category="shantou"][aria-pressed="true"]) #places{flex-shrink:0;min-height:150px;max-height:220px;overflow-y:auto}
+.explore:has([data-category="shantou"][aria-pressed="true"]){overflow-y:auto;overscroll-behavior:contain}
+.explore:has([data-category="shantou"][aria-pressed="true"])>*{flex-shrink:0}
+.place[hidden],.feature-detail[hidden]{display:none!important}
+.feature-detail{border-top:1px solid #78877640;margin-top:10px;padding-top:9px;font-size:12px;line-height:1.6}
+.feature-detail summary{cursor:pointer;font-weight:600}.feature-detail p{display:block!important;font-size:12px!important;line-height:1.7!important;margin:8px 0!important}
+.feature-tags{color:#5e786a;padding-top:10px;font-size:11px}.feature-detail a{color:inherit;text-underline-offset:3px}.feature-detail small{display:block;margin-top:7px;opacity:.65;font-size:10px}
+.location-overline{gap:8px;flex-wrap:wrap}.location-overline span{overflow-wrap:anywhere}.location-card{width:280px}
+body[data-time=night] .feature-tags{color:#abd3bf}
+.life-options{display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:10px 0;border-top:1px solid #78877640;font-size:11px}.life-options label{display:flex;align-items:center;gap:4px;cursor:pointer}.life-options input{accent-color:#387668}.life-options small{width:100%;opacity:.65;font-size:10px}
+.explore.open~.map-controls{visibility:hidden}
+.map-label.city-label{font-size:14px;font-weight:700;border:1px solid #527666;background:#f7fcf5;color:#264e40;z-index:3;letter-spacing:0}
+.map-label-leader{position:absolute;height:1px;background:#5c7c69;transform-origin:left center;pointer-events:none}
+.map-label-leader[hidden]{display:none}
+.feature-tabs button{white-space:nowrap;letter-spacing:0;flex:1 0 28%}
+.place-title{white-space:normal;overflow-wrap:anywhere}
+.food-inspect{margin-top:12px;padding:9px 14px;background:#256d68;color:white;border:0;border-radius:4px;cursor:pointer;font:inherit;font-size:13px}
+.food-inspect[hidden]{display:none}
+.scene-view-choices{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.scene-view-choices:empty{display:none}.scene-view-choices button{font:inherit;font-size:12px;padding:7px 9px;border:1px solid #769f9466;background:#e3efea;color:#285c55;border-radius:4px;cursor:pointer}
+.food-viewer{width:min(780px,calc(100vw - 32px));padding:0;border:1px solid #a7bfba;border-radius:8px;background:#f6faf8;color:#203c39;max-height:calc(100dvh - 32px);overflow:auto}
+.food-viewer::backdrop{background:#102c35b8}.food-viewer header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px}.food-viewer h2{font-size:22px;margin:0;letter-spacing:0}.food-viewer header button{width:40px;height:40px;border:0;background:transparent;font-size:28px;color:inherit;cursor:pointer}
+.food-viewer-stage{width:100%;height:min(58dvh,510px);min-height:240px}.food-viewer-stage canvas{display:block;width:100%;height:100%;touch-action:none}
+.food-viewer-tabs{display:flex;flex-wrap:wrap;gap:8px;padding:14px 20px}.food-viewer-tabs button{font:inherit;font-size:14px;border:0;background:transparent;border-bottom:2px solid transparent;color:inherit;padding:10px;cursor:pointer}.food-viewer-tabs button[aria-selected=true]{border-color:#25796b;background:#e0ede8}
+@media(min-width:651px){.explore{max-height:calc(100dvh - 220px);overflow-y:auto}}
+@media(max-width:650px){.feature-tabs{padding-bottom:5px}.location-card{width:245px}.feature-detail{margin-top:5px;padding-top:5px}.feature-detail[open]{max-height:180px;overflow:auto}}
+@media(min-width:651px) and (max-height:550px){
+ body .explore{top:120px;max-height:calc(100dvh - 200px);overflow-y:auto!important;overscroll-behavior:contain}
+ .explore>#places{flex:none;min-height:140px;max-height:180px!important}
+ body .location-card{top:90px;bottom:auto;max-height:calc(100dvh - 210px)}
+}
+@media(max-width:650px){
+ body .location-card{bottom:calc(126px + env(safe-area-inset-bottom));max-height:44dvh;overscroll-behavior:contain}
+ .location-card .location-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+ .location-actions>button{flex:1 1 auto;margin:0;min-height:38px;padding:8px;font-size:12px;white-space:normal}
+ .location-more{margin-top:9px;padding-top:8px;border-top:1px solid var(--line);font-size:12px}
+ .location-more>summary{display:list-item;cursor:pointer;color:var(--ink);padding:3px 0}
+ .location-more>summary:focus-visible{outline:2px solid #32997c;outline-offset:3px}
+ .location-more .feature-detail[open]{max-height:none;overflow:visible}
+}

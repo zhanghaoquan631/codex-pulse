@@ -1,0 +1,14 @@
+[
+ {"name":"汕头市","en":"Shantou","ll":[116.6819,23.3541],"description":"汕头湾与榕江入海口，探索真实海岸与城市街区。"},
+ {"name":"潮州市","en":"Chaozhou","ll":[116.6226,23.657],"description":"韩江穿过潮州，北侧山地与平原相接。"},
+ {"name":"揭阳市","en":"Jieyang","ll":[116.3656,23.5533],"description":"榕江两岸的城市、道路与周边山地。"},
+ {"name":"普宁市","en":"Puning","ll":[116.165,23.2979],"description":"练江流域，平原聚落与南侧山地。"},
+ {"name":"南澳岛","en":"Nan'ao Island","ll":[117.02,23.42],"description":"南澳县，海湾、山岭与沿岛公路。"},
+ {"name":"潮阳区","en":"Chaoyang","ll":[116.601,23.265],"description":"潮阳城区与海岸平原。"},
+ {"name":"潮南区","en":"Chaonan","ll":[116.433,23.25],"description":"练江中下游的道路与聚落。"},
+ {"name":"澄海区","en":"Chenghai","ll":[116.756,23.466],"description":"韩江三角洲与滨海河网。"},
+ {"name":"潮安区","en":"Chao'an","ll":[116.678,23.463],"description":"潮安城区与韩江沿岸平原。"},
+ {"name":"饶平县","en":"Raoping","ll":[117.004,23.664],"description":"黄冈河流域与粤东沿海丘陵。"},
+ {"name":"惠来县","en":"Huilai","ll":[116.295,23.033],"description":"南海岸线与惠来城区。"},
+ {"name":"揭西县","en":"Jiexi","ll":[115.841,23.431],"description":"榕江上游的山地与谷地。"}
+]

@@ -1,0 +1,4 @@
+Set shell = CreateObject("WScript.Shell")
+Set fso = CreateObject("Scripting.FileSystemObject")
+scriptDir = fso.GetParentFolderName(WScript.ScriptFullName)
+shell.Run "powershell.exe -NoProfile -File " & Chr(34) & scriptDir & "\start.ps1" & Chr(34), 0, False

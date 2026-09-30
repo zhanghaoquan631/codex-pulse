@@ -1,0 +1,26 @@
+.destination-controls{display:flex;gap:4px;align-items:center;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:9px;padding-top:9px;min-width:0}
+.destination-controls button{display:grid;place-items:center;width:32px;height:32px;flex:none;border-radius:5px}
+.destination-controls svg{width:17px;height:17px}.destination-controls button:hover{background:#6a8b6826}.destination-controls button[aria-pressed=true]{background:var(--accent);color:white}
+.destination-controls select{min-width:0;max-width:116px;flex:1;height:32px;padding:3px;border:1px solid var(--line);border-radius:5px;color:var(--ink);background:var(--glass);font-size:11px}
+.destination-status{width:100%;font-size:11px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere;color:var(--muted)}
+.explore .feature-tabs{max-height:115px}.tour-filter{display:flex;gap:6px;align-items:center;margin:0 0 8px;font-size:12px}.tour-filter button{padding:7px 8px;border:1px solid var(--line);border-radius:5px;flex:1}.tour-filter button[aria-pressed=true]{background:var(--accent);color:white}
+@media(max-width:650px){.destination-controls{margin-top:6px;padding-top:5px;gap:3px}.destination-controls button{width:28px;height:29px}.destination-controls select{height:29px}.destination-status{font-size:10px}.location-card{max-height:calc(100dvh - 395px);overflow-y:auto}}
+@media(max-width:650px) and (max-height:720px){.location-card{max-height:calc(100dvh - 340px)}}
+@media(min-width:651px) and (max-width:1000px) and (max-height:520px){
+ body #location-card.location-card{left:14px;right:auto;top:auto;bottom:16px;width:240px;max-height:calc(100dvh - 116px);overflow-y:auto;padding:10px}
+ body .location-card .location-overline,body #location-coordinates{display:none}
+ body .location-card h2{font-size:18px;line-height:1.4;margin:4px 0 7px}
+ body .location-actions button{padding:7px;font-size:12px}
+ body .destination-controls{margin-top:6px;padding-top:5px}
+ body .destination-controls button{width:28px;height:29px}
+ body .destination-controls select{height:29px}
+ body .location-more{margin-top:6px}
+ body .location-card:has(.location-more[open]) .destination-controls{position:sticky;bottom:-10px;background:var(--glass);padding-bottom:8px;z-index:1}
+ body .explore{display:none;top:80px;bottom:86px;left:14px;width:270px;max-height:none;overflow-y:auto;padding:14px;z-index:9}
+ body .explore.open{display:flex}
+ body .explore #places{overflow:visible;flex-shrink:0;min-height:100px}
+ body .explore-heading button{display:block;font-size:24px}
+ body .mobile-only{display:flex}
+ body .toolbar-divider,body #fullscreen,body footer{display:none}
+ body:has(#explore.open) .location-card{visibility:hidden}
+}

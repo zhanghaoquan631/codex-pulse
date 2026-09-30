@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "test": "266 places and new sky initialized",
+      "ready": true
+    },
+    {
+      "test": "continuous sunset while simulation is paused",
+      "start": 9.09650833333334,
+      "mid": 9.969202158126045,
+      "end": 17.6
+    },
+    {
+      "test": "quality, rendered stars, audio, capture and clean view",
+      "starPixels": 805
+    },
+    {
+      "test": "community, custom markers and adventure entry preserved",
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "missing": []
+}

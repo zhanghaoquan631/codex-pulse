@@ -1,0 +1,1 @@
+ALTER TABLE `music_listeners` ADD `revision` text DEFAULT '' NOT NULL;

@@ -1,0 +1,11 @@
+import {CHAPTER_JOURNEYS,activeJourneyStep} from './chapter-journeys.mjs';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+export function journeyIntroduction(level){
+ const j=CHAPTER_JOURNEYS[level.id];if(!j)return '';
+ return `<section class="journey-introduction"><small>本章行动 · 必做主线</small><h3>${esc(j.title)}</h3><p>${esc(j.hook)}</p><ol class="district-stages">${j.steps.map((s,i)=>`<li><b>${i+1} · ${esc(s.title)}</b><p>${esc(s.instruction)}</p></li>`).join('')}</ol><p><strong>开门条件：本章行动完成 ＋ 密码半钥 ＋ 战斗半钥。</strong> 三条进度可同时推进。按 N 重看行动；Tab 选择紫色编号任务点追踪。按 E 操作，图形校准面板会暂停计时，守卫时请关闭面板继续战斗。</p><small>首次完成行动：${j.reward.coins} 铜钱＋药包 1 份；重试重置行动，但不重复发放奖励。${esc(j.sourceNote)}</small></section>`;
+}
+export function journeyMarkup(state){
+ const j=state.level?.journey;if(!j)return '';
+ const s=activeJourneyStep(state.level);
+ return `<section class="journey-notebook" data-journey="${esc(j.id)}"><small>本章行动 · 必做主线 ${j.stepIndex}/${j.steps.length}</small><h3>${esc(j.title)} ${j.completed?'✓':''}</h3><p>${esc(j.hook)}</p>${j.carrying?`<p class="journey-cargo">随身任务物：<b>${esc(j.carrying)}</b> · 移速 92%，仍可奔跑与战斗</p>`:''}<ol class="district-stages">${j.steps.map((q,i)=>`<li class="${i===j.stepIndex?'current':''}"><b>${q.completed?'✓':i+1} · ${esc(q.title)}</b><p>${esc(q.instruction)}</p><small>${q.completed?'已完成':i===j.stepIndex?esc(q.status):'完成前一步后开始'}</small></li>`).join('')}</ol>${s?`<button class="outlined dark" data-track-journey="${esc(s.id)}">在地图追踪当前行动</button>${s.choices?`<div class="journey-puzzle"><h4>现场纸面提示</h4><p>${esc(s.clue)}</p><p role="status">${esc(s.status)}<br>已选：${s.selection.map(id=>esc(s.choices.find(c=>c.id===id)?.label||id)).join(' → ')||'尚未选择'}</p><div class="journey-choices">${s.choices.map(c=>`<button class="outlined dark" data-journey-choice="${esc(c.id)}">${esc(c.label)}</button>`).join('')}</div><small>必须在机关旁、同一层且无遮挡才能校准。按目标从左向右点击；选错会清空，可继续重试。</small></div>`:'<p>靠近紫色编号任务点按 E 操作。计时任务需关闭面板继续；走远或敌人进入内圈会暂停并保留进度。</p>'}`:`<p class="journey-success">✓ 地区任务完成。${state.progress.journeyRewardIds?.includes(state.level.id)?'首次行动奖励已收进行囊。':''}凑齐两半钥匙即可开启任务房。</p>`}<small>${esc(j.sourceNote)}</small></section>`;
+}

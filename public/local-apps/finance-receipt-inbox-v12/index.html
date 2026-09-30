@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>ME.zip · 财务收件箱 V12</title>
+    <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="/local-apps/finance-theme.css">
+</head>
+  <body>
+    <main class="app-shell">
+      <header class="app-header">
+        <a class="brand" href="#inbox" aria-label="ME.zip 财务收件箱首页"><span class="brand-mark">M</span><span>ME.zip <em>财务</em></span></a>
+        <div class="header-copy"><span>私人财务账本</span><h1>把凭证、账单与商家关系放在同一处</h1></div>
+        <div class="header-actions">
+          <span id="connection-state" class="connection-state">连接电脑收件箱…</span>
+          <button id="refresh" class="button subtle" type="button">刷新</button>
+          <button id="make-link" class="button primary" type="button">生成手机链接</button>
+        </div>
+      </header>
+
+      <section id="local-notice" class="local-notice" aria-live="polite">
+        <span>本地优先</span>
+        <p>照片与账本保存在这台电脑，通过私人连接访问；“已入账”只会在你明确确认后发生。</p>
+      </section>
+
+      <nav class="section-tabs" aria-label="财务收件箱功能">
+        <button type="button" data-route="inbox" class="is-active">财务收件箱 <span id="tab-pending">0</span></button>
+        <button type="button" data-route="bills">全部账单 <span id="tab-bills">0</span></button>
+        <button type="button" data-route="merchants">商家归纳 <span id="tab-merchants">0</span></button>
+        <button type="button" data-route="legacy">原财务中心 V2</button>
+      </nav>
+
+      <section id="page-content" class="page-content" aria-live="polite"></section>
+    </main>
+
+    <dialog id="app-dialog" class="app-dialog" aria-labelledby="dialog-title">
+      <div id="dialog-content"></div>
+    </dialog>
+
+    <template id="receipt-grid-template">
+      <section class="receipt-grid-card">
+        <div class="receipt-grid-heading"><div><span>明细备注</span><strong>货号 · 名称及规格 · 数量 · 单价 · 金额</strong></div><button type="button" class="icon-button grid-add" title="新增一行" aria-label="新增一行">＋</button></div>
+        <div class="receipt-grid-scroll"><table class="receipt-grid"><thead><tr><th>货号</th><th>名称及规格</th><th>单位</th><th>数量</th><th>单价</th><th>金额</th><th>备注</th><th aria-label="删除">−</th></tr></thead><tbody></tbody></table></div>
+        <p class="receipt-grid-help">每一格都可以继续填写；点击「＋」会增加下一行。空行不会写入账本。</p>
+      </section>
+    </template>
+
+    <script type="text/pulse-finance-deferred" data-src="../finance-center-v2/finance-core.js"></script>
+    <script type="text/pulse-finance-deferred" data-src="./app.js"></script>
+  <script src="/local-apps/finance-adapter.js"></script>
+</body>
+</html>

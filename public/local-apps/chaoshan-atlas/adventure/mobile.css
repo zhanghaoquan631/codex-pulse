@@ -1,0 +1,53 @@
+/* Phone controls and safe areas, including landscape; desktop styles stay intact. */
+@media(pointer:coarse) and (max-width:1100px){
+  body.ink-world .topbar{top:env(safe-area-inset-top);padding-inline:max(10px,env(safe-area-inset-left)) max(10px,env(safe-area-inset-right));height:56px;gap:8px}
+  .top-actions{gap:4px}
+  .top-actions button,.map-return{min-height:44px;font-size:12px!important;touch-action:manipulation}
+  .top-actions kbd,.brand small,#save-export{display:none}
+  body.ink-world .touch-controls{bottom:calc(64px + env(safe-area-inset-bottom));left:max(12px,env(safe-area-inset-left));right:max(12px,env(safe-area-inset-right));touch-action:none}
+  .touch-controls button{min-width:44px;min-height:44px;font-size:14px;touch-action:none;user-select:none;-webkit-user-select:none}
+  body.ink-world .bottom-bar{bottom:max(8px,env(safe-area-inset-bottom));left:max(10px,env(safe-area-inset-left));right:max(10px,env(safe-area-inset-right))}
+  body.ink-world .weapon-slot,body.ink-world .potion-button{min-height:44px;touch-action:manipulation}
+  .modal-layer{padding:max(12px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}
+  .dialog{max-height:calc(100dvh - 28px);overflow:auto}
+  .dialog button,.dialog summary{min-height:44px;font-size:14px}
+  .dialog input,.dialog select{font-size:16px;min-width:0}
+  .camera-settings-panel{max-height:55dvh;overflow:auto}
+  #look-lock,.camera-settings-panel label[for=camera-look-mode],#camera-look-mode{display:none}
+  body.ink-world .interaction{bottom:calc(182px + env(safe-area-inset-bottom));font-size:12px;max-width:calc(100vw - 32px)}
+}
+@media(pointer:coarse) and (max-width:1100px) and (max-height:500px){
+  body.ink-world .brand{display:none}
+  .camp-layer{inset:calc(56px + env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));display:block;overflow:auto}
+  .camp-panel{min-width:0;overflow:visible;padding:18px}
+  .traveller-panel{margin:12px 0 0;padding:18px}
+  .chapter-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .chapter{min-height:96px;padding:10px!important}
+  .chapter h3{font-size:17px}
+  body.ink-world[data-view] .location-card{top:calc(58px + env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left));width:155px;padding:7px}
+  body.ink-world .location-card h1{font-size:15px}
+  body.ink-world .location-card ol{display:none}
+  body.ink-world .status-card{top:calc(58px + env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right));width:148px;padding:7px}
+  .player-summary{display:none}
+  .kill-objective{top:calc(56px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);padding:6px 10px;min-width:100px}
+  .kill-objective strong{font-size:22px}
+  .kill-objective>span,.kill-objective p{display:none}
+  body.ink-world .hunt-strip{top:calc(106px + env(safe-area-inset-top));left:50%;right:auto;transform:translateX(-50%);max-width:calc(100vw - 360px);padding:4px 7px;font-size:12px;white-space:normal;gap:6px}
+  .hunt-strip>span{display:none}
+  body.ink-world .boss-hud{top:calc(151px + env(safe-area-inset-top));width:min(300px,46vw)}
+  body.ink-world .view-controls{top:auto;bottom:calc(57px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);gap:5px}
+  .view-controls .quiet,.camera-settings summary{min-height:44px;font-size:12px!important}
+  .camera-settings-panel{position:fixed;bottom:48px;top:auto;max-height:60dvh}
+  body.ink-world .weather-card,body.ink-world .view-hint{display:none}
+  body.ink-world .minimap-shell{top:calc(132px + env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right));width:auto;background:transparent;border:0;padding:0}
+  .minimap-shell canvas,.minimap-shell>span{display:none}
+  .minimap-shell #tactical-open{min-width:84px;min-height:44px;font-size:12px;background:#f5f0dfde}
+  body.ink-world .touch-controls{bottom:calc(57px + env(safe-area-inset-bottom));align-items:flex-end}
+  .dpad{grid-template-columns:repeat(3,44px)!important;grid-template-rows:repeat(3,44px)!important;gap:3px!important}
+  .dpad button{width:44px!important;height:44px!important}
+  .touch-actions{max-width:230px;display:grid;grid-template-columns:repeat(2,54px)!important;grid-auto-rows:48px!important;gap:5px}
+  .touch-actions button{width:54px!important;height:48px!important;min-width:44px!important}
+  body.ink-world .interaction{bottom:calc(106px + env(safe-area-inset-bottom));max-width:40vw;font-size:12px}
+  body.ink-world[data-play=playing] .toasts{bottom:calc(162px + env(safe-area-inset-bottom));top:auto;max-width:38vw}
+  .key-help{display:none}
+}

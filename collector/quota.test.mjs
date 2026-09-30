@@ -1,0 +1,43 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {DatabaseSync} from 'node:sqlite';
+import {quotaProfile,saveQuotaProfile,initializeQuota} from './quota.mjs';
+import {weeklyWindow,remaining,isLive} from '../lib/quota.ts';
+const identity={email:'first@example.com',accountId:'one',generation:'v1',subscription:{activeFrom:null,activeUntil:null,checkedAt:null}};
+const account={account:{email:identity.email,planType:'pro'},workspaceRouting:{chatgptAccountId:'one'}};
+const limits={accountId:'one',rateLimitsByLimitId:{codex:{planType:'pro',primary:{usedPercent:100,windowDurationMins:10080,resetsAt:1900000000},secondary:{usedPercent:0,windowDurationMins:300,resetsAt:1800000000},credits:{balance:'0'}}},rateLimitResetCredits:{availableCount:0,credits:[]}};
+test('Reject mixed accounts and in-flight login changes',()=>{
+  assert.equal(quotaProfile(account,{...limits,accountId:'two'},identity,identity),null);
+  assert.equal(quotaProfile(account,limits,identity,{...identity,generation:'v2'}),null);
+  assert.equal(quotaProfile({...account,account:{...account.account,email:'second@example.com'}},limits,identity,identity),null);
+});
+test('Week is selected by duration and missing fields are distinct from zero',()=>{
+  const profile=quotaProfile(account,limits,identity,identity);
+  assert.equal(remaining(weeklyWindow(profile)),0);
+  assert.equal(profile.resetCredits.availableCount,0);
+  assert.equal(profile.subscription.activeUntil,null);
+  const swapped={...profile,windows:[...profile.windows].reverse()};
+  assert.equal(weeklyWindow(swapped).windowDurationMins,10080);
+  assert.equal(remaining({usedPercent:0}),100);
+  assert.equal(remaining({usedPercent:null}),null);
+  const missing=quotaProfile(account,{accountId:'one'},identity,identity);
+  assert.equal(missing.resetCredits,null);assert.equal(weeklyWindow(missing),undefined);
+});
+test('Separate accounts persist; an older snapshot cannot replace a current reading',()=>{
+  const db=new DatabaseSync(':memory:');initializeQuota(db);
+  const first=quotaProfile(account,limits,identity,identity,'2026-09-30T00:00:00Z');
+  saveQuotaProfile(db,first);saveQuotaProfile(db,{...first,observedAt:'2026-09-29T00:00:00Z',source:'session-log'});
+  saveQuotaProfile(db,{...first,email:'second@example.com'});
+  assert.equal(db.prepare('SELECT COUNT(*) n FROM quota_profiles').get().n,2);
+  assert.equal(db.prepare('SELECT COUNT(*) n FROM quota_history').get().n,3);
+  saveQuotaProfile(db,{...first,observedAt:'2026-09-30T00:01:00Z'});
+  assert.equal(db.prepare('SELECT COUNT(*) n FROM quota_history').get().n,3);
+  saveQuotaProfile(db,{...first,observedAt:'2026-09-30T00:02:00Z',balance:'10'});
+  assert.equal(db.prepare('SELECT COUNT(*) n FROM quota_history').get().n,4);
+  const saved=JSON.parse(db.prepare('SELECT payload FROM quota_profiles WHERE email=?').get(identity.email).payload);
+  assert.equal(saved.source,'account-api');assert.equal(isLive(saved,Date.parse(saved.observedAt)+60000,identity.email),true);
+  assert.equal(isLive(saved,Date.parse(saved.observedAt)+160000,identity.email),false);
+  assert.equal(isLive(saved,Date.parse(saved.observedAt),'second@example.com'),false);
+  assert.equal(isLive(saved,Date.parse(saved.observedAt),null),false);
+  assert.equal(isLive({...saved,source:'session-log'},Date.parse(saved.observedAt),identity.email),false);db.close();
+});

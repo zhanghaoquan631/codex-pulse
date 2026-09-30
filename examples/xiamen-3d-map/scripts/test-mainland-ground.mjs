@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {smoothMainlandGround} from '../mainland-ground.mjs';
+const n=30,heights=Array.from({length:31*31},(_,k)=>k%7===0?20:10);
+heights[15*31+15]=-3;heights[16*31+15]=80;
+const source={nx:n,nz:n,bounds:[[0,0],[1,1]],heights},copy=heights.slice(),result=smoothMainlandGround(source,[[.1,.1,.9,.9]]);
+assert.deepEqual(heights,copy);assert.ok(result.changed>100);assert.equal(result.terrain.heights[15*31+15],-3);assert.equal(result.terrain.heights[16*31+15],80);
+assert.equal(result.terrain.heights[0],source.heights[0]);assert.ok(result.terrain.heights.every(Number.isFinite));
+const meanDifference=a=>a.reduce((s,h,k)=>s+(k%31?Math.abs(h-a[k-1]):0),0);
+assert.ok(meanDifference(result.terrain.heights)<meanDifference(heights));
+const lake=smoothMainlandGround(source,[[.1,.1,.9,.9]],{isWater:(x,z)=>x>.55&&x<.7&&z>.55&&z<.7});
+for(let j=17;j<=20;j++)for(let i=17;i<=20;i++)assert.equal(lake.terrain.heights[j*31+i],source.heights[j*31+i]);
+console.log('PASS: city sampling noise reduced, source untouched, water/hills/outside region preserved');

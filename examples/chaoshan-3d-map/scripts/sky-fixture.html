@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sky render test</title><style>body{margin:0;background:#e6ede7}.top-actions{position:absolute;right:10px;bottom:10px}canvas{display:block}</style></head><body><div class="top-actions"></div><script type="module">
+import * as THREE from 'three';
+import {createLivingSky} from '../living-sky.mjs';
+const reducedMotion=new URL(location.href).searchParams.has('reduced');
+const scene=new THREE.Scene();scene.background=new THREE.Color('#b4cbd2');
+const camera=new THREE.OrthographicCamera(-16,16,10,-10,.1,200);camera.position.z=20;
+const sun=new THREE.DirectionalLight(),hemisphere=new THREE.HemisphereLight();scene.add(sun,hemisphere);
+const contrastTarget=new THREE.Mesh(new THREE.PlaneGeometry(2,2),new THREE.ShaderMaterial({depthTest:true,depthWrite:true,toneMapped:false,vertexShader:'varying vec2 v; void main(){v=uv; gl_Position=vec4(position.xy,.5,1.);}',fragmentShader:'varying vec2 v; void main(){gl_FragColor=vec4(vec3(mod(floor(v.x*40.),2.)>.5?.8:.12),1.);}'}));contrastTarget.visible=false;scene.add(contrastTarget);
+const periods=[],sky=createLivingSky({scene,camera,sun,hemisphere,reducedMotion,setPeriod:mode=>{periods.push(mode);scene.background.set(mode==='night'?'#172b38':mode==='sunset'?'#e5b6a6':'#b4cbd2');}});
+const renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setPixelRatio(1);document.body.prepend(renderer.domElement);let seconds=0;
+const render=()=>{sky.update(seconds);renderer.render(scene,camera);};
+const resize=()=>{camera.left=-10*innerWidth/innerHeight;camera.right=-camera.left;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);render();};
+resize();addEventListener('resize',resize);
+window.skyAudit={
+ advance(hour){const steps=Math.round(((hour-sky.getState().hour+24)%24)*100);for(let i=0;i<steps;i++){seconds+=.1;sky.update(seconds);}render();return this.state();},
+ tick(duration){for(let i=0;i<duration*10;i++){seconds+=.1;sky.update(seconds);}render();return this.state();},
+ render,
+ foreground(visible){contrastTarget.visible=visible;render();},
+ state(){const state=sky.getState(),photo=state.photography;return {...state,periods:[...periods],sun:{visible:photo.visible,x:photo.sunScreen[0]-.5,y:photo.sunScreen[1]}};}
+};
+</script></body></html>

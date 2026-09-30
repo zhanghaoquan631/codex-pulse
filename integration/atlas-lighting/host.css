@@ -1,0 +1,5 @@
+body.scene-clean .opc-map-dock{visibility:hidden;pointer-events:none}
+@media(max-height:480px) and (min-width:651px) and (max-width:1000px){
+  body .opc-map-dock{left:260px;right:auto;top:12px!important;max-width:calc(100vw - 550px);padding:7px 10px;min-height:36px}
+  body .opc-map-dock>b{display:none}
+}

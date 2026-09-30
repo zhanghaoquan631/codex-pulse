@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ME.zip X Local Capture — 记录你本人在 X 上明确执行的行为">
+  <title>ME.zip Capture · 本地行为档案</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./pulse-theme.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="rail">
+      <a class="brand" href="#overview" aria-label="ME.zip 本地监控系统">
+        <span class="brand-mark">ME<span>.zip</span></span>
+        <small>LOCAL MEMORY</small>
+      </a>
+      <nav aria-label="本地监控导航">
+        <a href="#overview" data-route="overview">⌂<span>总览</span></a>
+        <a href="./global-timeline.html">◷<span>全局行为时间轴</span></a>
+        <a href="#timeline" data-route="timeline">◷<span>行为时间轴</span></a>
+        <a href="/mezip/x-link-archive-v1/index.html">🔗<span>X 链接收集</span></a>
+        <a href="./watch.html">▶<span>观看记录</span></a>
+        <a href="./resources.html">▤<span>网页 / 文章 / 代码</span></a>
+        <a href="./reading.html">◉<span>阅读 / 研究历史</span></a>
+        <a href="#special" data-route="special">★<span>私人资料库</span></a>
+        <a href="#interest" data-route="interest">✦<span>兴趣档案</span></a>
+        <a href="#settings" data-route="settings">⚙<span>隐私设置</span></a>
+      </nav>
+      <div class="rail-foot"><span class="status-dot"></span><span>LOCAL CAPTURE</span></div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div><p class="eyebrow">X / PRIVATE DIGITAL MEMORY</p><h1>本地监控系统</h1></div>
+        <form id="global-search-form" class="global-search" role="search"><input id="global-search" type="search" placeholder="搜索内容、标签、链接、作者…" aria-label="全局搜索"><button class="button button-quiet" type="submit">搜索</button></form>
+        <div class="top-actions"><span id="bridge-status" class="pill pill-muted">检查本地桥接…</span><a class="button button-quiet" href="http://127.0.0.1:5174/x" target="_blank" rel="noopener">打开官方 X 连接中心 ↗</a></div>
+      </header>
+
+      <section class="hero panel">
+        <div class="hero-copy"><span class="hero-orb">✦</span><div><p class="eyebrow">ME.ZIP CAPTURE</p><h2>你的 X 行为，从今天开始留下痕迹。</h2><p>不依赖 X API Credits，只记录你本人在设备上明确发生的操作。默认私密；未来官方 API 可用时，再为本地行为补全合法内容。</p></div></div>
+        <div class="mode-stack"><div class="mode-card active"><span>●</span><div><strong>Local Capture Mode</strong><small>现在可用 · 本地记录中</small></div></div><div class="mode-card"><span>◈</span><div><strong>Official X API Mode</strong><small>由原 X 连接中心管理</small></div></div></div>
+      </section>
+
+      <section id="view-overview" data-view="overview" class="view">
+        <div class="section-head"><div><p class="eyebrow">LOCAL / OVERVIEW</p><h2>今天的行为档案</h2></div><button class="button button-primary" id="open-capture">＋ 收集 X 链接</button></div>
+        <div class="metrics" id="metrics"></div>
+        <div class="grid two"><section class="panel chart-panel"><div class="card-head"><div><h3>最近 7 天</h3><p>只统计本地捕获的真实事件</p></div><span class="pill pill-green">LOCAL · 已记录</span></div><div id="week-chart" class="week-chart"></div></section><section class="panel status-panel"><div class="card-head"><div><h3>X DATA SOURCE</h3><p>官方 API 与本地行为双模式</p></div></div><div class="source-row"><span class="source-icon purple">◈</span><div><strong>Official API</strong><small id="official-status">状态由原 X 连接中心管理</small></div><span id="official-badge" class="pill pill-muted">UNKNOWN</span></div><div class="source-row"><span class="source-icon green">●</span><div><strong>Local Capture</strong><small>点赞、收藏、浏览、分享与 X 链接收集</small></div><span class="pill pill-green">Active</span></div><div class="sync-meta"><span>Sync Pending <strong id="pending-count">0</strong></span><span>Last Capture <strong id="last-capture">—</strong></span><span>Last Official Sync <strong>由原连接中心记录</strong></span></div><a class="text-link" href="http://127.0.0.1:5174/x" target="_blank" rel="noopener">进入官方 X 连接中心 →</a></section></div>
+        <section class="panel watch-entry"><div class="card-head"><div><h3>观看记录</h3><p>只有真实播放过的视频才会出现，进度与实际观看时间分开保存。</p></div><a class="button button-quiet" href="./watch.html">打开观看记录 →</a></div><p class="small-copy">继续观看、已看完、电影、视频和全部筛选由本地 Watch Capture 提供；不会把打开网页当成观看。</p></section>
+        <section class="panel watch-entry"><div class="card-head"><div><h3>阅读 / 研究历史</h3><p>网页、文章、代码和 X 链接由你保存；只有从 ME.zip 明确打开后，才会出现打开历史。</p></div><a class="button button-quiet" href="./reading.html">打开阅读历史 →</a></div><p class="small-copy">保存链接不等于已阅读：这里不扫描浏览器历史，也不会凭空生成阅读时长。</p></section>
+        <div class="grid two"><section class="panel"><div class="card-head"><div><h3>最近记录</h3><p>按发生时间倒序</p></div><a class="text-link" href="#timeline">查看全部 →</a></div><div id="recent-events" class="event-list"></div></section><section class="panel"><div class="card-head"><div><h3>私人资料库</h3><p>从已点赞、已收藏或已保存的资料中再次挑选</p></div><a class="text-link" href="#special">打开资料库 →</a></div><div id="special-preview" class="special-list"></div></section></div>
+        <section class="panel boundary-panel"><div class="card-head"><div><h3>数据边界</h3><p>透明说明，不把不可用的数据变成假数据</p></div></div><ul class="boundary"><li>本地模式只记录你明确执行的动作</li><li>不会读取 X 密码、Cookie 或 OAuth Token</li><li>不会后台批量爬取或调用私有接口</li><li>过去的点赞/收藏不会凭空出现</li></ul></section>
+      </section>
+
+      <section id="view-timeline" data-view="timeline" class="view hidden"><div class="section-head"><div><p class="eyebrow">LOCAL / TIMELINE</p><h2>行为时间轴</h2><p class="lede">每一条都对应你本人在设备上的一次明确操作。</p></div><button class="button button-primary" id="open-capture-timeline">＋ 收集 X 链接</button></div><div class="filters panel"><div class="filter-tabs" id="action-filters"><button data-filter="all" class="active">全部</button><button data-filter="like">❤️ 点赞</button><button data-filter="bookmark">🔖 收藏</button><button data-filter="viewed">👁 浏览</button><button data-filter="share_to_mezip">📤 分享</button><button data-filter="copied_link">🔗 X 链接收集</button></div><div class="filter-row"><select id="period-filter"><option value="all">全部时间</option><option value="today">今天</option><option value="week">本周</option><option value="month">本月</option><option value="year">今年</option></select><input id="timeline-search" type="search" placeholder="搜索链接、作者、标题、主要作用或标签"></div></div><div id="timeline-events" class="timeline"></div></section>
+
+      <section id="view-special" data-view="special" class="view hidden"><div class="section-head"><div><p class="eyebrow">PRIVATE LIBRARY / PERSONAL</p><h2>私人资料库</h2><p class="lede">只收录你明确再次保存的 X 链接、网页、文章、代码与观看记录。</p></div><span class="pill pill-green">本地私密资料库</span></div><section class="panel special-intro"><strong>它不是第三种自动捕获</strong><p>点赞和收藏仍由 Capture 自动记录；私人资料库只从已有记录或阅读 / 研究清单中二次挑选。每条来源资料只保留一份，移除原记录不会自动删除已保存的私人资料。</p></section><div id="special-favorites" class="special-grid"></div></section>
+
+      <section id="view-interest" data-view="interest" class="view hidden"><div class="section-head"><div><p class="eyebrow">DIGITAL MEMORY / INTERESTS</p><h2>个人兴趣档案</h2><p class="lede">从你自己的标签、主要作用和链接中整理兴趣，不使用推荐模型或外部画像。</p></div></div><div class="grid two"><section class="panel"><div class="card-head"><div><h3>主题标签</h3><p>由你主动添加的标签组成；点击标签即可查看对应记录</p></div></div><div id="tag-cloud" class="tag-cloud"></div></section><section class="panel"><div class="card-head"><div><h3>行为回顾</h3><p>基于本地事件的可验证统计；总记录为只读累计值，其余项目可点击筛选</p></div></div><div id="interest-summary" class="summary-list"></div></section></div><section class="panel insight-panel"><div class="card-head"><div><h3>可继续建立的记忆</h3><p>每个卡片都是真实记录的筛选入口，不生成推荐或假数据</p></div></div><div class="insight-grid" id="interest-insights"></div></section><section class="panel saved-links-panel"><div class="card-head"><div><h3>已保存的链接</h3><p>本机保存的 X 链接会自动进入主题标签和这里；可再次收藏到私人资料库。</p></div><span class="pill pill-muted" id="saved-links-count">0 条</span></div><div id="interest-saved-links" class="saved-links-list"></div></section></section>
+
+      <section id="view-settings" data-view="settings" class="view hidden"><div class="section-head"><div><p class="eyebrow">PRIVATE / SETTINGS</p><h2>本地监控设置</h2><p class="lede">默认私密。关闭某类记录后，扩展和页面都会停止发送该类事件。</p></div></div><section class="panel settings-panel"><div class="settings-group"><h3>X Local Capture</h3><label class="toggle-row"><span><strong>启用本地监控</strong><small>不依赖 X API Credits</small></span><input type="checkbox" id="setting-enabled"><i></i></label><label class="toggle-row"><span><strong>记录点赞 / 取消点赞</strong><small>只监听明确的 Like 按钮点击</small></span><input type="checkbox" id="setting-captureLikes"><i></i></label><label class="toggle-row"><span><strong>记录收藏 / 取消收藏</strong><small>只监听明确的 Bookmark 按钮点击</small></span><input type="checkbox" id="setting-captureBookmarks"><i></i></label><label class="toggle-row"><span><strong>记录打开与浏览</strong><small>当前 X 页面可见帖子才会记录</small></span><input type="checkbox" id="setting-captureViews"><i></i></label><label class="toggle-row"><span><strong>记录链接与分享</strong><small>只保存你主动保存或分享的链接</small></span><input type="checkbox" id="setting-captureSharedLinks"><i></i></label><label class="toggle-row"><span><strong>记录真实视频播放进度</strong><small>仅在播放器实际播放后累计，不计算拖动跳转</small></span><input type="checkbox" id="setting-watchCapture"><i></i></label><label class="toggle-row"><span><strong>保存页面元数据</strong><small>标题、作者和链接；不保存密码或 Cookie</small></span><input type="checkbox" id="setting-savePageMetadata"><i></i></label></div><div class="settings-actions"><button class="button button-quiet" id="export-data">导出本地记录 JSON</button><button class="button button-danger" id="delete-history">删除本地历史</button></div></section><section class="panel"><div class="card-head"><div><h3>本地服务</h3><p id="settings-bridge-copy">正在检查 127.0.0.1:4319</p></div><div class="top-actions"><span id="settings-bridge-pill" class="pill pill-muted">—</span><button class="button button-quiet" id="retry-bridge" type="button">重新连接</button></div></div><p class="small-copy">浏览器扩展需要本地桥接服务才能在多个浏览器页面之间共享同一份记录。电脑离线时暂停远程操作，开机联网后自动重新连接；未确认的操作不会显示为已写入电脑。</p></section><section class="panel"><div class="card-head"><div><h3>真实 X 点击捕获</h3><p>只在你本人明确点击 Like / Bookmark 后记录</p></div><span class="pill pill-muted">需要扩展</span></div><p class="small-copy">Codex 内置浏览器不能运行用户加载的 Chrome / Edge MV3 扩展。请在 Chrome 或 Edge 的扩展管理页加载本地目录，然后点击 Reload 并刷新 X 标签；扩展弹窗会显示“已记录到本地”或“已排队”，不会伪造成功。</p><p class="small-copy"><code>apps/browser-extension/mezip-capture</code></p></section></section>
+    </main>
+  </div>
+
+  <dialog id="capture-dialog"><form method="dialog" id="capture-form"><div class="dialog-head"><div><p class="eyebrow">LOCAL CAPTURE</p><h2>收集一条 X 链接</h2></div><button value="cancel" class="dialog-close" aria-label="关闭">×</button></div><label>帖子链接<input id="capture-url" type="url" placeholder="https://x.com/.../status/..." required></label><div class="form-actions"><button id="paste-capture-url" type="button" class="button button-quiet">从剪贴板填入链接</button><span class="small-copy">先在 X 复制帖子链接</span></div><div class="form-grid"><label>行为<select id="capture-action"><option value="copied_link">X 链接收集</option><option value="manual_save">手动保存</option><option value="like">点赞（手动补录）</option><option value="bookmark">收藏（手动补录）</option><option value="unlike">取消点赞（手动补录）</option><option value="unbookmark">取消收藏（手动补录）</option><option value="share_to_mezip">分享至 ME.zip</option></select></label><label>作者（可选）<input id="capture-author" maxlength="120" placeholder="@handle"></label></div><p class="small-copy">这与独立的「X 链接收集」使用同一套保存意图：粘贴真实 X 链接，再写下它的主要作用和标签；不会调用 API 或伪造帖子内容。</p><label>页面标题（可选）<input id="capture-title" maxlength="300" placeholder="帖子标题或一句话说明"></label><label>主要作用（可选）<textarea id="capture-note" maxlength="2,000" placeholder="例如：记录这个产品的交互思路，之后做功能区时参考。"></textarea></label><label>标签（逗号分隔）<input id="capture-tags" maxlength="500" placeholder="AI, 设计, 灵感"></label><p id="capture-error" class="form-error" role="alert"></p><div class="dialog-actions"><button value="cancel" class="button button-quiet">取消</button><button value="default" class="button button-primary">收集到本机</button></div></form></dialog>
+  <script type="text/mezip-deferred" data-src="./pulse-shell.js"></script>
+  <script type="text/mezip-deferred" data-src="./library-app.js"></script>
+<script src="/mezip/remote-adapter.js"></script>
+</body>
+</html>

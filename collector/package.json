@@ -1,0 +1,8 @@
+{
+  "name": "codex-pulse-local-collector",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.13.0" },
+  "dependencies": { "imapflow": "^2.1.2", "mailparser": "^3.9.31" }
+}

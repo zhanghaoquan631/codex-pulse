@@ -1,0 +1,146 @@
+/* Booking keeps its existing flow and adopts the surrounding Pulse palette. */
+:root {
+  color-scheme: light;
+  --bg: #f5f5f7;
+  --panel: #ffffff;
+  --panel-2: #f2f0f5;
+  --border: #e7e3ed;
+  --border-soft: #eeebf2;
+  --cream: #252329;
+  --muted: #746c7d;
+  --gold: #7c598f;
+  --disabled: #aaa4b0;
+  --ok: #39764c;
+  --err: #a94f60;
+  --skin-accent: #e9def9;
+  --skin-accent-text: #41324e;
+  --skin-accent-border: #d9c8ec;
+  --skin-hover: #f2edf8;
+  --skin-primary: #252329;
+  --skin-primary-text: #ffffff;
+  --skin-input-border: #dfd9e7;
+  --skin-ring: #9f80bf;
+  --skin-ok-bg: #edf5ef;
+  --skin-ok-border: #c9ddce;
+  --skin-err-bg: #fbf0f2;
+  --skin-err-border: #e8cbd2;
+}
+
+:root[data-pulse-theme="dark"] {
+  color-scheme: dark;
+  --bg: #131315;
+  --panel: #1c1c1f;
+  --panel-2: #262629;
+  --border: #343239;
+  --border-soft: #2e2c33;
+  --cream: #eeeeef;
+  --muted: #aaa6b2;
+  --gold: #bfa0e3;
+  --disabled: #696570;
+  --ok: #a3d1b0;
+  --err: #e2a4b1;
+  --skin-accent: #352e43;
+  --skin-accent-text: #e2d3f6;
+  --skin-accent-border: #554464;
+  --skin-hover: #29272e;
+  --skin-primary: #e7def5;
+  --skin-primary-text: #231b2e;
+  --skin-input-border: #44414b;
+  --skin-ring: #bfa0e3;
+  --skin-ok-bg: #22332a;
+  --skin-ok-border: #3c5745;
+  --skin-err-bg: #38262e;
+  --skin-err-border: #67424e;
+}
+
+:root[data-pulse-theme="eink"] {
+  color-scheme: light;
+  --bg: #d5d5d5;
+  --panel: #e8e8e8;
+  --panel-2: #cccccc;
+  --border: #999999;
+  --border-soft: #b5b5b5;
+  --cream: #222222;
+  --muted: #555555;
+  --gold: #333333;
+  --disabled: #888888;
+  --ok: #333333;
+  --err: #333333;
+  --skin-accent: #222222;
+  --skin-accent-text: #ffffff;
+  --skin-accent-border: #555555;
+  --skin-hover: #c4c4c4;
+  --skin-primary: #222222;
+  --skin-primary-text: #e8e8e8;
+  --skin-input-border: #888888;
+  --skin-ring: #333333;
+  --skin-ok-bg: #dddddd;
+  --skin-ok-border: #888888;
+  --skin-err-bg: #dddddd;
+  --skin-err-border: #888888;
+}
+
+body {
+  font-family: Arial, "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+}
+h1, .p-title, .cal-head .m-label { font-weight: 600; }
+.lead, .p-meta, .time-picker-note, .after-line { color: var(--muted); }
+.lead { font-weight: 400; }
+.avatar { background: var(--skin-accent); color: var(--skin-accent-text); }
+.cal-nav button:hover, .day.available:hover, .btn-ghost:hover {
+  background: var(--skin-hover);
+}
+.day.selected, .day.selected:hover {
+  background: var(--skin-accent);
+  color: var(--skin-accent-text);
+}
+.all-day-badge {
+  background: var(--skin-hover);
+  border-color: var(--skin-accent-border);
+  color: var(--gold);
+}
+.time-preview {
+  background: var(--skin-hover);
+  border-color: var(--skin-accent-border);
+  color: var(--cream);
+}
+.time-slider output, .time-preview { font-family: Arial, "Microsoft YaHei", sans-serif; }
+.btn {
+  background: var(--skin-primary);
+  border-color: var(--skin-primary);
+  color: var(--skin-primary-text);
+}
+.btn:disabled {
+  background: var(--panel-2);
+  color: var(--disabled);
+  border-color: var(--border);
+}
+.btn-ghost {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--cream);
+}
+.field input, .field textarea { border-color: var(--skin-input-border); }
+.field input::placeholder, .field textarea::placeholder { color: var(--muted); opacity: 1; }
+.field input:focus, .field textarea:focus { border-color: var(--skin-ring); }
+.confirm-card h2 { color: var(--cream); }
+.status-box.sending {
+  color: var(--gold);
+  border-color: var(--skin-accent-border);
+  background: var(--skin-hover);
+}
+.status-box.ok {
+  color: var(--ok);
+  border-color: var(--skin-ok-border);
+  background: var(--skin-ok-bg);
+}
+.status-box.fail {
+  color: var(--err);
+  border-color: var(--skin-err-border);
+  background: var(--skin-err-bg);
+}
+.btn-row a.primary, .btn-row button.primary {
+  background: var(--skin-primary);
+  color: var(--skin-primary-text);
+  border-color: var(--skin-primary);
+}

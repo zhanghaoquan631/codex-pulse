@@ -1,0 +1,68 @@
+import {chromium} from 'playwright';
+import {PNG} from 'pngjs';
+import {mkdir,writeFile} from 'node:fs/promises';
+import path from 'node:path';
+
+const output=path.resolve('qa/living-world');
+await mkdir(output,{recursive:true});
+const browser=await chromium.launch({headless:true,channel:'msedge',args:['--enable-webgl','--ignore-gpu-blocklist']});
+const page=await browser.newPage({viewport:{width:1440,height:960},deviceScaleFactor:1});
+const errors=[],failed=[];
+page.on('pageerror',e=>errors.push(e.message));
+page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
+page.on('requestfailed',r=>failed.push({url:r.url(),error:r.failure()?.errorText}));
+const started=Date.now();
+try {
+  await page.goto('http://127.0.0.1:5243/',{waitUntil:'domcontentloaded'});
+  await page.waitForFunction(()=>window.xiamenAtlas?.getState().ready,{},{timeout:90000});
+  const readyMs=Date.now()-started;
+  await page.waitForTimeout(4000);
+  await page.screenshot({path:path.join(output,'desktop.png')});
+  const pixels=PNG.sync.read(await page.locator('#viewport canvas').screenshot());
+  const colors=new Set();
+  for(let i=0;i<pixels.data.length;i+=32)colors.add(`${pixels.data[i]>>3},${pixels.data[i+1]>>3},${pixels.data[i+2]>>3}`);
+  const initial=await page.evaluate(()=>window.xiamenAtlas.getState());
+  const noGooglePanel=await page.locator('#google-view,#google-view-button,.provider-switch').count()===0;
+  const ids=await page.evaluate(()=>{const a=[...document.querySelectorAll('[id]')].map(e=>e.id);return a.filter((x,i)=>a.indexOf(x)!==i);});
+  await page.locator('#district').selectOption('0');
+  await page.waitForTimeout(2400);
+  await page.screenshot({path:path.join(output,'gulangyu.png')});
+  const before=await page.evaluate(()=>window.xiamenAtlas.getState().world.motion);
+  await page.waitForTimeout(1200);
+  const after=await page.evaluate(()=>window.xiamenAtlas.getState().world.motion);
+  await page.locator('#scene-pause').click();
+  await page.waitForTimeout(150);
+  const pausedAt=await page.evaluate(()=>window.xiamenAtlas.getState().world.seconds);
+  await page.waitForTimeout(600);
+  const pauseWorks=pausedAt===await page.evaluate(()=>window.xiamenAtlas.getState().world.seconds);
+  await page.locator('#scene-pause').click();
+  const visits=[];
+  for(let i=0;i<12;i++){
+    await page.locator('#district').selectOption(String(i));
+    await page.waitForTimeout(1700);
+    await page.screenshot({path:path.join(output,`place-${i}.png`)});
+    const state=await page.evaluate(()=>window.xiamenAtlas.getState());
+    visits.push({name:state.selected,invalidPeople:state.world.invalidPeople,overlaps:state.world.overlaps});
+  }
+  await page.locator('#district').selectOption('8');
+  await page.waitForTimeout(2400);
+  await page.screenshot({path:path.join(output,'beach.png')});
+  await page.locator('[data-time-choice="night"]').click();
+  await page.waitForFunction(()=>window.xiamenAtlas.getState().sky.transitioning===false,{},{timeout:30000});
+  const night=await page.evaluate(()=>window.xiamenAtlas.getState());
+  await page.screenshot({path:path.join(output,'night.png')});
+  await page.locator('#render-quality').selectOption('high');
+  const high=await page.evaluate(()=>window.xiamenAtlas.getState().sky);
+  await page.locator('#scene-hide').click();
+  const hidden=await page.locator('.brand').isHidden();
+  await page.locator('#scene-restore').click();
+  const restored=await page.locator('.brand').isVisible();
+  await page.setViewportSize({width:390,height:844});
+  await page.waitForTimeout(1500);
+  await page.screenshot({path:path.join(output,'mobile.png')});
+  const mobile=await page.evaluate(()=>({width:innerWidth,scrollWidth:document.documentElement.scrollWidth,canvas:!!document.querySelector('canvas')}));
+  const report={readyMs,colors:colors.size,moving:JSON.stringify(before)!==JSON.stringify(after),pauseWorks,noGooglePanel,duplicateIds:ids,hidden,restored,visits,initial,night,high,mobile,errors,failed};
+  await writeFile(path.join(output,'report.json'),JSON.stringify(report,null,2));
+  console.log(JSON.stringify({readyMs,colors:colors.size,moving:report.moving,pauseWorks,noGooglePanel,duplicateIds:ids,hidden,restored,scenes:initial.world.scenes,cityBuildings:initial.world.illustrativeBuildings,visits,night:night.time,mobile,errors,failed},null,2));
+  if(errors.length||colors.size<50||!report.moving||initial.world.invalidPeople||initial.world.scenes.some(s=>!s.people)||visits.some(s=>s.invalidPeople||s.overlaps)||!pauseWorks||!noGooglePanel||ids.length||!hidden||!restored||night.time!=='night')process.exitCode=1;
+} finally { await browser.close(); }

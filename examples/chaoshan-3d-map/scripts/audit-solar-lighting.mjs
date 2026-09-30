@@ -1,0 +1,47 @@
+import {chromium} from 'playwright';
+import {PNG} from 'pngjs';
+import fs from 'node:fs/promises';
+import assert from 'node:assert/strict';
+const dir=new URL('../RECON/solar-lighting/',import.meta.url);await fs.mkdir(dir,{recursive:true});
+const browser=await chromium.launch({headless:true,channel:'msedge'}),errors=[],results=[];
+try{
+ const page=await browser.newPage({viewport:{width:1440,height:960},deviceScaleFactor:1});page.setDefaultTimeout(60000);page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error'&&/shader|WebGL|TypeError/i.test(m.text()))errors.push(m.text());});
+ await page.goto('http://127.0.0.1:5242/',{waitUntil:'domcontentloaded'});
+ await page.waitForFunction(()=>window.chaoshanAtlas?.getState().ready,null,{timeout:240000});await page.locator('#loading').waitFor({state:'hidden',timeout:240000});console.log('Map ready');
+ await page.waitForFunction(()=>window.chaoshanAtlas.getState().sky.photography.ready,null,{timeout:60000});
+ const state=()=>page.evaluate(()=>window.chaoshanAtlas.getState());
+ const preset=async mode=>{await page.locator(`[data-time-choice=${mode}]`).click();await page.waitForFunction(()=>!window.chaoshanAtlas.getState().sky.transitioning,null,{timeout:180000});};
+ const frame=()=>page.evaluate(()=>{const {renderer,scene,camera}=window.__atlasLighting;renderer.render(scene,camera);return renderer.domElement.toDataURL('image/png').split(',')[1];});
+ const write=async(name)=>fs.writeFile(new URL(name+'.png',dir),Buffer.from(await frame(),'base64'));
+ await page.screenshot({path:new URL('initial.png',dir).pathname.replace(/^\/C:/,'C:')});
+ // Measure the click atomically: separate browser round trips can span slow GPU frames.
+ const {initial,immediate}=await page.evaluate(()=>{const initial=window.chaoshanAtlas.getState().sky;document.querySelector('[data-time-choice=sunset]').click();return {initial,immediate:window.chaoshanAtlas.getState().sky};});assert.equal(immediate.hour,initial.hour);assert.ok(immediate.transitioning);await page.waitForTimeout(2200);const middle=(await state()).sky;console.log('Transition sample',JSON.stringify({initial:initial.hour,middle:middle.hour,progress:middle.transitionProgress}));assert.ok(middle.transitioning);assert.ok(middle.hour>initial.hour&&middle.hour<17.6);await page.waitForFunction(()=>!window.chaoshanAtlas.getState().sky.transitioning,null,{timeout:180000});const dusk=(await state()).sky;assert.ok(Math.abs(dusk.hour-17.6)<.01);results.push({test:'preset follows a visible continuous solar path',initial:initial.hour,middle:middle.hour,final:dusk.hour});console.log('Transition passed');
+ await preset('day');await page.locator('#scene-pause').click();const before=(await state()).sceneSeconds;await page.waitForTimeout(1000);assert.equal((await state()).sceneSeconds,before);
+ const counts=await page.evaluate(()=>{const out={trees:0,houses:0,treeInstances:0,houseInstances:0,bad:0};window.__atlasLighting.scene.traverse(o=>{if(!o.isMesh)return;if(o.name.startsWith('woodland-')){out.trees++;out.treeInstances+=o.count||1;if(!o.castShadow||!o.receiveShadow)out.bad++;}if(['osm-buildings','regional-city-building'].includes(o.name)){out.houses++;out.houseInstances+=o.count||1;if(!o.castShadow||!o.receiveShadow)out.bad++;}});return out;});console.log('Shadow batches',JSON.stringify(counts));assert.ok(counts.treeInstances>100&&counts.houseInstances>100&&counts.bad===0);results.push({test:'map-wide tree and house shadow flags survive batching',...counts});
+ const names=['small-park','nanao-nature-gate','汕头市','潮州市','揭阳市','普宁市','南澳岛','潮阳区','潮南区','澄海区','潮安区','饶平县','惠来县','揭西县'];
+ for(const name of names){
+  await page.evaluate(name=>{const atlas=window.chaoshanAtlas,p=atlas.getState().places.find(p=>p.id===name||p.name===name);if(!p)throw new Error(name);atlas.focusPlace(p.index);},name);await page.waitForTimeout(2500);
+  const diagnostics=await page.evaluate(()=>({target:window.__atlasLighting.sun.target.position.toArray(),expected:window.chaoshanAtlas.getState().view.target,extent:window.chaoshanAtlas.getState().sky.light.shadowExtent}));assert.ok(diagnostics.target.every((v,i)=>Math.abs(v-diagnostics.expected[i])<.001));
+  if(['small-park','nanao-nature-gate','普宁市'].includes(name)){
+   const on=PNG.sync.read(Buffer.from(await frame(),'base64'));await write('day-'+name);
+   await page.evaluate(()=>{window.__savedCasters=[];window.__atlasLighting.scene.traverse(o=>{if(o.isMesh&&o.castShadow){window.__savedCasters.push(o);o.castShadow=false;}});});const off=PNG.sync.read(Buffer.from(await frame(),'base64'));
+   await page.evaluate(()=>{for(const o of window.__savedCasters)o.castShadow=true;delete window.__savedCasters;});let changed=0,darker=0,colors=new Set();for(let i=0;i<on.data.length;i+=4){const a=on.data[i]+on.data[i+1]+on.data[i+2],b=off.data[i]+off.data[i+1]+off.data[i+2];if(Math.abs(a-b)>12)changed++;if(b-a>12)darker++;if(i%64===0)colors.add(on.data.slice(i,i+3).join(','));}
+   assert.ok(darker>100&&colors.size>100,`${name}: visible shadows required, got ${darker}`);results.push({test:'rendered shadow pixels',place:name,changed,darker,colors:colors.size});
+  }
+ }
+ console.log('District shadow framing passed');
+ await page.locator('#render-quality').selectOption('high');assert.equal((await state()).sky.light.shadowSize,4096);await page.locator('#render-quality').selectOption('light');assert.equal((await state()).sky.light.shadowSize,1024);await page.locator('#render-quality').selectOption('balanced');
+ // A chosen time still animates while residents and traffic are paused.
+ await preset('night');await write('night-map');assert.equal((await state()).sky.nightSky.opacity,1);assert.equal((await state()).sceneSeconds,before);
+ await page.locator('#home').click();await page.waitForTimeout(2500);await write('night-overview');
+ const starOn=PNG.sync.read(Buffer.from(await frame(),'base64'));await page.getByLabel('星辰',{exact:true}).uncheck();assert.equal((await state()).sky.stars,false);await page.waitForTimeout(500);const starOff=PNG.sync.read(Buffer.from(await frame(),'base64'));let starPixels=0;for(let i=0;i<starOn.data.length;i+=4)if(starOn.data[i]+starOn.data[i+1]+starOn.data[i+2]-starOff.data[i]-starOff.data[i+1]-starOff.data[i+2]>20)starPixels++;assert.ok(starPixels>20,'Stars must change actual visible sky pixels');await page.getByLabel('星辰',{exact:true}).check();results.push({test:'visible stars behind the world',starPixels});
+ await page.locator('[data-time-choice=morning]').click();await page.waitForTimeout(3000);const rising=(await state()).sky;assert.ok(rising.transitioning);await write('sunrise-midpoint');await page.waitForFunction(()=>!window.chaoshanAtlas.getState().sky.transitioning);await write('sunrise-overview');
+ await preset('day');const noon=(await state()).sky;await write('noon-overview');await page.locator('[data-time-choice=sunset]').click();await page.waitForTimeout(4000);const setting=(await state()).sky;assert.ok(setting.transitioning);assert.ok(setting.photography.sunScreen[1]<noon.photography.sunScreen[1]);await write('sunset-midpoint');await page.waitForFunction(()=>!window.chaoshanAtlas.getState().sky.transitioning);await write('sunset-overview');results.push({test:'sunrise and sunset move their photographed disk gradually',risingHour:rising.hour,settingHour:setting.hour});
+ await page.locator('#scene-audio').click();assert.equal((await state()).sky.tools.audioState,'running');await page.locator('#scene-audio').click();assert.equal((await state()).sky.tools.audioState,'suspended');
+ const download=page.waitForEvent('download');await page.locator('#scene-capture').click();const saved=await download;await saved.saveAs(new URL('export.png',dir).pathname.replace(/^\/C:/,'C:'));assert.match(saved.suggestedFilename(),/\.png$/);
+ await page.locator('#scene-hide').click();assert.equal(await page.locator('.top-actions').isVisible(),false);assert.equal(await page.locator('#scene-restore').isVisible(),true);await page.locator('#scene-restore').click();assert.equal(await page.locator('.top-actions').isVisible(),true);
+ results.push({test:'quality, star toggle, sound, capture and clean view',pass:true});
+ await preset('morning');await page.screenshot({path:new URL('desktop-morning.png',dir).pathname.replace(/^\/C:/,'C:')});
+ for(const [width,height] of [[390,844],[320,740],[844,390]]){await page.setViewportSize({width,height});const bounds=await page.locator('.top-actions').boundingBox();assert.ok(bounds.x>=0&&bounds.x+bounds.width<=width&&bounds.y+bounds.height<=height);const controls=await page.locator('.time-switch button,.scene-tools button,.scene-tools select,.sky-options label').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return {x:r.x,y:r.y,right:r.right,bottom:r.bottom};}));for(const r of controls)assert.ok(r.x>=0&&r.right<=width&&r.y>=0&&r.bottom<=height);const card=await page.locator('#location-card').boundingBox();assert.ok(card.x+card.width<=bounds.x||bounds.x+bounds.width<=card.x||card.y+card.height<=bounds.y||bounds.y+bounds.height<=card.y,'Scene controls must not cover the location card');await page.screenshot({path:new URL('mobile-'+width+'.png',dir).pathname.replace(/^\/C:/,'C:')});}
+ assert.equal(errors.length,0,errors.join('\n'));console.log(JSON.stringify({results,errors},null,2));await fs.writeFile(new URL('results.json',dir),JSON.stringify({results,errors},null,2));
+}finally{await browser.close();}

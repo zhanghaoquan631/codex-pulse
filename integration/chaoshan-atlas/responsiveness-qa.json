@@ -1,0 +1,20 @@
+{
+  "date": "2026-09-27",
+  "runtime": "assets/index-responsive-b78981934e80.js",
+  "browser": "Codex in-app browser on Windows, Intel Graphics D3D11",
+  "localUrl": "http://127.0.0.1:43911/#atlas",
+  "observedOverview": { "calls": 931, "triangles": 5729146 },
+  "observedGuangji": { "calls": 144, "triangles": 831061 },
+  "checks": [
+    "Map reaches explicit ready and displays full geographic overview",
+    "Guangji place marker opens detailed bridge scene",
+    "Night mode changes selected state and map state",
+    "Adventure loads its scene and controls",
+    "Background map simulation time remains unchanged while adventure is open",
+    "Return from adventure and switch to Token statistics succeed",
+    "Small-surface compaction preserves exact geometry and world transforms",
+    "Detail wrapper restores near view without overriding the original feature layer flag",
+    "Asset verifier passes all 3382 files and 1593 animal manifests"
+  ],
+  "limitations": "Initial generation still takes time; startup progress, cancellation and retry remain available. This is a bounded functional/performance check, not a guarantee of a fixed frame rate on every device."
+}

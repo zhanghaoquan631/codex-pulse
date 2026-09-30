@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Social interaction test</title><link rel="stylesheet" href="../living-world.css"><style>body{margin:0;background:#c6d6c3}canvas{display:block}.community-open{position:fixed;bottom:20px;left:20px}</style></head><body><button class="community-open">街坊互动</button><script type="module">
+import * as THREE from 'three';
+import {person} from '../scene-miniatures.mjs';
+import {createCommunitySocial} from '../community-social.mjs';
+const scene=new THREE.Scene(),camera=new THREE.OrthographicCamera(-4,4,3,-3,.1,100);
+camera.position.set(0,2,8);camera.lookAt(0,1,0);camera.updateMatrixWorld();
+scene.add(new THREE.HemisphereLight(0xffffff,0x647563,3));
+const actors=[person(scene,0,{scale:.2}),person(scene,3,{scale:.2})];actors[0].root.position.x=-.3;actors[1].root.position.x=.3;
+const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setClearColor('#c6d6c3');document.body.prepend(renderer.domElement);
+const social=createCommunitySocial({camera}),place={id:'test-street',name:'街坊步道'};social.setPlace(place);
+document.querySelector('.community-open').onclick=()=>social.open(place);
+let time=0;
+function tick(t,roll=.8){time=t;scene.updateMatrixWorld(true);const random=Math.random;try{Math.random=()=>roll;social.update(t);}finally{Math.random=random;}renderer.render(scene,camera);return social.getState();}
+function resize(){camera.left=-3*innerWidth/innerHeight;camera.right=-camera.left;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);tick(time);}
+addEventListener('resize',resize);resize();social.setPlace(place);
+window.socialAudit={tick,state:()=>social.getState(),move(x){actors.forEach((a,i)=>a.root.position.x=x+(i-.5)*.6);},separate(){actors[1].root.position.x=5;},hide(){actors[0].root.visible=false;},reset(){actors.forEach(a=>a.root.visible=true);social.setPlace(place);}};
+</script></body></html>

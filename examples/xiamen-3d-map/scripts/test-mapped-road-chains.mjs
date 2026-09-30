@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {mappedRoadChains} from '../mapped-road-chains.mjs';
+const road=(a,b,kind='primary',bridge=false)=>[kind,bridge,[a,b]];
+const source=[road([0,0],[1,0]),road([2,0],[1,0]),road([2,0],[3,0])];
+assert.equal(mappedRoadChains(source).length,1);
+assert.deepEqual(mappedRoadChains(source)[0][2],[[0,0],[1,0],[2,0],[3,0]]);
+assert.equal(mappedRoadChains([...source,road([1,0],[1,1])]).length,3);
+assert.equal(mappedRoadChains([...source,road([3,0],[4,0],'primary',true)]).length,2);
+assert.equal(mappedRoadChains([...source,road([3,0],[4,0],'secondary')]).length,2);
+assert.equal(mappedRoadChains([...source,road([1,0],[0,0])]).length,1);
+const ring=mappedRoadChains([road([0,0],[1,0]),road([1,0],[1,1]),road([1,1],[0,0])]);
+assert.equal(ring.length,1);assert.deepEqual(ring[0][2][0],ring[0][2].at(-1));
+const {roads}=JSON.parse(readFileSync('public/data/mainland-buildings.json','utf8'));
+const chains=mappedRoadChains(roads);
+assert.equal(chains.reduce((n,p)=>n+p[2].length-1,0),roads.length);
+assert.ok(chains.some(([kind,,path])=>kind==='primary'&&path.length>4));
+console.log(JSON.stringify({segments:roads.length,chains:chains.length,connectedTrafficRoutes:chains.filter(([kind,,path])=>['primary','secondary','trunk','motorway'].includes(kind)&&path.length>4).length}));

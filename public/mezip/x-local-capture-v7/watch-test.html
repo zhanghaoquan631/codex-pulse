@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ME.zip Capture · 真实播放测试</title>
+  <link rel="stylesheet" href="./watch.css">
+  <link rel="stylesheet" href="./pulse-theme.css">
+</head>
+<body>
+  <main class="watch-app" style="max-width:960px;margin:0 auto;padding:42px 24px">
+    <section class="panel" style="padding:28px">
+      <p class="eyebrow">ME.ZIP / REAL PLAYBACK CHECK</p>
+      <h1>真实播放测试</h1>
+      <p class="lede">这是公开 HTML5 测试视频，不是伪造记录。请在 Edge 扩展 Reload 后播放至少 20 秒，再暂停或离开页面。</p>
+      <video controls playsinline preload="metadata" style="display:block;width:100%;margin:24px 0;border-radius:12px;background:#05070b" src="https://media.w3.org/2010/05/sintel/trailer.mp4"></video>
+      <div class="top-actions">
+        <a class="button button-primary" href="./watch.html">查看观看记录 →</a>
+        <a class="button button-quiet" href="./index.html#special">打开私人资料库 →</a>
+      </div>
+      <p class="small-copy" style="margin-top:18px">预期结果：记录标题、原始链接、HTML5 来源、视频时长、当前位置、观看百分比和实际观看时间；拖动进度条不会被计入实际观看时长。</p>
+    </section>
+  </main>
+<script type="text/mezip-deferred" data-src="./pulse-shell.js"></script>
+  <script src="/mezip/remote-adapter.js"></script>
+</body>
+</html>
