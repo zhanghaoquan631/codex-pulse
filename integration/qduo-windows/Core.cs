@@ -508,12 +508,12 @@ namespace QDuoWindows
                     }
                     if (request.Method == "GET" && request.Path == "/health")
                     {
-                        await Respond(stream, 200, new { ok = true, name = "QDuo Windows", service = "QDuo Windows", version = "1.2.0", features = new[] { "safe-cleanup", "d-drive-backup", "auto-reconnect", "defender", "file-catalog" } }, origin).ConfigureAwait(false); return;
+                        await Respond(stream, 200, new { ok = true, name = "QDuo Windows", service = "QDuo Windows", version = "1.2.1", features = new[] { "safe-cleanup", "d-drive-backup", "auto-reconnect", "defender", "file-catalog" } }, origin).ConfigureAwait(false); return;
                     }
                     if (!Authenticated(request)) { await Respond(stream, 401, new { error = "Native pairing token required." }, origin).ConfigureAwait(false); return; }
                     if (request.Method == "GET" && request.Path == "/connection/status")
                     {
-                        await Respond(stream, 200, new { ok = true, version = "1.2.0", computer = Environment.MachineName }, origin).ConfigureAwait(false); return;
+                        await Respond(stream, 200, new { ok = true, version = "1.2.1", computer = Environment.MachineName }, origin).ConfigureAwait(false); return;
                     }
                     if (service != null && ServiceRoutes.IsRoute(request.Method, request.Path))
                     {

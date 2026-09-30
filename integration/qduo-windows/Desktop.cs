@@ -25,8 +25,8 @@ using System.Windows.Automation.Text;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 
-[assembly: System.Reflection.AssemblyVersion("1.2.0.0")]
-[assembly: System.Reflection.AssemblyFileVersion("1.2.0.0")]
+[assembly: System.Reflection.AssemblyVersion("1.2.1.0")]
+[assembly: System.Reflection.AssemblyFileVersion("1.2.1.0")]
 [assembly: System.Reflection.AssemblyProduct("QDuo Windows")]
 
 namespace QDuoWindows
@@ -49,7 +49,45 @@ namespace QDuoWindows
     public sealed class AppConfig
     {
         public const string SiteUrl = "https://codex-pulse-willow-0911.wozhe0196.chatgpt.site/";
-        public static readonly string DirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "QDuoWindows");
+        private static readonly Lazy<string> DataDirectory = new Lazy<string>(delegate {
+            return ResolveDataDirectory(AppDomain.CurrentDomain.BaseDirectory, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "QDuoWindows"));
+        });
+        public static string DirectoryPath { get { return DataDirectory.Value; } }
+        // A per-installation marker makes desktop-host and Windows-login launches
+        // use the same settings location. It contains a path, never credentials.
+        public static string ResolveDataDirectory(string baseDirectory, string defaultDirectory)
+        {
+            string marker = Path.Combine(Path.GetFullPath(baseDirectory), "QDuoWindows.data-dir");
+            FileAttributes markerAttributes;
+            try { markerAttributes = File.GetAttributes(marker); }
+            catch (FileNotFoundException) { return defaultDirectory; }
+            catch (DirectoryNotFoundException) { return defaultDirectory; }
+            if ((markerAttributes & (FileAttributes.Directory | FileAttributes.ReparsePoint)) != 0)
+                throw new InvalidDataException("QDuoWindows.data-dir 必须是普通文本文件；不会改用默认配置目录。");
+            if (new FileInfo(marker).Length > 4096)
+                throw new InvalidDataException("QDuoWindows.data-dir 内容过长；不会改用默认配置目录。");
+            string configured = File.ReadAllText(marker, new UTF8Encoding(false, true)).Trim();
+            if (!Regex.IsMatch(configured, @"^[A-Za-z]:[\\/]") || configured.IndexOf(':', 2) >= 0 || configured.IndexOfAny(Path.GetInvalidPathChars()) >= 0 || configured.IndexOfAny(new[] { '*', '?' }) >= 0)
+                throw new InvalidDataException("QDuoWindows.data-dir 必须填写完整的本地盘绝对目录，例如 D:\\QDuoWindows\\data；不接受空值、相对路径或网络路径。");
+            string directory = Path.GetFullPath(configured);
+            DriveInfo drive = new DriveInfo(Path.GetPathRoot(directory));
+            if (!drive.IsReady || (drive.DriveType != DriveType.Fixed && drive.DriveType != DriveType.Removable && drive.DriveType != DriveType.Ram))
+                throw new IOException("QDuoWindows.data-dir 指定的本地磁盘不可用；为保留原配对，不会改用默认配置目录。");
+            // Reject an existing redirected/file ancestor instead of silently
+            // writing the fixed-path configuration to a different location.
+            string current = directory;
+            while (!String.IsNullOrEmpty(current))
+            {
+                FileAttributes attributes;
+                try { attributes = File.GetAttributes(current); }
+                catch (FileNotFoundException) { current = Path.GetDirectoryName(current.TrimEnd('\\')); continue; }
+                catch (DirectoryNotFoundException) { current = Path.GetDirectoryName(current.TrimEnd('\\')); continue; }
+                if ((attributes & FileAttributes.ReparsePoint) != 0 || (attributes & FileAttributes.Directory) == 0)
+                    throw new InvalidDataException("QDuoWindows.data-dir 指定路径必须是普通本地目录，不能是文件或目录联接；不会改用默认配置目录。");
+                current = Path.GetDirectoryName(current.TrimEnd('\\'));
+            }
+            return directory;
+        }
         public string BaseUrl = "https://api.openai.com/v1";
         public string Model = "gpt-4o-mini";
         public string ApiKey = "";

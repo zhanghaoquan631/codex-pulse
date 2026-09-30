@@ -3904,6 +3904,30 @@ const aiActions=[['translate','翻译'],['polish','润色'],['summarize','总结
 const downloadBase='/qduo-windows';
 const mobileQuery='(max-width:850px), (max-width:1100px) and (pointer:coarse)';
 const mobileDevice=()=>!/(Win32|Win64|Windows)/i.test(navigator.platform+' '+navigator.userAgent)&&window.matchMedia(mobileQuery).matches;
+type PairingStorage='persistent'|'session'|'none';
+const pairingKey='qduo:connection',pairingRecordKey='qduo:pairing:v1';
+type PairingRecord={version:1;key:string;revision:number};
+const pairingStores=[{get:()=>localStorage,kind:'persistent' as const},{get:()=>sessionStorage,kind:'session' as const}];
+function storedPairing(get:()=>Storage):PairingRecord|null{
+ try{const value:unknown=JSON.parse(get().getItem(pairingRecordKey)||'null');if(value&&typeof value==='object'&&'version'in value&&value.version===1&&'key'in value&&typeof value.key==='string'&&'revision'in value&&typeof value.revision==='number'&&Number.isSafeInteger(value.revision)&&value.revision>0)return {version:1,key:value.key.trim(),revision:value.revision};}catch{}
+ try{const key=get().getItem(pairingKey)?.trim();if(key)return {version:1,key,revision:0};}catch{}return null;
+}
+function readPairing():{key:string;storage:PairingStorage;revision:number}{
+ let best:PairingRecord|null=null,storage:PairingStorage='none';
+ for(const item of pairingStores){const candidate=storedPairing(item.get);if(candidate&&(!best||candidate.revision>best.revision)){best=candidate;storage=candidate.key?item.kind:'none';}}
+ return {key:best?.key||'',storage,revision:best?.revision||0};
+}
+function pairingRevision(){return Math.max(Date.now(),...pairingStores.map(item=>(storedPairing(item.get)?.revision||0)+1));}
+function savePairingRecord(get:()=>Storage,record:PairingRecord){const value=JSON.stringify(record);try{get().setItem(pairingRecordKey,value);return get().getItem(pairingRecordKey)===value;}catch{return false;}}
+function rememberPairing(key:string):PairingStorage{
+ const record:PairingRecord={version:1,key,revision:pairingRevision()};let result:PairingStorage='none';
+ for(const item of pairingStores){if(savePairingRecord(item.get,record)){if(result==='none')result=item.kind;try{item.get().setItem(pairingKey,key);}catch{}}}return result;
+}
+function forgetPairing(revision=pairingRevision()){
+ const record:PairingRecord={version:1,key:'',revision};
+ for(const item of pairingStores){if(!savePairingRecord(item.get,record)){try{item.get().removeItem(pairingRecordKey);}catch{}}try{item.get().removeItem(pairingKey);}catch{}}
+}
+function pairingNotice(storage:PairingStorage,automatic=false){return storage==='persistent'?automatic?'电脑已自动连接，已记住配对。':'电脑已连接，已在此浏览器记住配对并开启自动重连。':storage==='session'?'电脑已连接，刷新当前标签页会自动重连。浏览器限制了长期保存；关闭此标签页后可能需要重新配对。':'电脑已连接，但浏览器禁止保存配对。请在普通浏览器窗口中允许此网站保存数据后重新连接。';}
 export default function QDuoCenter(){
  const [mobile,setMobile]=useState(false);
  useEffect(()=>{const media=window.matchMedia(mobileQuery);setMobile(mobileDevice());if(mobileDevice())setView('text');const update=()=>{setMobile(mobileDevice());if(mobileDevice())setView(value=>['connection','safety'].includes(value)?'text':value);};media.addEventListener('change',update);return()=>media.removeEventListener('change',update);},[]);
@@ -3911,10 +3935,11 @@ export default function QDuoCenter(){
  const [token,setToken]=useState(''),[connected,setConnected]=useState(false),[report,setReport]=useState<QDuoReport|null>(null),[busy,setBusy]=useState(''),[message,setMessage]=useState(''),[query,setQuery]=useState(''),[listing,setListing]=useState('applications'),[source,setSource]=useState('');
  const fileInput=useRef<HTMLInputElement>(null),textArea=useRef<HTMLTextAreaElement>(null),generation=useRef(0);
  const autoKey=useRef(''),connectedRef=useRef(false),activeRequests=useRef(0),importedMode=useRef(false);
+ const [pairingStorage,setPairingStorage]=useState<PairingStorage>('none');
  useEffect(()=>{connectedRef.current=connected;},[connected]);
  useEffect(()=>{
   let live=true,pending=false;
-  try{const saved=localStorage.getItem('qduo:connection')||sessionStorage.getItem('qduo:connection')||'';autoKey.current=saved;setToken(saved);if(saved)localStorage.setItem('qduo:connection',saved);}catch{}
+  const saved=readPairing();autoKey.current=saved.key;setToken(saved.key);setPairingStorage(saved.storage);if(saved.key)setMessage('已找到保存的配对，正在自动连接本机…');
   async function reconnect(){
    const key=autoKey.current,current=generation.current;
    if(!live||pending||!key||activeRequests.current||document.hidden||mobileDevice())return;
@@ -3928,18 +3953,25 @@ export default function QDuoCenter(){
     const next=await request('/report',undefined,key,20000);
     if(!live||current!==generation.current||key!==autoKey.current)return;
     if(!isQDuoReport(next))throw new Error('请更新 Windows 客户端。');
-    setToken(key);setReport(next);setConnected(true);connectedRef.current=true;setSource('实时本机连接');setMessage('电脑已自动连接。关闭网页后再打开也会自动连接。');
+    const storage=rememberPairing(key);setPairingStorage(storage);setToken(key);setReport(next);setConnected(true);connectedRef.current=true;setSource('实时本机连接');setMessage(pairingNotice(storage,true));
    }catch(e){
     if(!live||current!==generation.current||key!==autoKey.current)return;
     setConnected(false);connectedRef.current=false;setSource('上次读取的本机报告');
-    if(e instanceof Error&&e.message.includes('连接码不正确')){autoKey.current='';try{localStorage.removeItem('qduo:connection');sessionStorage.removeItem('qduo:connection');}catch{}setMessage('配对码已失效，请从客户端重新复制配对码。');}
+    if(e instanceof Error&&e.message.includes('连接码不正确')){autoKey.current='';forgetPairing();setPairingStorage('none');setToken('');setMessage('配对码已失效，请从客户端重新复制配对码。');}
     else setMessage('等待本机客户端，网页会自动重连。浏览器首次询问本地网络访问时请允许。');
    }finally{pending=false;}
   }
   const onVisible=()=>{if(!document.hidden)void reconnect();};
   void reconnect();const timer=window.setInterval(()=>void reconnect(),15000);
   window.addEventListener('online',onVisible);document.addEventListener('visibilitychange',onVisible);
-  const onStorage=(event:StorageEvent)=>{if(event.key!=='qduo:connection'||importedMode.current)return;generation.current++;setBusy('');autoKey.current=event.newValue||'';setToken(autoKey.current);setConnected(false);connectedRef.current=false;if(!autoKey.current){setReport(null);setSource('');setMessage('已取消自动连接。');}else void reconnect();};window.addEventListener('storage',onStorage);
+  const onStorage=(event:StorageEvent)=>{
+   if((event.key!==pairingKey&&event.key!==pairingRecordKey)||importedMode.current)return;
+   let saved=readPairing();
+   if(event.key===pairingKey){if(event.newValue===null){forgetPairing();saved={key:'',storage:'none',revision:readPairing().revision};}else if(saved.revision===0)saved={key:event.newValue.trim(),storage:'persistent',revision:0};}
+   if(saved.key&&saved.key===autoKey.current)return;
+   generation.current++;setBusy('');autoKey.current=saved.key;setToken(saved.key);setConnected(false);connectedRef.current=false;setPairingStorage(saved.storage);
+   if(!saved.key){forgetPairing(saved.revision||undefined);setReport(null);setSource('');setMessage('已取消自动连接。');}else void reconnect();
+  };window.addEventListener('storage',onStorage);
   return()=>{live=false;generation.current++;window.clearInterval(timer);window.removeEventListener('online',onVisible);document.removeEventListener('visibilitychange',onVisible);window.removeEventListener('storage',onStorage);};
  },[]);
  async function request(path:string,body?:unknown,key=autoKey.current||token,timeout=30000){
@@ -3955,11 +3987,11 @@ export default function QDuoCenter(){
  async function connect(){
   if(!token.trim()){setMessage('请先打开 Windows 客户端，复制其中的网页配对码。');setView('connection');return;}
   importedMode.current=false;const current=++generation.current;setBusy('正在连接电脑');setMessage('');
-  try{const next=await request('/report',undefined,token.trim());if(current!==generation.current)return;if(!isQDuoReport(next))throw new Error('本机报告格式不兼容，请更新客户端。');setReport(next);setConnected(true);connectedRef.current=true;autoKey.current=token.trim();setSource('实时本机连接');setView('computer');let remembered=false;try{localStorage.setItem('qduo:connection',token.trim());sessionStorage.removeItem('qduo:connection');remembered=true;}catch{}setMessage(remembered?'电脑已连接，已在此浏览器记住配对并开启自动重连。':'电脑已连接；浏览器禁止保存配对，下次打开需要重新连接。');}
+  try{const next=await request('/report',undefined,token.trim());if(current!==generation.current)return;if(!isQDuoReport(next))throw new Error('本机报告格式不兼容，请更新客户端。');setReport(next);setConnected(true);connectedRef.current=true;autoKey.current=token.trim();setSource('实时本机连接');setView('computer');const storage=rememberPairing(token.trim());setPairingStorage(storage);setMessage(pairingNotice(storage));}
   catch(e){if(current===generation.current){setConnected(false);setMessage(e instanceof TypeError?'未能连接本机。请确认客户端正在运行；浏览器提示访问本地网络时允许连接。也可导入客户端导出的报告。':e instanceof Error?e.message:'连接失败');}}
   finally{if(current===generation.current)setBusy('');}
  }
- function disconnect(){generation.current++;autoKey.current='';connectedRef.current=false;setConnected(false);setReport(null);setSource('');setToken('');setBusy('');try{localStorage.removeItem('qduo:connection');sessionStorage.removeItem('qduo:connection');}catch{}setMessage('已断开并忘记这台电脑，自动重连已停止。');}
+ function disconnect(){generation.current++;autoKey.current='';connectedRef.current=false;setConnected(false);setReport(null);setSource('');setToken('');setBusy('');forgetPairing();setPairingStorage('none');setMessage('已断开并忘记这台电脑，自动重连已停止。');}
  async function scan(deep=false){
   const current=++generation.current;setBusy(deep?'正在扫描缓存和大文件':'正在刷新电脑状态');setMessage('');
   try{const next=await request(deep?'/scan':'/report',deep?{}:undefined,autoKey.current||token,deep?180000:30000);if(current!==generation.current)return;if(!isQDuoReport(next))throw new Error('未收到完整报告，已保留原来的结果。');setReport(next);setSource('实时本机连接');setMessage(deep?'扫描完成。详情中的扫描限制也已列出。':'电脑状态已更新。');}
@@ -4011,13 +4043,15 @@ export default function QDuoCenter(){
      <section className="panel"><div className="qd-panel-title"><h2>处理结果</h2><button className="library-button" disabled={!output} onClick={copy}><Copy size={15}/>复制</button></div><textarea aria-label="处理结果" value={output} onChange={e=>setOutput(e.target.value)} placeholder="处理结果会显示在这里。"/><div className="qd-actions"><button className="library-button" disabled={!output} onClick={()=>{setText(output);setOutput('');}}>替换本页输入</button><button className="library-button" disabled={!output} onClick={()=>setText(v=>v+(v?'\n':'')+output)}>追加到本页输入</button></div><p className="qd-subtle">{mobile?'文本转换在手机浏览器内完成。电脑报告可从“电脑报告”导入；跨应用划词和截图识字请在 Windows 客户端使用。':'跨应用划词、截图识字和回写由桌面客户端完成：Ctrl + Alt + Q 划词，Ctrl + Alt + S 截图。'}</p></section></div>
    </TabsContent>
    <TabsContent value="connection"><div className="qd-connect-grid">
-    <section className="panel qd-connect"><div className="qd-panel-title"><h2>连接 Windows 电脑</h2><Monitor size={22}/></div><ol><li>下载并解压 Windows 版，双击 <strong>QDuoWindows.exe</strong>。</li><li>在客户端“网页连接”处复制配对码。</li><li>粘贴到下方；浏览器询问访问本地网络时，允许连接。</li></ol><label htmlFor="qd-connection-code">网页连接码</label><input id="qd-connection-code" type="password" autoComplete="off" spellCheck={false} value={token} onChange={e=>setToken(e.target.value)} placeholder="粘贴 Windows 客户端显示的连接码"/><div className="qd-actions"><button className="library-button primary" disabled={!!busy} onClick={connect}><Link2 size={16}/>连接本机</button><button className="library-button" onClick={disconnect}><Unplug size={16}/>断开并忘记</button></div><p className="qd-subtle">配对码仅保存在此浏览器。重新打开网页或客户端重启后会自动重连；“断开并忘记”会停止自动连接。客户端可开启“登录 Windows 时自动启动”。</p></section>
+    <section className="panel qd-connect"><div className="qd-panel-title"><h2>连接 Windows 电脑</h2><Monitor size={22}/></div><p className="qd-subtle">网页连接 1.2.1 · 自动连接：{pairingStorage==='persistent'?'已长期记住配对':pairingStorage==='session'?'已记住当前标签页':'尚未保存配对'}</p><ol><li>下载并解压 Windows 版，双击 <strong>QDuoWindows.exe</strong>。</li><li>在客户端“网页连接”处复制配对码。</li><li>粘贴到下方；浏览器询问访问本地网络时，允许连接。</li></ol><label htmlFor="qd-connection-code">网页连接码</label><input id="qd-connection-code" type="password" autoComplete="off" spellCheck={false} value={token} onChange={e=>setToken(e.target.value)} placeholder="粘贴 Windows 客户端显示的连接码"/><div className="qd-actions"><button className="library-button primary" disabled={!!busy} onClick={connect}><Link2 size={16}/>连接本机</button><button className="library-button" onClick={disconnect}><Unplug size={16}/>断开并忘记</button></div><p className="qd-subtle">配对码仅保存在此浏览器。重新打开网页或客户端重启后会自动重连；“断开并忘记”会停止自动连接。客户端可开启“登录 Windows 时自动启动”。</p></section>
     <section className="panel qd-download"><div className="qd-panel-title"><h2>Windows 桌面版</h2><MousePointer2 size={23}/></div><p>选中其他应用中的文字，按快捷键打开动作窗口。支持 AI 动作、文本转换、朗读、搜索、截图识字和本地脚本。</p><div className="qd-hotkeys"><span>划词动作<kbd>Ctrl + Alt + Q</kbd></span><span>截图识字<kbd>Ctrl + Alt + S</kbd></span></div><a className="library-button primary" href={downloadBase+'/QDuo-Windows.zip'} download><Download size={16}/>下载便携版</a><a className="library-button" href={downloadBase+'/QDuo-Windows-Source.zip'} download><FileJson size={16}/>下载源代码</a><p className="qd-subtle">Windows 10 / 11 · .NET Framework 4.8 · 首次使用 AI 需在客户端配置模型。截图识字使用 Windows 已安装的 OCR 语言。</p><a className="qd-source-link" href="https://github.com/XueshiQiao/qduo" target="_blank" rel="noopener">基于 QDuo 的功能思路独立实现 · GPL-3.0</a></section>
    </div><div className="qd-privacy"><ShieldCheck size={17}/><p>体检、文件详情和图片预览由本机提供，不上传到网站。低风险缓存清理使用可恢复隔离；中风险隔离和 Defender 威胁处理在本机窗口确认。模型密钥保存在 Windows 客户端中。</p></div></TabsContent>
   </Tabs>
   <input ref={fileInput} type="file" accept="application/json,.json" aria-label="导入 QDuo 本机体检报告" className="qd-hidden-input" onChange={e=>importReport(e.target.files?.[0])}/>
  </section>;
 }
+
+
 
 
 
@@ -29017,12 +29051,12 @@ namespace QDuoWindows
                     }
                     if (request.Method == "GET" && request.Path == "/health")
                     {
-                        await Respond(stream, 200, new { ok = true, name = "QDuo Windows", service = "QDuo Windows", version = "1.2.0", features = new[] { "safe-cleanup", "d-drive-backup", "auto-reconnect", "defender", "file-catalog" } }, origin).ConfigureAwait(false); return;
+                        await Respond(stream, 200, new { ok = true, name = "QDuo Windows", service = "QDuo Windows", version = "1.2.1", features = new[] { "safe-cleanup", "d-drive-backup", "auto-reconnect", "defender", "file-catalog" } }, origin).ConfigureAwait(false); return;
                     }
                     if (!Authenticated(request)) { await Respond(stream, 401, new { error = "Native pairing token required." }, origin).ConfigureAwait(false); return; }
                     if (request.Method == "GET" && request.Path == "/connection/status")
                     {
-                        await Respond(stream, 200, new { ok = true, version = "1.2.0", computer = Environment.MachineName }, origin).ConfigureAwait(false); return;
+                        await Respond(stream, 200, new { ok = true, version = "1.2.1", computer = Environment.MachineName }, origin).ConfigureAwait(false); return;
                     }
                     if (service != null && ServiceRoutes.IsRoute(request.Method, request.Path))
                     {
@@ -29280,6 +29314,88 @@ namespace QDuoWindows
 
 
 
+===== FILE: integration/qduo-windows/DataDirectoryTests.cs =====
+using System;
+using System.IO;
+using System.Linq;
+using System.Text;
+using QDuoWindows;
+
+public static class DataDirectoryTests
+{
+    static int checks;
+    static string fixture;
+    static string marker;
+    static readonly string Fallback = @"C:\QDuo-test-default-unused";
+    static void Check(bool condition, string label) { if (!condition) throw new Exception("FAIL: " + label); checks++; Console.WriteLine("PASS: " + label); }
+    static void Write(string value) { File.WriteAllText(marker, value, new UTF8Encoding(false)); }
+    static void Rejected(string value, string label)
+    {
+        Write(value); bool rejected = false;
+        try { AppConfig.ResolveDataDirectory(fixture, Fallback); }
+        catch (InvalidDataException) { rejected = true; }
+        catch (IOException) { rejected = true; }
+        catch (ArgumentException) { rejected = true; }
+        Check(rejected, label);
+    }
+    public static int Main()
+    {
+        fixture = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "QDuo-DataDirectory-Test-" + Guid.NewGuid().ToString("N"));
+        marker = Path.Combine(fixture, "QDuoWindows.data-dir");
+        Directory.CreateDirectory(fixture);
+        try
+        {
+            Check(AppConfig.ResolveDataDirectory(fixture, Fallback) == Fallback, "no marker preserves the default verbatim");
+            Check(new DriveInfo(@"D:\").IsReady, "local D drive available for resolver test");
+            Write("D:\\QDuoWindows\\data\r\n");
+            Check(AppConfig.ResolveDataDirectory(fixture, Fallback) == @"D:\QDuoWindows\data", "absolute D path with text newline accepted");
+            Write("D:/QDuoWindows/data");
+            Check(AppConfig.ResolveDataDirectory(fixture, Fallback) == @"D:\QDuoWindows\data", "absolute forward-slash path normalized");
+            Rejected("", "empty marker rejected without fallback");
+            Rejected("  \r\n", "whitespace marker rejected without fallback");
+            Rejected("relative\\data", "relative path rejected");
+            Rejected("D:data", "drive-relative path rejected");
+            Rejected(@"\data", "root-relative path rejected");
+            Rejected(@"\\server\share\data", "UNC path rejected");
+            Rejected(@"\\?\D:\QDuoWindows\data", "device-prefixed path rejected");
+            Rejected(@"D:\QDuoWindows\data:stream", "alternate-stream path rejected");
+            Rejected(@"D:\QDuoWindows\d*ta", "wildcard path rejected");
+            Rejected("D:\\first\r\nD:\\second", "multi-line marker rejected");
+            Rejected(new string('x', 4097), "oversized marker rejected");
+            File.WriteAllBytes(marker, new byte[] { 0xff, 0xff, 0xff });
+            bool invalidEncodingRejected = false;
+            try { AppConfig.ResolveDataDirectory(fixture, Fallback); } catch (DecoderFallbackException) { invalidEncodingRejected = true; }
+            Check(invalidEncodingRejected, "invalid text encoding rejected");
+            string missingDrive = Enumerable.Range('D', 'Z' - 'D' + 1).Select(c => ((char)c) + @":\").First(d => !Directory.Exists(d));
+            Rejected(missingDrive + "QDuo-data", "unavailable drive rejected without fallback");
+            string fileTarget = Path.Combine(fixture, "not-a-directory"); File.WriteAllText(fileTarget, "test fixture");
+            Rejected(fileTarget, "existing file target rejected");
+            Rejected(Path.Combine(fileTarget, "child"), "existing file ancestor rejected");
+            File.Delete(fileTarget); File.Delete(marker); Directory.CreateDirectory(marker);
+            bool directoryMarkerRejected = false;
+            try { AppConfig.ResolveDataDirectory(fixture, Fallback); } catch (InvalidDataException) { directoryMarkerRejected = true; }
+            Check(directoryMarkerRejected, "directory used as marker rejected");
+            Directory.Delete(marker);
+            Check(AppConfig.Unprotect(AppConfig.Protect("synthetic DPAPI roundtrip")) == "synthetic DPAPI roundtrip", "DPAPI protection remains compatible");
+            Check(!File.Exists(Path.Combine(fixture, "settings.json")), "resolver never writes settings or pairing tokens");
+            Check(typeof(AppConfig).Assembly.GetName().Version.ToString() == "1.2.1.0", "built assembly version is 1.2.1.0");
+            Console.WriteLine("ALL " + checks + " DATA DIRECTORY TESTS PASSED");
+            return 0;
+        }
+        catch (Exception ex) { Console.Error.WriteLine(ex); return 1; }
+        finally
+        {
+            // Fixed names inside this invocation's own fixture; no recursion.
+            if (File.Exists(marker)) File.Delete(marker);
+            if (Directory.Exists(marker)) Directory.Delete(marker);
+            string target = Path.Combine(fixture, "not-a-directory"); if (File.Exists(target)) File.Delete(target);
+            if (Directory.Exists(fixture)) Directory.Delete(fixture);
+        }
+    }
+}
+
+
+
 ===== FILE: integration/qduo-windows/Desktop.cs =====
 // QDuo Windows: an independent Windows implementation inspired by XueshiQiao/qduo.
 // Copyright (C) 2026. Distributed under GNU GPL v3 or later. See LICENSE.
@@ -29308,8 +29424,8 @@ using System.Windows.Automation.Text;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 
-[assembly: System.Reflection.AssemblyVersion("1.2.0.0")]
-[assembly: System.Reflection.AssemblyFileVersion("1.2.0.0")]
+[assembly: System.Reflection.AssemblyVersion("1.2.1.0")]
+[assembly: System.Reflection.AssemblyFileVersion("1.2.1.0")]
 [assembly: System.Reflection.AssemblyProduct("QDuo Windows")]
 
 namespace QDuoWindows
@@ -29332,7 +29448,45 @@ namespace QDuoWindows
     public sealed class AppConfig
     {
         public const string SiteUrl = "https://codex-pulse-willow-0911.wozhe0196.chatgpt.site/";
-        public static readonly string DirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "QDuoWindows");
+        private static readonly Lazy<string> DataDirectory = new Lazy<string>(delegate {
+            return ResolveDataDirectory(AppDomain.CurrentDomain.BaseDirectory, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "QDuoWindows"));
+        });
+        public static string DirectoryPath { get { return DataDirectory.Value; } }
+        // A per-installation marker makes desktop-host and Windows-login launches
+        // use the same settings location. It contains a path, never credentials.
+        public static string ResolveDataDirectory(string baseDirectory, string defaultDirectory)
+        {
+            string marker = Path.Combine(Path.GetFullPath(baseDirectory), "QDuoWindows.data-dir");
+            FileAttributes markerAttributes;
+            try { markerAttributes = File.GetAttributes(marker); }
+            catch (FileNotFoundException) { return defaultDirectory; }
+            catch (DirectoryNotFoundException) { return defaultDirectory; }
+            if ((markerAttributes & (FileAttributes.Directory | FileAttributes.ReparsePoint)) != 0)
+                throw new InvalidDataException("QDuoWindows.data-dir 必须是普通文本文件；不会改用默认配置目录。");
+            if (new FileInfo(marker).Length > 4096)
+                throw new InvalidDataException("QDuoWindows.data-dir 内容过长；不会改用默认配置目录。");
+            string configured = File.ReadAllText(marker, new UTF8Encoding(false, true)).Trim();
+            if (!Regex.IsMatch(configured, @"^[A-Za-z]:[\\/]") || configured.IndexOf(':', 2) >= 0 || configured.IndexOfAny(Path.GetInvalidPathChars()) >= 0 || configured.IndexOfAny(new[] { '*', '?' }) >= 0)
+                throw new InvalidDataException("QDuoWindows.data-dir 必须填写完整的本地盘绝对目录，例如 D:\\QDuoWindows\\data；不接受空值、相对路径或网络路径。");
+            string directory = Path.GetFullPath(configured);
+            DriveInfo drive = new DriveInfo(Path.GetPathRoot(directory));
+            if (!drive.IsReady || (drive.DriveType != DriveType.Fixed && drive.DriveType != DriveType.Removable && drive.DriveType != DriveType.Ram))
+                throw new IOException("QDuoWindows.data-dir 指定的本地磁盘不可用；为保留原配对，不会改用默认配置目录。");
+            // Reject an existing redirected/file ancestor instead of silently
+            // writing the fixed-path configuration to a different location.
+            string current = directory;
+            while (!String.IsNullOrEmpty(current))
+            {
+                FileAttributes attributes;
+                try { attributes = File.GetAttributes(current); }
+                catch (FileNotFoundException) { current = Path.GetDirectoryName(current.TrimEnd('\\')); continue; }
+                catch (DirectoryNotFoundException) { current = Path.GetDirectoryName(current.TrimEnd('\\')); continue; }
+                if ((attributes & FileAttributes.ReparsePoint) != 0 || (attributes & FileAttributes.Directory) == 0)
+                    throw new InvalidDataException("QDuoWindows.data-dir 指定路径必须是普通本地目录，不能是文件或目录联接；不会改用默认配置目录。");
+                current = Path.GetDirectoryName(current.TrimEnd('\\'));
+            }
+            return directory;
+        }
         public string BaseUrl = "https://api.openai.com/v1";
         public string Model = "gpt-4o-mini";
         public string ApiKey = "";
@@ -31502,6 +31656,10 @@ Windows 10/11 x64 的本机划词与电脑体检工具。独立 Windows 实现�
 3. 浏览器首次连接本机可能要求允许访问本地网络。接口只绑定 `127.0.0.1:17643`，验证指定网站来源和 `X-QDuo-Token`；不会开放公网监听。配对码不放在 URL 中。
 4. 点击关闭窗口会留在托盘；退出请右击托盘图标选择「退出」。默认不注册开机自启动；可在“连接与设置”启用“登录 Windows 时自动启动”，以托盘模式运行。
 
+1.2.1 支持固定配置位置：安装者可在 `QDuoWindows.exe` 同目录创建 UTF-8 文本文件 `QDuoWindows.data-dir`，内容为完整本地盘目录，例如 `D:\QDuoWindows\data`。这使从 Codex 桌面启动与普通双击、Windows 登录启动使用同一设置文件。未设置标记时仍使用 `%LOCALAPPDATA%\QDuoWindows`；标记为空、相对路径、UNC/网络盘、重解析点、文件路径或磁盘不可用时会报错，不会静默切换配置或生成另一组配对码。目录可由客户端首次保存时创建。
+
+迁移已有安装时，应先退出客户端，把原 `settings.json` 原样复制到固定目录，校验副本并为当前用户限制访问权限，再写标记并重启；保留旧副本便于回退。API Key 和配对码继续使用当前 Windows 用户的 DPAPI 加密。标记本身只有目录路径，没有密钥；它属于单台电脑的安装配置，**公共 ZIP 不应包含该标记、用户 data 目录或 settings.json**。此设置不改变安全清理的 D 盘恢复目录和恢复密钥。
+
 ## 划词、截图与文本
 
 在其他应用选中文本后按 **Ctrl+Alt+Q** 调出动作胶囊。先读取 Windows UI Automation 选区，无法读取时模拟复制并恢复剪贴板。部分应用、受保护窗口或以管理员身份运行的应用不允许读取；此时可手动粘贴到工作台。快捷键冲突时使用主窗口按钮。
@@ -32555,6 +32713,137 @@ namespace QDuoWindows
     }
 }
 
+
+
+
+===== FILE: integration/qduo-windows/SafetyCrossVolumeTests.cs =====
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Security.AccessControl;
+using System.Security.Cryptography;
+using System.Security.Principal;
+using System.Web.Script.Serialization;
+using QDuoWindows;
+
+public static class SafetyCrossVolumeTests
+{
+    [DllImport("kernel32.dll", CharSet=CharSet.Unicode, SetLastError=true)] static extern bool CreateHardLink(string name,string existing,IntPtr security);
+    [DllImport("kernel32.dll", CharSet=CharSet.Unicode, SetLastError=true)] static extern Microsoft.Win32.SafeHandles.SafeFileHandle CreateFile(string path,uint access,uint share,IntPtr security,uint creation,uint flags,IntPtr template);
+    static Dictionary<string,object> Obj(object x) { return (Dictionary<string,object>)x; }
+    static IEnumerable<Dictionary<string,object>> Rows(object x) { return ((IEnumerable)x).Cast<object>().Select(Obj); }
+    static string Str(Dictionary<string,object> d,string k) { return Convert.ToString(d[k]); }
+    static void Check(bool pass,string label) { if(!pass) throw new Exception("FAIL: "+label); Console.WriteLine("PASS: "+label); }
+    static void Old(string p) { DateTime t=DateTime.UtcNow.AddDays(-45); File.SetCreationTimeUtc(p,t); File.SetLastWriteTimeUtc(p,t); File.SetLastAccessTimeUtc(p,t); }
+    static string Hash(string p) { using(var f=File.OpenRead(p)) using(var h=SHA256.Create()) return BitConverter.ToString(h.ComputeHash(f)); }
+    static object Invoke(string name,params object[] args) { return typeof(SafetyService).GetMethod(name,BindingFlags.NonPublic|BindingFlags.Static).Invoke(null,args); }
+    // The public scanner is exercised once below. Targeted follow-ups invoke
+    // that same candidate guard for this test's fixed D3DSCache root, avoiding
+    // whole-computer scan quotas making the fixture nondeterministically absent.
+    static string Candidate(string p) { try { object root=Invoke("R",Path.GetDirectoryName(fixture),"Direct3D test","test","low",7,new string[0]); object candidate=Invoke("MakeCandidate",p,root,Invoke("RunningProcesses")); if(candidate==null)return null; string id=(string)candidate.GetType().GetField("Id").GetValue(candidate); ((IDictionary)typeof(SafetyService).GetField("Candidates",BindingFlags.NonPublic|BindingFlags.Static).GetValue(null))[id]=candidate; return id; } catch(TargetInvocationException ex) { if(ex.InnerException is IOException)return null; throw; } }
+    static string Plan(string p) { string id=Candidate(p); Check(id!=null,"fixture candidate admitted"); return Str(Obj(SafetyService.CreatePlan("low",new[]{id})),"planId"); }
+    static string fixture;
+    static string path;
+    static Dictionary<string,object> D(params object[] v) { var d=new Dictionary<string,object>();for(int i=0;i<v.Length;i+=2)d[(string)v[i]]=v[i+1];return d; }
+    static void TestLegacy(int format)
+    {
+        string recovery=(string)typeof(SafetyService).GetField("LegacyQuarantine",BindingFlags.NonPublic|BindingFlags.Static).GetValue(null);
+        Check((bool)Invoke("SafeAncestors",recovery),"legacy recovery path safe"); Directory.CreateDirectory(recovery); Invoke("Key",recovery,true);
+        string id=Guid.NewGuid().ToString("N"),dir=Path.Combine(recovery,id),source=Path.Combine(fixture,"legacy"+format+".cache"); Directory.CreateDirectory(dir); File.WriteAllText(source,"legacy fixture "+format);Old(source);
+        string zipName=Guid.NewGuid().ToString("N")+".zip",originalName=Guid.NewGuid().ToString("N")+".original",hash=Hash(source).Replace("-","").ToLowerInvariant(); Old(source);
+        var f=new FileInfo(source); var record=D("id",Guid.NewGuid().ToString("N"),"path",source,"root",Path.GetDirectoryName(fixture),"risk","low","bytes",f.Length,"createdTicks",f.CreationTimeUtc.Ticks,"modifiedTicks",f.LastWriteTimeUtc.Ticks,"accessTicks",f.LastAccessTimeUtc.Ticks,"attributes",(int)f.Attributes,"sha256",hash,"archive",zipName,"state","quarantined");
+        using(var file=new FileStream(Path.Combine(dir,zipName),FileMode.CreateNew))using(var zip=new ZipArchive(file,ZipArchiveMode.Create))using(var input=File.OpenRead(source))using(var entry=zip.CreateEntry("content").Open())input.CopyTo(entry);
+        record["zipBytes"]=new FileInfo(Path.Combine(dir,zipName)).Length;record["archiveBytes"]=record["zipBytes"];
+        var journal=D("schemaVersion",1,"policyVersion","qd-safe-cache-2026-09-v1","transactionId",id,"startedAt",DateTime.UtcNow.ToString("o"),"completedAt",DateTime.UtcNow.ToString("o"),"status","completed","records",new[]{record},"risk","low");
+        if(format==2){record["kind"]="full-file";record["preservedFile"]=originalName;journal["journalFormat"]=2;journal["method"]="original-rename-ntfs";}
+        Invoke("SaveJournalAt",recovery,id,journal); if(format==2)File.Move(source,Path.Combine(dir,originalName));else File.Delete(source);
+        var restored=Obj(SafetyService.Restore(id));Check(Convert.ToInt32(restored["restoredFiles"])==1&&Hash(source).Replace("-","").ToLowerInvariant()==hash,"legacy format "+format+" restore remains compatible");
+    }
+    public static int Main()
+    {
+        try
+        {
+            fixture=Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"D3DSCache","QDuo-Safety-Test-"+Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(fixture); path=Path.Combine(fixture,"payload.cache");
+            byte[] block=new byte[1024*1024]; using(var r=RandomNumberGenerator.Create()) r.GetBytes(block);
+            using(var f=new FileStream(path,FileMode.CreateNew)) { for(int i=0;i<64;i++) f.Write(block,0,block.Length); f.Flush(true); }
+            FileSecurity acl=new FileSecurity(); acl.SetAccessRuleProtection(true,false); acl.SetOwner(WindowsIdentity.GetCurrent().User);
+            acl.AddAccessRule(new FileSystemAccessRule(WindowsIdentity.GetCurrent().User,FileSystemRights.FullControl,AccessControlType.Allow));
+            acl.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier("S-1-5-18"),FileSystemRights.Read,AccessControlType.Allow));
+            File.SetAccessControl(path,acl); File.SetAttributes(path,FileAttributes.Hidden|FileAttributes.Archive|FileAttributes.NotContentIndexed); Old(path);
+            string expectedHash=Hash(path); Old(path);
+            string expectedAcl=File.GetAccessControl(path).GetSecurityDescriptorSddlForm(AccessControlSections.Owner|AccessControlSections.Group|AccessControlSections.Access);
+            DateTime created=File.GetCreationTimeUtc(path),written=File.GetLastWriteTimeUtc(path),accessed=File.GetLastAccessTimeUtc(path);
+            FileAttributes attributes=File.GetAttributes(path);
+            string ads=Path.Combine(fixture,"ads.cache"); File.WriteAllBytes(ads,block); using(var adsHandle=CreateFile(ads+":guard",0x40000000,0,IntPtr.Zero,1,0x80,IntPtr.Zero)) using(var adsStream=new FileStream(adsHandle,FileAccess.Write)) adsStream.Write(block,0,4); Old(ads);
+            string hard=Path.Combine(fixture,"hard.cache"), hard2=Path.Combine(fixture,"hard2.cache"); File.WriteAllBytes(hard,block); Check(CreateHardLink(hard2,hard,IntPtr.Zero),"hardlink fixture created"); Old(hard);
+            string locked=Path.Combine(fixture,"locked.cache"); File.WriteAllBytes(locked,block); Old(locked);
+            string recent=Path.Combine(fixture,"recent.cache"); File.WriteAllBytes(recent,block);
+            string changed=Path.Combine(fixture,"changed.cache"); File.WriteAllBytes(changed,block); Old(changed);
+            string protectedFile=Path.Combine(fixture,"notes.txt"); File.WriteAllText(protectedFile,"not cache"); Old(protectedFile);
+            string pendingFile=Path.Combine(fixture,"pending.cache");File.WriteAllText(pendingFile,"delete-pending guard test");
+            using(var pendingHandle=(Microsoft.Win32.SafeHandles.SafeFileHandle)Invoke("OpenCrossVolumeSource",pendingFile))
+            {
+                Invoke("SetDeletePending",pendingHandle,true);
+                try
+                {
+                    using(var lateStream=CreateFile(pendingFile+":late",0x40000000,7,IntPtr.Zero,1,0x80,IntPtr.Zero))Check(lateStream.IsInvalid,"delete-pending prevents a late ADS creation");
+                    Check(!CreateHardLink(Path.Combine(fixture,"pending-late-link.cache"),pendingFile,IntPtr.Zero),"delete-pending prevents a late hardlink");
+                }
+                finally { Invoke("SetDeletePending",pendingHandle,false); }
+            }
+            Check(File.Exists(pendingFile),"revoking deletion preserves original file");
+            var scan=Obj(SafetyService.Scan(true)); var candidates=Rows(scan["candidates"]).Select(d=>Str(d,"path")).ToArray();
+            Check(!candidates.Contains(ads),"ADS candidate rejected"); Check(!candidates.Contains(hard)&&!candidates.Contains(hard2),"hardlinks rejected"); Check(!candidates.Contains(recent),"recent file rejected"); Check(!candidates.Contains(protectedFile),"document extension rejected");
+            Check(Candidate(ads)==null&&Candidate(hard)==null&&Candidate(hard2)==null,"native ADS and hardlink guard rejects fixtures directly");
+            foreach(string junction in new[]{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"pip","Cache"),Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"uv","cache")})
+                if(Directory.Exists(junction)&&(File.GetAttributes(junction)&FileAttributes.ReparsePoint)!=0) Check(!(bool)Invoke("SafeAncestors",junction),"existing cache junction rejected without following it");
+            using(var hold=new FileStream(locked,FileMode.Open,FileAccess.Read,FileShare.None)) Check(Candidate(locked)==null,"active exclusive file rejected");
+            string changedPlan=Plan(changed); File.AppendAllText(changed,"changed after planning");
+            var changedResult=Obj(SafetyService.ExecutePlan(changedPlan,false)); Check(Convert.ToInt32(changedResult["quarantinedFiles"])==0&&File.Exists(changed),"modified candidate retained");
+            string cleanPlan=Plan(path); var clean=Obj(SafetyService.ExecutePlan(cleanPlan,false));
+            Console.WriteLine(new JavaScriptSerializer().Serialize(clean));
+            Check(Convert.ToInt32(clean["quarantinedFiles"])==1&&!File.Exists(path),"C source removed only after D verified backup");
+            string transaction=Str(clean,"transactionId"), backup=Str(clean,"quarantinePath"); Check(backup.StartsWith(@"D:\QDuo-Backups\",StringComparison.OrdinalIgnoreCase),"fixed D recovery path");
+            var drives=Rows(clean["drives"]).ToArray(); Check(drives.Any(d=>Str(d,"name")==@"C:\")&&drives.Any(d=>Str(d,"name")==@"D:\"),"C and D deltas reported separately");
+            Check(Convert.ToInt64(drives.Single(d=>Str(d,"name")==@"C:\")["freeDelta"])>0,"C disk space measurably released");
+            string zip=Directory.GetFiles(backup,"*.zip").Single(), held=zip+".test-held"; File.Move(zip,held); File.WriteAllText(zip,"corrupt test archive");
+            try { var corrupt=Obj(SafetyService.Restore(transaction)); Check(Convert.ToInt32(corrupt["restoredFiles"])==0&&!File.Exists(path),"corrupt backup never creates restored file"); }
+            finally { File.Delete(zip); File.Move(held,zip); }
+            File.WriteAllText(path,"new cache must not be overwritten"); var conflict=Obj(SafetyService.Restore(transaction)); Check(Convert.ToInt32(conflict["restoredFiles"])==0&&File.ReadAllText(path)=="new cache must not be overwritten","restore refuses existing destination"); File.Delete(path);
+            var restored=Obj(SafetyService.Restore(transaction)); Console.WriteLine(new JavaScriptSerializer().Serialize(restored));
+            Check(Convert.ToInt32(restored["restoredFiles"])==1&&File.Exists(path),"cross-volume restore completes");
+            Check(File.GetCreationTimeUtc(path)==created&&File.GetLastWriteTimeUtc(path)==written&&File.GetLastAccessTimeUtc(path)==accessed,"all three file times restored");
+            Check(File.GetAttributes(path)==attributes,"file attributes restored");
+            Check((bool)Invoke("SamePermissions",new RawSecurityDescriptor(File.GetAccessControl(path).GetSecurityDescriptorBinaryForm(),0),new RawSecurityDescriptor(expectedAcl)),"owner group and every DACL permission restored");
+            Check(Hash(path)==expectedHash,"restored content SHA-256 identical"); Check(Directory.GetFiles(backup,"*.zip").Length==1,"D backup retained after restore");
+            string inherited=Path.Combine(fixture,"inherited.cache"); File.WriteAllText(inherited,"inherited ACL test");Old(inherited);byte[] inheritedAcl=File.GetAccessControl(inherited).GetSecurityDescriptorBinaryForm();
+            var inheritedClean=Obj(SafetyService.ExecutePlan(Plan(inherited),false)); Check(Convert.ToInt32(inheritedClean["quarantinedFiles"])==1,"inherited-permission cache backs up");
+            var inheritedRestore=Obj(SafetyService.Restore(Str(inheritedClean,"transactionId")));Check(Convert.ToInt32(inheritedRestore["restoredFiles"])==1&&(bool)Invoke("SamePermissions",new RawSecurityDescriptor(File.GetAccessControl(inherited).GetSecurityDescriptorBinaryForm(),0),new RawSecurityDescriptor(inheritedAcl,0)),"inherited owner group and DACL restore exactly");
+            TestLegacy(1); TestLegacy(2);
+            // Tampering is limited to this test's own completed journal; restore
+            // must reject it before any filesystem mutation. Put it back next.
+            string journal=Path.Combine(backup,"journal.json"); byte[] original=File.ReadAllBytes(journal); File.AppendAllText(journal,"tampered"); bool rejected=false;
+            try { SafetyService.Restore(transaction); } catch { rejected=true; } finally { File.WriteAllBytes(journal,original); }
+            Check(rejected,"tampered recovery journal rejected");
+            Console.WriteLine("ALL CROSS-VOLUME TESTS PASSED; fixture="+fixture+"; recovery="+backup);
+            return 0;
+        }
+        catch(Exception ex) { Console.Error.WriteLine(ex); return 1; }
+        finally
+        {
+            // Only this invocation's explicitly named test directory is touched.
+            // Keep all D transaction evidence and never follow reparse points.
+            if(fixture!=null&&Directory.Exists(fixture)&&Path.GetFileName(fixture).StartsWith("QDuo-Safety-Test-",StringComparison.Ordinal))
+                foreach(string f in Directory.GetFiles(fixture)) { try { if((File.GetAttributes(f)&FileAttributes.ReparsePoint)==0) { File.SetAttributes(f,FileAttributes.Normal); File.Delete(f); } } catch{} }
+        }
+    }
+}
 
 
 

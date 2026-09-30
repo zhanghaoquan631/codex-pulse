@@ -11,6 +11,30 @@ const aiActions=[['translate','翻译'],['polish','润色'],['summarize','总结
 const downloadBase='/qduo-windows';
 const mobileQuery='(max-width:850px), (max-width:1100px) and (pointer:coarse)';
 const mobileDevice=()=>!/(Win32|Win64|Windows)/i.test(navigator.platform+' '+navigator.userAgent)&&window.matchMedia(mobileQuery).matches;
+type PairingStorage='persistent'|'session'|'none';
+const pairingKey='qduo:connection',pairingRecordKey='qduo:pairing:v1';
+type PairingRecord={version:1;key:string;revision:number};
+const pairingStores=[{get:()=>localStorage,kind:'persistent' as const},{get:()=>sessionStorage,kind:'session' as const}];
+function storedPairing(get:()=>Storage):PairingRecord|null{
+ try{const value:unknown=JSON.parse(get().getItem(pairingRecordKey)||'null');if(value&&typeof value==='object'&&'version'in value&&value.version===1&&'key'in value&&typeof value.key==='string'&&'revision'in value&&typeof value.revision==='number'&&Number.isSafeInteger(value.revision)&&value.revision>0)return {version:1,key:value.key.trim(),revision:value.revision};}catch{}
+ try{const key=get().getItem(pairingKey)?.trim();if(key)return {version:1,key,revision:0};}catch{}return null;
+}
+function readPairing():{key:string;storage:PairingStorage;revision:number}{
+ let best:PairingRecord|null=null,storage:PairingStorage='none';
+ for(const item of pairingStores){const candidate=storedPairing(item.get);if(candidate&&(!best||candidate.revision>best.revision)){best=candidate;storage=candidate.key?item.kind:'none';}}
+ return {key:best?.key||'',storage,revision:best?.revision||0};
+}
+function pairingRevision(){return Math.max(Date.now(),...pairingStores.map(item=>(storedPairing(item.get)?.revision||0)+1));}
+function savePairingRecord(get:()=>Storage,record:PairingRecord){const value=JSON.stringify(record);try{get().setItem(pairingRecordKey,value);return get().getItem(pairingRecordKey)===value;}catch{return false;}}
+function rememberPairing(key:string):PairingStorage{
+ const record:PairingRecord={version:1,key,revision:pairingRevision()};let result:PairingStorage='none';
+ for(const item of pairingStores){if(savePairingRecord(item.get,record)){if(result==='none')result=item.kind;try{item.get().setItem(pairingKey,key);}catch{}}}return result;
+}
+function forgetPairing(revision=pairingRevision()){
+ const record:PairingRecord={version:1,key:'',revision};
+ for(const item of pairingStores){if(!savePairingRecord(item.get,record)){try{item.get().removeItem(pairingRecordKey);}catch{}}try{item.get().removeItem(pairingKey);}catch{}}
+}
+function pairingNotice(storage:PairingStorage,automatic=false){return storage==='persistent'?automatic?'电脑已自动连接，已记住配对。':'电脑已连接，已在此浏览器记住配对并开启自动重连。':storage==='session'?'电脑已连接，刷新当前标签页会自动重连。浏览器限制了长期保存；关闭此标签页后可能需要重新配对。':'电脑已连接，但浏览器禁止保存配对。请在普通浏览器窗口中允许此网站保存数据后重新连接。';}
 export default function QDuoCenter(){
  const [mobile,setMobile]=useState(false);
  useEffect(()=>{const media=window.matchMedia(mobileQuery);setMobile(mobileDevice());if(mobileDevice())setView('text');const update=()=>{setMobile(mobileDevice());if(mobileDevice())setView(value=>['connection','safety'].includes(value)?'text':value);};media.addEventListener('change',update);return()=>media.removeEventListener('change',update);},[]);
@@ -18,10 +42,11 @@ export default function QDuoCenter(){
  const [token,setToken]=useState(''),[connected,setConnected]=useState(false),[report,setReport]=useState<QDuoReport|null>(null),[busy,setBusy]=useState(''),[message,setMessage]=useState(''),[query,setQuery]=useState(''),[listing,setListing]=useState('applications'),[source,setSource]=useState('');
  const fileInput=useRef<HTMLInputElement>(null),textArea=useRef<HTMLTextAreaElement>(null),generation=useRef(0);
  const autoKey=useRef(''),connectedRef=useRef(false),activeRequests=useRef(0),importedMode=useRef(false);
+ const [pairingStorage,setPairingStorage]=useState<PairingStorage>('none');
  useEffect(()=>{connectedRef.current=connected;},[connected]);
  useEffect(()=>{
   let live=true,pending=false;
-  try{const saved=localStorage.getItem('qduo:connection')||sessionStorage.getItem('qduo:connection')||'';autoKey.current=saved;setToken(saved);if(saved)localStorage.setItem('qduo:connection',saved);}catch{}
+  const saved=readPairing();autoKey.current=saved.key;setToken(saved.key);setPairingStorage(saved.storage);if(saved.key)setMessage('已找到保存的配对，正在自动连接本机…');
   async function reconnect(){
    const key=autoKey.current,current=generation.current;
    if(!live||pending||!key||activeRequests.current||document.hidden||mobileDevice())return;
@@ -35,18 +60,25 @@ export default function QDuoCenter(){
     const next=await request('/report',undefined,key,20000);
     if(!live||current!==generation.current||key!==autoKey.current)return;
     if(!isQDuoReport(next))throw new Error('请更新 Windows 客户端。');
-    setToken(key);setReport(next);setConnected(true);connectedRef.current=true;setSource('实时本机连接');setMessage('电脑已自动连接。关闭网页后再打开也会自动连接。');
+    const storage=rememberPairing(key);setPairingStorage(storage);setToken(key);setReport(next);setConnected(true);connectedRef.current=true;setSource('实时本机连接');setMessage(pairingNotice(storage,true));
    }catch(e){
     if(!live||current!==generation.current||key!==autoKey.current)return;
     setConnected(false);connectedRef.current=false;setSource('上次读取的本机报告');
-    if(e instanceof Error&&e.message.includes('连接码不正确')){autoKey.current='';try{localStorage.removeItem('qduo:connection');sessionStorage.removeItem('qduo:connection');}catch{}setMessage('配对码已失效，请从客户端重新复制配对码。');}
+    if(e instanceof Error&&e.message.includes('连接码不正确')){autoKey.current='';forgetPairing();setPairingStorage('none');setToken('');setMessage('配对码已失效，请从客户端重新复制配对码。');}
     else setMessage('等待本机客户端，网页会自动重连。浏览器首次询问本地网络访问时请允许。');
    }finally{pending=false;}
   }
   const onVisible=()=>{if(!document.hidden)void reconnect();};
   void reconnect();const timer=window.setInterval(()=>void reconnect(),15000);
   window.addEventListener('online',onVisible);document.addEventListener('visibilitychange',onVisible);
-  const onStorage=(event:StorageEvent)=>{if(event.key!=='qduo:connection'||importedMode.current)return;generation.current++;setBusy('');autoKey.current=event.newValue||'';setToken(autoKey.current);setConnected(false);connectedRef.current=false;if(!autoKey.current){setReport(null);setSource('');setMessage('已取消自动连接。');}else void reconnect();};window.addEventListener('storage',onStorage);
+  const onStorage=(event:StorageEvent)=>{
+   if((event.key!==pairingKey&&event.key!==pairingRecordKey)||importedMode.current)return;
+   let saved=readPairing();
+   if(event.key===pairingKey){if(event.newValue===null){forgetPairing();saved={key:'',storage:'none',revision:readPairing().revision};}else if(saved.revision===0)saved={key:event.newValue.trim(),storage:'persistent',revision:0};}
+   if(saved.key&&saved.key===autoKey.current)return;
+   generation.current++;setBusy('');autoKey.current=saved.key;setToken(saved.key);setConnected(false);connectedRef.current=false;setPairingStorage(saved.storage);
+   if(!saved.key){forgetPairing(saved.revision||undefined);setReport(null);setSource('');setMessage('已取消自动连接。');}else void reconnect();
+  };window.addEventListener('storage',onStorage);
   return()=>{live=false;generation.current++;window.clearInterval(timer);window.removeEventListener('online',onVisible);document.removeEventListener('visibilitychange',onVisible);window.removeEventListener('storage',onStorage);};
  },[]);
  async function request(path:string,body?:unknown,key=autoKey.current||token,timeout=30000){
@@ -62,11 +94,11 @@ export default function QDuoCenter(){
  async function connect(){
   if(!token.trim()){setMessage('请先打开 Windows 客户端，复制其中的网页配对码。');setView('connection');return;}
   importedMode.current=false;const current=++generation.current;setBusy('正在连接电脑');setMessage('');
-  try{const next=await request('/report',undefined,token.trim());if(current!==generation.current)return;if(!isQDuoReport(next))throw new Error('本机报告格式不兼容，请更新客户端。');setReport(next);setConnected(true);connectedRef.current=true;autoKey.current=token.trim();setSource('实时本机连接');setView('computer');let remembered=false;try{localStorage.setItem('qduo:connection',token.trim());sessionStorage.removeItem('qduo:connection');remembered=true;}catch{}setMessage(remembered?'电脑已连接，已在此浏览器记住配对并开启自动重连。':'电脑已连接；浏览器禁止保存配对，下次打开需要重新连接。');}
+  try{const next=await request('/report',undefined,token.trim());if(current!==generation.current)return;if(!isQDuoReport(next))throw new Error('本机报告格式不兼容，请更新客户端。');setReport(next);setConnected(true);connectedRef.current=true;autoKey.current=token.trim();setSource('实时本机连接');setView('computer');const storage=rememberPairing(token.trim());setPairingStorage(storage);setMessage(pairingNotice(storage));}
   catch(e){if(current===generation.current){setConnected(false);setMessage(e instanceof TypeError?'未能连接本机。请确认客户端正在运行；浏览器提示访问本地网络时允许连接。也可导入客户端导出的报告。':e instanceof Error?e.message:'连接失败');}}
   finally{if(current===generation.current)setBusy('');}
  }
- function disconnect(){generation.current++;autoKey.current='';connectedRef.current=false;setConnected(false);setReport(null);setSource('');setToken('');setBusy('');try{localStorage.removeItem('qduo:connection');sessionStorage.removeItem('qduo:connection');}catch{}setMessage('已断开并忘记这台电脑，自动重连已停止。');}
+ function disconnect(){generation.current++;autoKey.current='';connectedRef.current=false;setConnected(false);setReport(null);setSource('');setToken('');setBusy('');forgetPairing();setPairingStorage('none');setMessage('已断开并忘记这台电脑，自动重连已停止。');}
  async function scan(deep=false){
   const current=++generation.current;setBusy(deep?'正在扫描缓存和大文件':'正在刷新电脑状态');setMessage('');
   try{const next=await request(deep?'/scan':'/report',deep?{}:undefined,autoKey.current||token,deep?180000:30000);if(current!==generation.current)return;if(!isQDuoReport(next))throw new Error('未收到完整报告，已保留原来的结果。');setReport(next);setSource('实时本机连接');setMessage(deep?'扫描完成。详情中的扫描限制也已列出。':'电脑状态已更新。');}
@@ -118,13 +150,15 @@ export default function QDuoCenter(){
      <section className="panel"><div className="qd-panel-title"><h2>处理结果</h2><button className="library-button" disabled={!output} onClick={copy}><Copy size={15}/>复制</button></div><textarea aria-label="处理结果" value={output} onChange={e=>setOutput(e.target.value)} placeholder="处理结果会显示在这里。"/><div className="qd-actions"><button className="library-button" disabled={!output} onClick={()=>{setText(output);setOutput('');}}>替换本页输入</button><button className="library-button" disabled={!output} onClick={()=>setText(v=>v+(v?'\n':'')+output)}>追加到本页输入</button></div><p className="qd-subtle">{mobile?'文本转换在手机浏览器内完成。电脑报告可从“电脑报告”导入；跨应用划词和截图识字请在 Windows 客户端使用。':'跨应用划词、截图识字和回写由桌面客户端完成：Ctrl + Alt + Q 划词，Ctrl + Alt + S 截图。'}</p></section></div>
    </TabsContent>
    <TabsContent value="connection"><div className="qd-connect-grid">
-    <section className="panel qd-connect"><div className="qd-panel-title"><h2>连接 Windows 电脑</h2><Monitor size={22}/></div><ol><li>下载并解压 Windows 版，双击 <strong>QDuoWindows.exe</strong>。</li><li>在客户端“网页连接”处复制配对码。</li><li>粘贴到下方；浏览器询问访问本地网络时，允许连接。</li></ol><label htmlFor="qd-connection-code">网页连接码</label><input id="qd-connection-code" type="password" autoComplete="off" spellCheck={false} value={token} onChange={e=>setToken(e.target.value)} placeholder="粘贴 Windows 客户端显示的连接码"/><div className="qd-actions"><button className="library-button primary" disabled={!!busy} onClick={connect}><Link2 size={16}/>连接本机</button><button className="library-button" onClick={disconnect}><Unplug size={16}/>断开并忘记</button></div><p className="qd-subtle">配对码仅保存在此浏览器。重新打开网页或客户端重启后会自动重连；“断开并忘记”会停止自动连接。客户端可开启“登录 Windows 时自动启动”。</p></section>
+    <section className="panel qd-connect"><div className="qd-panel-title"><h2>连接 Windows 电脑</h2><Monitor size={22}/></div><p className="qd-subtle">网页连接 1.2.1 · 自动连接：{pairingStorage==='persistent'?'已长期记住配对':pairingStorage==='session'?'已记住当前标签页':'尚未保存配对'}</p><ol><li>下载并解压 Windows 版，双击 <strong>QDuoWindows.exe</strong>。</li><li>在客户端“网页连接”处复制配对码。</li><li>粘贴到下方；浏览器询问访问本地网络时，允许连接。</li></ol><label htmlFor="qd-connection-code">网页连接码</label><input id="qd-connection-code" type="password" autoComplete="off" spellCheck={false} value={token} onChange={e=>setToken(e.target.value)} placeholder="粘贴 Windows 客户端显示的连接码"/><div className="qd-actions"><button className="library-button primary" disabled={!!busy} onClick={connect}><Link2 size={16}/>连接本机</button><button className="library-button" onClick={disconnect}><Unplug size={16}/>断开并忘记</button></div><p className="qd-subtle">配对码仅保存在此浏览器。重新打开网页或客户端重启后会自动重连；“断开并忘记”会停止自动连接。客户端可开启“登录 Windows 时自动启动”。</p></section>
     <section className="panel qd-download"><div className="qd-panel-title"><h2>Windows 桌面版</h2><MousePointer2 size={23}/></div><p>选中其他应用中的文字，按快捷键打开动作窗口。支持 AI 动作、文本转换、朗读、搜索、截图识字和本地脚本。</p><div className="qd-hotkeys"><span>划词动作<kbd>Ctrl + Alt + Q</kbd></span><span>截图识字<kbd>Ctrl + Alt + S</kbd></span></div><a className="library-button primary" href={downloadBase+'/QDuo-Windows.zip'} download><Download size={16}/>下载便携版</a><a className="library-button" href={downloadBase+'/QDuo-Windows-Source.zip'} download><FileJson size={16}/>下载源代码</a><p className="qd-subtle">Windows 10 / 11 · .NET Framework 4.8 · 首次使用 AI 需在客户端配置模型。截图识字使用 Windows 已安装的 OCR 语言。</p><a className="qd-source-link" href="https://github.com/XueshiQiao/qduo" target="_blank" rel="noopener">基于 QDuo 的功能思路独立实现 · GPL-3.0</a></section>
    </div><div className="qd-privacy"><ShieldCheck size={17}/><p>体检、文件详情和图片预览由本机提供，不上传到网站。低风险缓存清理使用可恢复隔离；中风险隔离和 Defender 威胁处理在本机窗口确认。模型密钥保存在 Windows 客户端中。</p></div></TabsContent>
   </Tabs>
   <input ref={fileInput} type="file" accept="application/json,.json" aria-label="导入 QDuo 本机体检报告" className="qd-hidden-input" onChange={e=>importReport(e.target.files?.[0])}/>
  </section>;
 }
+
+
 
 
 

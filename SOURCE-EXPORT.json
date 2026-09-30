@@ -1,5 +1,5 @@
 {
-  "writtenFiles": 4926,
+  "writtenFiles": 4961,
   "omittedFiles": [
     "public/edge-scenes/cat.html",
     "public/edge-scenes/fonts/AzeretMono-400.ttf",
@@ -1656,6 +1656,6 @@
   "siteBinding": "Removed from public hosting manifest",
   "optionalCharacter": "Default traveler retained; restricted external skin omitted",
   "optionalIllustrations": "Attribution and interfaces retained; artwork omitted",
-  "additionalSourceCommit": "21610f10387ef8f81d4292c06e83a31a34241a7d",
+  "additionalSourceCommit": "44e03115a1d907274718886ec89767ffaec54600",
   "latestFeatureEntries": 136
 }
