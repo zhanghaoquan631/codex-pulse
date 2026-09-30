@@ -31,92 +31,92 @@
   },
   {
     "id": "core",
-    "files": 282,
-    "textBytes": 2276904,
-    "zipBytes": 638219
+    "files": 283,
+    "textBytes": 2278879,
+    "zipBytes": 639311
   },
   {
     "id": "tokens",
-    "files": 314,
-    "textBytes": 2497136,
-    "zipBytes": 720215
+    "files": 315,
+    "textBytes": 2499111,
+    "zipBytes": 721306
   },
   {
     "id": "websites",
-    "files": 314,
-    "textBytes": 2497138,
-    "zipBytes": 720217
+    "files": 315,
+    "textBytes": 2499113,
+    "zipBytes": 721308
   },
   {
     "id": "betteropc",
-    "files": 282,
-    "textBytes": 2276909,
-    "zipBytes": 638222
+    "files": 283,
+    "textBytes": 2278884,
+    "zipBytes": 639314
   },
   {
     "id": "knowledge",
-    "files": 423,
-    "textBytes": 4011556,
-    "zipBytes": 1199337
+    "files": 424,
+    "textBytes": 4013531,
+    "zipBytes": 1200425
   },
   {
     "id": "bookshelf",
-    "files": 527,
-    "textBytes": 2760600,
-    "zipBytes": 11782316
+    "files": 528,
+    "textBytes": 2762575,
+    "zipBytes": 11783397
   },
   {
     "id": "mezip",
-    "files": 1077,
-    "textBytes": 6480081,
-    "zipBytes": 320543755
+    "files": 1078,
+    "textBytes": 6482056,
+    "zipBytes": 320544846
   },
   {
     "id": "shop",
-    "files": 339,
-    "textBytes": 2817550,
-    "zipBytes": 903784
+    "files": 340,
+    "textBytes": 2819525,
+    "zipBytes": 904875
   },
   {
     "id": "mezip-local",
-    "files": 1046,
-    "textBytes": 11643655,
-    "zipBytes": 3578185
+    "files": 1047,
+    "textBytes": 11645630,
+    "zipBytes": 3579282
   },
   {
     "id": "finance",
-    "files": 1058,
-    "textBytes": 12002484,
-    "zipBytes": 3684781
+    "files": 1059,
+    "textBytes": 12004459,
+    "zipBytes": 3685875
   },
   {
     "id": "github",
-    "files": 1059,
-    "textBytes": 11765685,
-    "zipBytes": 3620836
+    "files": 1060,
+    "textBytes": 11767660,
+    "zipBytes": 3621929
   },
   {
     "id": "media",
-    "files": 1053,
-    "textBytes": 11770865,
-    "zipBytes": 3619671
+    "files": 1054,
+    "textBytes": 11772840,
+    "zipBytes": 3620761
   },
   {
     "id": "music",
-    "files": 437,
-    "textBytes": 3643537,
-    "zipBytes": 3913525
+    "files": 438,
+    "textBytes": 3645512,
+    "zipBytes": 3914615
   },
   {
     "id": "booking",
-    "files": 338,
-    "textBytes": 2740650,
-    "zipBytes": 804166
+    "files": 339,
+    "textBytes": 2742625,
+    "zipBytes": 805254
   },
   {
     "id": "qduo",
-    "files": 293,
-    "textBytes": 2599954,
-    "zipBytes": 730225
+    "files": 294,
+    "textBytes": 2601929,
+    "zipBytes": 731315
   }
 ]

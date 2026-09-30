@@ -9,9 +9,14 @@ const sourceCache = new Map<string, Promise<string>>();
 function loadSource(id: SourceProjectId) {
   let request = sourceCache.get(id);
   if (!request) {
-    request = fetch(`/source-library/${id}.txt`, { signal: AbortSignal.timeout(30000) }).then(async response => {
+    request = fetch(`/source-library/${id}.txt.gz`, { signal: AbortSignal.timeout(30000) }).then(async response => {
       if (!response.ok) throw new Error('源码暂时无法读取，请重试或打开 GitHub。');
-      const text = await response.text();
+      const bytes = new Uint8Array(await response.arrayBuffer());
+      const compressed = bytes[0] === 0x1f && bytes[1] === 0x8b;
+      if (compressed && typeof DecompressionStream === 'undefined') throw new Error('当前浏览器不支持源码解压，请使用下方的下载源码包。');
+      const text = compressed
+        ? await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text()
+        : new TextDecoder().decode(bytes);
       if (!text.startsWith('# Codex Pulse source bundle')) throw new Error('源码文件暂未就绪，请重试或打开 GitHub。');
       return text;
     }).catch(error => { sourceCache.delete(id); throw error; });
@@ -72,9 +77,9 @@ export default function SourceActions({ project, heading = false }: { project: S
     {message && <p className="source-actions-status" role="status">{message}</p>}
     <Dialog open={!!fallback} onOpenChange={open => { if (!open) setFallback(null); }}>
       <DialogContent className="source-copy-dialog">
-        <DialogHeader><DialogTitle>{fallback?.title}</DialogTitle><DialogDescription>选中文本后复制；源码也可以下载为文件。</DialogDescription></DialogHeader>
+        <DialogHeader><DialogTitle>{fallback?.title}</DialogTitle><DialogDescription>选中文本后复制，也可以下载当前文本。</DialogDescription></DialogHeader>
         <textarea readOnly aria-label="可手动复制的内容" value={fallback?.text ?? ''} onFocus={event => event.currentTarget.select()} />
-        <div className="source-actions-buttons"><button type="button" onClick={() => { document.querySelector<HTMLTextAreaElement>('.source-copy-dialog textarea')?.select(); }}>全选文本</button><a href={`/source-library/${item.bundle}.txt`} download>下载源码文本</a></div>
+        <div className="source-actions-buttons"><button type="button" onClick={() => { document.querySelector<HTMLTextAreaElement>('.source-copy-dialog textarea')?.select(); }}>全选文本</button><button type="button" onClick={() => { if (!fallback) return; const url = URL.createObjectURL(new Blob([fallback.text], { type: 'text/plain;charset=utf-8' })); const link = document.createElement('a'); link.href = url; link.download = `${item.bundle}-text.txt`; link.click(); setTimeout(() => URL.revokeObjectURL(url), 5000); }}>下载当前文本</button></div>
       </DialogContent>
     </Dialog>
   </div>;

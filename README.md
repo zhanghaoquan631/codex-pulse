@@ -2,7 +2,7 @@
 
 一个集用量统计、知识整理、本机工具、3D 地图和游戏于一体的个人工作台。
 
-[在线体验](https://codex-pulse-willow-0911.wozhe0196.chatgpt.site/) · [全功能源码包](https://github.com/zhanghaoquan631/codex-pulse/releases/tag/source-v2.0.1) · [提示词](docs/feature-prompts.md) · [运行导览](docs/full-source-guide.md)
+[在线体验](https://codex-pulse-willow-0911.wozhe0196.chatgpt.site/) · [全功能源码包](https://github.com/zhanghaoquan631/codex-pulse/releases/tag/source-v2.0.2) · [提示词](docs/feature-prompts.md) · [运行导览](docs/full-source-guide.md)
 
 ![地图与互动体验](docs/screenshots/maps.png)
 

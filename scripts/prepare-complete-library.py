@@ -1,6 +1,6 @@
 """Build one audited source package per functional module; subfeatures share its implementation."""
 from pathlib import Path
-import importlib.util, json, hashlib, zipfile
+import importlib.util, json, hashlib, zipfile, gzip
 ROOT=Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location('source_bundle',ROOT/'scripts/prepare-source-library.py')
 b=importlib.util.module_from_spec(spec);spec.loader.exec_module(b)
@@ -51,4 +51,6 @@ if __name__=='__main__':
  manifest=[x for x in original if x['id'] in MAPS]+result
  (ROOT/'public/source-library/manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8')
  (ROOT/'docs/feature-source-coverage.json').write_text(json.dumps({'catalog':CAT,'packages':manifest},ensure_ascii=False,indent=2),encoding='utf-8')
+ for source in (ROOT/'public/source-library').glob('*.txt'):
+  source.with_suffix('.txt.gz').write_bytes(gzip.compress(source.read_bytes(),compresslevel=9,mtime=0))
  print(json.dumps(result,ensure_ascii=False))

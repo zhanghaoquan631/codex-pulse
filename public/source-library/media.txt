@@ -4678,9 +4678,14 @@ const sourceCache = new Map<string, Promise<string>>();
 function loadSource(id: SourceProjectId) {
   let request = sourceCache.get(id);
   if (!request) {
-    request = fetch(`/source-library/${id}.txt`, { signal: AbortSignal.timeout(30000) }).then(async response => {
+    request = fetch(`/source-library/${id}.txt.gz`, { signal: AbortSignal.timeout(30000) }).then(async response => {
       if (!response.ok) throw new Error('源码暂时无法读取，请重试或打开 GitHub。');
-      const text = await response.text();
+      const bytes = new Uint8Array(await response.arrayBuffer());
+      const compressed = bytes[0] === 0x1f && bytes[1] === 0x8b;
+      if (compressed && typeof DecompressionStream === 'undefined') throw new Error('当前浏览器不支持源码解压，请使用下方的下载源码包。');
+      const text = compressed
+        ? await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text()
+        : new TextDecoder().decode(bytes);
       if (!text.startsWith('# Codex Pulse source bundle')) throw new Error('源码文件暂未就绪，请重试或打开 GitHub。');
       return text;
     }).catch(error => { sourceCache.delete(id); throw error; });
@@ -4741,9 +4746,9 @@ export default function SourceActions({ project, heading = false }: { project: S
     {message && <p className="source-actions-status" role="status">{message}</p>}
     <Dialog open={!!fallback} onOpenChange={open => { if (!open) setFallback(null); }}>
       <DialogContent className="source-copy-dialog">
-        <DialogHeader><DialogTitle>{fallback?.title}</DialogTitle><DialogDescription>选中文本后复制；源码也可以下载为文件。</DialogDescription></DialogHeader>
+        <DialogHeader><DialogTitle>{fallback?.title}</DialogTitle><DialogDescription>选中文本后复制，也可以下载当前文本。</DialogDescription></DialogHeader>
         <textarea readOnly aria-label="可手动复制的内容" value={fallback?.text ?? ''} onFocus={event => event.currentTarget.select()} />
-        <div className="source-actions-buttons"><button type="button" onClick={() => { document.querySelector<HTMLTextAreaElement>('.source-copy-dialog textarea')?.select(); }}>全选文本</button><a href={`/source-library/${item.bundle}.txt`} download>下载源码文本</a></div>
+        <div className="source-actions-buttons"><button type="button" onClick={() => { document.querySelector<HTMLTextAreaElement>('.source-copy-dialog textarea')?.select(); }}>全选文本</button><button type="button" onClick={() => { if (!fallback) return; const url = URL.createObjectURL(new Blob([fallback.text], { type: 'text/plain;charset=utf-8' })); const link = document.createElement('a'); link.href = url; link.download = `${item.bundle}-text.txt`; link.click(); setTimeout(() => URL.revokeObjectURL(url), 5000); }}>下载当前文本</button></div>
       </DialogContent>
     </Dialog>
   </div>;
@@ -34917,7 +34922,7 @@ test('unavailable storage gives a recoverable error without a false saved respon
 
 ===== FILE: lib/feature-source-catalog.json =====
 {
-  "release": "source-v2.0.1",
+  "release": "source-v2.0.2",
   "sections": [
     {
       "id": "tokens",
@@ -55702,7 +55707,7 @@ export type Website = {id:string;url:string;title:string;kind:"developed"|"share
   "scripts": {
     "install:ci": "node scripts/install-ci.mjs",
     "dev": "node scripts/run-framework.mjs dev",
-    "build": "node scripts/run-framework.mjs build",
+    "build": "node scripts/run-framework.mjs build && node scripts/compress-source-assets.mjs",
     "start": "node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js dev --config dist/server/wrangler.json --local --persist-to .wrangler/state --ip 127.0.0.1 --inspector-port 0",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate"
@@ -55907,7 +55912,7 @@ export default config;
 
 一个集用量统计、知识整理、本机工具、3D 地图和游戏于一体的个人工作台。
 
-[在线体验](https://codex-pulse-willow-0911.wozhe0196.chatgpt.site/) · [全功能源码包](https://github.com/zhanghaoquan631/codex-pulse/releases/tag/source-v2.0.1) · [提示词](docs/feature-prompts.md) · [运行导览](docs/full-source-guide.md)
+[在线体验](https://codex-pulse-willow-0911.wozhe0196.chatgpt.site/) · [全功能源码包](https://github.com/zhanghaoquan631/codex-pulse/releases/tag/source-v2.0.2) · [提示词](docs/feature-prompts.md) · [运行导览](docs/full-source-guide.md)
 
 ![地图与互动体验](docs/screenshots/maps.png)
 
@@ -55983,6 +55988,28 @@ timeout \
   --kill-after="${SITES_BUILD_KILL_AFTER:-10s}" \
   "${SITES_BUILD_TIMEOUT:-3m}" \
   "${vinext}" build
+
+
+
+===== FILE: scripts/compress-source-assets.mjs =====
+import fs from 'node:fs';
+import path from 'node:path';
+import {gunzipSync} from 'node:zlib';
+const output=path.resolve('dist/client/source-library');
+const source=path.resolve('public/source-library');
+const manifest=JSON.parse(fs.readFileSync(path.join(source,'manifest.json'),'utf8'));
+let removed=0,compressed=0;
+for(const {id} of manifest){
+ if(!/^[a-z0-9-]+$/.test(id))throw Error('Invalid source asset ID');
+ const plain=fs.readFileSync(path.join(source,`${id}.txt`));
+ const gzip=fs.readFileSync(path.join(output,`${id}.txt.gz`));
+ if(!gunzipSync(gzip).equals(plain))throw Error('Source compression changed content: '+id);
+ const target=path.join(output,`${id}.txt`);
+ if(path.dirname(target)!==output)throw Error('Invalid source asset path');
+ fs.rmSync(target,{force:true});
+ removed+=plain.length;compressed+=gzip.length;
+}
+console.log(`Source assets verified: ${manifest.length}; ${removed} plain bytes, ${compressed} compressed bytes. GitHub retains the editable plain files.`);
 
 
 
@@ -56842,7 +56869,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
 ===== FILE: scripts/prepare-complete-library.py =====
 """Build one audited source package per functional module; subfeatures share its implementation."""
 from pathlib import Path
-import importlib.util, json, hashlib, zipfile
+import importlib.util, json, hashlib, zipfile, gzip
 ROOT=Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location('source_bundle',ROOT/'scripts/prepare-source-library.py')
 b=importlib.util.module_from_spec(spec);spec.loader.exec_module(b)
@@ -56893,6 +56920,8 @@ if __name__=='__main__':
  manifest=[x for x in original if x['id'] in MAPS]+result
  (ROOT/'public/source-library/manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8')
  (ROOT/'docs/feature-source-coverage.json').write_text(json.dumps({'catalog':CAT,'packages':manifest},ensure_ascii=False,indent=2),encoding='utf-8')
+ for source in (ROOT/'public/source-library').glob('*.txt'):
+  source.with_suffix('.txt.gz').write_bytes(gzip.compress(source.read_bytes(),compresslevel=9,mtime=0))
  print(json.dumps(result,ensure_ascii=False))
 
 
