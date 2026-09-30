@@ -1,0 +1,81 @@
+.text-scatter {
+  position: relative;
+  display: block;
+  isolation: isolate;
+}
+
+.text-scatter__measure,
+.text-scatter__visual {
+  position: relative;
+  display: block;
+  width: 100%;
+  white-space: pre-wrap;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+
+.text-scatter__measure {
+  color: transparent;
+  user-select: none;
+  pointer-events: none;
+}
+
+.text-scatter__measure-char,
+.text-scatter__visual-char {
+  display: inline-block;
+  white-space: pre;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  transform-origin: 50% 65%;
+}
+
+.text-scatter__visual {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.text-scatter__visual-char {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform, opacity;
+}
+
+.text-scatter__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  padding: 0;
+  margin: -1px;
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.text-scatter[data-text-scatter] {
+  cursor: default;
+}
+
+.text-scatter[data-text-scatter]:focus-visible {
+  outline: 1px solid color-mix(in srgb, currentColor 68%, transparent);
+  outline-offset: 7px;
+}
+
+.text-scatter[data-text-scatter-motion='reduced'] .text-scatter__visual {
+  position: static;
+}
+
+.text-scatter[data-text-scatter-motion='reduced'] .text-scatter__visual-char {
+  position: static;
+  transform: none !important;
+  opacity: 1 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .text-scatter__visual-char {
+    transition: none !important;
+  }
+}

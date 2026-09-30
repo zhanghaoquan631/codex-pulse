@@ -1,0 +1,123 @@
+.liquid-swap {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  overflow: hidden;
+  isolation: isolate;
+  background: #09090b;
+  color: #fff;
+  cursor: pointer;
+  outline: none;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.liquid-swap:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, .95);
+  outline-offset: -7px;
+}
+
+.liquid-swap__canvas,
+.liquid-swap__fallback-image {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.liquid-swap__fallback-image {
+  z-index: 0;
+  object-fit: cover;
+  filter: saturate(.78) contrast(1.04);
+  transition: opacity .24s ease;
+}
+
+.liquid-swap[data-liquid-swap-renderer="webgl"] .liquid-swap__fallback-image { opacity: 0; }
+
+.liquid-swap[data-liquid-swap-invert-top="true"] > .liquid-swap__fallback-image {
+  visibility: hidden;
+}
+
+.liquid-swap__fallback-panel {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  overflow: hidden;
+  pointer-events: none;
+}
+.liquid-swap__fallback-panel--top { top: 0; }
+.liquid-swap__fallback-panel--bottom { bottom: 0; }
+.liquid-swap[data-liquid-swap-renderer="webgl"] .liquid-swap__fallback-panel { visibility: hidden; }
+
+.liquid-swap__loading {
+  position: absolute;
+  z-index: 5;
+  top: 50%;
+  left: 50%;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 999px;
+  background: rgba(10, 10, 13, .6);
+  color: rgba(255, 255, 255, .78);
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 9px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  transform: translate(-50%, -50%);
+  backdrop-filter: blur(12px);
+}
+
+.liquid-swap__loading::before {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #fff;
+  content: '';
+  animation: liquid-swap-pulse 1s ease-in-out infinite alternate;
+}
+
+.liquid-swap__glass-mark {
+  position: absolute;
+  z-index: 3;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, .24);
+  border-radius: 50%;
+  box-shadow: inset 6px 6px 9px rgba(255, 255, 255, .26), inset -7px -7px 11px rgba(0, 0, 0, .2), 0 4px 16px rgba(0, 0, 0, .24);
+  pointer-events: none;
+}
+
+.liquid-swap__glass-mark::after {
+  position: absolute;
+  top: 7px;
+  left: 9px;
+  width: 11px;
+  height: 5px;
+  border: 1px solid rgba(255, 255, 255, .66);
+  border-right: 0;
+  border-bottom: 0;
+  border-radius: 50%;
+  content: '';
+  opacity: .8;
+  transform: rotate(-25deg);
+}
+
+@keyframes liquid-swap-pulse {
+  from { opacity: .35; transform: scale(.7); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .liquid-swap__fallback-image { transition: none; }
+  .liquid-swap__loading::before { animation: none; }
+}

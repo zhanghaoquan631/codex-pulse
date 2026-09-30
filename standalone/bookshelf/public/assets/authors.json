@@ -1,0 +1,56 @@
+[
+  {
+    "id": "1",
+    "name": "胡适",
+    "imageUrl": "/assets/authors/author-1.jpg",
+    "originalUrl": "https://bookbk.img.zhangyue01.com/idc_1/group62/UX/ql/aa3377abc8bfb0d8875b3b5c676c8207.jpg?v=N7WPoRKf&t=fwAAAWhQ1yc."
+  },
+  {
+    "id": "2",
+    "name": "冰心",
+    "imageUrl": "/assets/authors/author-2.jpg",
+    "originalUrl": "https://bookbk.img.zhangyue01.com/idc_1/group62/MY/m3/6be1adf3179e036d440170298f9616cc.jpg?v=jVetm2bT&t=fwAAAWhQ08Q."
+  },
+  {
+    "id": "3",
+    "name": "徐志摩",
+    "imageUrl": "/assets/authors/author-3.jpg",
+    "originalUrl": "https://bookbk.img.zhangyue01.com/idc_1/group62/Bb/t7/ce3e2ace402fca00f686652187aa96ea.jpg?v=8HQ12Kwj&t=fwAAAWhQ16k."
+  },
+  {
+    "id": "4",
+    "name": "林徽因",
+    "imageUrl": "/assets/authors/author-4.jpg",
+    "originalUrl": "https://bookbk.img.zhangyue01.com/idc_1/group62/T4/RZ/09fc890818258feb575e39059c51a37f.jpg?v=Zzs9fQGZ&t=fwAAAWhQ1AM."
+  },
+  {
+    "id": "5",
+    "name": "沈从文",
+    "imageUrl": "/assets/authors/author-5.jpg",
+    "originalUrl": "https://bookbk.img.zhangyue01.com/idc_1/group62/SD/p3/f9c680a9c035a206d363956087514b00.jpg?v=yrjvMacM&t=fwAAAWhQ14I."
+  },
+  {
+    "id": "6",
+    "name": "杨绛",
+    "imageUrl": "/assets/authors/author-6.jpg",
+    "originalUrl": "https://bookbk.img.zhangyue01.com/idc_1/group62/xy/7f/9ae3d1d8562be76144fe88744d0a8683.jpg?v=YClXB-f_&t=fwAAAWhQ1GY."
+  },
+  {
+    "id": "7",
+    "name": "汪曾祺",
+    "imageUrl": "/assets/authors/author-7.jpg",
+    "originalUrl": "https://bookbk.img.zhangyue01.com/idc_1/group62/yv/iK/65c1d8128707e5a154a70e304e60f75c.jpg?v=zIeSU4K2&t=fwAAAWhRECw."
+  },
+  {
+    "id": "8",
+    "name": "贾平凹",
+    "imageUrl": "/assets/authors/author-8.png",
+    "originalUrl": "https://bookbk.img.zhangyue01.com/idc_1/group62/We/xw/a94569d41b7f5d9c5adcb860695b1ca4.png?v=3Pap1A5h&t=fwAAAWhREMk."
+  },
+  {
+    "id": "9",
+    "name": "冯骥才",
+    "imageUrl": "/assets/authors/author-9.jpg",
+    "originalUrl": "https://bookbk.img.zhangyue01.com/idc_1/group62/K4/my/2ceaece954d58dcdc57b456c6cb013d9.jpg?v=TvitzY2Q&t=fwAAAWhQ2dg."
+  }
+]

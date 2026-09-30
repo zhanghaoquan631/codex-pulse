@@ -1,0 +1,99 @@
+.wireframe-ball {
+  --wireframe-ink: currentColor;
+  position: relative;
+  display: block;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  isolation: isolate;
+  color: #f5f5f5;
+  background: transparent;
+  touch-action: none;
+  user-select: none;
+}
+
+.wireframe-ball__canvas,
+.wireframe-ball__fallback {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.wireframe-ball__canvas {
+  opacity: 1;
+  transition: opacity 180ms ease;
+}
+
+.wireframe-ball__fallback {
+  display: none;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(255, 255, 255, .08), transparent 19%),
+    radial-gradient(circle at 50% 48%, rgba(122, 162, 255, .16), transparent 40%),
+    #090909;
+}
+
+.wireframe-ball[data-wireframe-fallback='true'] .wireframe-ball__fallback {
+  display: block;
+}
+
+.wireframe-ball[data-wireframe-fallback='true'] .wireframe-ball__canvas {
+  opacity: 0;
+}
+
+.wireframe-ball__hits {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+}
+
+.wireframe-ball__vertex-hit {
+  position: absolute;
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: transparent;
+  opacity: .001;
+  pointer-events: auto;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  outline: none;
+  transition: background-color 140ms ease, box-shadow 140ms ease, opacity 140ms ease;
+}
+
+.wireframe-ball__vertex-hit:hover,
+.wireframe-ball__vertex-hit:focus-visible {
+  opacity: .18;
+  background: rgba(255, 255, 255, .2);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, .6), 0 0 18px rgba(255, 255, 255, .45);
+}
+
+.wireframe-ball__content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.wireframe-ball__content :where(a, button, input, textarea, select, [role='button']) {
+  pointer-events: auto;
+}
+
+.wireframe-ball.is-dragging {
+  cursor: grabbing;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wireframe-ball__canvas {
+    transition: none;
+  }
+}
+

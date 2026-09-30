@@ -1,0 +1,185 @@
+.magic-transform-studio {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, .78fr) minmax(420px, 1.22fr);
+  align-items: center;
+  gap: clamp(40px, 7vw, 112px);
+  padding-top: clamp(96px, 12vw, 176px);
+  padding-bottom: clamp(96px, 12vw, 176px);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  scroll-margin-top: 96px;
+}
+
+.magic-transform-studio-copy { max-width: 475px; }
+.magic-transform-studio-copy h2 { max-width: 530px; }
+.magic-transform-studio-copy > p:not(.eyebrow) { max-width: 470px; margin: 22px 0 0; color: var(--muted); font-size: 16px; line-height: 1.65; }
+
+.magic-transform-studio-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 32px; }
+
+.magic-transform-random-button {
+  display: inline-flex;
+  min-height: 52px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 42px;
+  padding: 0 18px 0 22px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: var(--fg);
+  color: var(--bg);
+  font-size: 14px;
+  font-weight: 600;
+  transition: transform .18s ease, opacity .18s ease;
+}
+
+.magic-transform-random-button:hover:not(:disabled) { opacity: .86; transform: translateY(-2px); }
+.magic-transform-random-button:focus-visible { outline: 2px solid var(--fg); outline-offset: 4px; }
+.magic-transform-random-button:disabled { cursor: not-allowed; opacity: .42; }
+.magic-transform-random-button b { display: grid; width: 28px; height: 28px; place-items: center; border-radius: 50%; background: var(--bg); color: var(--fg); font-size: 17px; font-weight: 400; }
+
+.magic-transform-pause-button {
+  min-height: 42px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--fg) 3%, transparent);
+  color: var(--fg);
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  transition: transform .18s ease, background .18s ease;
+}
+
+.magic-transform-pause-button:hover { background: color-mix(in srgb, var(--fg) 9%, transparent); transform: translateY(-1px); }
+.magic-transform-pause-button:focus-visible { outline: 2px solid var(--fg); outline-offset: 4px; }
+
+.magic-transform-selection {
+  min-height: 18px;
+  max-width: 470px;
+  overflow: hidden;
+  color: var(--faint) !important;
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 11px !important;
+  line-height: 1.55 !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.magic-transform-upload-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.magic-transform-upload-label {
+  margin: 0 !important;
+  color: var(--faint) !important;
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 10px !important;
+  letter-spacing: .1em;
+  line-height: 1.5 !important;
+}
+
+.magic-transform-local-upload { min-height: 44px; }
+
+.magic-transform-upload-actions .session-image-upload-control.is-inline {
+  position: relative;
+  inset: auto;
+  z-index: 1;
+  justify-content: flex-start;
+  max-width: 100%;
+}
+
+.magic-transform-upload-actions .session-image-upload-button,
+.magic-transform-upload-actions .mobile-upload-link-buttons > button {
+  min-height: 44px;
+  padding: 0 17px;
+  font-size: 13px;
+}
+
+.magic-transform-upload-actions .session-image-upload-status {
+  text-align: left;
+  line-height: 1.5;
+}
+
+.magic-transform-upload-actions .mobile-upload-links { max-width: 100%; }
+.magic-transform-upload-actions .mobile-upload-link-panel { min-width: 0; }
+
+.magic-transform-studio-visual { display: grid; min-width: 0; gap: 14px; }
+
+.magic-transform-studio-stage {
+  position: relative;
+  width: 100%;
+  height: min(48vw, 560px);
+  min-height: 560px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background: #08070d;
+  box-shadow: 0 28px 80px rgba(0,0,0,.32);
+}
+
+.magic-transform-studio-stage::before {
+  position: absolute;
+  z-index: 16;
+  inset: 0;
+  border: 1px solid rgba(255,255,255,.055);
+  border-radius: inherit;
+  box-shadow: inset 0 -90px 120px rgba(0,0,0,.26);
+  content: '';
+  pointer-events: none;
+}
+
+.magic-transform-studio-effect { position: absolute; inset: 0; }
+
+.magic-transform-refresh-button {
+  position: absolute;
+  z-index: 22;
+  top: 14px;
+  left: 14px;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 12px;
+  background: rgba(10,8,15,.66);
+  color: var(--fg);
+  font-size: 21px;
+  line-height: 1;
+  transition: transform .22s ease, background .18s ease, opacity .18s ease;
+  backdrop-filter: blur(11px);
+}
+
+.magic-transform-refresh-button:hover:not(:disabled) { background: rgba(255,255,255,.14); transform: rotate(24deg); }
+.magic-transform-refresh-button:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; }
+.magic-transform-refresh-button:disabled { cursor: not-allowed; opacity: .42; }
+.magic-transform-stage-note { position: absolute; z-index: 22; right: 20px; bottom: 17px; margin: 0; color: rgba(238,232,250,.4); font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 8px; letter-spacing: .14em; pointer-events: none; }
+.magic-transform-tip { margin: 0; color: var(--faint); font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 10px; line-height: 1.55; }
+
+@media (max-width: 920px) {
+  .magic-transform-studio { grid-template-columns: minmax(0, 1fr); gap: 48px; }
+  .magic-transform-studio-copy { max-width: 620px; }
+  .magic-transform-studio-stage { height: min(70vw, 520px); min-height: 520px; }
+}
+
+@media (max-width: 590px) {
+  .magic-transform-studio { padding-top: 88px; padding-bottom: 88px; }
+  .magic-transform-studio-copy > p:not(.eyebrow) { font-size: 15px; }
+  .magic-transform-studio-stage { height: 470px; min-height: 470px; border-radius: 22px; }
+  .magic-transform-studio-actions { align-items: flex-start; flex-direction: column; }
+  .magic-transform-random-button { width: min(100%, 260px); }
+  .magic-transform-refresh-button { top: 12px; left: 12px; }
+  .magic-transform-stage-note { right: 12px; bottom: 15px; font-size: 7px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .magic-transform-random-button,
+  .magic-transform-pause-button,
+  .magic-transform-refresh-button { transition: none; }
+}

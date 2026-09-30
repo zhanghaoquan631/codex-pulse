@@ -1,0 +1,13 @@
+{
+  "source": "f625b31662226bec004f9d4fa2c3d27250309475",
+  "files": 1137,
+  "runtimeDataIncluded": false,
+  "siteBindingRemoved": true,
+  "exportedFiles": 795,
+  "publicExportChanges": [
+    "Personal configuration replaced with examples",
+    "Runtime data and credentials excluded",
+    "Original site binding removed",
+    "APEX original engine/model/audio build omitted; custom extensions retained"
+  ]
+}

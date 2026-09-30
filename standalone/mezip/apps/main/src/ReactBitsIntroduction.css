@@ -1,0 +1,117 @@
+/* Public Introduction page style values, verified 2026-09-11.
+   All styles are scoped to this standalone component. No Tailwind setup needed. */
+.rbi-document {
+  --rbi-background: oklch(100% 0 0);
+  --rbi-foreground: oklch(14.5% 0 0);
+  --rbi-muted: oklch(95% 0 0);
+  --rbi-muted-foreground: oklch(37.5% 0 0);
+  --rbi-border: oklch(92.2% 0 0);
+  --rbi-accent: oklch(97% 0 0);
+  --rbi-accent-foreground: oklch(50% 0 0);
+  --rbi-ring: oklch(70.8% 0 0);
+  --rbi-radius: 12.8px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1250px;
+  min-width: 0;
+  margin: 0 auto;
+  padding: 24px 16px 0;
+  background: var(--rbi-background);
+  color: var(--rbi-foreground);
+  font-family: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  animation: rbi-route-fade 240ms ease-out;
+}
+.rbi-document[data-rbi-theme='dark'] {
+  --rbi-background: #0a0a0a;
+  --rbi-foreground: #fff;
+  --rbi-muted: #1f1f1f;
+  --rbi-muted-foreground: #d6d6d6;
+  --rbi-border: #1f1f1f;
+  --rbi-accent: #1f1f1f;
+  --rbi-accent-foreground: #e0e0e0;
+  --rbi-ring: #2a2a2a;
+}
+.rbi-document *, .rbi-document *::before, .rbi-document *::after { box-sizing: border-box; }
+.rbi-document :is(h1, h2, h3, p, ul) { margin: 0; padding: 0; font-size: inherit; font-weight: inherit; }
+.rbi-document a { color: inherit; text-decoration: none; }
+.rbi-document svg { display: block; vertical-align: middle; }
+.rbi-document .rbi-content { max-width: 896px; }
+.rbi-document .rbi-header { margin-bottom: 40px; }
+.rbi-document .rbi-title { margin-bottom: 16px; font-size: 30px; line-height: 36px; font-weight: 600; letter-spacing: -0.025em; }
+.rbi-document .rbi-lead { max-width: 672px; font-size: 18px; line-height: 1.625; }
+.rbi-document .rbi-muted { color: var(--rbi-muted-foreground); }
+.rbi-document .rbi-shell { padding: 4px; border: 1px solid var(--rbi-border); border-radius: calc(var(--rbi-radius) + 4px); background: color-mix(in oklab, var(--rbi-muted) 50%, transparent); }
+.rbi-document .rbi-panel { border: 1px solid var(--rbi-border); border-radius: var(--rbi-radius); background: var(--rbi-background); }
+.rbi-document .rbi-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; margin-bottom: 56px; }
+.rbi-document .rbi-stat { padding: 16px 20px; }
+.rbi-document .rbi-stat-value { font-size: 24px; line-height: 32px; font-weight: 600; letter-spacing: -0.025em; }
+.rbi-document .rbi-stat-label { margin-top: 4px; font-size: 12px; line-height: 16px; color: var(--rbi-muted-foreground); }
+.rbi-document .rbi-section { margin-bottom: 56px; }
+.rbi-document .rbi-section-title { font-size: 20px; line-height: 28px; font-weight: 600; letter-spacing: -0.025em; }
+.rbi-document .rbi-section-subtitle { margin-top: 6px; font-size: 14px; line-height: 20px; color: var(--rbi-muted-foreground); }
+.rbi-document .rbi-section-content { margin-top: 24px; }
+.rbi-document .rbi-library { display: grid; grid-template-columns: minmax(0, 1fr); gap: 4px; }
+.rbi-document .rbi-library-card { display: flex; flex-direction: column; padding: 20px; transition: background-color 150ms cubic-bezier(.4, 0, .2, 1); }
+.rbi-document .rbi-card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.rbi-document .rbi-card-top-spread { justify-content: space-between; }
+.rbi-document .rbi-icon-box { display: grid; width: 36px; height: 36px; flex-shrink: 0; place-items: center; border-radius: calc(var(--rbi-radius) - 4px); background: var(--rbi-muted); color: var(--rbi-muted-foreground); }
+.rbi-document .rbi-icon-box-hover { transition: color 150ms cubic-bezier(.4, 0, .2, 1); }
+.rbi-document .rbi-icon { width: 16px; height: 16px; flex-shrink: 0; }
+.rbi-document .rbi-plan { font-size: 11px; line-height: 16.5px; font-weight: 500; color: var(--rbi-muted-foreground); }
+.rbi-document .rbi-plan-end { margin-left: auto; }
+.rbi-document .rbi-card-title { display: flex; align-items: center; gap: 4px; margin-bottom: 6px; font-weight: 500; }
+.rbi-document .rbi-arrow { width: 14px; height: 14px; opacity: 0; transform: translateX(-4px); transition: all 150ms cubic-bezier(.4, 0, .2, 1); }
+.rbi-document .rbi-description { font-size: 14px; line-height: 1.625; color: var(--rbi-muted-foreground); }
+.rbi-document .rbi-description-constrained { max-width: 672px; }
+.rbi-document .rbi-library-note { margin-top: 16px; font-size: 14px; line-height: 20px; color: color-mix(in oklab, var(--rbi-muted-foreground) 75%, transparent); }
+.rbi-document .rbi-stack > * + * { margin-top: 4px; }
+.rbi-document .rbi-tool-card { padding: 20px; }
+.rbi-document .rbi-medium { font-weight: 500; }
+.rbi-document .rbi-bullets { margin-top: 16px; list-style: none; }
+.rbi-document .rbi-bullets > * + * { margin-top: 6px; }
+.rbi-document .rbi-bullet { display: flex; gap: 10px; font-size: 14px; line-height: 20px; color: var(--rbi-muted-foreground); }
+.rbi-document .rbi-bullet-icon { width: 14px; height: 14px; margin-top: 4px; flex-shrink: 0; }
+.rbi-document .rbi-button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 32px; margin-top: 20px; padding: 0 10px; flex-shrink: 0; border: 1px solid var(--rbi-border); border-radius: calc(var(--rbi-radius) - 2px); background: var(--rbi-background); font-size: 14px; line-height: 20px; font-weight: 500; letter-spacing: -0.025em; white-space: nowrap; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 5%); outline: none; transition: box-shadow 200ms, transform 200ms, opacity 200ms; }
+.rbi-document .rbi-button svg { pointer-events: none; }
+.rbi-document[data-rbi-theme='dark'] .rbi-button { background: color-mix(in oklab, var(--rbi-border) 30%, transparent); }
+.rbi-document .rbi-button:focus-visible { border-color: var(--rbi-ring); box-shadow: 0 0 0 3px color-mix(in oklab, var(--rbi-ring) 50%, transparent); }
+.rbi-document .rbi-library-card:focus-visible { outline: 2px solid var(--rbi-ring); outline-offset: 2px; }
+.rbi-document .rbi-reasons { font-size: 15px; line-height: 1.625; }
+.rbi-document .rbi-reasons > * + * { margin-top: 12px; }
+.rbi-document .rbi-emphasis { font-weight: 500; color: var(--rbi-foreground); }
+.rbi-document .rbi-step { display: flex; align-items: flex-start; gap: 16px; padding: 16px; }
+.rbi-document .rbi-step-number { display: grid; width: 28px; height: 28px; flex-shrink: 0; place-items: center; border-radius: calc(var(--rbi-radius) - 4px); background: var(--rbi-muted); font-size: 12px; line-height: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.rbi-document .rbi-min-width { min-width: 0; }
+.rbi-document .rbi-step-title { font-weight: 500; line-height: 24px; }
+.rbi-document .rbi-step-description { margin-top: 2px; font-size: 14px; line-height: 20px; color: var(--rbi-muted-foreground); }
+@media (hover: hover) {
+  .rbi-document .rbi-library-card:hover { background: color-mix(in oklab, var(--rbi-muted) 50%, transparent); }
+  .rbi-document .rbi-library-card:hover .rbi-icon-box-hover { color: var(--rbi-foreground); }
+  .rbi-document .rbi-library-card:hover .rbi-arrow { opacity: 1; transform: translateX(0); }
+  .rbi-document .rbi-button:hover { background: var(--rbi-accent); color: var(--rbi-accent-foreground); }
+  .rbi-document[data-rbi-theme='dark'] .rbi-button:hover { background: color-mix(in oklab, var(--rbi-border) 50%, transparent); }
+}
+@media (min-width: 640px) {
+  .rbi-document .rbi-library { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rbi-document .rbi-tool-card { padding: 24px; }
+  .rbi-document .rbi-step { align-items: center; }
+}
+@media (min-width: 768px) {
+  .rbi-document { padding-top: 40px; }
+  .rbi-document .rbi-title { font-size: 36px; line-height: 40px; }
+  .rbi-document .rbi-lead { font-size: 20px; }
+  .rbi-document .rbi-section-title { font-size: 24px; line-height: 32px; }
+}
+@media (min-width: 1024px) {
+  .rbi-document { padding-right: 40px; padding-left: 40px; }
+  .rbi-document .rbi-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@keyframes rbi-route-fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .rbi-document { animation: none; } }

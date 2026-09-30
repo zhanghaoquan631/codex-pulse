@@ -1,0 +1,27 @@
+{
+  "name": "@me-zip/web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "lint": "eslint src --max-warnings=0",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "build": "tsc --noEmit && vite build"
+  },
+  "dependencies": {
+    "@me-zip/design-system": "workspace:*",
+    "@me-zip/sdk": "workspace:*",
+    "@me-zip/shared-types": "workspace:*",
+    "motion": "13.1.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "vite": "^7.2.7"
+  }
+}

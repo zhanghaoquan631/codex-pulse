@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Tom 的 Creator Town 夜空小镇独立场景网站。"
+    />
+    <title>Tom — Creator Town</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: "Kaiti SC", "STKaiti", "KaiTi", "Noto Serif SC", serif;
+        background: #05070a;
+        color: #fff6dc;
+      }
+
+      * { box-sizing: border-box; }
+
+      html, body { min-height: 100%; margin: 0; }
+
+      body {
+        min-height: 100vh;
+        overflow-x: hidden;
+        background: #05070a;
+      }
+
+      .town-site {
+        position: relative;
+        min-height: 100vh;
+        isolation: isolate;
+        overflow: hidden;
+        background: #05070a;
+      }
+
+      .town-art {
+        position: absolute;
+        z-index: -2;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        filter: saturate(.94) contrast(1.04);
+      }
+
+      .town-shade {
+        position: absolute;
+        z-index: -1;
+        inset: 0;
+        pointer-events: none;
+        background:
+          linear-gradient(180deg, rgba(3, 5, 8, .45), transparent 30%, transparent 70%, rgba(3, 5, 8, .62)),
+          radial-gradient(circle at 50% 20%, rgba(190, 169, 255, .09), transparent 42%);
+      }
+
+      .town-topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: clamp(20px, 4vw, 48px);
+      }
+
+      .town-brand {
+        display: grid;
+        gap: 4px;
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .town-brand strong {
+        font-family: "Segoe Script", "Snell Roundhand", cursive;
+        font-size: clamp(1.5rem, 3vw, 2.3rem);
+        font-style: italic;
+        font-weight: 400;
+      }
+
+      .town-brand small,
+      .town-status,
+      .town-hint {
+        font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+        font-size: .66rem;
+        letter-spacing: .12em;
+      }
+
+      .town-brand small { color: rgba(255, 246, 220, .68); }
+
+      .town-status {
+        padding: 8px 12px;
+        border: 1px solid rgba(244, 225, 168, .5);
+        border-radius: 999px;
+        color: #f4e1a8;
+        background: rgba(6, 8, 13, .55);
+        backdrop-filter: blur(10px);
+      }
+
+      .town-content {
+        display: grid;
+        min-height: calc(100vh - 120px);
+        place-items: center;
+        padding: 0 clamp(18px, 6vw, 96px) clamp(48px, 8vw, 100px);
+      }
+
+      .town-intro {
+        width: min(580px, 92vw);
+        margin-top: clamp(30px, 12vh, 140px);
+        padding: clamp(22px, 4vw, 42px);
+        border: 1px solid rgba(244, 225, 168, .35);
+        border-radius: 18px;
+        text-align: center;
+        background: rgba(6, 8, 13, .64);
+        box-shadow: 0 28px 80px rgba(0, 0, 0, .5), inset 0 1px 0 rgba(255, 255, 255, .14);
+        backdrop-filter: blur(14px) saturate(120%);
+      }
+
+      .town-intro p { margin: 0; line-height: 1.7; }
+
+      .town-intro .eyebrow {
+        color: #f4e1a8;
+        font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+        font-size: .72rem;
+        letter-spacing: .16em;
+      }
+
+      .town-intro h1 {
+        margin: 10px 0;
+        font-family: "Segoe Script", "Snell Roundhand", cursive;
+        font-size: clamp(2.8rem, 8vw, 5.5rem);
+        font-style: italic;
+        font-weight: 400;
+        letter-spacing: .02em;
+      }
+
+      .town-intro .lede { color: rgba(255, 246, 220, .78); }
+
+      .town-links {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 9px;
+        margin-top: 24px;
+      }
+
+      .town-link {
+        min-height: 42px;
+        padding: 9px 14px;
+        border: 1px solid rgba(244, 225, 168, .42);
+        border-radius: 999px;
+        color: #fff6dc;
+        text-decoration: none;
+        background: rgba(10, 12, 18, .58);
+        transition: transform 160ms ease, border-color 160ms ease, background-color 160ms ease;
+      }
+
+      .town-link:hover,
+      .town-link:focus-visible {
+        transform: translateY(-2px);
+        border-color: #f4e1a8;
+        background: rgba(45, 40, 30, .75);
+        outline: none;
+      }
+
+      .town-hint {
+        position: absolute;
+        right: 20px;
+        bottom: 18px;
+        left: 20px;
+        color: rgba(255, 246, 220, .7);
+        text-align: center;
+        text-shadow: 0 2px 14px #000;
+      }
+
+      @media (max-width: 640px) {
+        .town-topbar { align-items: flex-start; }
+        .town-status { max-width: 150px; text-align: right; }
+        .town-content { min-height: calc(100vh - 100px); }
+        .town-intro { margin-top: 40px; }
+        .town-link { flex: 1 1 42%; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .town-link { transition: none; }
+        .town-link:hover, .town-link:focus-visible { transform: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="town-site">
+      <img class="town-art" src="/creator-intro-reference.jpg" alt="Tom 的夜空小镇背景" />
+      <div class="town-shade" aria-hidden="true"></div>
+      <header class="town-topbar">
+        <a class="town-brand" href="/creator-town.html" aria-label="Tom Creator Town 首页">
+          <strong>Tom</strong>
+          <small>CREATOR TOWN / NIGHT PROFILE</small>
+        </a>
+        <span class="town-status">STANDALONE SCENE · PRIVATE BY DEFAULT</span>
+      </header>
+      <section class="town-content" aria-labelledby="town-title">
+        <div class="town-intro">
+          <p class="eyebrow">CAPRICORN / 摩羯座</p>
+          <h1 id="town-title">我的小镇</h1>
+          <p class="lede">这是资料卡背面的独立场景网站。夜空、建筑、星座与功能入口在这里单独展开，不修改原来的资料卡页面。</p>
+          <nav class="town-links" aria-label="小镇入口">
+            <a class="town-link" href="/life">Life · 我的家</a>
+            <a class="town-link" href="/timeline">Timeline · 档案馆</a>
+            <a class="town-link" href="/history">History · 图书馆</a>
+            <a class="town-link" href="/fitness">Fitness · 健身公园</a>
+            <a class="town-link" href="/community">Community · 广场</a>
+            <a class="town-link" href="/ai-lab">AI Lab · 实验室</a>
+          </nav>
+        </div>
+      </section>
+      <p class="town-hint">独立页面 · 点击入口继续探索 · 原资料卡保持不变</p>
+    </main>
+  </body>
+</html>

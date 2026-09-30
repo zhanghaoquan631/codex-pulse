@@ -1,0 +1,11 @@
+import {build} from 'esbuild';
+import {mkdir,cp,writeFile,readFile} from 'node:fs/promises';
+import path from 'node:path';
+await mkdir('dist/client',{recursive:true});await mkdir('dist/server',{recursive:true});await mkdir('dist/.openai',{recursive:true});
+await cp('public','dist/client',{recursive:true});
+await build({entryPoints:['worker/index.mjs'],bundle:true,format:'esm',platform:'browser',target:'es2022',outfile:'dist/server/index.js',external:['node:crypto','node:util','node:zlib','node:buffer'],minify:false});
+const wrangler={name:'personal-bookshelf',main:'index.js',compatibility_date:'2026-09-30',compatibility_flags:['nodejs_compat'],assets:{directory:'../client',binding:'ASSETS',run_worker_first:true,not_found_handling:'single-page-application'},d1_databases:[{binding:'DB',database_name:'bookshelf-local',database_id:'00000000-0000-0000-0000-000000000000',migrations_dir:'../../drizzle'}],r2_buckets:[{binding:'BUCKET',bucket_name:'bookshelf-local-files'}]};
+await writeFile('dist/server/wrangler.json',JSON.stringify(wrangler,null,2)+'\n');
+await cp('.openai/hosting.json','dist/.openai/hosting.json');
+await cp('drizzle','dist/.openai/drizzle',{recursive:true});
+console.log('Built bookshelf API with durable DB and file storage.');

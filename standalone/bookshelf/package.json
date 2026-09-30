@@ -1,0 +1,13 @@
+{
+  "name": "personal-bookshelf-cloud",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "db:generate": "drizzle-kit generate",
+    "dev": "wrangler dev --config dist/server/wrangler.json --port 4180",
+    "test": "node scripts/cloud-smoke.mjs"
+  },
+  "dependencies": {"drizzle-orm":"^0.44.0"},
+  "devDependencies": {"drizzle-kit":"^0.31.0","esbuild":"^0.25.0","wrangler":"^4.0.0"}
+}

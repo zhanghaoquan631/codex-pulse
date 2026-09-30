@@ -1,0 +1,386 @@
+{
+  "/media/wechat-cards-20260827/card-070.png": {
+    "path": "/media/wechat-cards-20260827/card-070.lossless.webp",
+    "sha256": "717727857c7c2528e3a56008ae64b7d925fddbc23f457ec2f89b1b215b182a54",
+    "webpSha256": "8299f6222da1a19e7a1d13450d77a3ddb95b096300c7c63c8f19f277b566be3f",
+    "rgbaSha256": "54363222bae4401faf77aa9b6d67397d27b5f3291917abd082e0e0372d933b63",
+    "width": 1018,
+    "height": 1458
+  },
+  "/media/wechat-cards-20260827/card-030.png": {
+    "path": "/media/wechat-cards-20260827/card-030.lossless.webp",
+    "sha256": "629b1d1ee82730069232f724a09cc6abbadd04d6c9125c3a88f72407cfa5f3ca",
+    "webpSha256": "0bfba0b4d61a2c501e5da190a011b3b660232a9d3862e895bee2f8725a216a3c",
+    "rgbaSha256": "112150f5ed211cb6661e6c4df2492d511b1f25e4baaccc30f1b20be1f72d5611",
+    "width": 1077,
+    "height": 1414
+  },
+  "/media/wechat-cards-20260827/card-010.png": {
+    "path": "/media/wechat-cards-20260827/card-010.lossless.webp",
+    "sha256": "8138b5bc76ec2b84c87d691b7352b0089c5da445760b02cd0651ca45dca7d475",
+    "webpSha256": "4c29d604c087ac7e7b1c318d5bda087313185950db00a6ae1c6c75f209a4b4b4",
+    "rgbaSha256": "76185c58a21a41ef52161062c2be9ee3179cb87ed16fc4a2bc5a6f620d82b323",
+    "width": 1069,
+    "height": 1352
+  },
+  "/media/wechat-cards-20260827/card-069.png": {
+    "path": "/media/wechat-cards-20260827/card-069.lossless.webp",
+    "sha256": "557139b24a8f7adee4bc6990221d4649ef34d7f748e83347c16f30a91e27e117",
+    "webpSha256": "e6c98875fa30e31cbb1396483a1ecb82a531ce40e40eb5897f345c7f49d037fd",
+    "rgbaSha256": "a8a348630dd23e2d1a2f13de7ed3ecbe99341a16df9312f695668f19a190a342",
+    "width": 989,
+    "height": 1424
+  },
+  "/media/wechat-cards-20260827/card-045.png": {
+    "path": "/media/wechat-cards-20260827/card-045.lossless.webp",
+    "sha256": "74cca9f66245999b3167895dd65d21dc6600bb41625560e463d9eb7c7ecdee8e",
+    "webpSha256": "b6c52dafb4ec1db8da29d6b1e39fd33e5ea64788a347b3b7858cba9c3dc9560f",
+    "rgbaSha256": "a0e31cea6c2dbef3593fd420f0e17b49189c193bd9aba4d855c1cc1f0ed71dec",
+    "width": 1013,
+    "height": 1520
+  },
+  "/media/wechat-cards-20260827/card-007.png": {
+    "path": "/media/wechat-cards-20260827/card-007.lossless.webp",
+    "sha256": "ea1bee89900dd49ad4fb1e87292ef964e407ff857880008910aab87cde84ef33",
+    "webpSha256": "3a1c390549a16466f46faa64cc02bdf8fc18160392ce4bdeca331d62e3e48b8a",
+    "rgbaSha256": "4ebbbe7950e6907271a4a469228429baafd1e41b221ae62e6bcb70f624357426",
+    "width": 1013,
+    "height": 1354
+  },
+  "/media/wechat-cards-20260827/card-028.png": {
+    "path": "/media/wechat-cards-20260827/card-028.lossless.webp",
+    "sha256": "f1ad44ca8c06d2d97a9a8a2ad7ab06edb41dd3fe25d29320b9e8788c75fc9696",
+    "webpSha256": "af0662369ef441beb6f259b3e680721cbba1d404e334ec5609e7e6cd983af160",
+    "rgbaSha256": "3ef4cd1c476e583a921ce8ec3dd4c3c3a0d2ae1dd022be3c4c0e320b4adcd765",
+    "width": 983,
+    "height": 1258
+  },
+  "/media/wechat-cards-20260827/card-054.png": {
+    "path": "/media/wechat-cards-20260827/card-054.lossless.webp",
+    "sha256": "33170b8b0448f59eaca09438e0b27a4dd263ece14dc97a1beb6e70abbfd2d5fd",
+    "webpSha256": "805d63268011029e4075f49e6f4d73ebaa70ad48d7ba5e572ca7f1ffce650a0b",
+    "rgbaSha256": "f27b25d2f4a6cb33d8fbc4b5594d675e331d11837a514d01c22533cdd87ee3ed",
+    "width": 1004,
+    "height": 1334
+  },
+  "/media/wechat-cards-20260827/card-006.png": {
+    "path": "/media/wechat-cards-20260827/card-006.lossless.webp",
+    "sha256": "9d8b6e0cbe8d21f4b4dedf1b97099e6b21bd5d5be068f2f55ca600ef9e17819f",
+    "webpSha256": "3e7dcbf6c295b9304c930200d793fcd1266dc52d479e66e423c754b40f7572ce",
+    "rgbaSha256": "5379d100f2719b589d6b1f1ae6a6c99611a4a12f98d67fb01527f0dcd43c9d36",
+    "width": 1041,
+    "height": 1392
+  },
+  "/media/wechat-cards-20260827/card-008.png": {
+    "path": "/media/wechat-cards-20260827/card-008.lossless.webp",
+    "sha256": "7fd6e18ee7cea0051ee4a7d135606f2dcc4421e696a5f5f19aaa0b75232214f8",
+    "webpSha256": "6a4016fcea77859f162ccf369029d957377e61c6c69ad4ecdd4ab8266edd9719",
+    "rgbaSha256": "b0486a4ef206008651e3b996bfc6f808fa0560831fc0497c3a97325d8a5afa7a",
+    "width": 1031,
+    "height": 1374
+  },
+  "/media/wechat-cards-20260827/card-009.png": {
+    "path": "/media/wechat-cards-20260827/card-009.lossless.webp",
+    "sha256": "1eb2ff9ab84248fdea48fac4b14e9236283485c47e9c46ed204a8d1533268619",
+    "webpSha256": "98977f4e6df93e252a65893231141ce50472c42394bd4788d75028632557e62b",
+    "rgbaSha256": "7d2d382fe37d4ba3e8afa913b88fdee596ef18674a92babe191a5d47b2c9ca73",
+    "width": 1022,
+    "height": 1368
+  },
+  "/media/wechat-cards-20260827/card-065.png": {
+    "path": "/media/wechat-cards-20260827/card-065.lossless.webp",
+    "sha256": "a6048beed40dd211b987ff1a643db3b3ff987623d2c00f1a63091ab520c36cfa",
+    "webpSha256": "4abf04a4075c0fd7aca2a2b5eb80d52e3092a1547cd3b933d81742cc956bddd4",
+    "rgbaSha256": "c1629fdd46d83187c2d025d03633c347743b96159765ce5d17d8b028801fe101",
+    "width": 927,
+    "height": 1384
+  },
+  "/media/wechat-cards-20260827/card-051.png": {
+    "path": "/media/wechat-cards-20260827/card-051.lossless.webp",
+    "sha256": "5e18295e65a143748e155904a5fa4bd6c8e14d84289275d38a1ff5dd719c1e59",
+    "webpSha256": "6ea59a13bcfb2afa608a9c4831e2565c5b2cd27327b15f1afebdca514a17825b",
+    "rgbaSha256": "8a75fb1b56195d028610fbeef097204d1f94e3596548586e6aebe3683d0c3374",
+    "width": 957,
+    "height": 1400
+  },
+  "/media/wechat-cards-20260827/card-057.png": {
+    "path": "/media/wechat-cards-20260827/card-057.lossless.webp",
+    "sha256": "a62b0163af01132035aa0fe8816b11520c49dd2643fecc7a4e183ee730fe6598",
+    "webpSha256": "7384d577e98950ab9e4d3406231e80db732c9f2a7849300ab63282aa88e44ee3",
+    "rgbaSha256": "d61b379707691f173f4ce3c11779707a90ece2709d6b474bccabf28997304cc7",
+    "width": 1070,
+    "height": 1426
+  },
+  "/media/wechat-cards-20260827/card-056.png": {
+    "path": "/media/wechat-cards-20260827/card-056.lossless.webp",
+    "sha256": "744037478d973c57b1d4306d79b3f52ae0920c4bf760cc3ae7acc23232d08fa4",
+    "webpSha256": "35b325fe59f08be5d5580b0859eaa9fcfc660f63ea4846824d2bee6aa258672b",
+    "rgbaSha256": "d0a4b6ddcfa5f6eddec08bafe6b3f7b0dadc953e6c66d340893076d48414a329",
+    "width": 1022,
+    "height": 1360
+  },
+  "/media/wechat-cards-20260827/card-017.png": {
+    "path": "/media/wechat-cards-20260827/card-017.lossless.webp",
+    "sha256": "ef9740ee58b178220972c9c52c3f6a718de71d39a9e959e66f8b1ebba1d23688",
+    "webpSha256": "fe84d0feb2467ffb3c788f8fe3e459ee73bde89a1d88062431f4d3fb06434a07",
+    "rgbaSha256": "13552a70746020d6b9f7e4e31033e84a4627a84c9efceaa4632549d4979bed39",
+    "width": 1012,
+    "height": 1352
+  },
+  "/media/wechat-cards-20260827/card-039.png": {
+    "path": "/media/wechat-cards-20260827/card-039.lossless.webp",
+    "sha256": "7e963205801bbe40c5bc2a75a05908c0623aedeb012c981efa1c199b06b63312",
+    "webpSha256": "2d026d8742ccd431f58a6fc261ff4cc3e828d6f2a44c355efed6ad5434265895",
+    "rgbaSha256": "c2d2634c52acf340476a120f076799904aecd1934571af339afa7a42aec012e5",
+    "width": 1011,
+    "height": 1358
+  },
+  "/media/wechat-cards-20260827/card-021.png": {
+    "path": "/media/wechat-cards-20260827/card-021.lossless.webp",
+    "sha256": "03e13f4b5de94cf12b9e34f5bb99209439a9fe716fe93562b14b1745a1f1df11",
+    "webpSha256": "9b8504cb046df97e02fe9abe2a32fc5e7b60340281cf20cc5c5bc446141f3c6f",
+    "rgbaSha256": "14fc76248c23ee8734548cff91f91b6825c01f8f56c59e819e65fb948a507a0b",
+    "width": 943,
+    "height": 1366
+  },
+  "/media/wechat-cards-20260827/card-013.png": {
+    "path": "/media/wechat-cards-20260827/card-013.lossless.webp",
+    "sha256": "2860ab0f7bbae83ec8566f5f6ad2be92d8c9363764303a33494badc8c3827cfb",
+    "webpSha256": "80b341384befab00a42c2b1f4e4fd8561ec2d443595ea03bd9b3de410cafdf07",
+    "rgbaSha256": "e8a76b697e9a49acd1d834c81533d7d96f150ca79d14d03c9d0c3cbdc490e0d0",
+    "width": 956,
+    "height": 1294
+  },
+  "/media/wechat-cards-20260827/card-068.png": {
+    "path": "/media/wechat-cards-20260827/card-068.lossless.webp",
+    "sha256": "1bd158f97e434f610285701f34de4e2d216e0a4a1e2b80141a5b41ad91136a7e",
+    "webpSha256": "477aceceb42c700bdd379fe87849cb2bbdb67e02fad847d757a5d1e3cb4d1ac0",
+    "rgbaSha256": "e5a6e61eb2c381b59a9c67b205c29c156b175e71267b30a4395ffab8c82cb83d",
+    "width": 995,
+    "height": 1472
+  },
+  "/media/wechat-cards-20260827/card-002.png": {
+    "path": "/media/wechat-cards-20260827/card-002.lossless.webp",
+    "sha256": "f6e977ee1e52d993d3cb7e100be7e50895ac7a4f9b3d100a35b1cf529db23faa",
+    "webpSha256": "5bffd145d67aa88c3fb376329ee3209918a080ce724537c790acbb10c4e3fcaf",
+    "rgbaSha256": "8cd2bcfb2248e5ee2d074af5bfadd8f781c83992e45c310b6388721d10e1b712",
+    "width": 1008,
+    "height": 1344
+  },
+  "/media/wechat-cards-20260827/card-014.png": {
+    "path": "/media/wechat-cards-20260827/card-014.lossless.webp",
+    "sha256": "c4710b4d895273cd72f1c57e8a8f7fd96966df3398262ed21cb58a2795b74fe9",
+    "webpSha256": "63976f540d6053fe0ea269a7f9f3bb364116746bf14bcd0637385392fe68a1b8",
+    "rgbaSha256": "e7321ccf395685e4fb4e15e60b6ac1671e7281ab36169a9915416d19701e9c2e",
+    "width": 1011,
+    "height": 1374
+  },
+  "/media/wechat-cards-20260827/card-020.png": {
+    "path": "/media/wechat-cards-20260827/card-020.lossless.webp",
+    "sha256": "54e8db75290605b7b25ab5106e66555127018a90fba69b492d070120086d0e32",
+    "webpSha256": "10b6610ab56a638b643d93f4fc43e24942b3ef2c28fdc660f176dd4eca7427af",
+    "rgbaSha256": "81325ba70b0a6646f4919e45405158354d1fdedc09be3419accfe544c1de1d29",
+    "width": 975,
+    "height": 1422
+  },
+  "/media/wechat-cards-20260827/card-026.png": {
+    "path": "/media/wechat-cards-20260827/card-026.lossless.webp",
+    "sha256": "54e8db75290605b7b25ab5106e66555127018a90fba69b492d070120086d0e32",
+    "webpSha256": "10b6610ab56a638b643d93f4fc43e24942b3ef2c28fdc660f176dd4eca7427af",
+    "rgbaSha256": "81325ba70b0a6646f4919e45405158354d1fdedc09be3419accfe544c1de1d29",
+    "width": 975,
+    "height": 1422
+  },
+  "/media/wechat-cards-20260827/card-046.png": {
+    "path": "/media/wechat-cards-20260827/card-046.lossless.webp",
+    "sha256": "2ad3ed5f7447cc5cba623b7c954ae86cbf2bd18137de8a4ca5dd583ec87d27fb",
+    "webpSha256": "99e49c5ad6add86bd46fb2bd06c86ed94fcff2c7e5a112a910b71e3c6ea00021",
+    "rgbaSha256": "4d9ef433fe8ab9fd65c88f2d12879b6ca2214fe79a465fc863a436ced470508f",
+    "width": 983,
+    "height": 1336
+  },
+  "/media/wechat-cards-20260827/card-059.png": {
+    "path": "/media/wechat-cards-20260827/card-059.lossless.webp",
+    "sha256": "d3e3cb263953eb630d3f59fc3626c8b043de3c5bb9ed466995179e0b86460c19",
+    "webpSha256": "c708631e2c1b2541ad5592c2fd60b5bc340234c4b034187151635f055c3e2a1b",
+    "rgbaSha256": "1d7a498ae36417479f5dbbc22910a23291e11f930436e3a8fcae51bd64539cd2",
+    "width": 1003,
+    "height": 1360
+  },
+  "/media/wechat-cards-20260827/card-067.png": {
+    "path": "/media/wechat-cards-20260827/card-067.lossless.webp",
+    "sha256": "9eea4e49400677372b5b7257406a2fe37f3afc09d5535aa8dd11da14861e08d5",
+    "webpSha256": "5b22655981cef44085a351351e4e924721c17e0fe0348ebb87186eed169c3432",
+    "rgbaSha256": "cf49e7cb24a4acd7b420acd396f1ed180de33494844f44720d30568cac776cc3",
+    "width": 904,
+    "height": 1212
+  },
+  "/media/wechat-cards-20260827/card-049.png": {
+    "path": "/media/wechat-cards-20260827/card-049.lossless.webp",
+    "sha256": "133e64ebdcc21b4ddcacdd81f0a0e26fbd7b137d992e791616d1472952011cf8",
+    "webpSha256": "ce94e3d37cc854e5d7f86c491a1d693169443a03c5232bc4bad20ffbe2e8ae7e",
+    "rgbaSha256": "8151c9177799d125f8760172105a94ef6d68c82868c5d7a5fd499371d0a7e3bd",
+    "width": 973,
+    "height": 1290
+  },
+  "/media/wechat-cards-20260827/card-053.png": {
+    "path": "/media/wechat-cards-20260827/card-053.lossless.webp",
+    "sha256": "868115f5200325b7ce00ec5af2dcd81eae48d2668126fd4d72d92b9ca12eb3b9",
+    "webpSha256": "6dd3644328bd04d26c56b492242ffa9c1260e632ffdd58e1c18b702288fd5697",
+    "rgbaSha256": "913f5c1c29b3586b01edfc39fb6b3b8706bc374de76435f93f6a42f2968f64c7",
+    "width": 1041,
+    "height": 1390
+  },
+  "/media/wechat-cards-20260827/card-018.png": {
+    "path": "/media/wechat-cards-20260827/card-018.lossless.webp",
+    "sha256": "fc3c5824238101e16f0617807b698c425f30bc6bfd07d9c33e3f9c936e136b71",
+    "webpSha256": "9b088e65180b9b1e55d4521c6b09b03e18ea23dad8a18253f1c2bc129640aa0a",
+    "rgbaSha256": "a1b7f121b7d4a78c6b6e5e5973fa08313d01f6ce68f569cd22036814a14ba5aa",
+    "width": 1046,
+    "height": 1370
+  },
+  "/media/wechat-cards-20260827/card-022.png": {
+    "path": "/media/wechat-cards-20260827/card-022.lossless.webp",
+    "sha256": "fc3c5824238101e16f0617807b698c425f30bc6bfd07d9c33e3f9c936e136b71",
+    "webpSha256": "9b088e65180b9b1e55d4521c6b09b03e18ea23dad8a18253f1c2bc129640aa0a",
+    "rgbaSha256": "a1b7f121b7d4a78c6b6e5e5973fa08313d01f6ce68f569cd22036814a14ba5aa",
+    "width": 1046,
+    "height": 1370
+  },
+  "/media/wechat-cards-20260827/card-038.png": {
+    "path": "/media/wechat-cards-20260827/card-038.lossless.webp",
+    "sha256": "b6c52bc1152847a06c81dbab8324a64e353f07cea379e9f120c81845cee8dc60",
+    "webpSha256": "80b7a52be3f74726ba2d58caf3534e8146d58ec286a8881914b592a241e1a377",
+    "rgbaSha256": "a3e8e67e6ebc162a0fd7b57b4cf2118f8ec7b670d6e22ddb883f5fca72455a50",
+    "width": 994,
+    "height": 1288
+  },
+  "/media/wechat-cards-20260827/card-004.png": {
+    "path": "/media/wechat-cards-20260827/card-004.lossless.webp",
+    "sha256": "a3bd5bcfe802375a2282d765f64194a28a46802162fbf016244bb82b4aeb86ef",
+    "webpSha256": "c7d75af859af6f0bbfdf8e2944306011d2a2356ba9d2582cc7b47f2740fadfd8",
+    "rgbaSha256": "a0f012bd546387a4fd77bd66b5173f523c4ae8b2dc26ac0c4016af54d1f46025",
+    "width": 964,
+    "height": 1250
+  },
+  "/media/wechat-cards-20260827/card-015.png": {
+    "path": "/media/wechat-cards-20260827/card-015.lossless.webp",
+    "sha256": "eb9fada7e103454303dbc6cb73e281f9f45358e86b8fcafb4c333a3665aef3f1",
+    "webpSha256": "1611efc8c7be9e6d2786a34b2d5bc419740b0f1f4a31e7261c3a212b65a63125",
+    "rgbaSha256": "ace1e438cf32d5831b4f392ae492dc39dc908c458a31fd81c76b1b25c1391773",
+    "width": 1023,
+    "height": 1340
+  },
+  "/media/wechat-cards-20260827/card-071.png": {
+    "path": "/media/wechat-cards-20260827/card-071.lossless.webp",
+    "sha256": "6aec0342cc3faf46be9c83a0afbe58a1d3bacc8f5e3fe6f781b3268d50875c62",
+    "webpSha256": "e246309736caad4145d7207012bf7c1ce6619e474c99cbad06e784136bcbe94b",
+    "rgbaSha256": "6a961184a31f0acde61f73397f44dd53abd24fc449b0a869131dfcf955d51ca4",
+    "width": 944,
+    "height": 1238
+  },
+  "/media/wechat-cards-20260827/card-032.png": {
+    "path": "/media/wechat-cards-20260827/card-032.lossless.webp",
+    "sha256": "c3d25d25106729cc4302917811badff8249dc8967394ba30cb950d76e4561c89",
+    "webpSha256": "962d62773289844167fde74558a157503bcc38c0f977a2aef06d1d14378ab266",
+    "rgbaSha256": "fa64311681aeff00b4637af6deacdf0dce491136b6b6ff3a2d64b0a554ee3ca5",
+    "width": 1033,
+    "height": 1268
+  },
+  "/media/wechat-cards-20260827/card-011.png": {
+    "path": "/media/wechat-cards-20260827/card-011.lossless.webp",
+    "sha256": "708b973e7b8b8fa626fd15309e315fb2bb157d248ec44f50ba253b134e4b8be7",
+    "webpSha256": "4635818040aac5bf23a296983b24bd1cb757f5cf794eeedc52cacd16e7aea6e6",
+    "rgbaSha256": "6b84bd79a4341005800595dba5013abfa5a55e675b071a312616775a8d3aad4d",
+    "width": 980,
+    "height": 1296
+  },
+  "/media/wechat-cards-20260827/card-003.png": {
+    "path": "/media/wechat-cards-20260827/card-003.lossless.webp",
+    "sha256": "c4a27b0c571d2f1a23f19b37a8c4910fcc44998b06c85b04c408e8b3ce54731f",
+    "webpSha256": "785b7713adcfa7c815ce8c654e92fc8447eb58a3adf1f128bd6785958966ddd7",
+    "rgbaSha256": "01ddaa15653ff7fc58b27ca4081fb62372818d6eb10a5a8a7b6903964c1e099c",
+    "width": 932,
+    "height": 1222
+  },
+  "/media/wechat-cards-20260827/card-047.png": {
+    "path": "/media/wechat-cards-20260827/card-047.lossless.webp",
+    "sha256": "b268275a2c331166843fdf422596e5e72bc4ee5224acbef4839b11ae89b6e978",
+    "webpSha256": "418a2b4b06bba07fbc569af2208ddd29eeac4f1d078d6e4f6f00369941c93156",
+    "rgbaSha256": "5f383ea110c821df172495a42aea20d1c2aa33ecc743d7ba8ec611c39a4cb26f",
+    "width": 1010,
+    "height": 1266
+  },
+  "/media/wechat-cards-20260827/card-058.png": {
+    "path": "/media/wechat-cards-20260827/card-058.lossless.webp",
+    "sha256": "dd49890ac46f292e0debc09f7af4e109cadeb8558e4c2f1a03026e271afd290d",
+    "webpSha256": "1ee5e2557b34bf38a1ad84d039cb144bc5abe59e1b20dafaf23790712a858ba4",
+    "rgbaSha256": "2cbc123957ef0e1a3fa1124b8dca58b3c689349cf3f30a46ca7afb928ed41df5",
+    "width": 993,
+    "height": 1322
+  },
+  "/media/wechat-cards-20260827/card-044.png": {
+    "path": "/media/wechat-cards-20260827/card-044.lossless.webp",
+    "sha256": "0e8d49e270280d6c780de62293a623302847e8e64be68b1abd8a80759429f8d2",
+    "webpSha256": "e870adf0312d73d7d822d5484f95d8556460edef60602608d08529b8de668903",
+    "rgbaSha256": "2936307b906dae701fd958d4c9b3ecf47a6c1eb1b1290c1ea1c7005300ef47fa",
+    "width": 935,
+    "height": 1354
+  },
+  "/media/wechat-cards-20260827/card-061.png": {
+    "path": "/media/wechat-cards-20260827/card-061.lossless.webp",
+    "sha256": "66b70961a24873342bd2f03226350238818b3e7ad467d5226496536b6522a5bb",
+    "webpSha256": "3cdb6451acef1a516015acbde1d3b3b5de90b6726a0201dfb35ead251791c571",
+    "rgbaSha256": "09887851c36324ee3e166fa9050ad722822cea3df482982aaa884a9acedc3f9f",
+    "width": 962,
+    "height": 1280
+  },
+  "/media/wechat-cards-20260827/card-012.png": {
+    "path": "/media/wechat-cards-20260827/card-012.lossless.webp",
+    "sha256": "4548afe0088290cf3563ead149f8dd0affa0ef2b7fbc3d85138053027e9187d3",
+    "webpSha256": "a5b595ca749d8113151d47b0917f4bc4737eb070038d510208d40bae32e6cd8c",
+    "rgbaSha256": "60afc2fd0110ee550454f07d01348a573bc3b288ef64001bb11e730a0d56d97f",
+    "width": 935,
+    "height": 1242
+  },
+  "/media/wechat-cards-20260827/card-016.png": {
+    "path": "/media/wechat-cards-20260827/card-016.lossless.webp",
+    "sha256": "67fe300aeff8b995536931605eb485436229a0471d44b84fbe6be1347b7f63f9",
+    "webpSha256": "a438032308892545860f30881b34f1268eb7e29bf6cd6cc1acf56cf55bf96a8d",
+    "rgbaSha256": "70ce926593ea4d2c13ff4324c87582e1372dee757d36aa7212441b5840c104ce",
+    "width": 1038,
+    "height": 1356
+  },
+  "/media/wechat-cards-20260827/card-074.png": {
+    "path": "/media/wechat-cards-20260827/card-074.lossless.webp",
+    "sha256": "bab3d0ff492892f90d8f3c61fd39973702b18a8c23dfee69c4335158cfaa8498",
+    "webpSha256": "cf9397cba0110ef7b1c4e06bc0221026ea6e6550fec7660b470673dceba5621d",
+    "rgbaSha256": "92c4cb69bcd9a40f5a0d28a248f5ff27b976b95d3394894a11150579847e6d09",
+    "width": 950,
+    "height": 1322
+  },
+  "/media/wechat-cards-20260827/card-043.png": {
+    "path": "/media/wechat-cards-20260827/card-043.lossless.webp",
+    "sha256": "482705535126a3fcdffb84fc35b3bf91cf4d6444d78d5f4f58178da0356bd22a",
+    "webpSha256": "76ae6359d9cc0bc02dffad0d4cff4b836b5dcabaeca8516d26f337eb753823ff",
+    "rgbaSha256": "97c042e60c4fc0026b4b6f46ca533f53b36148598abed0379a62d4dec7a3fe20",
+    "width": 924,
+    "height": 1334
+  },
+  "/media/wechat-cards-20260827/card-073.png": {
+    "path": "/media/wechat-cards-20260827/card-073.lossless.webp",
+    "sha256": "b918a94f693bab4e9b8c0239c3746d649739e94ba4bbb630b0e61606d432a60f",
+    "webpSha256": "f4a1b8002cb400fc41e3ebfa134f9921e4ba1ac615b561856b67d6d958e89776",
+    "rgbaSha256": "067e13973483bce3cbdf14c94bf1e51828235a6e17478b6c8f8f6dd8ffc7e8c5",
+    "width": 877,
+    "height": 1152
+  },
+  "/media/wechat-cards-20260827/card-060.png": {
+    "path": "/media/wechat-cards-20260827/card-060.lossless.webp",
+    "sha256": "20e2f52e63a36b0c416184fe01834b444dea7c86a7dc5b979cd4638032e750a6",
+    "webpSha256": "3fbec1e664e31520f1b84128dd89888eb673cb90c19447e54436e9241a900e88",
+    "rgbaSha256": "d3aa47804136dca8bd1fd01bd8a1f2fcfabf4f5620f0846bcee0fd4c5857b750",
+    "width": 923,
+    "height": 1252
+  }
+}

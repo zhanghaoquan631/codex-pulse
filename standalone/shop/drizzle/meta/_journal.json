@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1789819915004,
+      "tag": "0000_supreme_lord_tyger",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1789820475782,
+      "tag": "0001_ordinary_ser_duncan",
+      "breakpoints": true
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+.rotating-cards { position: relative; width: 100%; height: 100%; overflow: hidden; touch-action: pan-y; user-select: none; }
+.rotating-cards__scene { position: absolute; inset: 0; display: grid; place-items: center; overflow: visible; transform: scale(var(--rotating-fit-scale, 0)); transform-origin: center; }
+.rotating-cards__ring { position: relative; width: 0; height: 0; will-change: transform; }
+.rotating-cards__card { position: absolute; top: calc(var(--rotating-card-height) / -2); left: calc(var(--rotating-card-width) / -2); display: block; width: var(--rotating-card-width); height: var(--rotating-card-height); overflow: hidden; padding: 0; border: 1px solid rgba(255,255,255,.2); border-radius: 16px; background: #222; box-shadow: 0 18px 42px rgba(0,0,0,.35); color: #fff; cursor: grab; transition: border-color .2s ease, box-shadow .2s ease; }
+.rotating-cards[data-rotating-dragging="true"] .rotating-cards__card { cursor: grabbing; }
+.rotating-cards__card:hover, .rotating-cards__card:focus-visible { border-color: rgba(255,255,255,.66); box-shadow: 0 22px 58px rgba(0,0,0,.48); outline: none; }
+.rotating-cards__card:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+.rotating-cards__card img { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; transition: transform .45s cubic-bezier(.2,.8,.2,1); }
+.rotating-cards__card:hover img, .rotating-cards__card:focus-visible img { transform: scale(1.045); }
+.rotating-cards__shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.05) 35%, rgba(0,0,0,.76) 100%); pointer-events: none; }
+.rotating-cards__meta { position: absolute; right: 14px; bottom: 12px; left: 14px; display: flex; align-items: flex-end; justify-content: space-between; gap: 8px; color: rgba(255,255,255,.94); font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace; pointer-events: none; }
+.rotating-cards__meta b { font-size: 10px; font-weight: 500; letter-spacing: .12em; }
+.rotating-cards__meta small { overflow: hidden; max-width: 94px; color: rgba(255,255,255,.72); font-size: 8px; line-height: 1.25; letter-spacing: .06em; text-align: right; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rotating-cards__ring { transition: transform .01ms linear; }
+  .rotating-cards__card img { transition: none; }
+}

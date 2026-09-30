@@ -1,0 +1,252 @@
+.scroll-stack {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  color: #fff;
+  isolation: isolate;
+}
+
+.scroll-stack__pin {
+  position: sticky;
+  top: 96px;
+  display: grid;
+  width: 100%;
+  height: min(78vh, 760px);
+  min-height: 470px;
+  align-content: center;
+  gap: 18px;
+}
+
+.scroll-stack__viewport {
+  position: relative;
+  display: grid;
+  width: 100%;
+  height: calc(100% - 48px);
+  min-height: 420px;
+  place-items: center;
+  transform-style: preserve-3d;
+}
+
+.scroll-stack__viewport::before {
+  position: absolute;
+  z-index: 0;
+  inset: 10% 3%;
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(255, 255, 255, .08), transparent 52%),
+    linear-gradient(145deg, rgba(255, 255, 255, .035), rgba(0, 0, 0, .2));
+  box-shadow: inset 0 0 80px rgba(0, 0, 0, .35), 0 24px 70px rgba(0, 0, 0, .2);
+  content: '';
+  pointer-events: none;
+}
+
+.scroll-stack__cards {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+.scroll-stack__card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(180px, .98fr);
+  width: min(100%, var(--ss-card-width, 880px));
+  height: min(var(--ss-card-height, 68vh), 680px);
+  min-height: 310px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .15);
+  border-radius: var(--ss-card-radius, 22px);
+  background: #171717;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, .45), 0 0 0 1px rgba(255, 255, 255, .03);
+  transform: translate3d(-50%, -50%, 0);
+  transform-origin: center center;
+  transform-style: preserve-3d;
+  will-change: transform, opacity, filter;
+}
+
+.scroll-stack__card::after {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: inherit;
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, .22), inset 0 -80px 100px rgba(0, 0, 0, .18);
+  content: '';
+  pointer-events: none;
+}
+
+.scroll-stack__card-media {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  background: linear-gradient(145deg, color-mix(in srgb, var(--ss-accent, #a3a3a3) 34%, #151515), #090909 74%);
+}
+
+.scroll-stack__card-media::after {
+  position: absolute;
+  z-index: 2;
+  top: 12%;
+  left: 12%;
+  width: 36%;
+  height: 1px;
+  background: var(--ss-accent, #a3a3a3);
+  box-shadow: 0 0 20px var(--ss-accent, #a3a3a3);
+  content: '';
+  opacity: .8;
+}
+
+.scroll-stack__card-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: .84;
+  filter: saturate(.8) contrast(1.04);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.scroll-stack__card-wash {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background:
+    linear-gradient(90deg, transparent 52%, rgba(0, 0, 0, .38)),
+    linear-gradient(0deg, rgba(0, 0, 0, .42), transparent 45%, rgba(255, 255, 255, .05));
+  pointer-events: none;
+}
+
+.scroll-stack__card-content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(28px, 4vw, 58px);
+  background:
+    radial-gradient(circle at 12% 18%, color-mix(in srgb, var(--ss-accent, #a3a3a3) 14%, transparent), transparent 42%),
+    linear-gradient(145deg, #1a1a1a, #0b0b0b);
+}
+
+.scroll-stack__card-eyebrow {
+  margin: 0 0 18px;
+  color: color-mix(in srgb, var(--ss-accent, #a3a3a3) 82%, #fff);
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 10px;
+  letter-spacing: .16em;
+}
+
+.scroll-stack__card-content h3 {
+  max-width: 430px;
+  margin: 0;
+  color: #fafafa;
+  font-size: clamp(28px, 4.2vw, 62px);
+  font-weight: 500;
+  letter-spacing: -.055em;
+  line-height: .98;
+}
+
+.scroll-stack__card-body {
+  max-width: 390px;
+  margin: 24px 0 0;
+  color: rgba(255, 255, 255, .62);
+  font-size: clamp(13px, 1.25vw, 16px);
+  line-height: 1.65;
+}
+
+.scroll-stack__card-accent {
+  display: block;
+  width: 44px;
+  height: 3px;
+  margin-top: 34px;
+  border-radius: 99px;
+  box-shadow: 0 0 18px currentColor;
+  opacity: .9;
+}
+
+.scroll-stack__card-number {
+  position: absolute;
+  z-index: 7;
+  top: 20px;
+  right: 24px;
+  color: rgba(255, 255, 255, .58);
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 10px;
+  letter-spacing: .1em;
+}
+
+.scroll-stack__custom-card {
+  display: grid;
+  place-items: center;
+  padding: 28px;
+}
+
+.scroll-stack__meta {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: min(100%, var(--ss-card-width, 880px));
+  margin: 0 auto;
+}
+
+.scroll-stack__progress {
+  position: relative;
+  flex: 1 1 auto;
+  height: 2px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, .16);
+}
+
+.scroll-stack__progress span {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: #fff;
+  box-shadow: 0 0 16px rgba(255, 255, 255, .8);
+  transition: width .18s ease;
+}
+
+.scroll-stack__counter {
+  min-width: 62px;
+  color: rgba(255, 255, 255, .6);
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 10px;
+  letter-spacing: .11em;
+  text-align: right;
+}
+
+.scroll-stack.is-flip .scroll-stack__cards { transform-style: preserve-3d; }
+.scroll-stack.is-flip .scroll-stack__card { backface-visibility: hidden; }
+
+@media (max-width: 920px) {
+  .scroll-stack__pin { top: 86px; height: min(78vh, 700px); }
+  .scroll-stack__card { grid-template-columns: minmax(0, .92fr) minmax(160px, 1.08fr); }
+  .scroll-stack__card-content { padding: 32px; }
+}
+
+@media (max-width: 620px) {
+  .scroll-stack { --ss-card-height: min(62vh, 520px) !important; }
+  .scroll-stack__pin { top: 78px; height: min(76vh, 590px); min-height: 390px; }
+  .scroll-stack__viewport { min-height: 340px; }
+  .scroll-stack__card { grid-template-columns: 1fr; grid-template-rows: 42% 58%; min-height: 300px; }
+  .scroll-stack__card-media { order: 0; }
+  .scroll-stack__card-content { order: 1; padding: 22px 24px 26px; }
+  .scroll-stack__card-content h3 { font-size: clamp(28px, 10vw, 42px); }
+  .scroll-stack__card-body { margin-top: 14px; font-size: 13px; }
+  .scroll-stack__card-accent { margin-top: 18px; }
+  .scroll-stack__card-number { top: 14px; right: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-stack__progress span { transition: none; }
+}

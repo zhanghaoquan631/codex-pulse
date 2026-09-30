@@ -1,0 +1,66 @@
+.blur-highlight {
+  position: relative;
+  isolation: isolate;
+  filter: blur(var(--blur-highlight-amount));
+  opacity: var(--blur-highlight-opacity);
+  transition:
+    filter var(--blur-highlight-duration) cubic-bezier(.22, 1, .36, 1) var(--blur-highlight-delay),
+    opacity var(--blur-highlight-duration) ease var(--blur-highlight-delay);
+}
+
+.blur-highlight[data-blur-highlight-active='true'] {
+  filter: blur(0);
+  opacity: 1;
+}
+
+.blur-highlight__part {
+  position: relative;
+  display: inline;
+  transition: filter var(--blur-highlight-duration) cubic-bezier(.22, 1, .36, 1) var(--blur-highlight-part-delay),
+    opacity var(--blur-highlight-duration) ease var(--blur-highlight-part-delay);
+}
+
+.blur-highlight__marked {
+  z-index: 0;
+  color: inherit;
+  white-space: nowrap;
+}
+
+.blur-highlight__marked::before {
+  position: absolute;
+  z-index: -1;
+  inset: -0.08em -0.18em;
+  border-radius: 0.2em;
+  background: var(--blur-highlight-color);
+  content: '';
+  opacity: 0.72;
+  transform: scaleX(var(--blur-highlight-marker-scale));
+  transform-origin: var(--blur-highlight-origin);
+  transition: transform var(--blur-highlight-marker-duration) cubic-bezier(.22, 1, .36, 1) var(--blur-highlight-marker-delay);
+}
+
+.blur-highlight[data-blur-highlight-active='true'] .blur-highlight__marked::before {
+  transform: scaleX(1);
+}
+
+.blur-highlight[data-blur-highlight-direction='top'] .blur-highlight__marked::before,
+.blur-highlight[data-blur-highlight-direction='bottom'] .blur-highlight__marked::before {
+  transform: scaleY(var(--blur-highlight-marker-scale));
+}
+
+.blur-highlight[data-blur-highlight-active='true'][data-blur-highlight-direction='top'] .blur-highlight__marked::before,
+.blur-highlight[data-blur-highlight-active='true'][data-blur-highlight-direction='bottom'] .blur-highlight__marked::before {
+  transform: scaleY(1);
+}
+
+.blur-highlight[data-blur-highlight-active='false'] .blur-highlight__marked {
+  filter: blur(var(--blur-highlight-amount));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blur-highlight,
+  .blur-highlight__part,
+  .blur-highlight__marked::before {
+    transition: none !important;
+  }
+}

@@ -1,0 +1,370 @@
+.lenticular-carousel {
+  --lenticular-card-width: 260px;
+  --lenticular-card-gap: 26px;
+  --lenticular-aspect: 3 / 4;
+  --lenticular-radius: 14px;
+  --lenticular-perspective: 1200px;
+  --lenticular-speed: 1;
+  --lenticular-label-color: #fff;
+  --lenticular-strip-count: 56;
+  --lenticular-ridge: .5;
+  --lenticular-foil: .5;
+  --lenticular-foil-scale: 8;
+  --lenticular-scrim: .85;
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  color: #fff;
+  outline: none;
+}
+
+.lenticular-carousel:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, .7);
+  outline-offset: 8px;
+  border-radius: 10px;
+}
+
+.lenticular-carousel__viewport {
+  position: relative;
+  height: min(44vw, 520px);
+  min-height: 390px;
+  overflow: hidden;
+  perspective: var(--lenticular-perspective);
+  perspective-origin: 50% 48%;
+  mask-image: linear-gradient(90deg, transparent 0, #000 5%, #000 95%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 5%, #000 95%, transparent 100%);
+  touch-action: pan-y;
+}
+
+.lenticular-carousel__viewport.is-draggable { cursor: grab; }
+.lenticular-carousel__viewport.is-draggable:active { cursor: grabbing; }
+
+.lenticular-carousel__track {
+  display: flex;
+  width: max-content;
+  min-height: 100%;
+  align-items: center;
+  gap: var(--lenticular-card-gap);
+  transition: transform calc(.68s / var(--lenticular-speed)) cubic-bezier(.2, .82, .2, 1);
+  will-change: transform;
+}
+
+.lenticular-carousel__viewport:active .lenticular-carousel__track { transition-duration: 0s; }
+
+.lenticular-carousel__card {
+  position: relative;
+  display: block;
+  flex: 0 0 var(--lenticular-card-width);
+  width: var(--lenticular-card-width);
+  aspect-ratio: var(--lenticular-aspect);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--lenticular-radius);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  isolation: isolate;
+  opacity: 1;
+  transform: translate3d(0, var(--lenticular-card-y, 0px), var(--lenticular-card-z, 0px)) scale(var(--lenticular-card-scale, 1)) rotateY(var(--lenticular-angle, 0deg));
+  transform-style: preserve-3d;
+  filter: brightness(var(--lenticular-card-dim, 1));
+  transition: transform calc(.58s / var(--lenticular-speed)) cubic-bezier(.2, .82, .2, 1), filter .48s ease, opacity .48s ease;
+  will-change: transform, filter;
+}
+
+.lenticular-carousel__card::before {
+  position: absolute;
+  z-index: -1;
+  inset: 6% -10% -4%;
+  border-radius: calc(var(--lenticular-radius) * 1.4);
+  background: rgba(0, 0, 0, .7);
+  box-shadow: 0 28px 56px rgba(0, 0, 0, .52);
+  content: '';
+  filter: blur(17px);
+  opacity: .72;
+  transform: translateZ(-18px);
+  transition: opacity .42s ease, transform .5s ease;
+}
+
+.lenticular-carousel__card.is-active { z-index: 3; }
+.lenticular-carousel__card.is-hovered { filter: brightness(1.04); }
+.lenticular-carousel__card.is-hovered::before { opacity: .98; transform: translateY(5px) translateZ(-18px) scale(1.04); }
+
+.lenticular-carousel__card:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, .92);
+  outline-offset: 6px;
+}
+
+.lenticular-carousel__surface {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: inherit;
+  background: #232323;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .1);
+  clip-path: inset(0 round var(--lenticular-radius));
+  transform: translateZ(0);
+  transform-style: preserve-3d;
+}
+
+.lenticular-carousel__face {
+  position: absolute;
+  inset: -5%;
+  display: block;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+  backface-visibility: hidden;
+}
+
+.lenticular-carousel__face img {
+  display: block;
+  width: 110%;
+  height: 110%;
+  max-width: none;
+  object-fit: cover;
+  user-select: none;
+  transition: transform .16s linear, filter .4s ease;
+  will-change: transform;
+}
+
+.lenticular-carousel__face--front {
+  z-index: 1;
+  opacity: calc(1 - (var(--lenticular-turn, 0) * .82));
+  transform: translate3d(calc(var(--lenticular-refraction-x, 0px) * -1), var(--lenticular-refraction-y, 0px), 0);
+  transition: opacity calc(.42s / var(--lenticular-speed)) ease, transform .16s linear;
+}
+
+.lenticular-carousel__face--front img {
+  transform: scale(1.045);
+  filter: saturate(.88) contrast(1.04);
+}
+
+.lenticular-carousel__face--reveal {
+  z-index: 2;
+  opacity: var(--lenticular-turn, 0);
+  transform: translate3d(var(--lenticular-refraction-x, 0px), calc(var(--lenticular-refraction-y, 0px) * -1), 2px);
+  transition: opacity calc(.48s / var(--lenticular-speed)) ease, transform .16s linear;
+}
+
+.lenticular-carousel__face--reveal img {
+  transform: scale(1.12);
+  filter: saturate(1.18) contrast(1.08) brightness(.72);
+}
+
+.lenticular-carousel__foil {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: block;
+  background:
+    linear-gradient(112deg, transparent 7%, rgba(255, 72, 193, .46) 17%, rgba(95, 232, 255, .38) 28%, rgba(255, 232, 104, .42) 41%, rgba(104, 255, 189, .34) 54%, rgba(139, 113, 255, .42) 69%, transparent 84%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, .05) 0 2px, rgba(255, 255, 255, 0) 2px calc(100% / var(--lenticular-foil-scale, 8)));
+  background-position: calc(var(--lenticular-sweep, .5) * 100% - 50%) 0, calc(var(--lenticular-sweep, .5) * 100%) 0;
+  background-size: 180% 100%, 100% 100%;
+  mix-blend-mode: screen;
+  opacity: calc(var(--lenticular-foil, .5) * .82);
+  pointer-events: none;
+}
+
+.lenticular-carousel__scrim {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: block;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 42%, rgba(0, 0, 0, calc(var(--lenticular-scrim, .85) * .18)) 59%, rgba(0, 0, 0, var(--lenticular-scrim, .85)) 100%);
+  pointer-events: none;
+}
+
+.lenticular-carousel__label {
+  position: absolute;
+  z-index: 3;
+  right: 18px;
+  bottom: 16px;
+  left: 18px;
+  display: block;
+  overflow: hidden;
+  font-family: Geist, ui-sans-serif, system-ui, sans-serif;
+  line-height: 1.2;
+  text-align: left;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: calc(var(--lenticular-turn, 0) * .94);
+  transform: translateY(calc((1 - var(--lenticular-turn, 0)) * 10px));
+  transition: opacity .42s ease, transform .5s cubic-bezier(.2, .8, .2, 1);
+  text-shadow: 0 2px 14px rgba(0, 0, 0, .68);
+}
+
+.lenticular-carousel__label small,
+.lenticular-carousel__label strong { display: block; }
+.lenticular-carousel__label small { margin-bottom: 5px; font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 8px; font-weight: 500; letter-spacing: .13em; line-height: 1.2; opacity: .72; }
+.lenticular-carousel__label strong { overflow: hidden; font-size: 14px; font-weight: 500; letter-spacing: -.02em; line-height: 1.2; text-overflow: ellipsis; text-transform: none; white-space: nowrap; }
+
+.lenticular-carousel__ribs {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  border-radius: inherit;
+  opacity: calc(var(--lenticular-turn, 0) * var(--lenticular-ridge, .5));
+  pointer-events: none;
+  transition: opacity .34s ease;
+}
+
+.lenticular-carousel__ribs::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 18%, rgba(255, 255, 255, .42) 49%, transparent 74%);
+  background-position: calc(var(--lenticular-sweep, .5) * 100%) 0;
+  background-size: 190% 100%;
+  content: '';
+  mix-blend-mode: screen;
+  opacity: .8;
+}
+
+.lenticular-carousel__ribs i {
+  position: absolute;
+  top: -2%;
+  bottom: -2%;
+  left: calc(var(--lenticular-strip-index, 0) * 100% / var(--lenticular-strip-count, 56));
+  display: block;
+  width: calc(100% / var(--lenticular-strip-count, 56));
+  border-right: 1px solid rgba(255, 255, 255, .24);
+  background: linear-gradient(90deg, rgba(255, 255, 255, .12), transparent 42%, rgba(0, 0, 0, .18));
+  transform: translateX(calc((var(--lenticular-sweep, .5) - .5) * 16px)) skewX(calc((var(--lenticular-sweep, .5) - .5) * -2deg));
+  transform-origin: 50% 50%;
+}
+
+.lenticular-carousel__glint {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  display: block;
+  border-radius: inherit;
+  background: radial-gradient(90px 220px at calc(var(--lenticular-sweep, .5) * 100%) 50%, rgba(255, 255, 255, .38), transparent 72%);
+  mix-blend-mode: screen;
+  opacity: calc(var(--lenticular-turn, 0) * var(--lenticular-glint, 0));
+  pointer-events: none;
+}
+
+.lenticular-carousel__edge-glow {
+  position: absolute;
+  z-index: 6;
+  inset: 11% 2% 11%;
+  border: 1px solid rgba(255, 255, 255, .07);
+  border-radius: 30px;
+  box-shadow: inset 0 0 80px rgba(255, 255, 255, .025);
+  pointer-events: none;
+}
+
+.lenticular-carousel__navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 38px;
+  margin-top: 17px;
+}
+
+.lenticular-carousel__arrow {
+  display: grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: currentColor;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 1;
+  opacity: .56;
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+.lenticular-carousel__arrow:hover:not(:disabled) { opacity: 1; transform: scale(1.12); }
+.lenticular-carousel__arrow:disabled { cursor: not-allowed; opacity: .15; }
+.lenticular-carousel__arrow:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; border-radius: 4px; }
+
+.lenticular-carousel__dots {
+  display: flex;
+  width: min(224px, 56vw);
+  align-items: center;
+  gap: 5px;
+}
+
+.lenticular-carousel__dots button {
+  position: relative;
+  display: block;
+  flex: 1 1 0;
+  height: 22px;
+  margin: 0;
+  padding: 9px 0;
+  border: 0;
+  background: transparent;
+  color: currentColor;
+  cursor: pointer;
+  opacity: .42;
+}
+
+.lenticular-carousel__dots button::before,
+.lenticular-carousel__dots button span {
+  position: absolute;
+  right: 0;
+  left: 0;
+  display: block;
+  height: 2px;
+  border-radius: 999px;
+  content: '';
+}
+
+.lenticular-carousel__dots button::before { background: currentColor; opacity: .25; }
+.lenticular-carousel__dots button span { background: currentColor; transform: scaleX(0); transform-origin: left center; transition: transform .48s ease; }
+.lenticular-carousel__dots button.is-active { opacity: 1; }
+.lenticular-carousel__dots button.is-active span { transform: scaleX(1); }
+.lenticular-carousel__dots button:hover { opacity: .9; }
+.lenticular-carousel__dots button:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; border-radius: 4px; }
+
+@media (max-width: 920px) {
+  .lenticular-carousel__viewport { height: min(58vw, 520px); min-height: 390px; }
+}
+
+@media (max-width: 590px) {
+  .lenticular-carousel__viewport {
+    height: 365px;
+    min-height: 365px;
+    mask-image: linear-gradient(90deg, transparent 0, #000 4%, #000 96%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 4%, #000 96%, transparent 100%);
+  }
+
+  .lenticular-carousel__card {
+    flex-basis: min(var(--lenticular-card-width), 64vw);
+    width: min(var(--lenticular-card-width), 64vw);
+  }
+
+  .lenticular-carousel__navigation { gap: 8px; margin-top: 13px; }
+  .lenticular-carousel__dots { width: min(190px, 58vw); gap: 3px; }
+  .lenticular-carousel__label { right: 12px; bottom: 12px; left: 12px; }
+  .lenticular-carousel__label small { margin-bottom: 4px; font-size: 7px; }
+  .lenticular-carousel__label strong { font-size: 11px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lenticular-carousel__track,
+  .lenticular-carousel__card,
+  .lenticular-carousel__face,
+  .lenticular-carousel__face img,
+  .lenticular-carousel__foil,
+  .lenticular-carousel__label,
+  .lenticular-carousel__ribs,
+  .lenticular-carousel__dots button span { transition-duration: 0s !important; }
+}

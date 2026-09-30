@@ -1,0 +1,192 @@
+{
+  "version": 1,
+  "name": "灵感库 · 01 横屏人物主讲",
+  "current_scene": "灵感库 · 01 横屏人物主讲",
+  "current_program_scene": "灵感库 · 01 横屏人物主讲",
+  "scene_order": [
+    {
+      "name": "灵感库 · 01 横屏人物主讲"
+    }
+  ],
+  "sources": [
+    {
+      "name": "黑色背景",
+      "uuid": "74fb8fd5-c807-5050-aa1a-a4b9e12a26eb",
+      "id": "color_source",
+      "versioned_id": "color_source_v3",
+      "settings": {
+        "color": 4278190080,
+        "width": 1920,
+        "height": 1080
+      },
+      "mixers": 0,
+      "volume": 1.0,
+      "balance": 0.5,
+      "sync": 0,
+      "enabled": true,
+      "muted": false,
+      "monitoring_type": 0,
+      "hotkeys": {},
+      "filters": [],
+      "private_settings": {}
+    },
+    {
+      "name": "人物摄像头（双击选择设备）",
+      "uuid": "9fb7d6f7-4210-53b6-93f3-71a7a8c3f32e",
+      "id": "dshow_input",
+      "versioned_id": "dshow_input",
+      "settings": {
+        "video_device_id": "",
+        "active": true,
+        "res_type": 0,
+        "use_custom_audio_device": false,
+        "audio_device_id": "",
+        "deactivate_when_not_showing": true
+      },
+      "mixers": 0,
+      "volume": 1.0,
+      "balance": 0.5,
+      "sync": 0,
+      "enabled": true,
+      "muted": true,
+      "monitoring_type": 0,
+      "hotkeys": {},
+      "filters": [],
+      "private_settings": {}
+    },
+    {
+      "name": "灵感库 · 01 横屏人物主讲",
+      "uuid": "90dc6e35-46a7-5c67-b071-171faeea68a4",
+      "id": "scene",
+      "versioned_id": "scene",
+      "settings": {
+        "id_counter": 2,
+        "custom_size": true,
+        "cx": 1920,
+        "cy": 1080,
+        "items": [
+          {
+            "name": "黑色背景",
+            "source_uuid": "74fb8fd5-c807-5050-aa1a-a4b9e12a26eb",
+            "id": 1,
+            "visible": true,
+            "locked": true,
+            "pos": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "scale": {
+              "x": 1.0,
+              "y": 1.0
+            },
+            "rot": 0.0,
+            "align": 5,
+            "bounds_type": 2,
+            "bounds_align": 0,
+            "bounds_crop": false,
+            "bounds": {
+              "x": 1920.0,
+              "y": 1080.0
+            },
+            "crop_left": 0,
+            "crop_top": 0,
+            "crop_right": 0,
+            "crop_bottom": 0,
+            "scale_filter": "lanczos",
+            "blend_method": "default",
+            "blend_type": "normal",
+            "private_settings": {}
+          },
+          {
+            "name": "人物摄像头（双击选择设备）",
+            "source_uuid": "9fb7d6f7-4210-53b6-93f3-71a7a8c3f32e",
+            "id": 2,
+            "visible": true,
+            "locked": false,
+            "pos": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "scale": {
+              "x": 1.0,
+              "y": 1.0
+            },
+            "rot": 0.0,
+            "align": 5,
+            "bounds_type": 3,
+            "bounds_align": 0,
+            "bounds_crop": true,
+            "bounds": {
+              "x": 1920.0,
+              "y": 1080.0
+            },
+            "crop_left": 0,
+            "crop_top": 0,
+            "crop_right": 0,
+            "crop_bottom": 0,
+            "scale_filter": "lanczos",
+            "blend_method": "default",
+            "blend_type": "normal",
+            "private_settings": {}
+          }
+        ]
+      },
+      "mixers": 1,
+      "volume": 1.0,
+      "balance": 0.5,
+      "sync": 0,
+      "enabled": true,
+      "muted": false,
+      "monitoring_type": 0,
+      "hotkeys": {},
+      "filters": [],
+      "private_settings": {}
+    }
+  ],
+  "groups": [],
+  "transitions": [],
+  "quick_transitions": [],
+  "current_transition": "Fade",
+  "transition_duration": 300,
+  "preview_locked": false,
+  "DesktopAudioDevice1": {
+    "name": "系统声音（默认播放设备）",
+    "uuid": "5496a812-88d6-5bce-818d-d4713438a4d1",
+    "id": "wasapi_output_capture",
+    "versioned_id": "wasapi_output_capture",
+    "settings": {
+      "device_id": "default",
+      "use_device_timing": true
+    },
+    "mixers": 1,
+    "volume": 0.5,
+    "balance": 0.5,
+    "sync": 0,
+    "enabled": true,
+    "muted": false,
+    "monitoring_type": 0,
+    "hotkeys": {},
+    "filters": [],
+    "private_settings": {}
+  },
+  "AuxAudioDevice1": {
+    "name": "麦克风（默认输入设备）",
+    "uuid": "c9c1ccaf-97aa-5c57-8826-e3f1038801a9",
+    "id": "wasapi_input_capture",
+    "versioned_id": "wasapi_input_capture",
+    "settings": {
+      "device_id": "default",
+      "use_device_timing": false
+    },
+    "mixers": 1,
+    "volume": 1.0,
+    "balance": 0.5,
+    "sync": 0,
+    "enabled": true,
+    "muted": false,
+    "monitoring_type": 0,
+    "hotkeys": {},
+    "filters": [],
+    "private_settings": {}
+  }
+}

@@ -1,0 +1,243 @@
+.sg-graph {
+  position: relative;
+  display: block;
+  overflow: visible;
+  color: #111827;
+  isolation: isolate;
+}
+
+.sg-graph__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.sg-graph__line,
+.sg-graph__area {
+  transform-origin: center;
+  transition: opacity 220ms ease;
+}
+
+.sg-graph__line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: sg-draw var(--sg-duration, 2s) cubic-bezier(0.65, 0, 0.35, 1)
+    forwards;
+}
+
+.sg-graph__area {
+  opacity: 0;
+  animation: sg-fade-in 600ms ease var(--sg-duration, 2s) forwards;
+}
+
+.sg-graph[data-animate-state="hidden"] .sg-graph__line,
+.sg-graph[data-animate-state="hidden"] .sg-graph__area,
+.sg-graph[data-animate-state="hidden"] .sg-graph__dot {
+  animation-play-state: paused;
+}
+
+.sg-graph__point {
+  cursor: pointer;
+  outline: none;
+}
+
+.sg-graph__hit-area {
+  pointer-events: all;
+}
+
+.sg-graph__dot {
+  opacity: 0;
+  transform-origin: center;
+  transform-box: fill-box;
+  transform: scale(0);
+  pointer-events: none;
+  animation: sg-dot-in 300ms ease forwards;
+}
+
+.sg-graph__point.is-active .sg-graph__dot {
+  transform: scale(1.5);
+}
+
+.sg-graph__point:focus-visible .sg-graph__dot {
+  stroke: #111827;
+  stroke-width: 3;
+}
+
+.sg-graph__glow {
+  opacity: 0.28;
+  filter: blur(8px);
+  pointer-events: none;
+  animation: sg-glow-in 200ms ease forwards;
+}
+
+.sg-graph__tooltip-anchor {
+  overflow: visible;
+  pointer-events: none;
+}
+
+.sg-graph__tooltip-wrap {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  transform-origin: 50% 100%;
+  transition: transform 140ms ease-out;
+}
+
+.sg-graph__tooltip {
+  position: relative;
+  min-width: 72px;
+  max-width: 150px;
+  padding: 8px 12px;
+  border: 1px solid rgba(209, 213, 219, 0.9);
+  border-radius: 9px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(17, 24, 39, 0.16);
+  color: #111827;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.sg-graph__value {
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+.sg-graph__label {
+  margin-top: 4px;
+  overflow: hidden;
+  color: #6b7280;
+  font-size: 11px;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+}
+
+.sg-graph__difference {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+.sg-graph__difference.is-up {
+  color: #34d399;
+}
+
+.sg-graph__difference.is-down {
+  color: #f87171;
+}
+
+.sg-graph__caret {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+  border-top: 4px solid #fff;
+  transform: translate(-50%, 100%);
+}
+
+@keyframes sg-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes sg-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes sg-dot-in {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes sg-glow-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.28;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .sg-graph {
+    color: #f3f4f6;
+  }
+
+  .sg-graph__tooltip {
+    border-color: #374151;
+    background: #1a1a1a;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.36);
+    color: #f3f4f6;
+  }
+
+  .sg-graph__label {
+    color: #9ca3af;
+  }
+
+  .sg-graph__caret {
+    border-top-color: #1a1a1a;
+  }
+}
+
+/* Host applications that use a class-based theme (Tailwind/shadcn style). */
+.dark .sg-graph,
+[data-theme="dark"] .sg-graph {
+  color: #f3f4f6;
+}
+
+.dark .sg-graph__tooltip,
+[data-theme="dark"] .sg-graph__tooltip {
+  border-color: #374151;
+  background: #1a1a1a;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.36);
+  color: #f3f4f6;
+}
+
+.dark .sg-graph__label,
+[data-theme="dark"] .sg-graph__label {
+  color: #9ca3af;
+}
+
+.dark .sg-graph__caret,
+[data-theme="dark"] .sg-graph__caret {
+  border-top-color: #1a1a1a;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sg-graph__line,
+  .sg-graph__area,
+  .sg-graph__dot,
+  .sg-graph__glow {
+    animation-duration: 1ms;
+    animation-delay: 0ms;
+  }
+
+  .sg-graph__tooltip-wrap {
+    transition: none;
+  }
+}
+
+

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ME.zip 阅读与研究详情">
+  <title>ME.zip Capture · 阅读详情</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./resources.css">
+  <link rel="stylesheet" href="./reading.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="rail">
+      <a class="brand" href="./index.html#overview" aria-label="ME.zip 本地监控系统"><span class="brand-mark">ME<span>.zip</span></span><small>LOCAL MEMORY</small></a>
+      <nav aria-label="本地监控导航"><a href="./index.html#overview">⌂<span>总览</span></a><a href="./watch.html">▶<span>观看记录</span></a><a href="./resources.html">▤<span>网页 / 文章 / 代码</span></a><a class="active" href="./reading.html">◉<span>阅读 / 研究历史</span></a><a href="/x-link-archive-v1/index.html">🔗<span>X 链接收集</span></a><a href="./index.html#special">★<span>私人资料库</span></a></nav>
+      <div class="rail-foot"><span class="status-dot"></span><span>READING HISTORY</span></div>
+    </aside>
+    <main class="main">
+      <header class="topbar"><div><p class="eyebrow">READING / DETAIL</p><h1>阅读 / 研究详情</h1><p class="lede">只展示从 ME.zip 明确打开过的历史；不推断外部网页的阅读时长。</p></div><div class="top-actions"><span id="detail-status" class="pill pill-muted">正在读取…</span><a class="button button-quiet" href="./reading.html">返回阅读历史</a></div></header>
+      <section id="detail-loading" class="empty panel"><strong>正在读取详情…</strong><span>只从本地桥接服务读取。</span></section>
+      <section id="detail-error" class="empty panel hidden" role="alert"></section>
+      <section id="detail-content" class="hidden"></section>
+    </main>
+  </div>
+  <script src="./reading-detail-app.js"></script>
+</body>
+</html>

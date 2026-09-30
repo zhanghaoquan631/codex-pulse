@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="description" content="ME·zip Pro · 登录个人空间，探索作品、收藏照片和继续游戏。" />
+    <meta name="app-id" content="tom-profile-card-triple-v15" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="/account/media/ripple-flower.jpg" as="image" fetchpriority="high" crossorigin="anonymous" />
+    <link rel="preload" href="/account/assets/geist-22a5144ee8d83bca-s.woff2" as="font" type="font/woff2" crossorigin />
+    <title>Sign in | ME·zip Pro</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <div id="file-protocol-help" hidden style="max-width:720px;margin:48px auto;padding:24px;border:1px solid #555;border-radius:16px;background:#151515;color:#f4f4f4;font:16px/1.6 system-ui,sans-serif">
+      这是 Vite/React 应用，直接双击 HTML 文件会被浏览器的 <code>file://</code> 安全策略拦截。请先运行项目目录中的 <code>start-tom-v15.cmd</code>，再打开
+      <a href="/#login" style="color:#b99cff">/#login</a>。
+    </div>
+    <script>
+      if (location.protocol === 'file:') {
+        document.getElementById('file-protocol-help').hidden = false;
+      }
+    </script>
+    <script type="module" src="./src/main.jsx"></script>
+  </body>
+</html>

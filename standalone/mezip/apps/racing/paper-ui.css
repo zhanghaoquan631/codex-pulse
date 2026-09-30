@@ -1,0 +1,157 @@
+@font-face{font-family:Sketch Han;src:url('/racing/fonts/sketch-han.woff2') format('woff2');font-style:normal;font-weight:400;font-display:swap}
+@font-face{font-family:Rock Salt;src:url('/racing/fonts/rock-salt.woff2') format('woff2');font-style:normal;font-weight:400;font-display:swap}
+
+/* Prevent focus/scrollIntoView from scrolling the fixed game canvas. */
+.experience-shell,.experience-shell__hud,.racing-hud{overflow:clip}
+
+/* A folded instruction card keeps the original HUD corners free. */
+#paper-tools{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:10000;max-width:calc(100vw - 24px);color:#28567d;font:13px/1.5 "Sketch Han",system-ui,sans-serif}
+#paper-tools[data-scene=home]{top:70px}
+#paper-tools *{box-sizing:border-box}
+#paper-tools .paper-tools__details{border:1.5px solid #28567d;border-radius:3px 8px 4px 6px;background:#faf6e9f5;box-shadow:3px 3px 0 #28567d25}
+#paper-tools summary{display:flex;align-items:center;gap:10px;min-height:34px;padding:6px 12px;cursor:pointer;list-style:none;white-space:nowrap}
+#paper-tools summary::-webkit-details-marker{display:none}
+#paper-tools summary:after{content:'⌄';font:16px/1 system-ui,sans-serif}
+#paper-tools details[open] summary:after{content:'⌃'}
+#paper-tools summary:focus-visible,#paper-tools a:focus-visible{outline:2px dashed #28567d;outline-offset:3px}
+#paper-tools .paper-tools__brand{font-size:17px;letter-spacing:.04em}
+#paper-tools .paper-tools__local{padding:0 5px;border:1px solid #28567d70;border-radius:3px;font-size:11px}
+#paper-tools .paper-tools__more{font-size:11px;opacity:.85}
+#paper-tools .paper-tools__panel{width:344px;max-width:calc(100vw - 28px);padding:12px 14px 14px;border-top:1px dashed #28567d60;max-height:calc(100dvh - 136px);overflow:auto}
+#paper-tools .paper-tools__heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+#paper-tools a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+#paper-tools .paper-tools__style{font-size:11px}
+#paper-tools .paper-tools__tracks{display:flex;gap:8px}
+#paper-tools .paper-tools__tracks a{flex:1;padding:7px 8px;border:1px solid #28567d77;border-radius:4px 2px 5px 3px;text-align:center;text-decoration:none;font:12px/1.4 system-ui,sans-serif}
+#paper-tools .paper-tools__tracks a[aria-current]{background:#28567d;color:#fffdf4}
+#paper-tools .paper-tools__tracks a:hover{box-shadow:2px 2px 0 #28567d30}
+#paper-tools .paper-tools__reload{margin:6px 0 12px;font-size:11px;color:#526c80}
+#paper-tools .paper-tools__keys{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;margin:0;padding:12px 0;border-top:1px dashed #28567d55;border-bottom:1px dashed #28567d55}
+#paper-tools .paper-tools__keys div{display:flex;flex-wrap:wrap;align-items:center;gap:4px 7px}
+#paper-tools dt,#paper-tools dd{margin:0}
+#paper-tools kbd{display:inline-block;min-width:22px;padding:1px 4px;border:1px solid #28567d66;border-radius:3px;background:#fffef7;font:10px/1.6 ui-monospace,monospace;text-align:center}
+#paper-tools dd{font-size:12px}
+#paper-tools .paper-tools__note{margin:10px 0 0;font-size:12px;line-height:1.65;color:#45647b}
+.home-thumb[data-paper-unavailable=true]{cursor:not-allowed}
+.home-thumb[data-paper-unavailable=true]:after{content:'本地版暂不可用';position:absolute;inset:auto 0 0;padding:5px 3px;background:#f5f0ddec;color:#28567d;font:12px/1.4 "Sketch Han",system-ui,sans-serif;z-index:2}
+.settings-panel__section--phone[data-paper-unavailable=true]>:not(.settings-panel__section-head):not(.paper-local-service-note),.settings-panel__section--phone[data-paper-unavailable=true] .settings-live-input,.settings-panel__section--phone[data-paper-unavailable=true] button{display:none}
+
+/* The game sets HUD variables inline. Override only its paper theme, retaining
+   the original positions, numerical fonts and animation behavior. */
+html[data-paper=on]{
+  --paper:#f5f0dd;--paper-white:#fffdf4;--pen:#28567d;--pen-soft:#526f84;
+  --hud-text:#234b6d!important;--hud-text-soft:#3c607a!important;
+  --hud-muted:#526f84!important;--hud-muted-ghost:#8b9ba6!important;
+  --hud-line-soft:#28567d44!important;--hud-border-strong:#28567d80!important;
+  --hud-shell:#fffdf4df!important;--hud-shell-strong:#fffdf4ed!important;
+  --hud-panel:#fffdf4ed!important;--hud-accent:#28567d!important;
+  --hud-accent-soft:#28567d20!important;--hud-shadow:2px 3px 0 #28567d20!important;
+  --hud-offline:#758390!important;--hud-car-fill:#f5f0dd!important;
+  --hud-car-stroke:#28567d!important;--hud-track:#28567d35!important;
+  --hud-ring-fill:#28567d!important;--hud-brake-fill:#b74738!important;
+  --hud-throttle-fill:#547846!important;--hud-rpm-fill:#28567d!important;
+  --hud-steer-dot:#28567d!important;--hud-digit-glow:transparent!important;
+}
+html[data-paper=on] :is(body,#root,.container){background-color:var(--paper)}
+html[data-paper=on] .home-screen{color:var(--pen);background:var(--paper);--home-accent:#28567d;--home-accent-soft:#28567d20}
+html[data-paper=on] .home-screen:before,html[data-paper=on] .experience-shell:after{background:var(--paper)}
+html[data-paper=on] .home-screen:after{background-image:linear-gradient(#28567d0b 1px,transparent 1px),linear-gradient(90deg,#28567d08 1px,transparent 1px)}
+html[data-paper=on] .home-info__code{color:#28567d0c}
+html[data-paper=on] :is(.home-info__title,.home-info__status,.home-driver__input,.home-distance__value,.home-clock__time,.home-clock__date,.home-track__option,.home-thumb__label,.home-corner-panels__credit a,.home-corner-panels__copy a,.home-name-prompt__title,.home-name-prompt__action){color:var(--pen)}
+html[data-paper=on] :is(.home-info__eyebrow,.home-info__desc,.home-driver__label,.home-track__label,.home-car-color__label,.home-car-color__meta,.home-distance__unit,.home-clock__meta,.home-lb__label,.home-lb__loading,.home-lb__empty,.home-lb__rank,.home-lb__name,.home-lb__time,.home-corner-panels__eyebrow,.home-corner-panels__copy,.home-corner-panels__role,.home-corner-panels__trigger--version,.home-name-prompt__eyebrow,.home-name-prompt__copy){color:var(--pen-soft)}
+html[data-paper=on] :is(.home-btn--settings,.home-driver,.home-track,.home-car-color,.home-distance,.home-clock,.home-clock__date,.home-car-color__picker,.home-screen .input-device-badge,.home-thumb__label,.home-corner-panels__panel,.home-name-prompt){color:var(--pen);border-color:#28567d55;background:var(--paper-white);box-shadow:2px 2px 0 #28567d16}
+html[data-paper=on] :is(.home-screen .input-device-badge__value,.home-screen .action-hints__item){color:var(--pen-soft)}
+html[data-paper=on] .home-driver__input::placeholder{color:#607b91}
+html[data-paper=on] .home-track__option.is-active{color:var(--paper-white);background:var(--pen);border-color:var(--pen)}
+html[data-paper=on] .home-thumb__label:after{border-top-color:var(--paper-white)}
+html[data-paper=on] .home-topbar__logo{filter:brightness(0) saturate(100%) invert(29%) sepia(29%) saturate(982%) hue-rotate(164deg) brightness(92%) contrast(90%)}
+
+html[data-paper=on] .racing-speedometer{isolation:isolate}
+html[data-paper=on] .racing-speedometer:before{content:'';position:absolute;inset:4%;z-index:-1;border:1px solid #28567d2b;border-radius:48% 51% 49% 52%;background:#fffdf4dc;box-shadow:2px 3px 0 #28567d15}
+html[data-paper=on] :is(.racing-speedometer__digits,.racing-speedometer__gear-item,.racing-mode-intro__label,.racing-flash__time,.racing-hud__press-start){text-shadow:none}
+html[data-paper=on] .racing-grip-wheel__body{border-color:var(--pen)}
+html[data-paper=on] .racing-grip__car-image{mix-blend-mode:multiply;filter:sepia(.5) saturate(.6)}
+html[data-paper=on] .racing-minimap__track{filter:brightness(0) saturate(100%) invert(29%) sepia(29%) saturate(982%) hue-rotate(164deg) brightness(92%) contrast(90%);opacity:.9}
+html[data-paper=on] .racing-minimap__cursor{filter:none}
+html[data-paper=on] .racing-minimap__cursor-mid{background:#fffdf4;box-shadow:none}
+html[data-paper=on] .racing-minimap__cursor-core{background:#b74738;box-shadow:none}
+html[data-paper=on] .racing-minimap__ghost-cursor .racing-minimap__remote-cursor-core{background:#735087;box-shadow:none}
+html[data-paper=on] :is(.racing-timing,.racing-lap-counter,.racing-distance,.racing-ghost-source,.lb-panel,.lb-modal){border-radius:4px 8px 5px 7px;border-color:#28567d60}
+html[data-paper=on] .racing-timing__sector{background:#28567d08}
+html[data-paper=on] .racing-timing__sector.is-active{background:#28567d15}
+html[data-paper=on] .racing-timing__sector.is-pb{background:#5478461c}
+html[data-paper=on] .racing-timing__sector.is-pb .racing-timing__sector-time{color:#406538}
+html[data-paper=on] :is(.racing-timing__pb-label,.racing-timing__pb-time,.racing-timing__history-row.is-pb .racing-timing__history-idx,.racing-timing__history-row.is-pb .racing-timing__history-time){color:#735087}
+html[data-paper=on] .racing-timing.is-invalid .racing-timing__lap-time{color:#a83830}
+html[data-paper=on] .racing-timing__pb-share-icon{filter:none}
+html[data-paper=on] .racing-hud__press-start{padding:8px 12px;border:1px solid #28567d55;border-radius:4px;background:#fffdf4ed}
+
+html[data-paper=on] .settings-overlay{
+  --settings-accent:#28567d;--settings-accent-soft:#28567d20;
+  --settings-bg-start:#f5f0dd;--settings-bg-mid:#f8f3e3;--settings-bg-end:#f5f0dd;
+  --settings-grid-line-y:#28567d09;--settings-grid-line-x:#28567d08;
+  --settings-chrome-border:#28567d44;--settings-chrome-fill:#fffdf4;--settings-chrome-fill-strong:#e8e5d8;
+  --settings-panel-border:#28567d55;--settings-section-fill:#fffdf4d9;--settings-control-fill:#f5f0dd;
+  --settings-text:#28567d;--settings-muted:#45647b;--settings-soft:#526f84;
+  --settings-shadow:2px 3px 0 #28567d16;
+}
+html[data-paper=on] :is(.settings-overlay .input-device-badge,.settings-overlay .input-device-badge__value,.settings-panel__close,.settings-switch,.settings-live-input,.settings-toggle-arrow,.settings-toggle-display,.settings-info-button,.settings-action,.settings-overlay .action-hints__item){color:var(--pen)}
+@media(max-width:700px){
+  #paper-tools{top:8px}
+  #paper-tools[data-scene=home]{top:auto;bottom:46px}
+  #paper-tools summary{padding:5px 8px;gap:6px;min-height:30px}
+  #paper-tools .paper-tools__brand{font-size:14px}
+  #paper-tools .paper-tools__more{font-size:10px}
+  #paper-tools[data-scene=home] .paper-tools__panel{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);border:1px solid #28567d;border-radius:5px;background:#faf6e9fa;box-shadow:2px 2px 0 #28567d25}
+}
+@media(max-width:420px){#paper-tools .paper-tools__more{display:none}}
+.home-screen [data-competition-entry]{position:relative}
+.home-screen [data-competition-entry] .competition-mode-label{position:absolute;bottom:4px;left:4px;right:4px;padding:7px 4px;background:#f5f0dfed;color:#274f6a;font:600 11px/1.4 sans-serif;border:1px solid #274f6a;border-radius:3px}
+.paper-tools__competition{display:block;text-align:center;padding:9px;border:1px solid currentColor;color:inherit;font-weight:700;text-decoration:none}
+
+/* Append to paper-ui.css. The card occupies normal home layout after mount. */
+.paper-race-entry{color:#28567d;background:#fffdf4f5;border:1.5px solid #28567d;border-radius:7px 11px 6px 9px;box-shadow:3px 3px 0 #28567d20;padding:12px;font-family:"Sketch Han","Rock Salt",cursive;box-sizing:border-box;isolation:isolate}
+.paper-race-entry[hidden]{display:none!important}
+.paper-race-entry[data-placement=loading]{position:fixed;z-index:35;left:50%;bottom:max(28px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(580px,calc(100% - 32px))}
+.paper-race-entry[data-placement=home]{position:relative;z-index:2;width:100%;max-width:590px;margin:3px 0 1px}
+.paper-race-entry__heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;font-size:17px;line-height:1.3}
+.paper-race-entry__heading>span{font-size:12px;white-space:nowrap;opacity:.8}
+.paper-race-entry__actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.paper-race-entry__actions>a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:66px;padding:9px 8px;text-align:center;color:#28567d;background:#f5f0dd;border:1.5px solid #28567d;border-radius:5px 8px 6px 4px;text-decoration:none;box-sizing:border-box;box-shadow:2px 2px 0 #28567d22;cursor:pointer}
+.paper-race-entry__actions>a[data-race-intent=ai]{background:#28567d;color:#fffdf4;transform:rotate(.3deg)}
+.paper-race-entry__actions>a>strong{font-size:19px;font-weight:700;line-height:1.3}
+.paper-race-entry__actions>a>span{font-size:11px;line-height:1.35}
+.paper-race-entry__actions>a:hover{box-shadow:3px 4px 0 #28567d35;translate:0 -1px}
+.paper-race-entry__actions>a:focus-visible{outline:3px solid #b74738;outline-offset:4px}
+.home-screen--unrevealed .home-info>.paper-race-entry{opacity:1!important;transform:none!important;filter:none!important}
+.home-screen--is-launching .paper-race-entry{display:none!important}
+/* The old network implementation stays disabled in application state. */
+.home-screen .home-thumb[data-competition-entry=true]{opacity:1!important;cursor:pointer!important;filter:none!important}
+.home-screen .home-thumb[data-competition-entry=true] .competition-mode-label{font-family:"Sketch Han",cursive;font-size:12px}
+@media(max-width:640px){.paper-race-entry{padding:10px}.paper-race-entry__heading{font-size:15px;margin-bottom:8px}.paper-race-entry__actions{gap:8px}.paper-race-entry__actions>a{min-height:58px;padding:8px 5px}.paper-race-entry__actions>a>strong{font-size:17px}.paper-race-entry__actions>a>span{font-size:10px}}
+@media(max-height:780px){.paper-race-entry[data-placement=home]{padding:8px}.paper-race-entry[data-placement=home] .paper-race-entry__heading{margin-bottom:6px;font-size:14px}.paper-race-entry[data-placement=home] .paper-race-entry__actions>a{min-height:45px;padding:6px}.paper-race-entry[data-placement=home] .paper-race-entry__actions>a>span{display:none}}
+html[data-race-room=true] #paper-race-entry{display:none!important}
+
+/* The cover art and wordmark use the same ink and paper as the driving scene. */
+html[data-paper=on] .home-topbar__logo{height:40px;width:auto;filter:none}
+html[data-paper=on] .splash-screen,html[data-paper=on] .splash-screen__blackout{background:var(--paper)}
+html[data-paper=on] .splash-screen__logo{height:76px;width:auto}
+html[data-paper=on] .splash-screen__line{background:linear-gradient(90deg,transparent,#28567d66 28%,#28567d66 72%,transparent)}
+html[data-paper=on] :is(.splash-screen__tagline,.splash-screen__loading){color:var(--pen-soft);font-family:"Sketch Han",system-ui,sans-serif;letter-spacing:.16em;text-shadow:none}
+@media(max-width:700px){html[data-paper=on] .home-topbar__logo{height:32px}}
+html[data-paper=on] .home-preview__frame .edge-light,
+html[data-paper=on] .home-preview__frame::before,
+html[data-paper=on] .home-preview__frame::after,
+html[data-paper=on] .home-preview__layer::before,
+html[data-paper=on] .home-preview__shine,
+html[data-paper=on] .home-preview::after{display:none}
+html[data-paper=on] .home-preview__layer,
+html[data-paper=on] .home-preview__layer.is-front{box-shadow:5px 6px 0 #28567d20;border-radius:3px}
+html[data-paper=on] .home-preview__frame.border-glow-card,
+html[data-paper=on] .home-preview__frame.is-front.border-glow-card{border:1px solid #28567d70;background:var(--paper-white);box-shadow:none}
+html[data-paper=on] .home-preview__layer img{filter:none}
+html[data-paper=on] .home-thumb,
+html[data-paper=on] .home-thumb img{animation:none;filter:none}
+html[data-paper=on] .home-thumb.is-selected .home-thumb__img{animation:none;filter:none}
+html[data-paper=on] .home-thumb{border-color:#28567d66;background:var(--paper-white);box-shadow:2px 3px 0 #28567d20}
+html[data-paper=on] .home-thumb:is(.is-selected,:hover,:focus-visible){border-color:var(--pen);background:var(--paper-white);box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--pen),3px 4px 0 #28567d20}

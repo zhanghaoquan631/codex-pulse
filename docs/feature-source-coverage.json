@@ -1,0 +1,952 @@
+{
+  "catalog": {
+    "release": "source-v2.0.0",
+    "sections": [
+      {
+        "id": "tokens",
+        "title": "Token 统计",
+        "bundle": "tokens",
+        "items": [
+          {
+            "id": "tokens-overview",
+            "title": "用量总览",
+            "requirements": "汇总输入、输出、缓存、调用次数，按时间和账号筛选，绘制趋势与热力图"
+          },
+          {
+            "id": "tokens-accounts",
+            "title": "账号与额度",
+            "requirements": "按账号观察用量、额度和历史证据，不推测无法归属的旧记录"
+          },
+          {
+            "id": "tokens-ledger",
+            "title": "额度账本",
+            "requirements": "记录额度变化、手工支出、汇率与原币金额，区分已确认支出和待核实变化"
+          },
+          {
+            "id": "tokens-data",
+            "title": "用量明细",
+            "requirements": "按日期、账号、模型查看明细并导出防公式注入的 CSV"
+          },
+          {
+            "id": "tokens-settings",
+            "title": "连接与采集",
+            "requirements": "本机日志增量采集、去重、断线恢复、开机启动及同步鉴权"
+          }
+        ]
+      },
+      {
+        "id": "websites",
+        "title": "网站收藏",
+        "bundle": "websites",
+        "items": [
+          {
+            "id": "websites-all",
+            "title": "收藏管理",
+            "requirements": "整理网址、搜索、分类和去重；新增、编辑、删除需要管理权限"
+          },
+          {
+            "id": "websites-history",
+            "title": "历史补录",
+            "requirements": "从本机助手正式回复补录开发链接，过滤授权参数、密钥与私密地址"
+          }
+        ]
+      },
+      {
+        "id": "betteropc",
+        "title": "BetterOPC",
+        "bundle": "betteropc",
+        "items": [
+          {
+            "id": "betteropc-embed",
+            "title": "社区接入",
+            "requirements": "嵌入 BetterOPC 原站，提供重载、超时提示和独立打开；此模块是外站接入，不包含外站服务器源码"
+          }
+        ]
+      },
+      {
+        "id": "activity",
+        "title": "ME.zip 记录",
+        "bundle": "mezip-local",
+        "items": [
+          {
+            "id": "activity-overview",
+            "title": "活动总览",
+            "requirements": "汇总本机活动、阅读、观看和收藏，显示真实连接状态"
+          },
+          {
+            "id": "activity-timeline",
+            "title": "全局时间轴",
+            "requirements": "按时间统一呈现真实活动，支持筛选与定位"
+          },
+          {
+            "id": "activity-x",
+            "title": "X 行为",
+            "requirements": "采集与检索用户授权的 X 浏览及互动记录"
+          },
+          {
+            "id": "activity-watch",
+            "title": "观看记录",
+            "requirements": "记录视频观看位置和进度，回到上次位置"
+          },
+          {
+            "id": "activity-links",
+            "title": "X 链接收集",
+            "requirements": "收藏链接并维护标签、说明和用途"
+          },
+          {
+            "id": "activity-resources",
+            "title": "网页、文章与代码",
+            "requirements": "归档网页与代码资源，保留来源、检索与整理功能"
+          },
+          {
+            "id": "activity-reading",
+            "title": "阅读与研究",
+            "requirements": "保存阅读进度、研究材料与标记"
+          },
+          {
+            "id": "activity-library",
+            "title": "私人资料库",
+            "requirements": "使用收藏夹和标签管理长期资料并隔离用户"
+          },
+          {
+            "id": "activity-interest",
+            "title": "兴趣档案",
+            "requirements": "基于真实记录整理兴趣，说明数据来源和范围"
+          },
+          {
+            "id": "activity-settings",
+            "title": "隐私设置",
+            "requirements": "控制采集范围、暂停、导出与删除本机历史"
+          }
+        ]
+      },
+      {
+        "id": "knowledge",
+        "title": "知识库",
+        "bundle": "knowledge",
+        "items": [
+          {
+            "id": "knowledge-compass",
+            "title": "Compass 今日",
+            "requirements": "生成每日工作摘要，保留条目、日期、来源与管理权限"
+          },
+          {
+            "id": "knowledge-trends",
+            "title": "开源趋势",
+            "requirements": "浏览开源项目趋势，搜索、筛选并查看来源与更新时间"
+          },
+          {
+            "id": "knowledge-library",
+            "title": "灵感内容库",
+            "requirements": "收集多平台内容，分类、标签、搜索、查看详情与用户隔离"
+          },
+          {
+            "id": "knowledge-weekly",
+            "title": "我的周刊",
+            "requirements": "从收藏中选内容编排周刊，支持顺序、编辑与预览"
+          },
+          {
+            "id": "knowledge-materials",
+            "title": "素材箱",
+            "requirements": "整理图片、文案、脚本和文件，维护来源与下载"
+          },
+          {
+            "id": "knowledge-capture",
+            "title": "内容收集",
+            "requirements": "从链接创建收集草稿，支持手机入口、解析错误与重试"
+          },
+          {
+            "id": "knowledge-documents",
+            "title": "文档与长图",
+            "requirements": "查看文档和长图，保留内容结构、缩放与导出"
+          },
+          {
+            "id": "knowledge-video",
+            "title": "视频编辑",
+            "requirements": "整理素材、剪辑与渲染，明确浏览器和本机能力差异"
+          },
+          {
+            "id": "knowledge-live",
+            "title": "录屏与直播",
+            "requirements": "提供镜头、布局、录制与上传，保留 OBS 模板和本机辅助端源码"
+          },
+          {
+            "id": "knowledge-tags",
+            "title": "标签归纳",
+            "requirements": "维护内容标签、搜索和多条件筛选，重命名标签时保留内容关联",
+            "path": "standalone/library"
+          }
+        ]
+      },
+      {
+        "id": "bookshelf",
+        "title": "我的书架",
+        "bundle": "bookshelf",
+        "items": [
+          {
+            "id": "bookshelf-browse",
+            "title": "浏览书架",
+            "requirements": "按分类搜索浏览书籍，查看封面、作者与书籍信息"
+          },
+          {
+            "id": "bookshelf-manage",
+            "title": "后台管理",
+            "requirements": "管理员维护书籍、分类、封面和私人笔记"
+          },
+          {
+            "id": "bookshelf-upload",
+            "title": "手机上传与电子书",
+            "requirements": "支持 PDF、EPUB、TXT 上传、容量校验、鉴权下载与阅读入口"
+          }
+        ]
+      },
+      {
+        "id": "pro",
+        "title": "ME·zip Pro",
+        "bundle": "mezip",
+        "items": [
+          {
+            "id": "pro-login",
+            "title": "登录与账号",
+            "requirements": "提供原应用登录、会话校验、退出与跨页面身份状态"
+          },
+          {
+            "id": "pro-account",
+            "title": "个人空间",
+            "requirements": "展示并管理个人吊牌、账号空间与交互视觉"
+          },
+          {
+            "id": "pro-playground",
+            "title": "作品与游戏",
+            "requirements": "提供画廊、互动作品、游戏与各独立应用入口"
+          },
+          {
+            "id": "pro-gallery",
+            "title": "无限画廊",
+            "requirements": "浏览三维画廊、切换图片与视角，并处理触控和资源加载",
+            "path": "standalone/mezip/apps/gallery"
+          },
+          {
+            "id": "pro-racing",
+            "title": "纸上赛车",
+            "requirements": "实现本站自编的纸面样式、浏览器适配、竞赛房间与手机控制器接入；原版 APEX 赛车引擎是外部依赖，未取得原版工程，不把压缩构建产物称为原始源码",
+            "path": "standalone/mezip/apps/racing"
+          },
+          {
+            "id": "pro-booking",
+            "title": "预约工作室",
+            "requirements": "管理会谈时段、联系人和邮件通知，保留独立页面及服务器接口",
+            "path": "standalone/mezip/apps/main/src/BookingStudio.jsx"
+          },
+          {
+            "id": "pro-upload",
+            "title": "电脑与手机上传",
+            "requirements": "授权上传图片、管理临时预览和持久化媒体，验证大小类型与访问权限",
+            "path": "standalone/mezip/apps/main/src/SessionImageUpload.jsx"
+          },
+          {
+            "id": "pro-photo-memory-game",
+            "title": "照片记忆游戏",
+            "requirements": "实现照片记忆游戏现有组件的交互、参数和内容编辑能力；以 PhotoMemoryGame.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/PhotoMemoryGame.jsx"
+          },
+          {
+            "id": "pro-cursor-effects",
+            "title": "光标特效",
+            "requirements": "实现光标特效现有组件的交互、参数和内容编辑能力；以 CursorEffects.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/CursorEffects.jsx"
+          },
+          {
+            "id": "pro-text-type",
+            "title": "打字文本",
+            "requirements": "实现打字文本现有组件的交互、参数和内容编辑能力；以 TextType.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/TextType.jsx"
+          },
+          {
+            "id": "pro-scroll-expand",
+            "title": "滚动展开",
+            "requirements": "实现滚动展开现有组件的交互、参数和内容编辑能力；以 ScrollExpand.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/ScrollExpand.jsx"
+          },
+          {
+            "id": "pro-ripple-distortion",
+            "title": "波动失真",
+            "requirements": "实现波动失真现有组件的交互、参数和内容编辑能力；以 RippleDistortion.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/RippleDistortion.jsx"
+          },
+          {
+            "id": "pro-elastic-mesh",
+            "title": "弹性网格",
+            "requirements": "实现弹性网格现有组件的交互、参数和内容编辑能力；以 ElasticMesh.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/ElasticMesh.jsx"
+          },
+          {
+            "id": "pro-halftone-reveal",
+            "title": "半色调揭示",
+            "requirements": "实现半色调揭示现有组件的交互、参数和内容编辑能力；以 HalftoneReveal.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/HalftoneReveal.jsx"
+          },
+          {
+            "id": "pro-orbit-images",
+            "title": "轨道图像",
+            "requirements": "实现轨道图像现有组件的交互、参数和内容编辑能力；以 OrbitImages.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/OrbitImages.jsx"
+          },
+          {
+            "id": "pro-tumble-carousel",
+            "title": "翻滚轮播",
+            "requirements": "实现翻滚轮播现有组件的交互、参数和内容编辑能力；以 TumbleCarousel.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/TumbleCarousel.jsx"
+          },
+          {
+            "id": "pro-warped-card",
+            "title": "扭曲卡片",
+            "requirements": "实现扭曲卡片现有组件的交互、参数和内容编辑能力；以 WarpedCard.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/WarpedCard.jsx"
+          },
+          {
+            "id": "pro-chroma-card",
+            "title": "彩色边缘卡片",
+            "requirements": "实现彩色边缘卡片现有组件的交互、参数和内容编辑能力；以 ChromaCard.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/ChromaCard.jsx"
+          },
+          {
+            "id": "pro-circle-gallery",
+            "title": "环形图库",
+            "requirements": "实现环形图库现有组件的交互、参数和内容编辑能力；以 CircleGallery.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/CircleGallery.jsx"
+          },
+          {
+            "id": "pro-comparison-slider",
+            "title": "图片对比滑块",
+            "requirements": "实现图片对比滑块现有组件的交互、参数和内容编辑能力；以 ComparisonSlider.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/ComparisonSlider.jsx"
+          },
+          {
+            "id": "pro-gradual-blur",
+            "title": "渐变模糊",
+            "requirements": "实现渐变模糊现有组件的交互、参数和内容编辑能力；以 GradualBlur.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/GradualBlur.jsx"
+          },
+          {
+            "id": "pro-complete-split-image",
+            "title": "完整分割图像",
+            "requirements": "实现完整分割图像现有组件的交互、参数和内容编辑能力；以 CompleteSplitImage.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/CompleteSplitImage.jsx"
+          },
+          {
+            "id": "pro-click-spark",
+            "title": "点击火花",
+            "requirements": "实现点击火花现有组件的交互、参数和内容编辑能力；以 ClickSpark.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/ClickSpark.jsx"
+          },
+          {
+            "id": "pro-magnet",
+            "title": "磁吸交互",
+            "requirements": "实现磁吸交互现有组件的交互、参数和内容编辑能力；以 Magnet.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/Magnet.jsx"
+          },
+          {
+            "id": "pro-sticker-peel",
+            "title": "贴纸揭开",
+            "requirements": "实现贴纸揭开现有组件的交互、参数和内容编辑能力；以 StickerPeel.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/StickerPeel.jsx"
+          },
+          {
+            "id": "pro-crosshair",
+            "title": "十字准星",
+            "requirements": "实现十字准星现有组件的交互、参数和内容编辑能力；以 Crosshair.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/Crosshair.jsx"
+          },
+          {
+            "id": "pro-masked-heading",
+            "title": "遮罩标题",
+            "requirements": "实现遮罩标题现有组件的交互、参数和内容编辑能力；以 MaskedHeading.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/MaskedHeading.jsx"
+          },
+          {
+            "id": "pro-letter-swap3-d",
+            "title": "三维字母切换",
+            "requirements": "实现三维字母切换现有组件的交互、参数和内容编辑能力；以 LetterSwap3D.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/LetterSwap3D.jsx"
+          },
+          {
+            "id": "pro-blur-highlight",
+            "title": "模糊高亮",
+            "requirements": "实现模糊高亮现有组件的交互、参数和内容编辑能力；以 BlurHighlight.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/BlurHighlight.jsx"
+          },
+          {
+            "id": "pro-text-scatter",
+            "title": "文本散射",
+            "requirements": "实现文本散射现有组件的交互、参数和内容编辑能力；以 TextScatter.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/TextScatter.jsx"
+          },
+          {
+            "id": "pro-falling-text",
+            "title": "文字掉落",
+            "requirements": "实现文字掉落现有组件的交互、参数和内容编辑能力；以 FallingText.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/FallingText.jsx"
+          },
+          {
+            "id": "pro-watercolor",
+            "title": "水彩背景",
+            "requirements": "实现水彩背景现有组件的交互、参数和内容编辑能力；以 Watercolor.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/Watercolor.jsx"
+          },
+          {
+            "id": "pro-wireframe-ball",
+            "title": "线框球导航",
+            "requirements": "实现线框球导航现有组件的交互、参数和内容编辑能力；以 WireframeBall.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/WireframeBall.jsx"
+          },
+          {
+            "id": "pro-depth-card",
+            "title": "深度卡片",
+            "requirements": "实现深度卡片现有组件的交互、参数和内容编辑能力；以 DepthCard.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/DepthCard.jsx"
+          },
+          {
+            "id": "pro-lenticular-carousel",
+            "title": "透镜翻转轮播",
+            "requirements": "实现透镜翻转轮播现有组件的交互、参数和内容编辑能力；以 LenticularCarousel.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/LenticularCarousel.jsx"
+          },
+          {
+            "id": "pro-page-flip",
+            "title": "翻页图库",
+            "requirements": "实现翻页图库现有组件的交互、参数和内容编辑能力；以 PageFlip.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/PageFlip.jsx"
+          },
+          {
+            "id": "pro-parallax-carousel",
+            "title": "视差轮播",
+            "requirements": "实现视差轮播现有组件的交互、参数和内容编辑能力；以 ParallaxCarousel.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/ParallaxCarousel.jsx"
+          },
+          {
+            "id": "pro-parallax-cards-studio",
+            "title": "视差卡片工作室",
+            "requirements": "实现视差卡片工作室现有组件的交互、参数和内容编辑能力；以 ParallaxCardsStudio.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/ParallaxCardsStudio.jsx"
+          },
+          {
+            "id": "pro-reel-gallery-studio",
+            "title": "胶片图库工作室",
+            "requirements": "实现胶片图库工作室现有组件的交互、参数和内容编辑能力；以 ReelGalleryStudio.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/ReelGalleryStudio.jsx"
+          },
+          {
+            "id": "pro-scroll-stack-studio",
+            "title": "滚动堆叠工作室",
+            "requirements": "实现滚动堆叠工作室现有组件的交互、参数和内容编辑能力；以 ScrollStackStudio.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/ScrollStackStudio.jsx"
+          },
+          {
+            "id": "pro-gradient-carousel-studio",
+            "title": "渐变轮播工作室",
+            "requirements": "实现渐变轮播工作室现有组件的交互、参数和内容编辑能力；以 GradientCarouselStudio.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/GradientCarouselStudio.jsx"
+          },
+          {
+            "id": "pro-liquid-swap-studio",
+            "title": "液态切换工作室",
+            "requirements": "实现液态切换工作室现有组件的交互、参数和内容编辑能力；以 LiquidSwapStudio.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/LiquidSwapStudio.jsx"
+          },
+          {
+            "id": "pro-pixel-swap-studio",
+            "title": "像素切换工作室",
+            "requirements": "实现像素切换工作室现有组件的交互、参数和内容编辑能力；以 PixelSwapStudio.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/PixelSwapStudio.jsx"
+          },
+          {
+            "id": "pro-magic-transform-studio",
+            "title": "变换工作室",
+            "requirements": "实现变换工作室现有组件的交互、参数和内容编辑能力；以 MagicTransformStudio.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/MagicTransformStudio.jsx"
+          },
+          {
+            "id": "pro-modal-cards-studio",
+            "title": "弹窗卡片工作室",
+            "requirements": "实现弹窗卡片工作室现有组件的交互、参数和内容编辑能力；以 ModalCardsStudio.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/ModalCardsStudio.jsx"
+          },
+          {
+            "id": "pro-pixel-reveal",
+            "title": "像素显影",
+            "requirements": "实现像素显影现有组件的交互、参数和内容编辑能力；以 PixelReveal.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/PixelReveal.jsx"
+          },
+          {
+            "id": "pro-pixelate-hover",
+            "title": "悬停像素",
+            "requirements": "实现悬停像素现有组件的交互、参数和内容编辑能力；以 PixelateHover.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/PixelateHover.jsx"
+          },
+          {
+            "id": "pro-rotating-cards",
+            "title": "旋转卡片",
+            "requirements": "实现旋转卡片现有组件的交互、参数和内容编辑能力；以 RotatingCards.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/RotatingCards.jsx"
+          },
+          {
+            "id": "pro-shader-card",
+            "title": "着色器卡片",
+            "requirements": "实现着色器卡片现有组件的交互、参数和内容编辑能力；以 ShaderCard.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/ShaderCard.jsx"
+          },
+          {
+            "id": "pro-shader-reveal",
+            "title": "着色器显影",
+            "requirements": "实现着色器显影现有组件的交互、参数和内容编辑能力；以 ShaderReveal.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/ShaderReveal.jsx"
+          },
+          {
+            "id": "pro-credit-card",
+            "title": "倾斜名片",
+            "requirements": "实现倾斜名片现有组件的交互、参数和内容编辑能力；以 CreditCard.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/CreditCard.jsx"
+          },
+          {
+            "id": "pro-personal-drift-wall-studio",
+            "title": "个人漂浮墙",
+            "requirements": "实现个人漂浮墙现有组件的交互、参数和内容编辑能力；以 PersonalDriftWallStudio.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/PersonalDriftWallStudio.jsx"
+          },
+          {
+            "id": "pro-infinite-gallery-section",
+            "title": "无限图库",
+            "requirements": "实现无限图库现有组件的交互、参数和内容编辑能力；以 InfiniteGallerySection.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/InfiniteGallerySection.jsx"
+          },
+          {
+            "id": "pro-simple-graph-studio",
+            "title": "关系图工作室",
+            "requirements": "实现关系图工作室现有组件的交互、参数和内容编辑能力；以 SimpleGraphStudio.jsx 及同名样式为入口，保留实际依赖、触控适配与资源加载失败处理",
+            "path": "standalone/mezip/apps/main/src/SimpleGraphStudio.jsx"
+          }
+        ]
+      },
+      {
+        "id": "finance",
+        "title": "票据收件箱",
+        "bundle": "finance",
+        "items": [
+          {
+            "id": "finance-inbox",
+            "title": "票据收件箱",
+            "requirements": "导入图片凭证，整理待处理票据、解析状态与重复项"
+          },
+          {
+            "id": "finance-ledger",
+            "title": "财务账单",
+            "requirements": "核对收支、分类、日期、账户和金额，支持导入导出"
+          },
+          {
+            "id": "finance-merchants",
+            "title": "商家分析",
+            "requirements": "归纳商家与消费分布，并从汇总回查原始凭证"
+          },
+          {
+            "id": "finance-mobile",
+            "title": "手机拍照上传",
+            "requirements": "配对手机上传凭证，验证授权、同步状态与连接失效"
+          }
+        ]
+      },
+      {
+        "id": "shop",
+        "title": "我的小店",
+        "bundle": "shop",
+        "items": [
+          {
+            "id": "shop-storefront",
+            "title": "商品商城",
+            "requirements": "展示商品详情、数量、订单与用户自配收款方式"
+          },
+          {
+            "id": "shop-orders",
+            "title": "订单查询",
+            "requirements": "按订单标识查询状态，限制越权查看和重复提交"
+          },
+          {
+            "id": "shop-manage",
+            "title": "店铺管理",
+            "requirements": "管理商品、订单、店铺设置和登录权限"
+          },
+          {
+            "id": "shop-calendar",
+            "title": "重置日历与通知",
+            "requirements": "维护重置计划、状态与邮件通知，邮件凭据由部署者配置"
+          }
+        ]
+      },
+      {
+        "id": "atlas",
+        "title": "潮汕地图",
+        "bundle": "chaoshan-map",
+        "items": [
+          {
+            "id": "atlas-communities",
+            "title": "全国社区地图",
+            "requirements": "展示社区地图与列表、分类、详情和有来源的数据快照"
+          },
+          {
+            "id": "atlas-ranking",
+            "title": "社区榜单",
+            "requirements": "按指标浏览社区榜单并标明日期与来源"
+          },
+          {
+            "id": "atlas-events",
+            "title": "活动与城市政策",
+            "requirements": "浏览活动和政策，保留来源、时间与真实性边界"
+          },
+          {
+            "id": "atlas-map",
+            "title": "潮汕 3D 地图",
+            "requirements": "地区探索、缩放、朝北、平面、昼夜、巡游、全屏与景点详情"
+          },
+          {
+            "id": "atlas-places",
+            "title": "收藏与我的地点",
+            "requirements": "在当前浏览器管理收藏与自定义地点，支持定位和恢复"
+          }
+        ]
+      },
+      {
+        "id": "rooster",
+        "title": "公鸡快跑",
+        "bundle": "rooster-rush",
+        "items": [
+          {
+            "id": "rooster-play",
+            "title": "游戏与操控",
+            "requirements": "左右移动、跳跃、收集金币、踩敌人、火箭、暂停与重开；兼容手机触控"
+          }
+        ]
+      },
+      {
+        "id": "github",
+        "title": "GitHub 工作台",
+        "bundle": "github",
+        "items": [
+          {
+            "id": "github-overview",
+            "title": "开发总览",
+            "requirements": "汇总真实仓库、活动与任务；使用本机 GitHub 授权"
+          },
+          {
+            "id": "github-repositories",
+            "title": "仓库管理",
+            "requirements": "浏览仓库、文件、README、分支与变更"
+          },
+          {
+            "id": "github-snippets",
+            "title": "代码片段",
+            "requirements": "维护可检索代码片段、标签、来源与编辑状态"
+          },
+          {
+            "id": "github-tasks",
+            "title": "开发任务",
+            "requirements": "维护任务状态、关联仓库与记录"
+          },
+          {
+            "id": "github-activity",
+            "title": "开发活动",
+            "requirements": "展示真实提交和开发历史，处理分页、离线与权限失败"
+          }
+        ]
+      },
+      {
+        "id": "media",
+        "title": "录制与截图库",
+        "bundle": "media",
+        "items": [
+          {
+            "id": "media-record",
+            "title": "屏幕录制",
+            "requirements": "用户主动授权后录制屏幕、窗口和声音，支持停止与保存"
+          },
+          {
+            "id": "media-video",
+            "title": "视频资料库",
+            "requirements": "浏览本机视频，播放、筛选、整理与管理元数据"
+          },
+          {
+            "id": "media-screenshots",
+            "title": "截图资料库",
+            "requirements": "捕捉与整理画面，支持查看、标签、检索及下载"
+          }
+        ]
+      },
+      {
+        "id": "music",
+        "title": "音乐空间",
+        "bundle": "music",
+        "items": [
+          {
+            "id": "music-search",
+            "title": "选歌与播放",
+            "requirements": "搜索歌曲、切换来源、播放和暂停；失败时明确提示，不能伪造可播放状态"
+          },
+          {
+            "id": "music-history",
+            "title": "播放历史",
+            "requirements": "保存歌曲和播放进度，恢复历史并明确同步状态"
+          },
+          {
+            "id": "music-source",
+            "title": "音乐来源站",
+            "requirements": "接入 Go Music DL 来源站，保留原站链接与备用曲库选择"
+          },
+          {
+            "id": "music-microphone",
+            "title": "手机麦克风",
+            "requirements": "生成配对房间，授权采集音频，经 WebRTC 实时传输到接收端并支持断开"
+          }
+        ]
+      },
+      {
+        "id": "booking",
+        "title": "预约系统",
+        "bundle": "booking",
+        "items": [
+          {
+            "id": "booking-book",
+            "title": "预约日期与时段",
+            "requirements": "按 UTC+8 选择日期与 15 分钟时段，服务端拒绝重叠并幂等保存"
+          },
+          {
+            "id": "booking-manage",
+            "title": "预约管理",
+            "requirements": "仅管理账号可查看预约联系人和处理状态"
+          },
+          {
+            "id": "booking-mail",
+            "title": "邮件确认",
+            "requirements": "通过独立 SMTP 服务发送通知，记录不确定结果并避免重复发送"
+          }
+        ]
+      },
+      {
+        "id": "qduo",
+        "title": "QDuo Windows",
+        "bundle": "qduo",
+        "items": [
+          {
+            "id": "qduo-computer",
+            "title": "电脑体检",
+            "requirements": "查看硬件、应用、缓存、大文件与扫描限制，支持导入导出报告"
+          },
+          {
+            "id": "qduo-safety",
+            "title": "清理与文件",
+            "requirements": "查看缓存、大文件、回收站与文件定位；仅对用户选中的目标执行客户端允许的操作，显示预览、确认和错误"
+          },
+          {
+            "id": "qduo-text",
+            "title": "文本工具",
+            "requirements": "JSON、URL 编解码、格式处理、朗读及可选模型翻译润色总结"
+          },
+          {
+            "id": "qduo-connection",
+            "title": "客户端与配对",
+            "requirements": "提供 Windows 客户端源码、构建说明、本机配对、鉴权和断开"
+          },
+          {
+            "id": "qduo-applications",
+            "title": "已安装应用",
+            "requirements": "从本机报告显示真实安装应用、发布者和筛选结果",
+            "path": "app/qduo-center.tsx"
+          },
+          {
+            "id": "qduo-processes",
+            "title": "运行进程",
+            "requirements": "查看真实运行进程并搜索名称，明确本机连接状态",
+            "path": "app/qduo-center.tsx"
+          },
+          {
+            "id": "qduo-startup",
+            "title": "启动项",
+            "requirements": "读取并展示本机启动项状态与来源",
+            "path": "app/qduo-center.tsx"
+          },
+          {
+            "id": "qduo-large-files",
+            "title": "大文件列表",
+            "requirements": "分页显示扫描到的大文件、大小和时间，保留扫描边界与失败说明",
+            "path": "app/qduo-center.tsx"
+          },
+          {
+            "id": "qduo-cleanup",
+            "title": "安全清理",
+            "requirements": "按风险扫描缓存、预览选中目标、确认计划、隔离及恢复；禁止越过受保护目标",
+            "path": "app/qduo-safety.tsx"
+          },
+          {
+            "id": "qduo-files",
+            "title": "文件与图片浏览",
+            "requirements": "分页搜索文件及图片缩略图，查看时间、来源与关联收藏，保留本机访问限制",
+            "path": "app/qduo-safety.tsx"
+          },
+          {
+            "id": "qduo-security",
+            "title": "Windows 防护状态",
+            "requirements": "读取 Windows Defender 状态，显示建议、刷新与失败状态，不伪造已修复",
+            "path": "app/qduo-safety.tsx"
+          }
+        ]
+      },
+      {
+        "id": "tools",
+        "title": "界面与通用工具",
+        "bundle": "core",
+        "items": [
+          {
+            "id": "tools-theme",
+            "title": "主题与手机布局",
+            "requirements": "提供浅色、暗色、墨水风格与响应式导航，保存偏好"
+          },
+          {
+            "id": "tools-reading-pen",
+            "title": "阅读笔与交互",
+            "requirements": "提供阅读标注、交互音效、雪花、装饰层和全屏开关"
+          },
+          {
+            "id": "tools-auth",
+            "title": "登录与权限",
+            "requirements": "区分公开查看与管理写入，对本机代理、数据接口验证身份"
+          },
+          {
+            "id": "tools-source",
+            "title": "源码与提示词",
+            "requirements": "每个功能提供真实代码复制、复现提示词、文件下载和权限拒绝回退"
+          }
+        ]
+      }
+    ]
+  },
+  "packages": [
+    {
+      "id": "chaoshan-map",
+      "files": 316,
+      "textBytes": 8021006,
+      "zipBytes": 49140580
+    },
+    {
+      "id": "chaoshan-adventure",
+      "files": 1719,
+      "textBytes": 4162446,
+      "zipBytes": 12823083
+    },
+    {
+      "id": "rooster-rush",
+      "files": 15,
+      "textBytes": 68934,
+      "zipBytes": 493195
+    },
+    {
+      "id": "xiamen-map",
+      "files": 188,
+      "textBytes": 797470,
+      "zipBytes": 18306470
+    },
+    {
+      "id": "zju-overworld",
+      "files": 104,
+      "textBytes": 843816,
+      "zipBytes": 13919228
+    },
+    {
+      "id": "core",
+      "files": 270,
+      "textBytes": 2119111,
+      "zipBytes": 605310
+    },
+    {
+      "id": "tokens",
+      "files": 302,
+      "textBytes": 2339343,
+      "zipBytes": 687295
+    },
+    {
+      "id": "websites",
+      "files": 302,
+      "textBytes": 2339345,
+      "zipBytes": 687297
+    },
+    {
+      "id": "betteropc",
+      "files": 270,
+      "textBytes": 2119116,
+      "zipBytes": 605313
+    },
+    {
+      "id": "knowledge",
+      "files": 411,
+      "textBytes": 3853763,
+      "zipBytes": 1166442
+    },
+    {
+      "id": "bookshelf",
+      "files": 515,
+      "textBytes": 2602807,
+      "zipBytes": 11749402
+    },
+    {
+      "id": "mezip",
+      "files": 1065,
+      "textBytes": 6322288,
+      "zipBytes": 320510847
+    },
+    {
+      "id": "shop",
+      "files": 327,
+      "textBytes": 2659757,
+      "zipBytes": 870876
+    },
+    {
+      "id": "mezip-local",
+      "files": 1034,
+      "textBytes": 11485862,
+      "zipBytes": 3545267
+    },
+    {
+      "id": "finance",
+      "files": 1046,
+      "textBytes": 11844691,
+      "zipBytes": 3651869
+    },
+    {
+      "id": "github",
+      "files": 1047,
+      "textBytes": 11607892,
+      "zipBytes": 3587923
+    },
+    {
+      "id": "media",
+      "files": 1041,
+      "textBytes": 11613072,
+      "zipBytes": 3586755
+    },
+    {
+      "id": "music",
+      "files": 425,
+      "textBytes": 3485744,
+      "zipBytes": 3880632
+    },
+    {
+      "id": "booking",
+      "files": 326,
+      "textBytes": 2582857,
+      "zipBytes": 771248
+    },
+    {
+      "id": "qduo",
+      "files": 281,
+      "textBytes": 2442161,
+      "zipBytes": 697298
+    }
+  ]
+}

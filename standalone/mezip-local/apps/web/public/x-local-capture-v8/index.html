@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ME.zip Capture V8 — 可验证的本地行为监控与私人资料库">
+  <title>ME.zip Capture · 信号工作台</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="workspace-shell">
+    <aside class="sidecar" aria-label="ME.zip Capture 导航">
+      <a class="wordmark" href="#overview" aria-label="ME.zip Capture 信号工作台">
+        <span class="wordmark-dot dot-blue"></span><span class="wordmark-dot dot-coral"></span><span class="wordmark-dot dot-amber"></span><span class="wordmark-dot dot-violet"></span>
+        <strong>ME.zip</strong><em>CAPTURE</em>
+      </a>
+      <p class="sidecar-intro">把明确发生的行为，整理成只属于你的可验证记忆。</p>
+      <nav class="main-nav">
+        <a href="#overview" data-route="overview"><b>01</b><span>信号总览</span><i>↗</i></a>
+        <a href="#timeline" data-route="timeline"><b>02</b><span>记录流</span><i>↗</i></a>
+        <a href="#special" data-route="special"><b>03</b><span>私人资料库</span><i>↗</i></a>
+        <a href="#interest" data-route="interest"><b>04</b><span>兴趣画像</span><i>↗</i></a>
+        <a href="#settings" data-route="settings"><b>05</b><span>捕获设置</span><i>↗</i></a>
+      </nav>
+      <div class="sidecard local-card">
+        <span class="live-dot"></span>
+        <div><strong>本地记录模式</strong><small>可随时导出或删除</small></div>
+      </div>
+      <div class="sidecar-foot">
+        <a href="../x-local-capture-v7/global-timeline.html">跨来源时间轴 ↗</a>
+        <a href="/x-link-archive-v1/index.html">链接收集箱 ↗</a>
+      </div>
+    </aside>
+
+    <main class="canvas">
+      <header class="command-bar">
+        <div class="command-copy"><span>ME.ZIP / LOCAL MEMORY</span><strong>信号工作台</strong></div>
+        <form id="global-search-form" class="global-search" role="search">
+          <label for="global-search">⌕</label><input id="global-search" type="search" placeholder="搜索链接、标签、作者或主要作用…"><button type="submit">搜索</button>
+        </form>
+        <div class="command-actions"><span id="bridge-status" class="bridge-pill">检查本地桥接…</span><a class="compact-link" href="/x">X 连接中心</a></div>
+      </header>
+
+      <section id="view-overview" data-view="overview" class="view">
+        <div class="masthead">
+          <div>
+            <div class="eyebrow"><i class="color-dot blue"></i><i class="color-dot coral"></i><i class="color-dot amber"></i><i class="color-dot violet"></i> REAL ACTIONS, LOCAL MEMORY</div>
+            <h1>复杂内容，<br>应该有一个清醒的入口。</h1>
+            <p>ME.zip 只保存你自己明确产生的点赞、收藏、浏览与链接收集。把重复菜单收成一条记录流，让“看过”和“想留下”保持不同。</p>
+            <div class="masthead-actions"><button class="button button-primary" id="open-capture">收集一条链接 <span>↗</span></button><a class="button button-plain" href="#timeline">查看记录流</a></div>
+          </div>
+          <div class="logic-card">
+            <div class="logic-top"><span>当前工作方式</span><span class="logic-indicator">● LOCAL</span></div>
+            <div class="logic-chain"><div><b>①</b><span>明确操作</span></div><i>→</i><div><b>②</b><span>本地记录</span></div><i>→</i><div><b>③</b><span>再次筛选</span></div></div>
+            <p>私密资料需要你主动再次收藏；不会因为一次浏览就自动进入资料库。</p>
+          </div>
+        </div>
+
+        <section class="panel processor-panel">
+          <div class="panel-heading"><div><span class="micro-label">PROCESSING</span><h2>今天的捕获脉冲</h2></div><span class="quiet-stat">只计算真实本地动作</span></div>
+          <div id="metrics" class="metric-strip"></div>
+          <div class="process-footer"><span>最近记录会在下方记录流出现；不把“在线”误标为已同步。</span><a class="button button-small" href="#timeline">查看并收集</a></div>
+        </section>
+
+        <div class="editor-grid">
+          <section class="panel calendar-panel"><div class="panel-heading"><div><span class="micro-label">RHYTHM</span><h2>七天节奏</h2></div><span>每一格都是当天动作数</span></div><div id="week-chart" class="week-chart"></div></section>
+          <section class="panel source-panel"><div class="panel-heading"><div><span class="micro-label">SOURCES</span><h2>数据边界</h2></div><span id="official-badge" class="neutral-badge">UNKNOWN</span></div><div class="source-status"><div><span class="status-symbol symbol-violet">◈</span><strong>官方 X 数据</strong><small id="official-status">状态由原 X 连接中心管理</small></div><div><span class="status-symbol symbol-green">●</span><strong>本地行为记录</strong><small>点赞、收藏、浏览与主动保存</small></div></div><div class="source-stats"><span>待补全 <b id="pending-count">0</b></span><span>最近一次 <b id="last-capture">—</b></span></div><a href="/x" class="inline-link">打开官方连接中心 →</a></section>
+        </div>
+
+        <div class="overview-grid">
+          <section class="panel recent-panel"><div class="panel-heading"><div><span class="micro-label">SIGNALS</span><h2>刚刚留下的信号</h2></div><a href="#timeline" class="inline-link">查看全部 →</a></div><div id="recent-events" class="event-list"></div></section>
+          <section class="panel library-preview"><div class="panel-heading"><div><span class="micro-label">PRIVATE LIBRARY</span><h2>准备长期保留</h2></div><a href="#special" class="inline-link">打开资料库 →</a></div><div id="special-preview" class="special-list"></div></section>
+        </div>
+
+        <section class="workflow-board">
+          <div class="workflow-copy"><span class="micro-label">WORKFLOWS</span><h2>内容不用散落在不同入口。</h2><p>观看、阅读、网页与跨来源轨迹各有自己的记录契约；这里是它们的统一入口，而不是再造一份重复列表。</p></div>
+          <div class="workflow-links">
+            <a href="../x-local-capture-v7/watch.html"><b class="tile-lilac">01</b><strong>观看记录</strong><small>真实播放与进度</small><i>↗</i></a>
+            <a href="../x-local-capture-v7/reading.html"><b class="tile-sage">02</b><strong>阅读与研究</strong><small>只记录明确打开</small><i>↗</i></a>
+            <a href="../x-local-capture-v7/resources.html"><b class="tile-amber">03</b><strong>网页与代码</strong><small>手动保存与再整理</small><i>↗</i></a>
+            <a href="../x-local-capture-v7/global-timeline.html"><b class="tile-coral">04</b><strong>跨来源轨迹</strong><small>在原页面中查看</small><i>↗</i></a>
+          </div>
+        </section>
+      </section>
+
+      <section id="view-timeline" data-view="timeline" class="view hidden">
+        <div class="route-head"><div><span class="micro-label">02 / RECORD STREAM</span><h1>记录流</h1><p>每条内容都对应你本人在设备上的一次明确操作；可按动作、时间与文字回看。</p></div><button class="button button-primary" id="open-capture-timeline">收集 X 链接 <span>↗</span></button></div>
+        <section class="panel filter-panel"><div id="action-filters" class="filter-tabs"><button data-filter="all" class="active">全部信号</button><button data-filter="like">点赞</button><button data-filter="bookmark">收藏</button><button data-filter="viewed">浏览</button><button data-filter="share_to_mezip">分享</button><button data-filter="copied_link">链接收集</button></div><div class="filter-row"><select id="period-filter"><option value="all">全部时间</option><option value="today">今天</option><option value="week">本周</option><option value="month">本月</option><option value="year">今年</option></select><input id="timeline-search" type="search" placeholder="搜链接、作者、标题、主要作用或标签"></div></section>
+        <div id="timeline-events" class="timeline"></div>
+      </section>
+
+      <section id="view-special" data-view="special" class="view hidden">
+        <div class="route-head"><div><span class="micro-label">03 / PRIVATE LIBRARY</span><h1>私人资料库</h1><p>它不是第三种自动捕获。只有你再次确认想长期留下的内容才会出现在这里。</p></div><span class="privacy-stamp">PRIVATE BY DEFAULT</span></div>
+        <section class="library-note"><span>★</span><p>点赞、收藏与主动保存各自保留原始记录；加入资料库只是你的二次筛选。删除原记录不会自动删除这里的内容。</p></section>
+        <div id="special-favorites" class="special-grid"></div>
+      </section>
+
+      <section id="view-interest" data-view="interest" class="view hidden">
+        <div class="route-head"><div><span class="micro-label">04 / INTEREST MAP</span><h1>兴趣画像</h1><p>只根据你亲自保存的标签、链接与说明整理，不创建外部画像，也不使用推荐模型。</p></div></div>
+        <div class="interest-layout"><section class="panel"><div class="panel-heading"><div><span class="micro-label">TAGS</span><h2>你标注过的主题</h2></div></div><div id="tag-cloud" class="tag-cloud"></div></section><section class="panel"><div class="panel-heading"><div><span class="micro-label">COUNTS</span><h2>可回看的记录</h2></div></div><div id="interest-summary" class="summary-list"></div></section></div>
+        <section class="panel insight-panel"><div class="panel-heading"><div><span class="micro-label">PROMPTS</span><h2>从记录中继续整理</h2></div></div><div id="interest-insights" class="insight-grid"></div></section>
+        <section class="panel saved-links-panel"><div class="panel-heading"><div><span class="micro-label">SAVED LINKS</span><h2>已保存的链接</h2><p>保存链接后可再次加入私人资料库。</p></div><span class="neutral-badge" id="saved-links-count">0 条</span></div><div id="interest-saved-links" class="saved-links-list"></div></section>
+      </section>
+
+      <section id="view-settings" data-view="settings" class="view hidden">
+        <div class="route-head"><div><span class="micro-label">05 / CAPTURE CONTROL</span><h1>捕获设置</h1><p>默认私密。关闭任一类型后，扩展与页面都会停止发送该类事件。</p></div></div>
+        <section class="panel settings-panel"><div class="settings-group"><h2>记录开关</h2><label class="toggle-row"><span><strong>启用本地监控</strong><small>不依赖 X API Credits</small></span><input type="checkbox" id="setting-enabled"><i></i></label><label class="toggle-row"><span><strong>记录点赞 / 取消点赞</strong><small>只监听明确的 Like 按钮点击</small></span><input type="checkbox" id="setting-captureLikes"><i></i></label><label class="toggle-row"><span><strong>记录收藏 / 取消收藏</strong><small>只监听明确的 Bookmark 按钮点击</small></span><input type="checkbox" id="setting-captureBookmarks"><i></i></label><label class="toggle-row"><span><strong>记录打开与浏览</strong><small>当前 X 页面可见内容才会记录</small></span><input type="checkbox" id="setting-captureViews"><i></i></label><label class="toggle-row"><span><strong>记录链接与分享</strong><small>只保存主动保存或分享的链接</small></span><input type="checkbox" id="setting-captureSharedLinks"><i></i></label><label class="toggle-row"><span><strong>记录观看进度</strong><small>只记录真正播放的内容与进度</small></span><input type="checkbox" id="setting-watchCapture"><i></i></label><label class="toggle-row"><span><strong>保存页面元数据</strong><small>标题、作者和链接；不保存密码或 Cookie</small></span><input type="checkbox" id="setting-savePageMetadata"><i></i></label></div><div class="settings-actions"><button class="button button-plain" id="export-data">导出本地记录 JSON</button><button class="button button-danger" id="delete-history">删除本地历史</button></div></section>
+        <div class="settings-split"><section class="panel helper-panel"><span class="micro-label">LOCAL BRIDGE</span><h2>跨页面共享</h2><p id="settings-bridge-copy">正在检查 127.0.0.1:4319</p><div><span id="settings-bridge-pill" class="neutral-badge">—</span><button class="button button-plain" id="retry-bridge" type="button">重新连接</button></div></section><section class="panel helper-panel"><span class="micro-label">EXTENSION</span><h2>真实点击捕获</h2><p>Chrome 或 Edge 的本地扩展捕获明确点击；内置浏览器不会把不可运行的扩展伪装成成功。</p><code>apps/browser-extension/mezip-capture</code></section></div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="capture-dialog"><form method="dialog" id="capture-form"><div class="dialog-head"><div><span class="micro-label">LOCAL CAPTURE</span><h2>收集一条 X 链接</h2></div><button type="button" data-close-capture-dialog class="dialog-close" aria-label="关闭">×</button></div><label>帖子链接<input id="capture-url" type="url" placeholder="https://x.com/.../status/..." required></label><div class="form-actions"><button id="paste-capture-url" type="button" class="button button-plain">从剪贴板填入链接</button><span>先在 X 复制真实帖子链接</span></div><div class="form-grid"><label>行为<select id="capture-action"><option value="copied_link">X 链接收集</option><option value="manual_save">手动保存</option><option value="like">点赞（手动补录）</option><option value="bookmark">收藏（手动补录）</option><option value="unlike">取消点赞（手动补录）</option><option value="unbookmark">取消收藏（手动补录）</option><option value="share_to_mezip">分享至 ME.zip</option></select></label><label>作者（可选）<input id="capture-author" maxlength="120" placeholder="@handle"></label></div><label>页面标题（可选）<input id="capture-title" maxlength="300" placeholder="帖子标题或一句话说明"></label><label>主要作用（可选）<textarea id="capture-note" maxlength="2000" placeholder="例如：记录这个产品的交互思路，之后做功能区时参考。"></textarea></label><label>标签（逗号分隔）<input id="capture-tags" maxlength="500" placeholder="AI, 设计, 灵感"></label><p id="capture-error" class="form-error" role="alert"></p><div class="dialog-actions"><button type="button" data-close-capture-dialog class="button button-plain">取消</button><button value="default" class="button button-primary">收集到本机</button></div></form></dialog>
+  <script src="../x-local-capture-v7/library-app.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

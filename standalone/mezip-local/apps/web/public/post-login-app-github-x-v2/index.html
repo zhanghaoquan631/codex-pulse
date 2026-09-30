@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0d0d10" />
+    <meta
+      name="description"
+      content="保留 ME.zip 原登录后功能区，并提供独立的 GitHub 工作台与 X 内容工作台入口。"
+    />
+    <title>ME.zip · 登录后空间 · GitHub 与 X V2</title>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: #0d0d10;
+      }
+
+      iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        background: #0d0d10;
+      }
+    </style>
+  </head>
+  <body>
+    <iframe id="mezip-original" title="ME.zip 登录后空间" src="/post-login-app/index.html?fromLogin=1"></iframe>
+    <script>
+      (() => {
+        const frame = document.querySelector('#mezip-original');
+        const returnTo = '/post-login-app-github-x-v2/index.html?fromLogin=1';
+        const session = localStorage.getItem('mezip.local-demo-session.v1');
+        const signedIn = session === 'active' || session?.includes('"state":"active"');
+        const fromLogin = new URLSearchParams(location.search).get('fromLogin') === '1';
+
+        if (!signedIn && !fromLogin) {
+          location.replace(`/?login=1&returnTo=${encodeURIComponent(returnTo)}`);
+          return;
+        }
+
+        const entries = [
+          {
+            key: 'github-workspace',
+            className: 'feature-github',
+            href: '/github-workspace-v6/index.html#overview',
+            title: 'GitHub 工作台',
+            detail: '查看已授权的真实仓库、代码片段与开发活动',
+            accent: '#b896ff',
+          },
+          {
+            key: 'x-workspace',
+            className: 'feature-x',
+            href: '/x',
+            title: 'X 内容工作台',
+            detail: '整理已授权账号的推文、收藏、点赞与媒体引用',
+            accent: '#80d4e8',
+          },
+        ];
+
+        const installStyles = (doc) => {
+          if (doc.querySelector('[data-mezip-github-x-v2-style]')) return;
+          const style = doc.createElement('style');
+          style.dataset.mezipGithubXv2Style = 'true';
+          style.textContent = `
+            .feature-github { border-color: #9b71e88a; background: linear-gradient(135deg, #5f3bb52e, #ffffff08); }
+            .feature-github:hover { border-color: #b896ff; background: linear-gradient(135deg, #7048d94d, #ffffff0d); }
+            .feature-x { border-color: #80d4e888; background: linear-gradient(135deg, #2a7f9640, #ffffff08); }
+            .feature-x:hover { border-color: #80d4e8; background: linear-gradient(135deg, #2a9dbd55, #ffffff0d); }
+            .feature-github:focus-visible, .feature-x:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+          `;
+          doc.head?.append(style);
+        };
+
+        const appendEntry = (doc, grid, entry) => {
+          const selector = `[data-mezip-entry="${entry.key}"]`;
+          let link = grid.querySelector(selector) || grid.querySelector(`.${entry.className}`);
+          // The link belongs to the iframe's document. Avoid an outer-window
+          // instanceof check, which fails across realms and would append the
+          // same entry forever through the MutationObserver.
+          if (!link || link.tagName !== 'A') {
+            link = doc.createElement('a');
+            link.className = `feature ${entry.className}`;
+            link.dataset.mezipEntry = entry.key;
+            link.target = '_top';
+            link.rel = 'noopener';
+            const title = doc.createElement('strong');
+            title.textContent = entry.title;
+            const detail = doc.createElement('span');
+            detail.textContent = entry.detail;
+            link.append(title, detail);
+            grid.append(link);
+          }
+          link.dataset.mezipEntry = entry.key;
+          link.href = entry.href;
+          link.setAttribute('aria-label', `${entry.title}：${entry.detail}`);
+          link.classList.add(entry.className);
+          const title = link.querySelector('strong');
+          if (title) title.textContent = entry.title;
+          const detail = link.querySelector('span');
+          if (detail) detail.textContent = entry.detail;
+        };
+
+        const installEntries = () => {
+          const doc = frame?.contentDocument;
+          const grid = doc?.querySelector('.feature-grid');
+          if (!doc || !grid) return;
+          installStyles(doc);
+          entries.forEach((entry) => appendEntry(doc, grid, entry));
+        };
+
+        frame?.addEventListener('load', () => {
+          installEntries();
+          const doc = frame.contentDocument;
+          if (!doc?.body) return;
+          new MutationObserver(installEntries).observe(doc.body, { childList: true, subtree: true });
+        });
+      })();
+    </script>
+  </body>
+</html>

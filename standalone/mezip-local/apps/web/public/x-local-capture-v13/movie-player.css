@@ -1,0 +1,25 @@
+:root { color-scheme: dark; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: #f1f0f4; background: #15141a; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+button, select { font: inherit; }
+button, select, .source-link { min-height: 40px; border: 1px solid #4d465a; border-radius: 8px; color: #f2eff8; background: #302b3c; }
+button, .source-link { padding: 9px 13px; cursor: pointer; }
+button:disabled, select:disabled { opacity: .5; cursor: default; }
+button:focus-visible, select:focus-visible, .source-link:focus-visible { outline: 2px solid #bba5fa; outline-offset: 3px; }
+.movie-player { width: 100%; max-width: 1200px; margin: 0 auto; padding: 14px; }
+.player-heading { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 12px; }
+.player-heading > div { min-width: 0; }
+.player-source { margin: 0 0 5px; color: #b6a9cb; font-size: 11px; }
+h1 { margin: 0; color: #f4f1f8; font-size: 17px; line-height: 1.45; overflow-wrap: anywhere; }
+.source-link { flex: 0 0 auto; text-decoration: none; font-size: 12px; white-space: nowrap; }
+[hidden] { display: none !important; }
+video { display: block; width: 100%; max-height: min(66vh, 710px); aspect-ratio: 16 / 9; background: #08080b; border-radius: 9px; }
+.player-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; margin-top: 12px; }
+.player-controls label { display: flex; align-items: center; gap: 9px; color: #c9c0d4; font-size: 12px; }
+.player-controls select { min-width: 110px; max-width: 260px; padding: 7px 30px 7px 10px; }
+.player-controls button { font-size: 12px; }
+#play-button { border-color: #8062b0; background: #61428b; }
+.player-status { margin: 11px 0 0; color: #c9bfda; font-size: 12px; line-height: 1.65; overflow-wrap: anywhere; }
+.player-status.is-error { color: #f4bf9f; }
+.player-note { margin: 8px 0 0; color: #99909f; font-size: 11px; line-height: 1.65; }
+@media (max-width: 560px) { .movie-player { padding: 10px; }.player-heading { align-items: flex-start; gap: 10px; }h1 { font-size: 14px; }.source-link { padding: 7px 9px; min-height: 34px; font-size: 11px; }.player-controls { gap: 8px; }.player-controls label { flex: 1 1 100%; }.player-controls select { flex: 1; max-width: none; }.player-controls button { flex: 1; min-height: 42px; }video { max-height: 62svh; } }

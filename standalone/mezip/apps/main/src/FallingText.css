@@ -1,0 +1,17 @@
+.falling-text-container { position: relative; width: 100%; height: 100%; overflow: hidden; cursor: grab; touch-action: pan-y; }
+.falling-text-container:active { cursor: grabbing; }
+.falling-text-container:focus-visible { outline: 2px solid #c4a6ff; outline-offset: -5px; border-radius: inherit; }
+.falling-text-words { padding: 44px 24px 64px; text-align: center; font-size: clamp(22px, 2.3vw, 34px); font-weight: 600; line-height: 1.4; }
+.falling-text-word { display: inline-block; max-width: calc(100% - 12px); overflow-wrap: anywhere; margin: 0 .12em .18em; color: #f3edf8; user-select: none; touch-action: none; }
+.falling-text-word.is-highlighted { color: #c4a6ff; }
+.falling-text-note { position: absolute; bottom: 15px; left: 16px; right: 16px; margin: 0; color: #bfb1ce; text-align: center; font-size: 11px; letter-spacing: .06em; pointer-events: none; }
+.falling-text-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.falling-text-actions button { min-height: 44px; padding: 0 16px; border: 1px solid rgba(255,255,255,.25); border-radius: 24px; background: rgba(255,255,255,.035); color: var(--fg, #fff); font: inherit; font-size: 13px; cursor: pointer; }
+.falling-text-actions button:hover { background: rgba(196,166,255,.14); border-color: #c4a6ff; }
+.falling-text-actions button:focus-visible, .falling-text-editor textarea:focus-visible { outline: 2px solid #c4a6ff; outline-offset: 3px; }
+.falling-text-editor { display: grid; gap: 12px; min-width: 0; padding-top: 10px; }
+.falling-text-editor label { font-size: 13px; color: #c7bdd0; }
+.falling-text-editor textarea { box-sizing: border-box; width: 100%; min-height: 140px; resize: vertical; padding: 12px; border: 1px solid #5c4d6a; border-radius: 12px; background: #16121b; color: #f3edf8; font: inherit; font-size: 15px; line-height: 1.6; }
+.falling-text-message { margin: 0; color: #c7bdd0; font-size: 12px; line-height: 1.5; }
+.falling-text-message:empty { display: none; }
+@media (max-width: 590px) { .falling-text-words { padding: 28px 14px 50px; font-size: 22px; } }

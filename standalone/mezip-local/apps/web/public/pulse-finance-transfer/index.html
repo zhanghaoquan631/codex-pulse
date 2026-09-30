@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>复制原财务账本 · Codex Pulse</title><style>body{margin:0;background:#131810;color:#eef1e5;font:16px/1.8 "Microsoft YaHei",system-ui,sans-serif}main{max-width:650px;margin:10vh auto;padding:32px;background:#202719;border:1px solid #4c593a;border-radius:18px}h1{font-size:28px}p{color:#bcc8ae}button{padding:12px 20px;color:#19200f;background:#d9e8a0;border:0;border-radius:8px;font:inherit;cursor:pointer}button:disabled{opacity:.5;cursor:default}#status{white-space:pre-wrap;color:#e5d394}a{color:#d9e8a0}@media(max-width:720px){main{margin:20px;padding:24px}}</style></head><body><main><small>财务账本 · 一次复制</small><h1>把原账本复制到新版</h1><p>此操作将当前浏览器的原账本复制到新版，原账本保持不变。新版以后独立保存在这台电脑，由登录你账号的设备共同使用，不会双向修改原浏览器的账本。</p><p>请使用原来记账的浏览器打开此页。账本从浏览器直接传给本机服务，不会显示账单内容或读取其他网站资料。</p><button id="copy" disabled>检查账本中…</button><p id="status" role="status"></p><a href="https://codex-pulse-willow-0911.wozhe0196.chatgpt.site/#finance" target="_blank" rel="noopener">返回 Codex Pulse 财务页面</a></main><script>
+(() => {
+  const endpoint = 'http://127.0.0.1:43873/storage/finance/import';
+  const button = document.querySelector('#copy'); const status = document.querySelector('#status'); let ledger = null;
+  async function check() {
+    if (location.origin !== 'http://127.0.0.1:5174') { status.textContent = '请在本机 http://127.0.0.1:5174/pulse-finance-transfer/index.html 打开此页，才能读取原账本。'; button.textContent = '需要原网页地址'; return; }
+    try {
+      ledger = localStorage.getItem('mezip.finance.center.v2');
+      const parsed = ledger ? JSON.parse(ledger) : null;
+      if (!parsed || !Array.isArray(parsed.transactions)) { ledger = null; button.textContent = '此浏览器没有原账本'; status.textContent = '没有找到原账本。请在你平时打开 ME.zip 记账的浏览器中打开这个地址。若确实没有旧账本，可回新版页面明确选择新建空账本。'; return; }
+      const response = await fetch(endpoint, { cache:'no-store' });
+      if (!response.ok) throw new Error('本机迁移服务尚未连接，请确认 Codex Pulse 采集服务正在运行后刷新。');
+      const state = await response.json();
+      if (state.initialized) { button.textContent = '新版账本已存在'; status.textContent = '新版已有账本。为避免覆盖记录，不再重复导入。请回新版重新连接。'; return; }
+      button.disabled = false; button.textContent = '复制原账本到新版'; status.textContent = '已找到原账本。点击按钮完成一次复制；不会修改原账本。';
+    } catch (error) { status.textContent = error.message || '无法读取原账本。'; button.textContent = '刷新页面重试'; }
+  }
+  button.onclick = async () => {
+    if (!ledger || button.disabled) return;
+    button.disabled = true; status.textContent = '正在保存到这台电脑…';
+    try {
+      ledger = localStorage.getItem('mezip.finance.center.v2');
+      if (!ledger || !Array.isArray(JSON.parse(ledger)?.transactions)) throw new Error('原账本已变化或暂时无法读取，请刷新页面重新检查。');
+      const response = await fetch(endpoint, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({data:ledger}) });
+      if (response.status === 409) throw new Error('新版账本已经存在，本次未覆盖。请返回新版重新连接。');
+      if (!response.ok) throw new Error('复制未完成，请刷新后重试。原账本保持不变。');
+      const result = await response.json();
+      if (!result.initialized) throw new Error('尚未收到保存确认，请刷新检查。');
+      button.textContent = '已完成复制'; status.textContent = '原账本已复制到新版。请返回新版财务页面点击“我已复制，重新连接”。原浏览器账本保持不变。';
+    } catch (error) { status.textContent = error.message; button.textContent = '刷新检查保存状态'; }
+  };
+  check();
+})();
+</script></body></html>

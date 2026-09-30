@@ -48,7 +48,7 @@ export default function SourceActions({ project, heading = false }: { project: S
     try {
       const text = kind === 'prompt'
         ? `# ${item.title} · 复现提示词\n\n以下根据现有功能整理，并非原始对话逐字记录。\n\n${item.prompt}`
-        : await loadSource(project);
+        : await loadSource(item.bundle);
       if (await writeClipboard(text)) {
         setCopied(kind);
         setMessage(kind === 'prompt' ? '已复制复现提示词' : '已复制源码文本，含文件路径与内容');
@@ -64,17 +64,17 @@ export default function SourceActions({ project, heading = false }: { project: S
     {heading && <h2>{item.title}</h2>}
     <div className="source-actions-buttons">
       <button type="button" disabled={busy} onClick={() => void copy('prompt')}>{copied === 'prompt' ? <Check size={16}/> : <Copy size={16}/>}复制提示词</button>
-      <button type="button" disabled={busy} onClick={() => void copy('source')} onPointerEnter={() => void loadSource(project).catch(() => {})} onFocus={() => void loadSource(project).catch(() => {})}>{busy ? <LoaderCircle size={16} className="source-spinner"/> : copied === 'source' ? <Check size={16}/> : <Code2 size={16}/>}复制源码</button>
-      <a href={`${sourceRepository}/releases/download/source-v1.0.0/${project}.zip`}><Download size={16}/>下载源码包</a>
+      <button type="button" disabled={busy} onClick={() => void copy('source')} onPointerEnter={() => void loadSource(item.bundle).catch(() => {})} onFocus={() => void loadSource(item.bundle).catch(() => {})}>{busy ? <LoaderCircle size={16} className="source-spinner"/> : copied === 'source' ? <Check size={16}/> : <Code2 size={16}/>}复制源码</button>
+      <a href={`${sourceRepository}/releases/download/${item.release}/${item.bundle}.zip`}><Download size={16}/>下载源码包</a>
       <a href={`${sourceRepository}/tree/main/${item.path}`} target="_blank" rel="noopener noreferrer"><GitBranch size={16}/>GitHub</a>
     </div>
-    <p className="source-actions-note">提示词按现有功能整理；源码按文件分段，运行时请下载源码包。</p>
+    <p className="source-actions-note">{item.note}</p>
     {message && <p className="source-actions-status" role="status">{message}</p>}
     <Dialog open={!!fallback} onOpenChange={open => { if (!open) setFallback(null); }}>
       <DialogContent className="source-copy-dialog">
         <DialogHeader><DialogTitle>{fallback?.title}</DialogTitle><DialogDescription>选中文本后复制；源码也可以下载为文件。</DialogDescription></DialogHeader>
         <textarea readOnly aria-label="可手动复制的内容" value={fallback?.text ?? ''} onFocus={event => event.currentTarget.select()} />
-        <div className="source-actions-buttons"><button type="button" onClick={() => { document.querySelector<HTMLTextAreaElement>('.source-copy-dialog textarea')?.select(); }}>全选文本</button><a href={`/source-library/${project}.txt`} download>下载源码文本</a></div>
+        <div className="source-actions-buttons"><button type="button" onClick={() => { document.querySelector<HTMLTextAreaElement>('.source-copy-dialog textarea')?.select(); }}>全选文本</button><a href={`/source-library/${item.bundle}.txt`} download>下载源码文本</a></div>
       </DialogContent>
     </Dialog>
   </div>;

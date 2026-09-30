@@ -1,0 +1,69 @@
+.pixelated-image-card {
+  --pixel-transition-ink: var(--color-primary, #fff);
+  position: relative;
+  width: 300px;
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--pixel-transition-ink);
+  background-color: #222;
+  border: 2px solid #fff;
+  border-radius: 15px;
+  box-sizing: border-box;
+  isolation: isolate;
+  cursor: pointer;
+  outline: none;
+}
+
+.pixelated-image-card:focus-visible {
+  outline: 3px solid color-mix(in srgb, currentColor 70%, transparent);
+  outline-offset: 4px;
+}
+
+.pixelated-image-card__default,
+.pixelated-image-card__active,
+.pixelated-image-card__pixels {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.pixelated-image-card__default,
+.pixelated-image-card__active {
+  overflow: hidden;
+}
+
+.pixelated-image-card__default {
+  z-index: 1;
+}
+
+.pixelated-image-card__active {
+  z-index: 2;
+  display: none;
+}
+
+.pixelated-image-card__pixels {
+  z-index: 3;
+  pointer-events: none;
+}
+
+.pixelated-image-card__pixel {
+  position: absolute;
+  display: none;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.pixelated-image-card :where(img, video, canvas) {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pixelated-image-card {
+    transition: none;
+  }
+}
+

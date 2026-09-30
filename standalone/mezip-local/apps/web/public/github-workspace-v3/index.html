@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#070a10" />
+    <meta
+      name="description"
+      content="ME.zip GitHub 工作台 V3：通过 GitHub 官方授权显示当前账号允许访问的真实数据。"
+    />
+    <title>ME.zip · GitHub 工作台 V3</title>
+    <link rel="stylesheet" href="/github-workspace-v1/styles.css" />
+    <style>
+      .landing-actions a[href*='preview=1'] {
+        display: none !important;
+      }
+    </style>
+    <script>
+      (() => {
+        const url = new URL(location.href);
+        if (url.searchParams.has('preview')) {
+          url.searchParams.delete('preview');
+          history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <main id="app" aria-live="polite"></main>
+    <noscript>请启用 JavaScript 后使用 GitHub 工作台。</noscript>
+    <script src="/github-workspace-v1/app.js"></script>
+    <script src="/github-workspace-v3/connection-guard.js"></script>
+  </body>
+</html>

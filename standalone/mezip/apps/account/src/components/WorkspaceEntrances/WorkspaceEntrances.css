@@ -1,0 +1,66 @@
+.workspace-entrances {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 30;
+  display: grid;
+  gap: 8px;
+  width: min(152px, calc(100vw - 36px));
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.workspace-entrance {
+  display: grid;
+  min-height: 38px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, .28);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, .9);
+  background: rgba(8, 11, 20, .62);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .24);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0;
+  text-decoration: none;
+  transition: border-color .18s ease, color .18s ease, background .18s ease, transform .18s ease;
+}
+
+.workspace-entrance-booking {
+  border-color: rgba(110, 188, 255, .42);
+}
+
+.workspace-entrance-gallery {
+  border-color: rgba(255, 187, 111, .42);
+}
+
+.workspace-entrance-visitors {
+  border-color: rgba(185, 151, 255, .55);
+}
+
+.workspace-entrance:hover,
+.workspace-entrance:focus-visible {
+  color: #fff;
+  background: rgba(13, 18, 35, .88);
+  transform: translateY(-2px);
+}
+
+.workspace-entrance:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+@media (max-width: 760px) {
+  .workspace-entrances {
+    right: 50%;
+    bottom: 146px;
+    width: min(220px, calc(100vw - 32px));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    transform: translateX(50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .workspace-entrance { transition: none; }
+}

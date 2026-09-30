@@ -12,12 +12,12 @@ import { billingProfile } from '../integration/local-apps/billing-profiles.mjs';
 import { resolveRelayRoute } from '../integration/local-apps/relay-policy.mjs';
 
 const accounts = [
-  ['account3@example.com', 'Default', '您的 Chrome'],
-  ['account2@example.com', 'Profile 1', 'haoquan'],
-  ['account6@example.com', 'Profile 2', 'Lenct'],
-  ['account4@example.com', 'Profile 3', 'token'],
-  ['account1@example.com', 'Profile 4', '好'],
-  ['account5@example.com', 'Profile 9', '这'],
+  ['account4@example.com', 'Default', '您的 Chrome'],
+  ['account3@example.com', 'Profile 1', 'haoquan'],
+  ['account7@example.com', 'Profile 2', 'Lenct'],
+  ['account5@example.com', 'Profile 3', 'token'],
+  ['account2@example.com', 'Profile 4', '好'],
+  ['account6@example.com', 'Profile 9', '这'],
 ];
 const endpoint = email => `/relay/identity/open-billing?email=${encodeURIComponent(email)}`;
 function fakeLauncher(calls, outcome = 'spawn') {
@@ -80,7 +80,7 @@ test('relay policy allows only POST for an exact authorized email and rejects ca
   for (const value of [endpoint('fixture@gmail.com'), endpoint('a14735869706@googlemail.com'),
     `${endpoint(accounts[4][0])}&email=${accounts[0][0]}`, `${endpoint(accounts[4][0])}&url=https://attacker.invalid`,
     `${endpoint(accounts[4][0])}&profile=Default`, '/relay/identity/open-billing',
-    endpoint('a147'), '/relay/identity/open-billing/extra?email=account1@example.com'])
+    endpoint('a147'), '/relay/identity/open-billing/extra?email=account2@example.com'])
     assert.equal(resolveRelayRoute('POST', value), null);
   assert.equal(resolveRelayRoute('GET', '/relay/identity/status?email=fixture@gmail.com').app, 'identity');
   assert.equal(resolveRelayRoute('POST', '/relay/booking/book').app, 'booking');

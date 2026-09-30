@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta property="og:type" content="video.movie">
+<meta property="og:title" content="ME.zip 无损播放验证 · FAMILY Edge · 20260930-01">
+<title>ME.zip 无损播放验证 · FAMILY Edge · 20260930-01</title>
+<style>body{font:18px/1.7 system-ui,sans-serif;background:#f4f6f8;color:#202c3b;margin:0}main{max-width:900px;margin:40px auto;padding:28px;background:white;border-radius:18px}h1{font-size:28px}video{display:block;width:100%;background:#111;border-radius:12px;margin:24px 0}output{display:block;background:#edf5ff;padding:16px;border-radius:10px}a{color:#155bb6}</style>
+<main>
+<h1>FAMILY Edge：真实播放验证</h1>
+<p>请在 FAMILY Edge 打开本页，点击视频播放，保持页面在前台观看至少 25 秒，再暂停。此页使用独立网址，播放后会新增一条明确标记的测试观看记录。</p>
+<video id="player" controls muted playsinline preload="metadata" src="https://media.w3.org/2010/05/sintel/trailer.mp4"></video>
+<output id="status">等待播放。请保持默认速度，不拖动进度条。</output>
+<p>完成后在聊天中回复“FAMILY 已播放并暂停”。后续同步检查由 Codex 完成。</p>
+<p>本页的秒数仅用于提示播放操作；扩展是否成功同步，由本机服务与扩展状态交叉验证。</p>
+<p><a href="http://127.0.0.1:5174/x-local-capture-v13/index.html#watch">打开 ME.zip 电影与视频</a></p>
+</main>
+<script>
+const player=document.getElementById('player'), status=document.getElementById('status');
+let observed=0, lastClock=performance.now();
+setInterval(()=>{const current=performance.now();if(!player.paused&&!player.ended&&!player.seeking&&player.readyState>=3&&document.visibilityState==='visible')observed+=Math.min(1,(current-lastClock)/1000);lastClock=current;status.textContent=`本页前台播放约 ${Math.floor(observed)} 秒；当前位置 ${Math.floor(player.currentTime)} 秒。${observed>=25?'现在可以暂停，再回复聊天。':'请持续播放至至少 25 秒。'}`},500);
+player.addEventListener('error',()=>{status.textContent='测试视频加载失败，请在聊天中回复加载失败。'});
+</script>
+</html>

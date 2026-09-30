@@ -8,7 +8,7 @@ import shutil
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-TEXT = {'.js', '.mjs', '.cjs', '.ts', '.tsx', '.css', '.html', '.md', '.txt', '.json', '.svg', '.sql', '.py', '.ps1', '.cmd', '.sh', '.yml', '.yaml'}
+TEXT = {'.js', '.mjs', '.cjs', '.ts', '.tsx', '.jsx', '.css', '.html', '.md', '.txt', '.json', '.svg', '.sql', '.py', '.ps1', '.cmd', '.sh', '.yml', '.yaml', '.go', '.toml', '.cs', '.csproj', '.example'}
 CODE = {'.js', '.mjs', '.cjs', '.ts', '.tsx', '.css', '.html'}
 NAMES = {'README.md', 'package.json', 'LICENSE', 'LICENSE.md', 'LICENSES.md', 'SOURCE-NOTES.md', 'REFERENCE-LICENSES.txt'}
 EXCLUDED = {'node_modules', '.git', '.cache', 'qa', 'outputs', 'work', '.wrangler', '.sites-runtime', 'RECON', 'yae-miko', '__pycache__'}
@@ -16,7 +16,12 @@ EXCLUDED = {'node_modules', '.git', '.cache', 'qa', 'outputs', 'work', '.wrangle
 def private_emails():
     path = ROOT / 'lib/account-query.ts'
     line = next((line for line in path.read_text(encoding='utf-8').splitlines() if line.startswith('export const queryAccounts=')), '')
-    return sorted(set(re.findall(r'[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}', line)))
+    emails = set(re.findall(r'[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}', line))
+    booking = ROOT / 'public/booking/index.html'
+    if booking.exists():
+        contact = re.search(r'const ALEX_EMAIL\s*=\s*[\"\x27]([^\"\x27]+)', booking.read_text(encoding='utf-8'))
+        if contact: emails.add(contact[1])
+    return sorted(emails)
 
 def sanitize(text):
     for index, email in enumerate(private_emails(), 1):
@@ -57,7 +62,7 @@ def included(path):
     relative = path.relative_to(ROOT)
     if relative.as_posix() == 'collector/config.json' or relative.as_posix().startswith('collector/data/'):
         return False
-    if set(relative.parts) & EXCLUDED or path.name.startswith('.env') or path.suffix in {'.log', '.sqlite', '.db', '.jsonl', '.dpapi', '.pem', '.pyc'} or path.name == 'appearance-yae-miko.png':
+    if set(relative.parts) & EXCLUDED or (path.name.startswith('.env') and path.name != '.env.example') or path.suffix in {'.log', '.sqlite', '.db', '.jsonl', '.dpapi', '.pem', '.pyc'} or path.name == 'appearance-yae-miko.png':
         return False
     # These image collections have provenance but no repository redistribution grant.
     if 'opc-images' in relative.parts or ('desktop-animals' in relative.parts and path.suffix.lower() in {'.png', '.webp', '.jpg', '.jpeg', '.gif'}):

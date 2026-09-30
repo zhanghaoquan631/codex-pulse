@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ME.zip Watch Capture — 真实播放进度与私人资料库">
+  <title>ME.zip Capture · 观看记录</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./watch.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="rail">
+      <a class="brand" href="./index.html#overview" aria-label="ME.zip 本地监控系统"><span class="brand-mark">ME<span>.zip</span></span><small>LOCAL MEMORY</small></a>
+      <nav aria-label="本地监控导航">
+        <a href="./index.html#overview">⌂<span>总览</span></a>
+        <a class="active" href="./watch.html">▶<span>观看记录</span></a>
+        <a href="./resources.html">▤<span>网页 / 文章 / 代码</span></a>
+        <a href="./index.html#timeline">◷<span>行为时间轴</span></a>
+        <a href="/x-link-archive-v1/index.html">🔗<span>X 链接收集</span></a>
+        <a href="./index.html#special">★<span>私人资料库</span></a>
+        <a href="./index.html#interest">✦<span>兴趣档案</span></a>
+        <a href="./index.html#settings">⚙<span>隐私设置</span></a>
+      </nav>
+      <div class="rail-foot"><span class="status-dot"></span><span>WATCH CAPTURE</span></div>
+    </aside>
+    <main class="main">
+      <header class="topbar"><div><p class="eyebrow">WATCH / PRIVATE HISTORY</p><h1>观看记录</h1><p class="lede">只有真正产生播放时间的视频才会记录；跳转进度不会被当成观看时长。</p></div><div class="top-actions"><span id="watch-status" class="pill pill-muted">检查本地桥接…</span><a class="button button-quiet" href="./index.html#special">打开私人资料库 ↗</a></div></header>
+      <section class="panel watch-boundary"><div><strong>本地优先 · 默认私密</strong><p>观看链接、进度、累计实际观看时间和会话只保存给当前本机用户。网页打开但没有实际播放，不会生成记录。</p></div><div class="top-actions"><a class="button button-quiet" href="./watch-test.html">打开真实播放测试 ↗</a><button id="retry-watch" class="button button-quiet" type="button">重新连接</button></div></section>
+      <section class="watch-toolbar panel"><div class="filter-tabs" id="watch-filters"><button class="active" data-filter="recent">最近观看</button><button data-filter="continue">继续观看</button><button data-filter="completed">已看完</button><button data-filter="movie">电影</button><button data-filter="video">视频</button><button data-filter="all">全部</button></div><div class="filter-row"><input id="watch-search" type="search" placeholder="搜索标题、平台、作者或链接"><span id="watch-count" class="pill pill-muted">0 条</span></div></section>
+      <section id="watch-error" class="empty panel hidden" role="alert"></section>
+      <section id="watch-loading" class="empty panel"><strong>正在读取观看记录…</strong><span>只从本地桥接服务读取，不显示假数据。</span></section>
+      <section id="watch-list" class="watch-list hidden"></section>
+    </main>
+  </div>
+  <script src="./watch-app.js"></script>
+</body>
+</html>

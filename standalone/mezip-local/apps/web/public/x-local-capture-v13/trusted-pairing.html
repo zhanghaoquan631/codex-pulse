@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ME.zip Capture V13 本机 Edge 扩展可信配对">
+  <title>ME.zip Capture V13 · 可信 Edge 配对</title>
+  <style>
+    :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0b0d14; color: #f7f4ff; }
+    * { box-sizing: border-box; }
+    body { min-height: 100vh; margin: 0; display: grid; place-items: center; padding: 24px; background: radial-gradient(circle at 15% 0%, #2b1c4c 0, transparent 42%), radial-gradient(circle at 100% 100%, #15263e 0, transparent 48%), #0b0d14; }
+    main { width: min(620px, 100%); border: 1px solid #493774; border-radius: 20px; padding: clamp(24px, 6vw, 48px); background: rgba(20, 18, 34, .92); box-shadow: 0 28px 90px rgba(0, 0, 0, .42); }
+    .eyebrow { color: #cdb7ff; font-size: 12px; font-weight: 700; letter-spacing: .12em; }
+    h1 { margin: 12px 0; font-size: clamp(28px, 5vw, 42px); line-height: 1.08; }
+    p { color: #beb8ca; line-height: 1.65; }
+    .notice { margin: 24px 0; padding: 16px; border: 1px solid #3e3654; border-radius: 13px; background: #131322; }
+    .notice strong { display: block; margin-bottom: 6px; color: #ebe6f7; }
+    #status { margin: 0; min-height: 1.65em; }
+    .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+    button, a { appearance: none; border: 1px solid #5e45a1; border-radius: 11px; padding: 12px 16px; color: #fff; background: #6e4fc1; font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; }
+    button:hover { background: #805ce0; }
+    button:disabled { cursor: wait; opacity: .65; }
+    a { border-color: #393447; color: #ddd6ea; background: transparent; }
+    .good { color: #8de0b2; } .error { color: #ffb2b2; } .muted { color: #8f899c; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="eyebrow">ME.ZIP / LOCAL TRUSTED PAIRING</div>
+    <h1>配对此 Edge 扩展</h1>
+    <p>这个页面只在本机 <code>127.0.0.1:5174</code> 上运行。配对时会生成一次性码，交给当前已加载的 ME.zip Capture 扩展；页面不会显示、保存或上传长期 Token。</p>
+    <section class="notice" aria-live="polite">
+      <strong id="heading">准备配对</strong>
+      <p id="status">确认扩展已重新加载后，点击下面的按钮。</p>
+    </section>
+    <div class="actions">
+      <button id="pair" type="button">配对此扩展</button>
+      <a href="./index.html#bookmarks">返回 V13 工作台</a>
+    </div>
+    <p class="muted">成功后，本机桥接会保存与当前扩展 ID 绑定的 Token，并立即请求一次 Edge 收藏夹同步。</p>
+  </main>
+  <script>
+    (() => {
+      'use strict';
+
+      const LOCAL_ORIGINS = new Set(['http://127.0.0.1:5174', 'http://localhost:5174']);
+      const API = localStorage.getItem('mezip.x.local.capture.api') || 'http://127.0.0.1:4319';
+      const button = document.getElementById('pair');
+      const heading = document.getElementById('heading');
+      const status = document.getElementById('status');
+      let pairing = false;
+
+      function setStatus(message, kind = '') {
+        status.textContent = message;
+        status.className = kind;
+      }
+
+      async function readJson(response) {
+        let body = null;
+        try { body = await response.json(); } catch { /* non-JSON bridge failure */ }
+        if (!response.ok) throw new Error(body?.error?.message || `本机桥接请求失败（${response.status}）。`);
+        return body?.data ?? body;
+      }
+
+      function requestExtensionPair(code) {
+        return new Promise((resolve, reject) => {
+          const requestId = `trusted_pair_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+          const timeout = window.setTimeout(() => {
+            window.removeEventListener('message', onMessage);
+            reject(new Error('没有检测到 ME.zip Capture 扩展。请先在 Edge 扩展管理页点击“重新加载”，然后回到此页再试。'));
+          }, 7_000);
+          const onMessage = (event) => {
+            if (event.source !== window || event.origin !== window.location.origin) return;
+            const message = event.data;
+            if (!message || message.source !== 'MEZIP_CAPTURE_EXTENSION' || message.type !== 'MEZIP_BRIDGE_PAIR_RESULT' || message.requestId !== requestId) return;
+            window.clearTimeout(timeout);
+            window.removeEventListener('message', onMessage);
+            if (message.ok === true && message.paired === true) resolve(message);
+            else reject(new Error(String(message.error || 'Edge 扩展未完成配对。')));
+          };
+          window.addEventListener('message', onMessage);
+          window.postMessage({
+            source: 'MEZIP_V13', type: 'MEZIP_BRIDGE_PAIR', requestId,
+            pairingId: String(code.pairingId || ''), code: String(code.code || code.pairingCode || ''),
+          }, window.location.origin);
+        });
+      }
+
+      async function startPairing() {
+        if (pairing) return;
+        if (!LOCAL_ORIGINS.has(window.location.origin)) {
+          heading.textContent = '不是受信任的本机地址';
+          setStatus('请从 ME.zip Capture 扩展打开本页面。', 'error');
+          return;
+        }
+        pairing = true;
+        button.disabled = true;
+        heading.textContent = '正在生成一次性配对码…';
+        setStatus('正在连接本机桥接服务。');
+        try {
+          const code = await readJson(await fetch(`${API}/v1/x/local-capture/edge-bookmarks/pairing/start`, {
+            method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: '{}',
+          }));
+          if (!String(code?.pairingId || '').trim() || !String(code?.code || code?.pairingCode || '').trim()) {
+            throw new Error('本机桥接没有返回有效的一次性配对码。');
+          }
+          heading.textContent = '正在请求 Edge 扩展确认…';
+          setStatus('一次性配对码已生成，正在交给当前浏览器中的 ME.zip Capture 扩展。');
+          await requestExtensionPair(code);
+          heading.textContent = 'Edge 扩展已可信配对';
+          setStatus('桥接 Token 已写入扩展和本机桥接注册表，首次 Edge 收藏夹同步已触发。', 'good');
+        } catch (error) {
+          heading.textContent = '配对尚未完成';
+          setStatus(error instanceof Error ? error.message : '配对失败。', 'error');
+          button.disabled = false;
+          pairing = false;
+        }
+      }
+
+      button.addEventListener('click', () => { void startPairing(); });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fff8f8" />
+    <meta name="description" content="SweetCam 本地创意自拍相机" />
+    <title>SweetCam · 甜拍相机</title>
+    <link rel="stylesheet" href="./sweetcam.css" />
+  </head>
+  <body>
+    <main class="sweetcam-shell" aria-label="SweetCam 甜拍相机">
+      <header class="titlebar">
+        <div class="window-controls" aria-hidden="true">
+          <span class="window-dot dot-close"></span>
+          <span class="window-dot dot-minimize"></span>
+          <span class="window-dot dot-maximize"></span>
+        </div>
+        <div class="brand-lockup">
+          <span class="brand-mark">✦</span>
+          <span>SweetCam</span>
+        </div>
+        <div class="title-actions">
+          <button class="icon-button header-text-button" id="importMediaButton" type="button" aria-label="上传照片或录像" title="上传照片或录像">上传</button>
+          <button class="icon-button header-text-button" id="openMobileStudio" type="button" aria-label="打开手机上传链接" title="手机上传链接">手机</button>
+          <button class="icon-button" id="openSettings" type="button" aria-label="打开设置" title="设置">⚙</button>
+          <button class="icon-button" id="openGallery" type="button" aria-label="打开本地图库" title="本地图库">▦</button>
+        </div>
+      </header>
+
+      <section class="camera-layout">
+        <section class="camera-column" aria-label="摄像头拍摄区">
+          <div class="camera-frame ratio-4-3" id="cameraFrame">
+            <video id="cameraPreview" class="camera-feed" autoplay playsinline muted aria-label="实时摄像头预览"></video>
+            <div class="camera-empty" id="cameraEmpty">
+              <div class="empty-orbit"><span>◌</span></div>
+              <strong>准备连接摄像头</strong>
+              <p id="cameraStatus">允许浏览器使用摄像头后，即可开始拍摄。</p>
+              <button class="secondary-button" id="startCamera" type="button">启用摄像头</button>
+            </div>
+            <div class="camera-grid" id="cameraGrid" aria-hidden="true"></div>
+            <div class="camera-flash" id="cameraFlash" aria-hidden="true"></div>
+            <div class="capture-countdown" id="countdown" aria-live="assertive"></div>
+            <div class="camera-top-controls">
+              <button class="small-control" id="toggleGrid" type="button" aria-pressed="false" title="构图网格">⌗ <span>构图</span></button>
+              <div class="capture-badge" id="cameraResolution">未连接</div>
+              <button class="small-control" id="ratioButton" type="button" title="切换拍摄比例"><span id="ratioLabel">4:3</span></button>
+            </div>
+            <div class="camera-bottom-hud">
+              <span class="effect-hud" id="selectedEffectName">柔粉</span>
+              <span class="record-hud" id="recordHud" hidden>● 00:00</span>
+            </div>
+          </div>
+
+          <section class="capture-controls" aria-label="拍摄控制">
+            <div class="mode-tabs" role="tablist" aria-label="拍摄模式">
+              <button class="mode-tab is-active" data-mode="photo" type="button" role="tab" aria-selected="true"><span>▣</span>拍照</button>
+              <button class="mode-tab" data-mode="video" type="button" role="tab" aria-selected="false"><span>▸</span>录像</button>
+              <button class="mode-tab" data-mode="strip" type="button" role="tab" aria-selected="false"><span>▤</span>四连拍</button>
+              <button class="mode-tab" data-mode="burst" type="button" role="tab" aria-selected="false"><span>✦</span>连拍</button>
+            </div>
+
+            <div class="shutter-row">
+              <div class="capture-side-actions">
+                <button class="utility-button" id="timerButton" type="button" title="倒计时拍摄"><span>◷</span><b id="timerLabel">关闭</b></button>
+                <button class="utility-button microphone-quick" id="microphoneQuickToggle" type="button" aria-pressed="false" hidden title="切换录像麦克风"><span>🎙</span><b id="microphoneQuickLabel">麦克风关</b></button>
+              </div>
+              <button class="shutter" id="shutterButton" type="button" aria-label="拍照"><span class="shutter-inner">●</span></button>
+              <button class="utility-button" id="mirrorButton" type="button" aria-pressed="true" title="切换预览镜像"><span>⇄</span><b id="mirrorLabel">镜像开</b></button>
+            </div>
+
+            <div class="capture-note" id="captureNote">拍摄会先保存在当前设备的 SweetCam 本地图库；通过手机入口上传的原件会仅在同一 Wi‑Fi 内保存到这台电脑。</div>
+          </section>
+        </section>
+
+        <aside class="effects-panel" aria-label="特效控制">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">实时效果</p>
+              <h1>特效</h1>
+            </div>
+            <button class="text-button" id="clearEffect" type="button">还原</button>
+          </div>
+
+          <div class="effect-categories" id="effectCategories" aria-label="特效分类"></div>
+          <div class="effect-grid" id="effectGrid" aria-live="polite"></div>
+
+          <section class="adjustments" aria-label="细节调整">
+            <div class="panel-heading compact-heading">
+              <h2>微调</h2>
+              <button class="text-button" id="resetAdjustments" type="button">重置</button>
+            </div>
+            <label class="range-field" for="brightnessRange"><span>亮度</span><output id="brightnessValue">0</output></label>
+            <input id="brightnessRange" type="range" min="-25" max="25" value="0" />
+            <label class="range-field" for="softnessRange"><span>柔雾</span><output id="softnessValue">0</output></label>
+            <input id="softnessRange" type="range" min="0" max="12" value="0" />
+          </section>
+
+          <section class="recent-section" aria-label="最近拍摄">
+            <div class="panel-heading compact-heading">
+              <h2>最近拍摄</h2>
+              <button class="text-button" id="openGalleryInline" type="button">查看全部</button>
+            </div>
+            <div class="recent-groups" id="recentGroups">
+              <section class="recent-group" aria-labelledby="recentPhotoTitle">
+                <div class="recent-group-title"><span id="recentPhotoTitle">照片</span><small id="recentPhotoCount">0</small></div>
+                <div class="recent-strip" id="recentPhotoStrip">
+                  <div class="recent-empty">还没有照片</div>
+                </div>
+              </section>
+              <section class="recent-group" aria-labelledby="recentVideoTitle">
+                <div class="recent-group-title"><span id="recentVideoTitle">录像</span><small id="recentVideoCount">0</small></div>
+                <div class="recent-strip" id="recentVideoStrip">
+                  <div class="recent-empty">还没有录像</div>
+                </div>
+              </section>
+            </div>
+          </section>
+        </aside>
+      </section>
+    </main>
+
+    <dialog class="modal gallery-modal" id="galleryDialog" aria-labelledby="galleryTitle">
+      <div class="modal-card">
+        <header class="modal-header">
+          <div>
+            <p class="eyebrow">本机图库</p>
+            <h2 id="galleryTitle">本地图库</h2>
+          </div>
+          <button class="icon-button close-button" data-close-dialog="galleryDialog" type="button" aria-label="关闭图库">×</button>
+        </header>
+        <div class="gallery-tabs" role="tablist" aria-label="图库分类">
+          <button class="gallery-tab is-active" data-gallery-filter="all" type="button">全部</button>
+          <button class="gallery-tab" data-gallery-filter="photo" type="button">照片</button>
+          <button class="gallery-tab" data-gallery-filter="video" type="button">录像</button>
+          <button class="gallery-tab" data-gallery-filter="favorite" type="button">收藏</button>
+          <button class="gallery-tab" data-gallery-filter="deleted" type="button">最近删除</button>
+        </div>
+        <p class="gallery-help" id="galleryHelp">照片和录像先保存在当前设备的本地图库；通过手机入口上传的原件会仅在同一 Wi‑Fi 内保存到这台电脑。</p>
+        <div class="gallery-grid" id="galleryGrid"></div>
+      </div>
+    </dialog>
+
+    <dialog class="modal media-viewer-modal" id="mediaViewerDialog" aria-labelledby="mediaViewerTitle">
+      <div class="modal-card media-viewer-card">
+        <header class="modal-header">
+          <div>
+            <p class="eyebrow">已拍摄内容</p>
+            <h2 id="mediaViewerTitle">照片</h2>
+          </div>
+          <button class="icon-button close-button" data-close-dialog="mediaViewerDialog" type="button" aria-label="关闭媒体查看器">×</button>
+        </header>
+        <div class="media-viewer-stage" id="mediaViewerMedia" aria-live="polite"></div>
+        <p class="media-viewer-meta" id="mediaViewerMeta"></p>
+        <div class="media-viewer-actions">
+          <button class="gallery-action viewer-action" id="mediaViewerEdit" type="button">再次编辑</button>
+          <button class="gallery-action viewer-action" id="mediaViewerDownload" type="button">下载原文件</button>
+          <button class="gallery-action viewer-action" id="mediaViewerCopy" type="button">复制图片</button>
+          <div class="media-drag-out is-preparing" id="mediaDragOut" draggable="false" role="button" tabindex="0" aria-disabled="true" title="正在准备可拖拽文件">
+            <span aria-hidden="true">⠿</span><span id="mediaDragLabel">准备拖拽文件…</span>
+          </div>
+        </div>
+        <p class="media-drag-help">可抓住上方实际照片或录像，或拖动此区域，直接拖到微信和其他支持文件拖放的应用。</p>
+      </div>
+    </dialog>
+
+    <dialog class="modal settings-modal" id="settingsDialog" aria-labelledby="settingsTitle">
+      <div class="modal-card settings-card">
+        <header class="modal-header">
+          <div>
+            <p class="eyebrow">本地控制</p>
+            <h2 id="settingsTitle">拍摄设置</h2>
+          </div>
+          <button class="icon-button close-button" data-close-dialog="settingsDialog" type="button" aria-label="关闭设置">×</button>
+        </header>
+        <div class="settings-content">
+          <label class="select-field" for="cameraSelect"><span>摄像头</span><select id="cameraSelect"><option value="">正在读取设备…</option></select></label>
+          <label class="select-field" for="qualitySelect"><span>清晰度</span><select id="qualitySelect"><option value="auto">自动</option><option value="720">720P</option><option value="1080">1080P</option></select></label>
+          <label class="switch-field"><span><b>预览镜像</b><small>只影响屏幕中的预览</small></span><input id="previewMirrorToggle" type="checkbox" checked /><i></i></label>
+          <label class="switch-field"><span><b>保存时镜像</b><small>开启后，下载的照片也保持镜像</small></span><input id="saveMirrorToggle" type="checkbox" /><i></i></label>
+          <label class="switch-field"><span><b>录像使用麦克风</b><small>仅开始录像时请求麦克风权限</small></span><input id="microphoneToggle" type="checkbox" /><i></i></label>
+          <p class="privacy-note">SweetCam V1 不会把摄像头画面或媒体上传到互联网。只有你主动使用“手机”入口上传时，原文件才会在同一 Wi‑Fi 内保存到这台电脑。浏览器会在你同意后才启用设备。</p>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog class="modal media-editor-modal" id="mediaEditorDialog" aria-labelledby="mediaEditorTitle">
+      <div class="modal-card media-editor-card">
+        <header class="modal-header">
+          <div>
+            <p class="eyebrow">不覆盖原文件</p>
+            <h2 id="mediaEditorTitle">重新编辑照片</h2>
+          </div>
+          <button class="icon-button close-button" data-close-dialog="mediaEditorDialog" type="button" aria-label="关闭编辑器">×</button>
+        </header>
+        <div class="media-editor-layout">
+          <div class="media-editor-stage" id="mediaEditorPreview" aria-live="polite"></div>
+          <aside class="media-editor-controls" aria-label="编辑控制">
+            <div>
+              <p class="eyebrow">重新选择</p>
+              <h3>特效</h3>
+            </div>
+            <div class="editor-effect-grid" id="editorEffectGrid"></div>
+            <label class="range-field" for="editorBrightnessRange"><span>亮度</span><output id="editorBrightnessValue">0</output></label>
+            <input id="editorBrightnessRange" type="range" min="-25" max="25" value="0" />
+            <label class="range-field" for="editorSoftnessRange"><span>柔雾</span><output id="editorSoftnessValue">0</output></label>
+            <input id="editorSoftnessRange" type="range" min="0" max="12" value="0" />
+            <button class="secondary-button editor-export-button" id="editorExportButton" type="button">生成新的编辑版</button>
+            <p class="editor-status" id="editorStatus">原文件会保留；新效果将作为另一份内容保存。</p>
+          </aside>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog class="modal mobile-studio-modal" id="mobileStudioDialog" aria-labelledby="mobileStudioTitle">
+      <div class="modal-card mobile-studio-card">
+        <header class="modal-header">
+          <div>
+            <p class="eyebrow">同一局域网</p>
+            <h2 id="mobileStudioTitle">手机上传与编辑</h2>
+          </div>
+          <button class="icon-button close-button" data-close-dialog="mobileStudioDialog" type="button" aria-label="关闭手机链接">×</button>
+        </header>
+        <p>用手机打开下面的链接，即可上传照片或录像，并使用同一套特效和微调。手机和电脑需连接同一个 Wi-Fi。</p>
+        <div class="mobile-link-row"><input id="mobileStudioLink" type="text" readonly value="正在准备手机链接…" aria-label="手机上传链接" /><button class="gallery-action viewer-action" id="copyMobileStudioLink" type="button">复制链接</button></div>
+        <p class="mobile-studio-status" id="mobileStudioStatus">正在检查本机手机上传服务…</p>
+      </div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <canvas id="captureCanvas" hidden></canvas>
+    <input id="importMediaInput" type="file" accept="image/*,video/*" multiple hidden />
+    <script type="module" src="./sweetcam.js"></script>
+  </body>
+</html>

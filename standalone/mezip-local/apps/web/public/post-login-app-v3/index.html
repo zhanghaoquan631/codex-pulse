@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0d0d10" />
+    <title>ME.zip · 登录后空间 V3</title>
+    <style>
+      :root { color-scheme: dark; font-family: Inter, "PingFang SC", "Microsoft YaHei", sans-serif; }
+      * { box-sizing: border-box; }
+      body { margin: 0; min-width: 320px; color: #f8f2e6; background: #0d0d10; }
+      button, input { font: inherit; }
+      button { cursor: pointer; }
+      .page { min-height: 100vh; display: grid; place-items: center; padding: 24px; background: radial-gradient(circle at 50% 8%, #8f632c40, transparent 35%), #0d0d10; }
+      .panel { width: min(720px, 100%); padding: clamp(20px, 4vw, 38px); border: 1px solid #c99d5b66; border-radius: 28px; background: #17161aeF; box-shadow: 0 30px 100px #000b, inset 0 1px #fff1; }
+      .panel.cards { width: min(560px, 100%); padding: 0; border: 0; background: transparent; box-shadow: none; }
+      .eyebrow { margin: 0 0 8px; color: #e7bd76; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; }
+      h1, h2, p { margin: 0; }
+      h1 { font-size: clamp(28px, 5vw, 46px); line-height: 1.1; }
+      .muted { margin-top: 12px; color: #d7d0c5b3; line-height: 1.7; }
+      .login-form { display: grid; gap: 14px; margin-top: 26px; }
+      label { display: grid; gap: 8px; color: #e8e0d3; font-size: 14px; }
+      input { min-height: 48px; padding: 0 14px; border: 1px solid #ffffff2e; border-radius: 12px; color: #fff; background: #0b0b0ec7; outline: 0; }
+      input:focus { border-color: #e6b86b; box-shadow: 0 0 0 3px #e6b86b22; }
+      .consent { display: flex; grid-template-columns: auto 1fr; align-items: flex-start; gap: 9px; color: #bdb5a8; font-size: 13px; }
+      .consent input { min-height: auto; margin-top: 3px; accent-color: #e6b86b; }
+      .primary { min-height: 48px; border: 0; border-radius: 999px; color: #1a130b; background: #f2cc87; font-weight: 700; }
+      .primary:disabled { cursor: default; opacity: .45; }
+      .status { min-height: 24px; color: #f0bd7b; font-size: 13px; }
+      .cards { display: grid; gap: 18px; }
+      .card-heading { display: grid; gap: 8px; justify-items: center; text-align: center; }
+      .card-quote { max-width: 34rem; margin: 0; color: #f2cc87; font-size: clamp(16px, 2.8vw, 24px); line-height: 1.45; font-weight: 500; }
+      .card-quote cite { display: block; margin-top: 7px; color: #d7d0c5; font-size: clamp(12px, 1.9vw, 15px); font-style: normal; letter-spacing: .04em; }
+      .card-stage { position: relative; width: min(100%, 460px); aspect-ratio: 2 / 3; margin: 0 auto; overflow: hidden; cursor: grab; touch-action: pan-y; user-select: none; }
+      .card-stage:active { cursor: grabbing; }
+      .card-image { width: 100%; height: 100%; display: block; object-fit: cover; pointer-events: none; }
+      .card-footer { display: grid; justify-items: center; gap: 10px; color: #c9c0b3; font-size: 13px; }
+      .dots { display: flex; gap: 7px; }
+      .dot { width: 7px; height: 7px; border-radius: 99px; background: #fff4; }
+      .dot.active { width: 22px; background: #f2cc87; }
+      html { scroll-behavior: smooth; }
+      .features { display: grid; gap: 20px; }
+      .panel.features { width: min(1040px, 100%); }
+      .features-title-reference { max-width: 100%; display: grid; gap: .1em; color: #f2cc87; font-size: clamp(18px, 3.4vw, 32px); letter-spacing: .12em; line-height: 1.3; text-transform: uppercase; }
+      .features-title-reference span { display: block; white-space: nowrap; text-align: justify; text-align-last: justify; }
+      .feature-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 24px; }
+      .feature { display: grid; gap: 7px; min-height: 96px; padding: 16px; border: 1px solid #ffffff1f; border-radius: 16px; color: #f9f1e4; text-decoration: none; background: #ffffff08; transition: border-color .2s, transform .2s, background .2s; }
+      .feature:hover { border-color: #e7bd7688; transform: translateY(-2px); background: #e7bd7618; }
+      .feature span { color: #bdb5a8; font-size: 13px; }
+      .feature-membership { border-color: #e7bd7670; background: linear-gradient(135deg, #8f632c32, #ffffff08); }
+      .feature-github { border-color: #9b71e88a; background: linear-gradient(135deg, #5f3bb52e, #ffffff08); }
+      .feature-github:hover { border-color: #b896ff; background: linear-gradient(135deg, #7048d94d, #ffffff0d); }
+      .feature-x-manual { border-color: #80d4e888; background: linear-gradient(135deg, #2a7f9640, #ffffff08); }
+      .feature-x-manual:hover { border-color: #80d4e8; background: linear-gradient(135deg, #2a9dbd55, #ffffff0d); }
+      .feature-x-capture { border-color: #b88cff88; background: linear-gradient(135deg, #6b3fbd38, #ffffff08); }
+      .feature-x-capture:hover { border-color: #c9a8ff; background: linear-gradient(135deg, #7a4bd455, #ffffff0d); }
+      .feature-monitor { border-color: #64c7d888; background: linear-gradient(135deg, #1e718238, #ffffff08); }
+      .feature-monitor:hover { border-color: #7ee7f4; background: linear-gradient(135deg, #238da055, #ffffff0d); }
+      .github-connection-panel { display: grid; gap: 12px; margin-top: 18px; padding: 18px; border: 1px solid #9b71e866; border-radius: 16px; background: linear-gradient(135deg, #5f3bb520, #ffffff06); }
+      .github-connection-panel h3, .github-connection-panel p { margin: 0; }
+      .github-connection-panel p { color: #c9c0d8; font-size: 13px; line-height: 1.55; }
+      .github-connection-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+      .feature-cta { display: inline-flex; align-items: center; justify-content: center; min-height: 38px; padding: 0 14px; border: 1px solid #ffffff2e; border-radius: 999px; color: #f8f1ff; text-decoration: none; background: #ffffff0a; font-size: 13px; }
+      .feature-cta:hover { border-color: #c4a5ff; background: #9b71e822; }
+      .feature-cta.is-hidden { display: none; }
+      .github-connection-status { color: #d4c5ee; font-size: 12px; }
+      .x-capture-panel { display: grid; gap: 12px; margin-top: 18px; padding: 18px; border: 1px solid #b88cff55; border-radius: 16px; background: linear-gradient(135deg, #6b3fbd20, #ffffff06); }
+      .x-capture-panel h3 { margin: 0; }
+      .x-capture-panel p { margin: 0; color: #bdb5a8; font-size: 13px; }
+      .x-capture-stats { display: flex; flex-wrap: wrap; gap: 10px; }
+      .x-capture-stat { min-width: 100px; padding: 10px 12px; border: 1px solid #ffffff18; border-radius: 10px; background: #00000018; }
+      .x-capture-stat strong,.x-capture-stat span { display: block; }
+      .x-capture-stat strong { font-size: 20px; color: #f5ddff; }
+      .x-capture-stat span { margin-top: 3px; color: #aaa0b6; font-size: 12px; }
+      .x-capture-status { color: #bdb5a8; font-size: 12px; }
+      .membership-passes { scroll-margin-top: 24px; display: grid; gap: 14px; padding-top: 8px; }
+      .membership-passes-heading { display: grid; gap: 6px; padding-top: 20px; border-top: 1px solid #ffffff1d; }
+      .membership-passes-heading h2 { font-size: clamp(22px, 4vw, 30px); }
+      .membership-passes-heading p { color: #d7d0c5b3; font-size: 14px; line-height: 1.65; }
+      .plan-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+      .plan-card { min-height: 176px; display: grid; align-content: space-between; gap: 12px; padding: 18px; overflow: hidden; border: 1px solid #ffffff26; border-radius: 20px; box-shadow: inset 0 1px #ffffff26, 0 14px 28px #0005; }
+      .plan-card p { margin: 0; font-size: 12px; letter-spacing: .12em; }
+      .plan-card strong { display: block; margin-top: 5px; font-size: clamp(23px, 4vw, 31px); line-height: 1; }
+      .plan-card span { color: #ffffffd9; font-size: 13px; line-height: 1.5; }
+      .plan-card-free { color: #f7efe0; background: linear-gradient(145deg, #232127, #5a5147); }
+      .plan-card-go { color: #fff; background: linear-gradient(180deg, #031c1a 0%, #075b50 48%, #2bd9b5 100%); }
+      .plan-card-plus { color: #fff; background: linear-gradient(180deg, #1c080b 0%, #671b18 45%, #ff9b24 100%); }
+      .plan-card-pro { color: #fff; background: linear-gradient(145deg, #10062e 0%, #3511a3 46%, #ed1a91 76%, #ffb51c 100%); }
+      .plan-card-pro-max { color: #fff; background: linear-gradient(180deg, #070d1e 0%, #0b2b72 50%, #36cafa 100%); }
+      .passes-note { color: #bdb5a8; font-size: 12px; line-height: 1.6; }
+      .booking { scroll-margin-top: 24px; display: grid; gap: 14px; padding-top: 24px; border-top: 1px solid #ffffff1d; }
+      .booking-heading { display: grid; gap: 6px; }
+      .booking-heading h2 { font-size: clamp(22px, 4vw, 30px); }
+      .booking-heading p { color: #d7d0c5b3; font-size: 14px; line-height: 1.65; }
+      .booking-shell { overflow: hidden; border: 1px solid #ffffff24; border-radius: 20px; background: #0c0c10; box-shadow: inset 0 1px #ffffff16, 0 18px 42px #0006; }
+      .booking-layout { display: grid; grid-template-columns: 170px minmax(0, 1fr) 164px; min-height: 430px; }
+      .booking-side, .booking-calendar, .booking-slots, .booking-form { padding: 18px; }
+      .booking-side { display: grid; align-content: start; gap: 14px; border-right: 1px solid #ffffff18; background: #121218; }
+      .booking-avatar { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; color: #fff; background: linear-gradient(135deg, #7d3cff, #b46aff); font-weight: 700; }
+      .booking-side h3 { margin: 0; font-size: 19px; }
+      .booking-title { color: #fff; font-size: 18px; font-weight: 700; }
+      .booking-meta { display: grid; gap: 9px; color: #d0cad3; font-size: 12px; line-height: 1.4; }
+      .booking-calendar { display: grid; align-content: start; gap: 14px; }
+      .booking-availability { margin: 0; color: #aaa4af; font-size: 11px; line-height: 1.5; }
+      .booking-month { display: flex; align-items: center; justify-content: space-between; color: #fff; font-size: 19px; font-weight: 700; }
+      .booking-month-actions { display: flex; gap: 7px; }
+      .booking-month-actions button, .booking-window button { min-width: 31px; min-height: 31px; border: 1px solid #ffffff18; border-radius: 9px; color: #ddd7e3; background: #ffffff08; }
+      .booking-week, .booking-dates { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; }
+      .booking-week { color: #aaa4af; font-size: 11px; text-align: center; }
+      .booking-date { min-height: 39px; border: 1px solid transparent; border-radius: 9px; color: #e8e4ec; background: #ffffff08; }
+      .booking-date:hover, .booking-date:focus-visible { border-color: #9c62ff; background: #9c62ff29; outline: none; }
+      .booking-date.is-selected { color: #17131d; border-color: #fff; background: #fff; font-weight: 700; }
+      .booking-date.is-unavailable, .booking-date:disabled { cursor: not-allowed; color: #49434e; border-color: #17151b; background: #09090c; box-shadow: inset 0 1px #000; }
+      .booking-date.is-unavailable:hover, .booking-date:disabled:hover { border-color: #17151b; background: #09090c; }
+      .booking-date.is-empty { visibility: hidden; }
+      .booking-slots { display: grid; align-content: start; gap: 12px; border-left: 1px solid #ffffff18; background: #111116; }
+      .booking-slot-heading { display: flex; align-items: center; justify-content: space-between; gap: 5px; color: #fff; font-size: 14px; font-weight: 700; }
+      .booking-window { display: flex; gap: 3px; padding: 3px; border-radius: 9px; background: #ffffff0c; }
+      .booking-window button { min-width: 0; min-height: 26px; padding: 0 6px; border: 0; color: #aaa4af; background: transparent; font-size: 10px; }
+      .booking-window button.is-selected { color: #fff; background: #ffffff1b; }
+      .slot-list { display: grid; gap: 8px; max-height: 360px; overflow-y: auto; }
+      .slot { min-height: 38px; border: 1px solid #ffffff38; border-radius: 9px; color: #fff; background: transparent; }
+      .slot:hover, .slot:focus-visible { border-color: #a96bff; background: #a96bff18; outline: none; }
+      .booking-form { display: grid; grid-template-columns: 180px minmax(0, 1fr); min-height: 430px; }
+      .booking-form .booking-side { margin: -18px 0 -18px -18px; }
+      .booking-form-main { display: grid; align-content: start; gap: 13px; }
+      .booking-form-main h3 { margin: 0 0 2px; color: #fff; font-size: 20px; }
+      .booking-form-main label { display: grid; gap: 6px; color: #eee9f3; font-size: 13px; }
+      .booking-form-main input, .booking-form-main textarea { min-height: 40px; padding: 9px 11px; border: 1px solid #ffffff2e; border-radius: 9px; color: #fff; background: #ffffff08; resize: vertical; }
+      .booking-form-main input[readonly] { cursor: default; color: #f2d7a5; border-color: #f2cc8755; background: #f2cc8710; }
+      .booking-form-main textarea { min-height: 82px; }
+      .booking-form-main input:focus, .booking-form-main textarea:focus { border-color: #a96bff; box-shadow: 0 0 0 3px #a96bff22; outline: none; }
+      .booking-form-notice { margin: 0; color: #cfc6d6; font-size: 12px; line-height: 1.55; }
+      .booking-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 3px; }
+      .booking-actions .primary { min-height: 42px; padding: 0 18px; color: #fff; background: linear-gradient(135deg, #7d3cff, #bd75ff); }
+      .booking-status { min-height: 22px; color: #d7b9ff; font-size: 12px; line-height: 1.5; }
+      .booking-confirm { display: grid; gap: 14px; padding: 26px; }
+      .booking-confirm h3 { margin: 0; font-size: 23px; }
+      .booking-confirm p { color: #d7d0dd; line-height: 1.65; }
+      .booking-confirm strong { color: #fff; }
+      .booking-confirm .notice { padding: 12px; border: 1px solid #f2cc8755; border-radius: 12px; color: #f2d7a5; background: #f2cc8710; font-size: 13px; line-height: 1.6; }
+      .booking-confirm a { color: #d6b4ff; }
+      .secondary { justify-self: start; min-height: 40px; padding: 0 16px; border: 1px solid #ffffff2e; border-radius: 999px; color: #eee4d3; background: transparent; }
+      @media (max-width: 760px) { .booking-layout, .booking-form { grid-template-columns: 1fr; } .booking-side, .booking-slots { border: 0; border-bottom: 1px solid #ffffff18; } .booking-form .booking-side { margin: -18px -18px 0; } }
+      @media (max-width: 560px) { .page { padding: 12px; } .panel { border-radius: 20px; padding: 18px; } .feature-grid, .plan-grid { grid-template-columns: 1fr; } .features-title-reference { font-size: 10px; letter-spacing: .08em; } .booking-layout { display: block; } .booking-side, .booking-calendar, .booking-slots, .booking-form { padding: 16px; } .booking-form .booking-side { margin: -16px -16px 0; } .booking-form { min-height: 0; } }
+      @media (prefers-reduced-motion: reduce) { .feature { transition: none; } .feature:hover { transform: none; } }
+    </style>
+  </head>
+  <body>
+    <main id="app" class="page" aria-live="polite"></main>
+    <script>
+      (() => {
+        const root = document.querySelector('#app');
+        const cards = [
+          '/after-login-cards/card-1-cropped.jpg',
+          '/after-login-cards/card-2.jpg',
+          '/after-login-cards/card-3-cropped.jpg',
+          '/after-login-cards/card-4.jpg',
+        ];
+        const cardQuotes = [
+          { quote: '“I am rooted, but I flow.”', author: 'Virginia Woolf' },
+          { quote: '“Life can only be understood backwards; but it must be lived forwards.”', author: 'Søren Kierkegaard' },
+          { quote: '“Forever is composed of nows.”', author: 'Emily Dickinson' },
+          { quote: '“The true secret of happiness lies in taking a genuine interest in all the details of daily life.”', author: 'William Morris' },
+        ];
+        const returnTo = '/post-login-app-v3/index.html?fromLogin=1';
+        const rawSession = localStorage.getItem('mezip.local-demo-session.v1');
+        const hasDemoSession = rawSession === 'active' || rawSession?.includes('"state":"active"');
+        const fromLogin = new URLSearchParams(location.search).get('fromLogin') === '1';
+        const loginComplete = sessionStorage.getItem('mezip-post-login-app-login-v3') === '1';
+        // The new app entry always starts at the existing product login screen.
+        // After that login returns successfully, a same-session reload can continue
+        // the card flow without changing the original site's auth UI.
+        if (!fromLogin && !(hasDemoSession && loginComplete)) {
+          sessionStorage.removeItem('mezip-post-login-app-v3-state');
+          location.replace(`/?login=1&returnTo=${encodeURIComponent(returnTo)}`);
+          return;
+        }
+        if (fromLogin && !hasDemoSession) {
+          location.replace(`/?login=1&returnTo=${encodeURIComponent(returnTo)}`);
+          return;
+        }
+        if (fromLogin) sessionStorage.setItem('mezip-post-login-app-login-v3', '1');
+        if (fromLogin) sessionStorage.removeItem('mezip-post-login-app-v3-state');
+        if (fromLogin) history.replaceState({}, '', '/post-login-app-v3/index.html');
+        let step = sessionStorage.getItem('mezip-post-login-app-v3-state') === 'features' ? 'features' : 'cards';
+        let cardIndex = 0;
+        let startX = null;
+        const bookingOwnerEmail = 'owner@example.com';
+        const bookingUrlForDate = (isoDate) => `https://cal.com/albia.dev/discovery-call?date=${encodeURIComponent(isoDate)}`;
+        const bookingSlots = ['17:30', '17:45', '18:00', '18:15', '18:45', '19:00', '19:15', '19:30', '19:45', '20:00'];
+        const bookingEarliestIso = '2026-08-21';
+        const bookingWeekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+        const toBookingIso = (year, monthIndex, date) => `${year}-${String(monthIndex + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
+        const bookingDateInfo = (iso) => {
+          const [year, month, date] = iso.split('-').map(Number);
+          const value = new Date(year, month - 1, date);
+          return { iso, year, monthIndex: month - 1, date, day: bookingWeekdays[value.getDay()] };
+        };
+        const bookingState = { view: 'schedule', date: bookingEarliestIso, time: '', name: '', email: '', phone: '', note: '', status: '', deliveryStatus: 'NOT_CONFIGURED', monthYear: 2026, monthIndex: 7 };
+        const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
+        const localCaptureApi = 'http://127.0.0.1:4319';
+        const loadLocalCaptureSummary = async () => {
+          const target = document.querySelector('#x-capture-summary');
+          if (!target) return;
+          try {
+            const [statsResponse, timelineResponse, specialResponse] = await Promise.all([
+              fetch(`${localCaptureApi}/v1/x/local-capture/stats`, { credentials: 'include', cache: 'no-store' }),
+              fetch(`${localCaptureApi}/v1/x/local-capture/timeline?limit=1`, { credentials: 'include', cache: 'no-store' }),
+              fetch(`${localCaptureApi}/v1/x/local-capture/special-favorites`, { credentials: 'include', cache: 'no-store' }),
+            ]);
+            if (!statsResponse.ok || !timelineResponse.ok || !specialResponse.ok) throw new Error('LOCAL_CAPTURE_UNAVAILABLE');
+            const stats = await statsResponse.json();
+            const timeline = await timelineResponse.json();
+            const special = await specialResponse.json();
+            const counts = stats?.data?.total || {};
+            const total = Object.values(counts).reduce((sum, value) => sum + Number(value || 0), 0);
+            const latest = timeline?.data?.events?.[0];
+            const specialCount = Array.isArray(special?.data?.items) ? special.data.items.length : 0;
+            target.innerHTML = `<h3>X 本地监控</h3><p>这里读取与 Edge 捕获扩展、X 本地监控页面相同的 4319 本地桥接记录。</p><div class="x-capture-stats"><div class="x-capture-stat"><strong>${total}</strong><span>总记录</span></div><div class="x-capture-stat"><strong>${Number(counts.like || 0)}</strong><span>点赞</span></div><div class="x-capture-stat"><strong>${Number(counts.bookmark || 0)}</strong><span>收藏</span></div><div class="x-capture-stat"><strong>${specialCount}</strong><span>私人资料</span></div></div><div class="x-capture-status">${latest ? `最近记录：${escapeHtml(latest.actionType)} · ${escapeHtml(latest.postUrl)}` : '还没有记录；请在 Edge 的 X 页面明确点击点赞或收藏。'}</div><a class="text-link" href="/x-local-capture-v6/reading.html">打开新版本地监控 →</a>`;
+          } catch {
+            target.innerHTML = '<h3>X 本地监控</h3><p>本地桥接暂不可用；请先启动 ME.zip 本地 Capture 服务。</p><div class="x-capture-status">当前页面不会伪造记录或统计。</div><a class="text-link" href="/x-local-capture-v6/reading.html">打开新版本地监控并重试 →</a>';
+          }
+        };
+        const loadGitHubConnection = async () => {
+          const target = document.querySelector('#github-connection-summary');
+          const copy = document.querySelector('#github-connection-copy');
+          const connect = document.querySelector('#github-connect');
+          if (!target || !copy || !connect) return;
+          try {
+            const response = await fetch('/v1/github-workspace/connection', {
+              credentials: 'same-origin',
+              cache: 'no-store',
+              headers: { Accept: 'application/json' },
+            });
+            if (!response.ok) throw new Error(`HTTP_${response.status}`);
+            const text = await response.text();
+            const connection = text ? JSON.parse(text) : null;
+            if (connection?.status === 'CONNECTED') {
+              copy.textContent = `已连接 GitHub · @${connection.githubLogin || '当前账号'}。连接状态保存在本机加密存储中，打开工作台即可继续读取真实数据。`;
+              connect.classList.add('is-hidden');
+              return;
+            }
+            copy.textContent = '尚未检测到有效的 GitHub 连接；授权后会回到工作台，不会使用演示数据。';
+          } catch {
+            copy.textContent = '暂时无法确认 GitHub 连接。可以先打开工作台检查本地桥接状态，页面不会伪造已连接。';
+          }
+        };
+        const bookingDeliveryConfig = (() => {
+          const candidate = window.__MEZIP_BOOKING_DELIVERY__;
+          const endpoint = typeof candidate?.endpoint === 'string' ? candidate.endpoint.trim() : '';
+          if (!endpoint) return { endpoint: '', configured: false };
+          try {
+            const parsed = new URL(endpoint, location.href);
+            const loopback = ['localhost', '127.0.0.1', '[::1]'].includes(parsed.hostname);
+            const allowed = parsed.protocol === 'https:' || (parsed.protocol === 'http:' && loopback);
+            return allowed ? { endpoint: parsed.toString(), configured: true } : { endpoint: '', configured: false };
+          } catch {
+            return { endpoint: '', configured: false };
+          }
+        })();
+        const notifyBooking = async (payload) => {
+          if (!bookingDeliveryConfig.configured) return { status: 'NOT_CONFIGURED' };
+          try {
+            const response = await fetch(bookingDeliveryConfig.endpoint, {
+              method: 'POST',
+              headers: { 'content-type': 'application/json' },
+              credentials: 'omit',
+              cache: 'no-store',
+              redirect: 'error',
+              referrerPolicy: 'no-referrer',
+              body: JSON.stringify({ type: 'DISCOVERY_BOOKING_REQUESTED', booking: payload }),
+            });
+            if (!response.ok) return { status: 'FAILED' };
+            const acknowledgement = await response.json().catch(() => null);
+            return acknowledgement?.accepted === true ? { status: 'ACKNOWLEDGED' } : { status: 'FAILED' };
+          } catch {
+            return { status: 'FAILED' };
+          }
+        };
+        const bookingMailtoHref = (day) => {
+          const subject = `Discovery call 预约 · ${day.iso} ${bookingState.time}`;
+          const body = [
+            `预约时间：${day.iso} ${bookingState.time}（Asia/Taipei）`,
+            `姓名：${bookingState.name}`,
+            `联系邮箱：${bookingState.email}`,
+            `联系电话：${bookingState.phone || '未填写'}`,
+            `意见建议：${bookingState.note || '未填写'}`,
+          ].join('\n');
+          return `mailto:${bookingOwnerEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        };
+
+        const setupBooking = () => {
+          const shell = document.querySelector('#booking-shell');
+          if (!shell) return;
+          const selectedDay = () => bookingDateInfo(bookingState.date);
+          const renderBooking = () => {
+            if (bookingState.view === 'confirm') {
+              const day = selectedDay();
+              const mailFallback = bookingState.deliveryStatus === 'ACKNOWLEDGED'
+                ? ''
+                : `<a class="secondary" href="${bookingMailtoHref(day)}">打开邮件客户端，发送给 Tom</a>`;
+              shell.innerHTML = `<div class="booking-confirm">
+                <p class="eyebrow">预约请求</p><h3>资料已准备好</h3>
+                <p><strong>${day.iso} ${escapeHtml(bookingState.time)}</strong> · 15 分钟 · Asia/Taipei</p>
+                <p>称呼：${escapeHtml(bookingState.name)}<br>联系邮箱：${escapeHtml(bookingState.email)}${bookingState.note ? `<br>意见建议：${escapeHtml(bookingState.note)}` : ''}</p>
+                <div class="notice">${bookingState.deliveryStatus === 'ACKNOWLEDGED' ? `通知服务已确认接收预约请求，将按服务端配置向 ${bookingOwnerEmail} 发送邮件，并向已配置的接收号码发送短信。` : bookingState.deliveryStatus === 'FAILED' ? `通知服务未确认这次预约请求；邮件目标仍为 ${bookingOwnerEmail}，页面没有伪造“已发送”。` : `邮件通知目标：${bookingOwnerEmail}<br>当前本地页面没有邮件或短信服务凭据，因此没有伪造“已发送”。短信通知需要在受控服务端配置接收号码和短信服务。`}</div>
+                <p>你可以继续使用真实 Cal.com 完成预约，或稍后接入经过授权的邮件/短信服务。</p>
+                <div class="booking-actions">${mailFallback}<a class="secondary" href="${bookingUrlForDate(day.iso)}" target="_blank" rel="noreferrer">打开 Cal.com</a><button class="secondary" id="booking-back" type="button">返回修改</button></div>
+              </div>`;
+              document.querySelector('#booking-back').addEventListener('click', () => { bookingState.view = 'details'; renderBooking(); });
+              return;
+            }
+            if (bookingState.view === 'details') {
+              const day = selectedDay();
+              shell.innerHTML = `<form class="booking-form" id="booking-form">
+                <aside class="booking-side"><div class="booking-avatar" aria-hidden="true">T</div><strong>Tom</strong><div class="booking-title">Discovery call</div><div class="booking-meta"><span>◷ ${day.iso} ${escapeHtml(bookingState.time)}</span><span>◷ 15 分钟</span><span>▣ Cal Video</span><span>◎ Asia/Taipei</span><span>✉ ${bookingOwnerEmail}</span></div></aside>
+                <div class="booking-form-main"><h3>填写资料</h3><label>预约通知邮箱<input name="owner-email" value="${bookingOwnerEmail}" readonly aria-readonly="true" /></label><p class="booking-form-notice">预约请求会固定发送到这个邮箱，用户不能修改收件目标。</p><label>你的姓名 *<input name="name" autocomplete="name" required value="${escapeHtml(bookingState.name)}" /></label><label>你的邮箱（便于 Tom 私下回复）*<input name="email" type="email" autocomplete="email" required value="${escapeHtml(bookingState.email)}" /></label><label>联系电话（用于回复）<input name="phone" type="tel" autocomplete="tel" value="${escapeHtml(bookingState.phone)}" /></label><label>意见建议<textarea name="note" placeholder="请分享想讨论的内容。">${escapeHtml(bookingState.note)}</textarea></label><p class="booking-status" id="booking-status">${escapeHtml(bookingState.status)}</p><div class="booking-actions"><button class="secondary" id="booking-back" type="button">后退</button><button class="primary" type="submit">确认预约</button></div></div>
+              </form>`;
+              document.querySelector('#booking-back').addEventListener('click', () => { bookingState.view = 'schedule'; renderBooking(); });
+              document.querySelector('#booking-form').addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const data = new FormData(event.currentTarget);
+                bookingState.name = String(event.currentTarget.elements.name?.value ?? data.get('name') ?? '').trim();
+                bookingState.email = String(event.currentTarget.elements.email?.value ?? data.get('email') ?? '').trim();
+                bookingState.phone = String(event.currentTarget.elements.phone?.value ?? data.get('phone') ?? '').trim();
+                bookingState.note = String(event.currentTarget.elements.note?.value ?? data.get('note') ?? '').trim();
+                if (!bookingState.name || !bookingState.email) { bookingState.status = '请先填写姓名和邮箱。'; renderBooking(); return; }
+                const submitButton = event.currentTarget.querySelector('button[type="submit"]');
+                if (submitButton) { submitButton.disabled = true; submitButton.textContent = '提交中…'; }
+                bookingState.status = '正在提交预约请求…';
+                const delivery = await notifyBooking({ date: bookingState.date, time: bookingState.time, name: bookingState.name, email: bookingState.email, phone: bookingState.phone, note: bookingState.note, ownerEmail: bookingOwnerEmail });
+                bookingState.deliveryStatus = delivery.status;
+                sessionStorage.setItem('mezip-discovery-booking-v1', JSON.stringify({ ...bookingState, ownerEmail: bookingOwnerEmail, status: delivery.status === 'ACKNOWLEDGED' ? 'ACKNOWLEDGED_EXTERNAL_DELIVERY' : 'PENDING_EXTERNAL_DELIVERY' }));
+                bookingState.view = 'confirm';
+                bookingState.status = '';
+                renderBooking();
+              });
+              return;
+            }
+            const selectedDayValue = selectedDay();
+            const monthStart = new Date(bookingState.monthYear, bookingState.monthIndex, 1);
+            const daysInMonth = new Date(bookingState.monthYear, bookingState.monthIndex + 1, 0).getDate();
+            const leadingEmpty = Array.from({ length: monthStart.getDay() }, () => '<span class="booking-date is-empty" aria-hidden="true"></span>').join('');
+            const isBaseMonth = bookingState.monthYear === 2026 && bookingState.monthIndex === 7;
+            const visibleDates = Array.from({ length: daysInMonth }, (_, index) => {
+              const date = index + 1;
+              const iso = toBookingIso(bookingState.monthYear, bookingState.monthIndex, date);
+              const available = iso >= bookingEarliestIso;
+              return `<button class="booking-date${iso === bookingState.date ? ' is-selected' : ''}${available ? '' : ' is-unavailable'}" type="button" aria-label="${bookingState.monthIndex + 1}月${date}日${available ? '，可预约' : '，不可预约'}" data-booking-date="${available ? iso : ''}"${available ? '' : ' disabled'}>${date}</button>`;
+            }).join('');
+            shell.innerHTML = `<div class="booking-layout"><aside class="booking-side"><div class="booking-avatar" aria-hidden="true">T</div><strong>Tom</strong><div class="booking-title">Discovery call</div><div class="booking-meta"><span>◷ 15 分钟</span><span>▣ Cal Video</span><span>◎ Asia/Taipei</span><span>✉ ${bookingOwnerEmail}</span></div></aside><section class="booking-calendar"><div class="booking-month"><span>${bookingState.monthYear} 年 ${bookingState.monthIndex + 1} 月</span><div class="booking-month-actions"><button type="button" data-booking-month="previous" aria-label="上个月"${isBaseMonth ? ' disabled' : ''}>‹</button><button type="button" data-booking-month="next" aria-label="下个月">›</button></div></div><div class="booking-week">${['日','一','二','三','四','五','六'].map((day) => `<span>${day}</span>`).join('')}</div><div class="booking-dates">${leadingEmpty}${visibleDates}</div><p class="booking-availability">深色日期不可预约；使用箭头可继续选择后续月份。</p></section><aside class="booking-slots"><div class="booking-slot-heading"><span>${selectedDayValue.day} ${selectedDayValue.date}日</span><div class="booking-window"><button type="button">12 小时</button><button class="is-selected" type="button">24 小时</button></div></div><div class="slot-list">${bookingSlots.map((slot) => `<button class="slot" type="button" data-booking-time="${slot}">${slot}</button>`).join('')}</div></aside></div>`;
+            document.querySelectorAll('[data-booking-month]').forEach((button) => button.addEventListener('click', () => {
+              const direction = button.dataset.bookingMonth === 'next' ? 1 : -1;
+              const cursor = new Date(bookingState.monthYear, bookingState.monthIndex + direction, 1);
+              bookingState.monthYear = cursor.getFullYear();
+              bookingState.monthIndex = cursor.getMonth();
+              const firstAvailable = toBookingIso(bookingState.monthYear, bookingState.monthIndex, isBaseMonth && direction < 0 ? 21 : 1);
+              bookingState.date = firstAvailable < bookingEarliestIso ? bookingEarliestIso : firstAvailable;
+              renderBooking();
+            }));
+            document.querySelectorAll('[data-booking-date]').forEach((button) => button.addEventListener('click', () => { bookingState.date = button.dataset.bookingDate; renderBooking(); }));
+            document.querySelectorAll('[data-booking-time]').forEach((button) => button.addEventListener('click', () => { bookingState.time = button.dataset.bookingTime; bookingState.view = 'details'; renderBooking(); }));
+          };
+          renderBooking();
+        };
+
+        const render = () => {
+          if (step === 'cards') {
+            const cardQuote = cardQuotes[cardIndex];
+            root.innerHTML = `
+              <section class="panel cards" aria-labelledby="cards-title">
+                <div class="card-heading"><blockquote class="card-quote" id="cards-title">${escapeHtml(cardQuote.quote)}<cite>— ${escapeHtml(cardQuote.author)}</cite></blockquote></div>
+                <div class="card-stage" id="card-stage" role="button" tabindex="0" aria-label="第 ${cardIndex + 1} 张介绍卡"><img class="card-image" src="${cards[cardIndex]}" alt="登录后介绍卡 ${cardIndex + 1}" draggable="false"></div>
+                <div class="card-footer"><div class="dots" aria-label="当前进度">${cards.map((_, i) => `<span class="dot ${i === cardIndex ? 'active' : ''}></span>`).join('')}</div></div>
+              </section>`;
+            const advance = () => { if (cardIndex + 1 >= cards.length) { step = 'features'; sessionStorage.setItem('mezip-post-login-app-v3-state', 'features'); render(); return; } cardIndex += 1; render(); };
+            const stage = document.querySelector('#card-stage');
+            stage.addEventListener('click', advance);
+            stage.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); advance(); } });
+            stage.addEventListener('pointerdown', (event) => { startX = event.clientX; stage.setPointerCapture?.(event.pointerId); });
+            stage.addEventListener('pointerup', (event) => { if (startX !== null && event.clientX - startX < -44) { event.preventDefault(); advance(); } startX = null; });
+            return;
+          }
+          root.innerHTML = `
+            <section class="panel features" aria-labelledby="features-title">
+              <div><p class="eyebrow">ME.zip · 功能区</p><h1 id="features-title" class="features-title-reference"><span>TOM IS A PRODUCT DESIGNER WHO</span><span>THINKS ABOUT HOW HUMANS THINK.</span></h1></div>
+              <div class="feature-grid">
+                <a class="feature" href="/life">生活记录<span>写下今天，保存为私有档案</span></a>
+                <a class="feature" href="/community">社区<span>查看动态与公开内容</span></a>
+                <a class="feature" href="/fitness">健身<span>记录训练与身体状态</span></a>
+                <a class="feature" href="/history">读书感悟<span>整理阅读与感悟</span></a>
+                <a class="feature" href="/timeline">时间线<span>按时间回看你的记录</span></a>
+                <a class="feature feature-membership" href="#monthly-passes">会员与福利<span>查看彩色月度通行证</span></a>
+                 <a class="feature feature-github" href="/github-workspace-v6/index.html#overview"><strong>GitHub 工作台</strong><span>查看真实仓库、代码片段与开发活动</span></a>
+                 <a class="feature feature-x-manual" href="/x-link-archive-v1/index.html"><strong>X 链接收集</strong><span>粘贴 X 链接并写下主要作用，保存在本机</span></a>
+                 <a class="feature feature-x-capture" href="/x-local-capture-v6/reading.html"><strong>本地监控 V6</strong><span>观看记录、网页文章代码和私人资料库</span></a>
+                 <a class="feature feature-monitor" href="/x-local-capture-v7/global-timeline.html"><strong>全局行为时间轴</strong><span>合并 X、观看、阅读和资源行为</span></a>
+               </div>
+               <section class="x-capture-panel" id="x-capture-summary" aria-live="polite"><h3>X 本地监控</h3><p>正在读取 4319 本地桥接记录…</p></section>
+              <section class="github-connection-panel" id="github-connection-summary" aria-live="polite"><h3>GitHub 工作台授权</h3><p id="github-connection-copy" class="github-connection-status">正在检查 GitHub 连接…</p><div class="github-connection-actions"><a class="feature-cta" href="/github-workspace-v6/index.html#overview">打开 GitHub 工作台</a><a id="github-connect" class="feature-cta" href="/api/integrations/github/connect">授权 / 重新连接</a></div></section>
+              <section id="monthly-passes" class="membership-passes" aria-labelledby="monthly-passes-title">
+                <div class="membership-passes-heading">
+                  <p class="eyebrow">会员与福利 · 月度通行证</p>
+                  <h2 id="monthly-passes-title">选择适合你的通行证</h2>
+                </div>
+                <div class="plan-grid" aria-label="月度通行证方案">
+                  <article class="plan-card plan-card-free"><div><p>FREE</p><strong>¥0</strong></div><span>建立和记录自己的 ME.zip</span></article>
+                  <article class="plan-card plan-card-go"><div><p>GO · 社区通行证</p><strong>¥10/月</strong></div><span>完整社区互动与普通社群</span></article>
+                  <article class="plan-card plan-card-plus"><div><p>PLUS · 深度交流</p><strong>¥20/月</strong></div><span>Founder Inbox 与专属权益</span></article>
+                  <article class="plan-card plan-card-pro"><div><p>PRO · 创始人圈层</p><strong>¥40/月</strong></div><span>深度圈层与优先交流体验</span></article>
+                  <article class="plan-card plan-card-pro-max"><div><p>PRO MAX · 创作者实验室</p><strong>¥80/月</strong></div><span>创作实验室与精选内容</span></article>
+                </div>
+                <p class="passes-note">价格与最终权益仍应以服务端确认的会员中心为准。</p>
+              </section>
+              <section id="discovery-booking" class="booking" aria-labelledby="discovery-booking-title">
+                <div class="booking-heading">
+                  <p class="eyebrow">TOM · DISCOVERY CALL</p>
+                  <h2 id="discovery-booking-title">预约时间</h2>
+                  <p>选择日期和时间段后，会进入资料填写页面。这里复刻 Cal.com 的预约节奏，时区为 Asia/Taipei。</p>
+                </div>
+                <div class="booking-shell" id="booking-shell" aria-live="polite"></div>
+              </section>
+              <button class="secondary" id="restart" type="button">重新浏览四张卡片</button>
+            </section>`;
+           setupBooking();
+           void loadLocalCaptureSummary();
+           void loadGitHubConnection();
+          document.querySelector('#restart').addEventListener('click', () => { step = 'cards'; cardIndex = 0; sessionStorage.setItem('mezip-post-login-app-v3-state', 'cards'); render(); });
+        };
+        render();
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,82 @@
+.letter-swap-3d {
+  position: relative;
+  display: inline-block;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  -webkit-font-smoothing: antialiased;
+  perspective: 1000px;
+}
+
+.letter-swap-3d__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.letter-swap-3d__visual {
+  display: inline-block;
+  transform-style: preserve-3d;
+}
+
+.letter-swap-3d__word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.letter-swap-3d__char {
+  position: relative;
+  display: inline-block;
+  height: 1lh;
+  transform: translateZ(-0.5lh);
+  transform-origin: center center;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.letter-swap-3d__face {
+  display: inline-block;
+  height: 1lh;
+  color: inherit;
+  line-height: inherit;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  transform-style: preserve-3d;
+}
+
+.letter-swap-3d__front {
+  position: relative;
+  transform: translateZ(0.5lh);
+}
+
+.letter-swap-3d__back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotateX(-90deg) translateZ(0.5lh);
+}
+
+.letter-swap-3d__space {
+  display: inline-block;
+  width: 1ch;
+  min-width: 1ch;
+  white-space: pre;
+}
+
+.letter-swap-3d:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 5px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .letter-swap-3d__char,
+  .letter-swap-3d__face {
+    transition: none !important;
+  }
+}

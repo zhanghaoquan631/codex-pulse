@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#08090e" />
+    <title>色度卡 · 弓弦影</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --paper: #f8f5ff;
+        --ink: #08090e;
+      }
+
+      * { box-sizing: border-box; }
+
+      html, body { min-height: 100%; }
+
+      body {
+        margin: 0;
+        overflow-x: hidden;
+        background:
+          radial-gradient(circle at 50% 22%, rgba(126, 70, 255, .16), transparent 31rem),
+          radial-gradient(circle at 14% 86%, rgba(25, 224, 199, .11), transparent 28rem),
+          radial-gradient(circle at 84% 78%, rgba(255, 86, 139, .10), transparent 25rem),
+          #08090e;
+        color: var(--paper);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      .page {
+        min-height: 100svh;
+        display: grid;
+        place-items: center;
+        isolation: isolate;
+        padding: clamp(28px, 6vh, 70px) 24px;
+      }
+
+      .page::before,
+      .page::after {
+        content: "";
+        position: fixed;
+        inset: auto;
+        pointer-events: none;
+        z-index: -1;
+        filter: blur(1px);
+      }
+
+      .page::before {
+        width: min(50vw, 570px);
+        aspect-ratio: 1;
+        top: -22vh;
+        left: -13vw;
+        border-radius: 50%;
+        background: conic-gradient(from 45deg, transparent, #3ef1de33, #7376ff33, #ff589533, transparent);
+        filter: blur(55px);
+        animation: drift 16s ease-in-out infinite alternate;
+      }
+
+      .page::after {
+        width: min(36vw, 430px);
+        aspect-ratio: 1;
+        right: -12vw;
+        bottom: -20vh;
+        border-radius: 50%;
+        background: conic-gradient(from 210deg, transparent, #f6ea9630, #fd71c930, #7469ff30, transparent);
+        filter: blur(62px);
+        animation: drift 19s -5s ease-in-out infinite alternate-reverse;
+      }
+
+      .site-mark {
+        position: fixed;
+        top: 28px;
+        left: clamp(24px, 5vw, 72px);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #f7f6fb;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: .18em;
+        text-transform: uppercase;
+        opacity: .82;
+      }
+
+      .site-mark::before {
+        content: "";
+        width: 13px;
+        height: 13px;
+        border-radius: 4px;
+        background: linear-gradient(135deg, #66f1d8, #856dff 45%, #ff76ad 72%, #ffd78a);
+        box-shadow: 0 0 22px #966dff91;
+      }
+
+      .chroma-stage {
+        width: min(100%, 500px);
+        display: grid;
+        place-items: center;
+        perspective: 1100px;
+      }
+
+      .card-wrap {
+        position: relative;
+        width: min(78vw, 418px);
+        aspect-ratio: 5 / 6;
+        transform-style: preserve-3d;
+      }
+
+      .card-wrap::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        inset: 4%;
+        border-radius: 30px;
+        background: conic-gradient(from 215deg, #52e9d6, #6b79ff, #f6539d, #ffd06e, #52e9d6);
+        opacity: .5;
+        filter: blur(34px);
+        transform: translateZ(-55px) scale(.88);
+        transition: opacity .42s ease, filter .42s ease;
+      }
+
+      .card-wrap.is-hovered::before {
+        opacity: .88;
+        filter: blur(45px);
+      }
+
+      .chroma-card {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, .42);
+        border-radius: 30px;
+        background: #10121b;
+        box-shadow:
+          0 42px 100px rgba(0, 0, 0, .55),
+          inset 0 1px 0 rgba(255, 255, 255, .32),
+          inset 0 -1px 0 rgba(255, 255, 255, .08);
+        transform-style: preserve-3d;
+        will-change: transform;
+      }
+
+      .chroma-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        pointer-events: none;
+        background:
+          linear-gradient(118deg, rgba(255,255,255,.28), transparent 22%, transparent 56%, rgba(255,255,255,.12)),
+          radial-gradient(circle at var(--glow-x, 50%) var(--glow-y, 42%), rgba(255,255,255,.3), transparent 20%);
+        mix-blend-mode: screen;
+        opacity: .56;
+      }
+
+      .chroma-card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 4;
+        border-radius: inherit;
+        pointer-events: none;
+        box-shadow: inset 0 0 0 1px rgba(140, 242, 255, .12), inset 0 0 35px rgba(148, 92, 255, .18);
+      }
+
+      .chroma-canvas,
+      .image-fallback {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .chroma-canvas {
+        z-index: 0;
+        display: block;
+        background: #121520;
+      }
+
+      .image-fallback {
+        z-index: -1;
+        background: center / cover no-repeat url("./prism-portrait-v1.png");
+      }
+
+      .card-scrim {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+        background:
+          linear-gradient(180deg, rgba(7, 7, 13, .4) 0%, transparent 30%, transparent 48%, rgba(7, 7, 13, .2) 64%, rgba(6, 7, 12, .88) 100%),
+          linear-gradient(90deg, rgba(3, 9, 19, .26), transparent 42%, rgba(40, 4, 56, .22));
+      }
+
+      .spectrum-line {
+        position: absolute;
+        z-index: 2;
+        top: 23px;
+        right: 24px;
+        left: 24px;
+        height: 2px;
+        border-radius: 99px;
+        background: linear-gradient(90deg, #53ead3, #7582ff 31%, #f858a0 67%, #ffda7c);
+        box-shadow: 0 0 15px rgba(191, 136, 255, .54);
+        transform: translateZ(25px);
+      }
+
+      .card-topline {
+        position: absolute;
+        z-index: 5;
+        top: 37px;
+        left: 29px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: rgba(255,255,255,.87);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+        transform: translateZ(36px);
+      }
+
+      .card-topline i {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: #61efd7;
+        box-shadow: 0 0 0 4px rgba(97, 239, 215, .14), 0 0 17px #61efd7;
+      }
+
+      .card-copy {
+        position: absolute;
+        z-index: 5;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        padding: 28px 30px 31px;
+        text-shadow: 0 2px 22px rgba(0, 0, 0, .45);
+        transform: translateZ(44px);
+      }
+
+      .card-copy h1,
+      .card-copy p { margin: 0; }
+
+      .name-cn {
+        color: #fff;
+        font-family: "Kaiti SC", "STKaiti", KaiTi, "DFKai-SB", serif;
+        font-size: clamp(42px, 10vw, 60px);
+        font-weight: 700;
+        line-height: 1.02;
+        letter-spacing: .06em;
+      }
+
+      .name-en {
+        margin-top: 14px !important;
+        color: rgba(255, 255, 255, .94);
+        font-size: 14px;
+        font-weight: 850;
+        letter-spacing: .28em;
+      }
+
+      .role {
+        margin-top: 9px !important;
+        color: rgba(255, 255, 255, .86);
+        font-family: "Kaiti SC", "STKaiti", KaiTi, "DFKai-SB", serif;
+        font-size: 21px;
+        font-weight: 700;
+        letter-spacing: .08em;
+      }
+
+      .color-index {
+        position: absolute;
+        z-index: 5;
+        top: 42px;
+        right: 29px;
+        color: rgba(255,255,255,.78);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: .18em;
+        transform: translateZ(35px);
+      }
+
+      .edge-tag {
+        position: absolute;
+        z-index: 5;
+        right: -15px;
+        top: 53%;
+        display: grid;
+        place-items: center;
+        width: 30px;
+        height: 89px;
+        border: 1px solid rgba(255,255,255,.47);
+        border-radius: 14px;
+        background: rgba(15, 15, 25, .68);
+        color: #fff;
+        font-size: 9px;
+        font-weight: 900;
+        letter-spacing: .1em;
+        writing-mode: vertical-rl;
+        backdrop-filter: blur(10px);
+        transform: translateZ(54px);
+      }
+
+      .caption {
+        margin: 30px auto 0;
+        max-width: 500px;
+        color: rgba(239, 238, 250, .74);
+        font-family: "Kaiti SC", "STKaiti", KaiTi, "DFKai-SB", serif;
+        font-size: 19px;
+        font-weight: 700;
+        letter-spacing: .12em;
+        line-height: 1.6;
+        text-align: center;
+      }
+
+      @keyframes drift {
+        from { transform: translate3d(0, 0, 0) rotate(0deg); }
+        to { transform: translate3d(7vw, 8vh, 0) rotate(25deg); }
+      }
+
+      @media (max-width: 560px) {
+        .site-mark { top: 20px; left: 23px; }
+        .page { padding: 86px 20px 35px; }
+        .card-wrap { width: min(86vw, 410px); }
+        .card-copy { padding: 24px 25px 27px; }
+        .card-topline { top: 33px; left: 25px; }
+        .color-index { top: 37px; right: 25px; }
+        .spectrum-line { top: 20px; right: 20px; left: 20px; }
+        .edge-tag { right: -11px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <div class="site-mark">ME.zip · Chroma</div>
+      <section class="chroma-stage" aria-label="弓弦影的色度资料卡">
+        <div class="card-wrap" id="cardWrap">
+          <article class="chroma-card" id="chromaCard">
+            <div class="image-fallback" aria-hidden="true"></div>
+            <canvas class="chroma-canvas" id="chromaCanvas" aria-label="带色度折射效果的个人肖像"></canvas>
+            <div class="card-scrim" aria-hidden="true"></div>
+            <div class="spectrum-line" aria-hidden="true"></div>
+            <div class="card-topline"><i aria-hidden="true"></i> PERSONAL UNIVERSE</div>
+            <div class="color-index">CHROMA / 01</div>
+            <div class="card-copy">
+              <h1 class="name-cn">弓弦影</h1>
+              <p class="name-en">ALEX</p>
+              <p class="role">FDE 产品经理</p>
+            </div>
+            <span class="edge-tag">COLOR FIELD</span>
+          </article>
+        </div>
+      </section>
+      <p class="caption">光谱会随着你的视角，重新描摹同一张肖像。</p>
+    </main>
+
+    <script>
+      (() => {
+        const wrap = document.getElementById('cardWrap');
+        const card = document.getElementById('chromaCard');
+        const canvas = document.getElementById('chromaCanvas');
+        const image = new Image();
+        image.src = './prism-portrait-v1.png';
+
+        const target = { x: 0, y: 0, hover: 0 };
+        const current = { x: 0, y: 0, hover: 0 };
+        const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+        function setPointer(event) {
+          const bounds = card.getBoundingClientRect();
+          const x = Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width));
+          const y = Math.max(0, Math.min(1, (event.clientY - bounds.top) / bounds.height));
+          target.x = (x - .5) * 2;
+          target.y = (y - .5) * 2;
+          target.hover = 1;
+          card.style.setProperty('--glow-x', `${(x * 100).toFixed(2)}%`);
+          card.style.setProperty('--glow-y', `${(y * 100).toFixed(2)}%`);
+          wrap.classList.add('is-hovered');
+          if (renderer) renderer.setPointer(target.x, target.y, target.hover);
+        }
+
+        const clearPointer = () => {
+          target.x = 0;
+          target.y = 0;
+          target.hover = 0;
+          wrap.classList.remove('is-hovered');
+          if (renderer) renderer.setPointer(0, 0, 0);
+        };
+
+        card.addEventListener('pointerenter', setPointer);
+        card.addEventListener('pointermove', setPointer);
+        card.addEventListener('pointerleave', clearPointer);
+        // Some desktop touchpads emit mouse events without PointerEvent updates.
+        card.addEventListener('mouseenter', setPointer);
+        card.addEventListener('mousemove', setPointer);
+        card.addEventListener('mouseleave', clearPointer);
+
+        function animateCard() {
+          const follow = motion.matches ? 1 : .13;
+          current.x += (target.x - current.x) * follow;
+          current.y += (target.y - current.y) * follow;
+          current.hover += (target.hover - current.hover) * follow;
+          const rotation = motion.matches ? 0 : 11.5;
+          const scale = 1 + current.hover * .045;
+          card.style.transform = `rotateX(${-current.y * rotation}deg) rotateY(${current.x * rotation}deg) scale(${scale})`;
+          if (renderer) renderer.setPointer(current.x, current.y, current.hover);
+          requestAnimationFrame(animateCard);
+        }
+
+        const gl = canvas.getContext('webgl', { alpha: false, antialias: true, premultipliedAlpha: false });
+        let renderer = null;
+
+        if (gl) {
+          const vertexSource = `
+            attribute vec2 aPosition;
+            varying vec2 vUv;
+            void main() {
+              vUv = aPosition * .5 + .5;
+              gl_Position = vec4(aPosition, 0.0, 1.0);
+            }
+          `;
+          const fragmentSource = `
+            precision highp float;
+            varying vec2 vUv;
+            uniform sampler2D uImage;
+            uniform vec2 uResolution;
+            uniform vec2 uImageSize;
+            uniform vec2 uPointer;
+            uniform float uHover;
+            uniform float uTime;
+
+            vec2 coverUv(vec2 uv) {
+              float canvasAspect = uResolution.x / uResolution.y;
+              float imageAspect = uImageSize.x / uImageSize.y;
+              if (canvasAspect > imageAspect) {
+                uv.y = (uv.y - .5) * canvasAspect / imageAspect + .5;
+              } else {
+                uv.x = (uv.x - .5) * imageAspect / canvasAspect + .5;
+              }
+              return uv;
+            }
+
+            float hash(vec2 p) {
+              return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
+            }
+
+            void main() {
+              vec2 uv = coverUv(vUv);
+              vec2 center = vec2(.5) + uPointer * .105;
+              float distanceToPointer = distance(vUv, center);
+              float localized = smoothstep(.86, .04, distanceToPointer) * uHover;
+              float wave = sin(distanceToPointer * 35.0 - uTime * 3.6) * .006 * localized;
+              vec2 parallax = uPointer * .022 * uHover;
+              vec2 displaced = uv + parallax + vec2(wave, cos(distanceToPointer * 27.0 + uTime * 2.7) * wave);
+              float scan = sin((displaced.y + uTime * .015) * 910.0) * .0015 * uHover;
+              float rgbShift = (.007 + localized * .018) * uHover;
+              float r = texture2D(uImage, displaced + vec2(rgbShift + scan, 0.0)).r;
+              float g = texture2D(uImage, displaced).g;
+              float b = texture2D(uImage, displaced - vec2(rgbShift - scan, 0.0)).b;
+              vec3 color = vec3(r, g, b);
+              float vignette = smoothstep(1.13, .23, distance(vUv, vec2(.5)));
+              float grain = (hash(vUv * (uResolution.xy / 1.7) + uTime) - .5) * .018;
+              color += grain;
+              color *= .76 + vignette * .29;
+              color = pow(max(color, 0.0), vec3(.91));
+              gl_FragColor = vec4(color, 1.0);
+            }
+          `;
+
+          const compile = (type, source) => {
+            const shader = gl.createShader(type);
+            gl.shaderSource(shader, source);
+            gl.compileShader(shader);
+            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(shader));
+            return shader;
+          };
+
+          try {
+            const program = gl.createProgram();
+            gl.attachShader(program, compile(gl.VERTEX_SHADER, vertexSource));
+            gl.attachShader(program, compile(gl.FRAGMENT_SHADER, fragmentSource));
+            gl.linkProgram(program);
+            if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(program));
+
+            const buffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW);
+            const texture = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, texture);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+            const locations = {
+              position: gl.getAttribLocation(program, 'aPosition'),
+              image: gl.getUniformLocation(program, 'uImage'),
+              resolution: gl.getUniformLocation(program, 'uResolution'),
+              imageSize: gl.getUniformLocation(program, 'uImageSize'),
+              pointer: gl.getUniformLocation(program, 'uPointer'),
+              hover: gl.getUniformLocation(program, 'uHover'),
+              time: gl.getUniformLocation(program, 'uTime')
+            };
+
+            let imageSize = [1, 1];
+            let pointerX = 0;
+            let pointerY = 0;
+            let hover = 0;
+
+            const resize = () => {
+              const rect = canvas.getBoundingClientRect();
+              const ratio = Math.min(window.devicePixelRatio || 1, 2);
+              const width = Math.max(1, Math.round(rect.width * ratio));
+              const height = Math.max(1, Math.round(rect.height * ratio));
+              if (canvas.width !== width || canvas.height !== height) {
+                canvas.width = width;
+                canvas.height = height;
+                gl.viewport(0, 0, width, height);
+              }
+            };
+
+            const draw = (time) => {
+              resize();
+              gl.useProgram(program);
+              gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+              gl.enableVertexAttribArray(locations.position);
+              gl.vertexAttribPointer(locations.position, 2, gl.FLOAT, false, 0, 0);
+              gl.activeTexture(gl.TEXTURE0);
+              gl.bindTexture(gl.TEXTURE_2D, texture);
+              gl.uniform1i(locations.image, 0);
+              gl.uniform2f(locations.resolution, canvas.width, canvas.height);
+              gl.uniform2f(locations.imageSize, imageSize[0], imageSize[1]);
+              gl.uniform2f(locations.pointer, pointerX, pointerY);
+              gl.uniform1f(locations.hover, hover);
+              gl.uniform1f(locations.time, time * .001);
+              gl.drawArrays(gl.TRIANGLES, 0, 6);
+              requestAnimationFrame(draw);
+            };
+
+            renderer = {
+              setPointer(x, y, value) {
+                pointerX = x;
+                pointerY = -y;
+                hover = value;
+              },
+              setImage(source) {
+                imageSize = [source.naturalWidth, source.naturalHeight];
+                gl.bindTexture(gl.TEXTURE_2D, texture);
+                gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source);
+              }
+            };
+
+            image.addEventListener('load', () => renderer.setImage(image), { once: true });
+            if (image.complete) renderer.setImage(image);
+            requestAnimationFrame(draw);
+          } catch (error) {
+            console.warn('Chroma renderer unavailable; showing the portrait fallback.', error);
+            canvas.style.display = 'none';
+          }
+        } else {
+          canvas.style.display = 'none';
+        }
+
+        animateCard();
+      })();
+    </script>
+  </body>
+</html>

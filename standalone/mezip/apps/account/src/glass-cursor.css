@@ -1,0 +1,32 @@
+.glass-cursor {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  background: #111018;
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+}
+
+.glass-cursor::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background:
+    linear-gradient(115deg, rgba(255, 255, 255, .08), transparent 36%),
+    radial-gradient(circle at 50% 48%, transparent 32%, rgba(8, 4, 13, .3) 100%);
+  content: "";
+  pointer-events: none;
+}
+
+.glass-cursor canvas {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: saturate(.92) contrast(1.02);
+}

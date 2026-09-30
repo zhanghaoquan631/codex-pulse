@@ -1,0 +1,167 @@
+:root {
+  color-scheme: dark;
+  background: #02040a;
+}
+
+* { box-sizing: border-box; }
+
+html,
+body {
+  width: 100%;
+  min-width: 320px;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  overflow: hidden;
+  background: #02040a;
+}
+
+.experience {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  isolation: isolate;
+  touch-action: none;
+  user-select: none;
+  background:
+    radial-gradient(circle at 52% 46%, rgba(58, 52, 130, .17), transparent 30rem),
+    radial-gradient(circle at 61% 68%, rgba(0, 143, 224, .06), transparent 34rem),
+    radial-gradient(circle at 36% 28%, rgba(232, 70, 150, .045), transparent 28rem),
+    #02040a;
+}
+
+.experience::after {
+  content: "";
+  position: absolute;
+  z-index: 6;
+  inset: 7%;
+  pointer-events: none;
+  border: 1px solid rgba(187, 207, 255, .038);
+  border-radius: clamp(22px, 3vw, 40px);
+  box-shadow: inset 0 0 110px rgba(9, 12, 29, .48);
+}
+
+.ambient {
+  position: absolute;
+  z-index: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(70px);
+  opacity: .25;
+}
+
+.ambient-one {
+  width: min(34vw, 440px);
+  aspect-ratio: 1;
+  left: 23%;
+  top: 9%;
+  background: #713cb0;
+}
+
+.ambient-two {
+  width: min(30vw, 400px);
+  aspect-ratio: 1;
+  right: 25%;
+  bottom: 3%;
+  background: #0579a8;
+}
+
+.photo-anchor {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: 50%;
+  width: min(85vw, calc(89vh * 2 / 3), 650px);
+  aspect-ratio: 2 / 3;
+  transform: translate(-50%, -50%);
+  perspective: 1200px;
+}
+
+.portrait-shell {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.portrait-image,
+.depth-copy {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.portrait-image {
+  z-index: 3;
+  opacity: 1;
+  filter: contrast(1.035) saturate(1.07) drop-shadow(0 24px 52px rgba(0, 0, 0, .5));
+  transform: translateZ(18px);
+}
+
+.depth-copy {
+  z-index: 1;
+  mix-blend-mode: screen;
+  opacity: .13;
+  filter: contrast(1.16) saturate(1.8);
+}
+
+.depth-cyan {
+  transform: translate3d(-4px, 2px, -28px);
+  filter: hue-rotate(15deg) contrast(1.18) saturate(2);
+}
+
+.depth-magenta {
+  transform: translate3d(5px, -2px, -42px);
+  filter: hue-rotate(292deg) contrast(1.16) saturate(1.9);
+  opacity: .105;
+}
+
+.glass-light {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at var(--light-x, 50%) var(--light-y, 46%), rgba(255, 255, 255, .16), transparent 16%);
+  mix-blend-mode: screen;
+  opacity: .24;
+  transform: translateZ(28px);
+}
+
+#particleCanvas {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 640px) {
+  .photo-anchor { width: min(91vw, calc(82vh * 2 / 3)); }
+  .experience::after { inset: 12px; }
+  .ambient { opacity: .18; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portrait-shell { transform: none !important; }
+  .glass-light { --light-x: 50%; --light-y: 46%; }
+}

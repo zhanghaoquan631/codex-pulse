@@ -1,0 +1,27 @@
+body{min-width:0}
+.inbox-layout{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.capture-editor,.inbox-list-panel{min-width:0}
+.drop-zone{height:auto;min-height:390px;padding:30px 20px;width:100%}
+.drop-zone p{color:#71677e;font-size:14px}
+.drop-actions{display:grid;grid-template-columns:1fr;width:100%;max-width:270px;gap:12px}
+.drop-actions button{width:100%;min-height:46px;height:auto;padding:13px 16px;white-space:nowrap;justify-content:center;font-size:14px;line-height:1.4}
+.drop-actions .primary-button{background:#7051b4;color:#fff}
+.drop-actions .quiet-button{background:#eee7fb;color:#523783;border:1px solid #d6c7ee}
+.sync-panel{overflow-wrap:anywhere}.sync-panel>div{min-width:0;flex-basis:260px}
+.profile-row{width:calc(100% - 10px);background:transparent;text-align:left;color:inherit;cursor:pointer;padding-bottom:8px}
+.profile-row>div:nth-child(2){min-width:0}.profile-row strong,.profile-row small{overflow:hidden;text-overflow:ellipsis;max-width:155px}
+.record-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.danger-button{color:#a32d43;border:1px solid #e6bfca;background:#fff8fa}
+.workspace-dialog{width:min(570px,calc(100% - 28px));max-height:90dvh;overflow:auto;border:1px solid #e7dff0;border-radius:20px;padding:26px;color:#302a39;background:#fff;box-shadow:0 25px 100px #31243c35}
+.workspace-dialog::backdrop{background:#2c20384d;backdrop-filter:blur(4px)}
+.workspace-dialog h2{margin:0;font-size:22px}.workspace-dialog p{line-height:1.7;overflow-wrap:anywhere}.workspace-dialog footer{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:22px}
+.workspace-dialog [role=status]{color:#765580;font-size:13px}.workspace-dialog button[disabled]{opacity:.55;cursor:wait}
+.dialog-title{display:flex;align-items:center;justify-content:space-between;gap:15px}.dialog-title>button{font-size:24px;background:#f5f1fa;border-radius:10px;width:36px;height:36px}
+.account-identity{background:#f7f3fb;padding:16px;border-radius:12px}.account-identity small{display:block;color:#82758e;margin-bottom:5px}.account-identity strong{overflow-wrap:anywhere}
+.trash-row{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid #eee8f3}.trash-row>div{flex:1;min-width:0}.trash-row strong{display:block;overflow-wrap:anywhere}.trash-row small{display:block;color:#85798c;margin-top:5px}
+.box-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:20px}.box-toolbar select{max-width:100%;min-height:42px;padding:10px;border:1px solid #dcd1e8;border-radius:12px;background:white}.box-toolbar p{flex-basis:100%;margin:0;color:#7e7389;font-size:12px}
+.material-card{position:relative;cursor:pointer}.material-card .record-actions button{height:34px;font-size:12px}.material-meta strong{overflow-wrap:anywhere}.material-meta p{overflow-wrap:anywhere}
+.asset-preview{display:flex;gap:15px;align-items:center;padding:14px;border-radius:12px;background:#f8f5fc;margin:14px 0;overflow-wrap:anywhere}.asset-preview img{width:110px;max-height:150px;object-fit:contain;border-radius:8px}.asset-preview>div{min-width:0}.asset-preview p{font-size:12px;color:#7f748b}
+.cover-field img,.issue-cover{display:block;max-width:100%;max-height:330px;object-fit:contain;border-radius:12px;margin:14px auto}.cover-field .quiet-button{margin:8px 0}.cover-field small{line-height:1.5;color:#81768b}
+.material-phone-entry{display:none}
+@media(max-width:1100px){.inbox-layout{grid-template-columns:minmax(0,1fr)}.drop-zone{min-height:290px}.drop-zone h2{white-space:normal}.drop-actions{max-width:340px}}
+@media(max-width:650px){.workspace-dialog{padding:20px}.capture-editor,.inbox-list-panel{padding:16px}.drop-zone{padding:26px 18px}.profile-row{width:auto}.setting-row{flex-wrap:wrap;gap:12px}.setting-actions{flex-wrap:wrap}.box-toolbar{padding:0 4px}.materials-grid{grid-template-columns:minmax(0,1fr)}.material-phone-entry{display:inline-flex}.asset-preview{flex-direction:column;align-items:stretch}.asset-preview img{width:100%;max-height:220px}.phone-owner-nav button{min-width:0;flex:1}.phone-owner-nav{gap:0}.sync-panel button{max-width:100%;white-space:normal;min-height:42px;height:auto}}

@@ -1,0 +1,10 @@
+{
+  "name": "@me-zip/sweetcam-mobile-bridge",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/sweetcam-mobile-bridge.mjs",
+    "test": "node --test src/sweetcam-mobile-bridge.test.mjs"
+  }
+}

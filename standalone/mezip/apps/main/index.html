@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#050505" />
+    <title>MEZIP · 作品与游戏</title>
+  </head>
+  <body>
+    <div id="file-protocol-help" hidden style="max-width: 42rem; margin: 12vh auto; padding: 2rem; border: 1px solid #333; border-radius: 1rem; background: #111; color: #f4f1ea; font: 16px/1.6 system-ui, sans-serif">
+      <h1 style="margin: 0 0 .75rem">需要通过本地地址打开</h1>
+      <p style="margin: 0 0 1rem">这是 Vite/React 应用，直接双击 HTML 文件会被浏览器的 file:// 安全策略拦截。请先运行项目目录中的 <code>start-rbp-v2.cmd</code>，再打开下面的地址：</p>
+      <p style="margin: 0"><a href="/#login" style="color: #8cc8ff">/#login</a></p>
+    </div>
+    <div id="root"></div>
+    <script>
+      if (window.location.protocol === 'file:') {
+        document.getElementById('file-protocol-help').hidden = false
+      }
+    </script>
+    <script type="module" src="./src/main.jsx"></script>
+  </body>
+</html>

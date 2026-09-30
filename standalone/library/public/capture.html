@@ -1,0 +1,15 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="referrer" content="no-referrer"><title>手机上传 · 灵感库</title><link rel="stylesheet" href="/capture.css"><script src="/capture.js" defer></script></head><body>
+<header><a class="brand" href="/?view=library">▤ 灵感库</a><span>随手收集，随时回看</span></header>
+<nav class="phone-tabs" aria-label="手机导航"><a class="active" href="#capture-form">上传</a><a href="/?view=library">内容库</a><a href="/?view=newsletters">我的周刊</a></nav>
+<main><p class="eyebrow">QUICK CAPTURE</p><h1>把此刻的灵感<br>留给以后的自己。</h1><p class="lead" id="captureLead">粘贴分享链接，或拍照、写几句话。保存后，电脑联网时会自动同步。</p>
+<p class="lead" id="fixedEntryNote" hidden>固定手机入口，地址不会自动到期。可收藏或添加到手机主屏幕；登录状态到期后，仍在这里重新登录。</p>
+<p id="connection" role="status">正在连接你的上传入口…</p>
+<a id="captureLogin" target="_top" href="/signin-with-chatgpt?return_to=%2Fmobile" hidden>登录并返回固定手机入口 →</a>
+<form id="capture-form"><label>链接或平台分享文字<textarea id="link" rows="3" placeholder="把抖音、X 的分享文字直接粘贴到这里…"></textarea></label><button type="button" id="preview">获取封面与文案</button>
+<figure id="coverBox" hidden><img id="cover" alt="本次上传的封面"><button type="button" id="removeCover">移除图片</button></figure>
+<div class="photo-actions"><label class="file-button">拍照<input id="camera" type="file" accept="image/jpeg,image/png,image/webp,image/gif" capture="environment"></label><label class="file-button">从相册选图<input id="photo" type="file" accept="image/jpeg,image/png,image/webp,image/gif"></label></div>
+<label>标题<input id="title" maxlength="300" placeholder="自动填入，也可以自己写"></label>
+<label>原始文案<textarea id="caption" rows="5" placeholder="来源内容的原文"></textarea></label>
+<label>我的笔记<textarea id="body" rows="5" placeholder="它为什么值得留下？"></textarea></label>
+<p id="feedback" role="status" aria-live="polite"></p><button id="save" class="primary" type="submit" disabled>保存到我的灵感库</button><small id="draftStatus">输入自动保留在这台手机上</small></form>
+<aside><strong>之前的资料和周刊都在</strong><p>点顶部“内容库”或“我的周刊”，用同一账号登录，就能继续查看和编辑。</p><a href="/?view=newsletters">打开我的周刊 →</a></aside></main></body></html>

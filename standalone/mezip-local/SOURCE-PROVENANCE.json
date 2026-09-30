@@ -1,0 +1,12 @@
+{
+  "source": "Local editable services snapshot; imported 2026-09-30",
+  "files": 665,
+  "runtimeDataIncluded": false,
+  "siteBindingRemoved": true,
+  "exportedFiles": 721,
+  "publicExportChanges": [
+    "Personal configuration replaced with examples",
+    "Runtime data and credentials excluded",
+    "Original site binding removed"
+  ]
+}

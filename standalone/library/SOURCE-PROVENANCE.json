@@ -1,0 +1,12 @@
+{
+  "source": "feff2ce08345e377aee9870b00c66fff8a2ffdbb",
+  "files": 140,
+  "runtimeDataIncluded": false,
+  "siteBindingRemoved": true,
+  "exportedFiles": 141,
+  "publicExportChanges": [
+    "Personal configuration replaced with examples",
+    "Runtime data and credentials excluded",
+    "Original site binding removed"
+  ]
+}

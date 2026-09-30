@@ -1,0 +1,151 @@
+.gradient-carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+  overflow: hidden;
+  perspective: 1800px;
+  background: #0a0a0a;
+  color: #fff;
+  cursor: grab;
+  isolation: isolate;
+  outline: none;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.gradient-carousel:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, .8);
+  outline-offset: 8px;
+  border-radius: 12px;
+}
+
+.gradient-carousel.is-dragging { cursor: grabbing; }
+
+.gradient-carousel__background {
+  position: absolute;
+  z-index: 0;
+  top: -8%;
+  left: -8%;
+  display: block;
+  width: 116%;
+  height: 116%;
+  filter: blur(var(--gc-blur, 24px)) saturate(1.05);
+  opacity: .98;
+  pointer-events: none;
+  transform: scale(1.03);
+}
+
+.gradient-carousel__cards {
+  position: absolute;
+  z-index: 10;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+.gradient-carousel__card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  width: min(26vw, 360px);
+  aspect-ratio: var(--gc-card-ratio, .8);
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 28px;
+  background: #161616;
+  box-shadow: 0 24px 54px rgba(0, 0, 0, .42);
+  cursor: inherit;
+  appearance: none;
+  backface-visibility: hidden;
+  transform-origin: 90% center;
+  transform-style: preserve-3d;
+  transition: box-shadow .35s ease, filter .35s ease, opacity .35s ease;
+  will-change: transform;
+}
+
+.gradient-carousel__card::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: inherit;
+  box-shadow: inset 0 0 34px rgba(0, 0, 0, .22);
+  content: '';
+  pointer-events: none;
+}
+
+.gradient-carousel__card[data-active="true"] {
+  box-shadow: 0 32px 78px rgba(0, 0, 0, .58), 0 0 0 1px rgba(255, 255, 255, .14);
+}
+
+.gradient-carousel__card:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, .94);
+  outline-offset: 7px;
+}
+
+.gradient-carousel__card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.gradient-carousel__loader {
+  position: absolute;
+  z-index: 50;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(10, 10, 10, .56);
+  color: rgba(255, 255, 255, .72);
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+}
+
+.gradient-carousel__loader span {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, .25);
+  border-top-color: rgba(255, 255, 255, .9);
+  border-radius: 50%;
+  animation: gradient-carousel-spin .8s linear infinite;
+}
+
+.gradient-carousel__hint {
+  position: absolute;
+  right: 24px;
+  bottom: 18px;
+  z-index: 60;
+  color: rgba(255, 255, 255, .48);
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 9px;
+  letter-spacing: .12em;
+  pointer-events: none;
+}
+
+@keyframes gradient-carousel-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 590px) {
+  .gradient-carousel { min-height: 365px; }
+  .gradient-carousel__card { width: min(78vw, 320px); border-radius: 22px; }
+  .gradient-carousel__hint { right: 14px; bottom: 14px; font-size: 8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gradient-carousel__card { transition-duration: 0s; }
+  .gradient-carousel__loader span { animation: none; }
+}

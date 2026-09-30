@@ -1,0 +1,298 @@
+{
+  "version": 1,
+  "name": "灵感库 · 03 竖屏屏幕加人物",
+  "current_scene": "灵感库 · 03 竖屏屏幕加人物",
+  "current_program_scene": "灵感库 · 03 竖屏屏幕加人物",
+  "scene_order": [
+    {
+      "name": "灵感库 · 03 竖屏屏幕加人物"
+    }
+  ],
+  "sources": [
+    {
+      "name": "黑色背景",
+      "uuid": "dc602b82-898f-5195-a49d-a62ea50f7b9b",
+      "id": "color_source",
+      "versioned_id": "color_source_v3",
+      "settings": {
+        "color": 4278190080,
+        "width": 1080,
+        "height": 1920
+      },
+      "mixers": 0,
+      "volume": 1.0,
+      "balance": 0.5,
+      "sync": 0,
+      "enabled": true,
+      "muted": false,
+      "monitoring_type": 0,
+      "hotkeys": {},
+      "filters": [],
+      "private_settings": {}
+    },
+    {
+      "name": "电脑屏幕（双击选择显示器）",
+      "uuid": "d3d0cff8-1cf7-5b77-8328-0dd7f55786e0",
+      "id": "monitor_capture",
+      "versioned_id": "monitor_capture",
+      "settings": {
+        "monitor_id": "DUMMY",
+        "capture_cursor": true,
+        "method": 0
+      },
+      "mixers": 0,
+      "volume": 1.0,
+      "balance": 0.5,
+      "sync": 0,
+      "enabled": true,
+      "muted": false,
+      "monitoring_type": 0,
+      "hotkeys": {},
+      "filters": [],
+      "private_settings": {}
+    },
+    {
+      "name": "人物摄像头（双击选择设备）",
+      "uuid": "b89f4e1d-9b6e-513e-8e4d-2cf6411d963e",
+      "id": "dshow_input",
+      "versioned_id": "dshow_input",
+      "settings": {
+        "video_device_id": "",
+        "active": true,
+        "res_type": 0,
+        "use_custom_audio_device": false,
+        "audio_device_id": "",
+        "deactivate_when_not_showing": true
+      },
+      "mixers": 0,
+      "volume": 1.0,
+      "balance": 0.5,
+      "sync": 0,
+      "enabled": true,
+      "muted": true,
+      "monitoring_type": 0,
+      "hotkeys": {},
+      "filters": [],
+      "private_settings": {}
+    },
+    {
+      "name": "上下分隔线",
+      "uuid": "3a4d1754-ebb9-51b7-beb5-e2305d20c942",
+      "id": "color_source",
+      "versioned_id": "color_source_v3",
+      "settings": {
+        "color": 4280558628,
+        "width": 1080,
+        "height": 4
+      },
+      "mixers": 0,
+      "volume": 1.0,
+      "balance": 0.5,
+      "sync": 0,
+      "enabled": true,
+      "muted": false,
+      "monitoring_type": 0,
+      "hotkeys": {},
+      "filters": [],
+      "private_settings": {}
+    },
+    {
+      "name": "灵感库 · 03 竖屏屏幕加人物",
+      "uuid": "1b27ff80-6efa-5d75-b34f-3bb9d0609e17",
+      "id": "scene",
+      "versioned_id": "scene",
+      "settings": {
+        "id_counter": 4,
+        "custom_size": true,
+        "cx": 1080,
+        "cy": 1920,
+        "items": [
+          {
+            "name": "黑色背景",
+            "source_uuid": "dc602b82-898f-5195-a49d-a62ea50f7b9b",
+            "id": 1,
+            "visible": true,
+            "locked": true,
+            "pos": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "scale": {
+              "x": 1.0,
+              "y": 1.0
+            },
+            "rot": 0.0,
+            "align": 5,
+            "bounds_type": 2,
+            "bounds_align": 0,
+            "bounds_crop": false,
+            "bounds": {
+              "x": 1080.0,
+              "y": 1920.0
+            },
+            "crop_left": 0,
+            "crop_top": 0,
+            "crop_right": 0,
+            "crop_bottom": 0,
+            "scale_filter": "lanczos",
+            "blend_method": "default",
+            "blend_type": "normal",
+            "private_settings": {}
+          },
+          {
+            "name": "电脑屏幕（双击选择显示器）",
+            "source_uuid": "d3d0cff8-1cf7-5b77-8328-0dd7f55786e0",
+            "id": 2,
+            "visible": true,
+            "locked": false,
+            "pos": {
+              "x": 0.0,
+              "y": 240.0
+            },
+            "scale": {
+              "x": 1.0,
+              "y": 1.0
+            },
+            "rot": 0.0,
+            "align": 5,
+            "bounds_type": 2,
+            "bounds_align": 0,
+            "bounds_crop": false,
+            "bounds": {
+              "x": 1080.0,
+              "y": 608.0
+            },
+            "crop_left": 0,
+            "crop_top": 0,
+            "crop_right": 0,
+            "crop_bottom": 0,
+            "scale_filter": "lanczos",
+            "blend_method": "default",
+            "blend_type": "normal",
+            "private_settings": {}
+          },
+          {
+            "name": "人物摄像头（双击选择设备）",
+            "source_uuid": "b89f4e1d-9b6e-513e-8e4d-2cf6411d963e",
+            "id": 3,
+            "visible": true,
+            "locked": false,
+            "pos": {
+              "x": 0.0,
+              "y": 848.0
+            },
+            "scale": {
+              "x": 1.0,
+              "y": 1.0
+            },
+            "rot": 0.0,
+            "align": 5,
+            "bounds_type": 3,
+            "bounds_align": 0,
+            "bounds_crop": true,
+            "bounds": {
+              "x": 1080.0,
+              "y": 1072.0
+            },
+            "crop_left": 0,
+            "crop_top": 0,
+            "crop_right": 0,
+            "crop_bottom": 0,
+            "scale_filter": "lanczos",
+            "blend_method": "default",
+            "blend_type": "normal",
+            "private_settings": {}
+          },
+          {
+            "name": "上下分隔线",
+            "source_uuid": "3a4d1754-ebb9-51b7-beb5-e2305d20c942",
+            "id": 4,
+            "visible": true,
+            "locked": true,
+            "pos": {
+              "x": 0.0,
+              "y": 846.0
+            },
+            "scale": {
+              "x": 1.0,
+              "y": 1.0
+            },
+            "rot": 0.0,
+            "align": 5,
+            "bounds_type": 2,
+            "bounds_align": 0,
+            "bounds_crop": false,
+            "bounds": {
+              "x": 1080.0,
+              "y": 4.0
+            },
+            "crop_left": 0,
+            "crop_top": 0,
+            "crop_right": 0,
+            "crop_bottom": 0,
+            "scale_filter": "lanczos",
+            "blend_method": "default",
+            "blend_type": "normal",
+            "private_settings": {}
+          }
+        ]
+      },
+      "mixers": 1,
+      "volume": 1.0,
+      "balance": 0.5,
+      "sync": 0,
+      "enabled": true,
+      "muted": false,
+      "monitoring_type": 0,
+      "hotkeys": {},
+      "filters": [],
+      "private_settings": {}
+    }
+  ],
+  "groups": [],
+  "transitions": [],
+  "quick_transitions": [],
+  "current_transition": "Fade",
+  "transition_duration": 300,
+  "preview_locked": false,
+  "DesktopAudioDevice1": {
+    "name": "系统声音（默认播放设备）",
+    "uuid": "7d91822a-09da-5af4-852b-df4ab15655ee",
+    "id": "wasapi_output_capture",
+    "versioned_id": "wasapi_output_capture",
+    "settings": {
+      "device_id": "default",
+      "use_device_timing": true
+    },
+    "mixers": 1,
+    "volume": 0.5,
+    "balance": 0.5,
+    "sync": 0,
+    "enabled": true,
+    "muted": false,
+    "monitoring_type": 0,
+    "hotkeys": {},
+    "filters": [],
+    "private_settings": {}
+  },
+  "AuxAudioDevice1": {
+    "name": "麦克风（默认输入设备）",
+    "uuid": "52ec35cd-c250-5c06-b6e0-756a251dd874",
+    "id": "wasapi_input_capture",
+    "versioned_id": "wasapi_input_capture",
+    "settings": {
+      "device_id": "default",
+      "use_device_timing": false
+    },
+    "mixers": 1,
+    "volume": 1.0,
+    "balance": 0.5,
+    "sync": 0,
+    "enabled": true,
+    "muted": false,
+    "monitoring_type": 0,
+    "hotkeys": {},
+    "filters": [],
+    "private_settings": {}
+  }
+}

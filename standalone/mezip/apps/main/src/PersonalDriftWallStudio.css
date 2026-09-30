@@ -1,0 +1,119 @@
+.personal-drift-wall-studio {
+  position: relative;
+  padding-top: clamp(96px, 12vw, 176px);
+  padding-bottom: clamp(96px, 12vw, 176px);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  scroll-margin-top: 96px;
+}
+
+.personal-drift-wall-hero {
+  display: grid;
+  grid-template-columns: minmax(0, .78fr) minmax(420px, 1.22fr);
+  align-items: center;
+  gap: clamp(40px, 7vw, 112px);
+}
+
+.personal-drift-wall-copy { max-width: 470px; }
+.personal-drift-wall-copy h2 { max-width: 560px; }
+.personal-drift-wall-copy h2 em { display: block; color: #cdbca9; font-style: normal; }
+.personal-drift-wall-copy > p:not(.eyebrow) { max-width: 470px; margin: 22px 0 0; color: var(--muted); font-size: 16px; line-height: 1.65; }
+.personal-drift-wall-lede { color: var(--muted); }
+.personal-drift-wall-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 18px; margin-top: 34px; }
+.personal-drift-wall-button { display: inline-flex; min-height: 46px; align-items: center; gap: 18px; padding: 0 18px; background: #e9e0d2; color: #1d1510; font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 11px; letter-spacing: .14em; transition: transform .18s ease, background .18s ease; }
+.personal-drift-wall-button:hover, .personal-drift-wall-button:focus-visible { transform: translateY(-2px); background: #fff7eb; }
+.personal-drift-wall-button:focus-visible { outline: 2px solid var(--fg); outline-offset: 4px; }
+.personal-drift-wall-count { color: var(--muted); font-size: 11px; line-height: 1.5; }
+.personal-drift-wall-count strong { margin-right: 4px; color: var(--fg); font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 16px; font-weight: 500; }
+.personal-drift-upload-actions { display: grid; gap: 12px; margin-top: 22px; min-width: 0; }
+.personal-drift-upload-actions .session-image-upload-control.is-inline { position: relative; inset: auto; z-index: 1; justify-content: flex-start; max-width: 100%; }
+.personal-drift-upload-actions .session-image-upload-button { min-height: 44px; padding: 0 18px; font-size: 13px; letter-spacing: 0; }
+.personal-drift-upload-actions .session-image-upload-status { text-align: left; line-height: 1.5; }
+.personal-drift-upload-actions .mobile-upload-links { max-width: 100%; }
+.personal-drift-upload-actions .mobile-upload-link-panel { min-width: 0; }
+.personal-drift-upload-actions .mobile-upload-link-buttons > button { min-height: 44px; }
+.personal-drift-wall-caption { margin-top: 56px !important; color: var(--faint) !important; font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 10px !important; letter-spacing: .08em; }
+
+.personal-drift-wall-stage { position: relative; width: 100%; height: clamp(540px, 48vw, 700px); min-height: 540px; overflow: hidden; border: 1px solid var(--line); background: #0c0b09; isolation: isolate; }
+.personal-drift-wall-stage::before { position: absolute; z-index: 1; inset: 0; pointer-events: none; content: ''; border: 1px solid rgba(255,255,255,.05); box-shadow: inset 0 0 120px rgba(0,0,0,.7); }
+.personal-drift-wall-effect { position: absolute; z-index: 0; inset: 0; -webkit-mask-image: none; mask-image: none; }
+.personal-drift-wall-effect .drift-wall__inner { background: #28221c; }
+.personal-drift-wall-effect .drift-wall__tile img { object-fit: cover; background: #28221c; }
+.personal-drift-wall-edge-note { position: absolute; right: 18px; bottom: 14px; z-index: 3; color: rgba(241,236,228,.52); font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9px; letter-spacing: .18em; pointer-events: none; }
+
+.personal-drift-wall-studio .personal-drift-mode-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 28px; }
+.personal-drift-wall-studio .personal-drift-mode-switch { display: inline-flex; padding: 4px; gap: 4px; border: 1px solid var(--line); border-radius: 12px; background: rgba(255,255,255,.025); }
+.personal-drift-wall-studio .personal-drift-mode-switch button,
+.personal-drift-wall-studio .personal-drift-shuffle { min-height: 42px; padding: 0 16px; border: 1px solid transparent; border-radius: 8px; background: transparent; color: var(--muted); font: inherit; font-size: 13px; cursor: pointer; }
+.personal-drift-wall-studio .personal-drift-mode-switch button[aria-pressed="true"] { background: #e9e0d2; color: #1d1510; }
+.personal-drift-wall-studio .personal-drift-mode-switch button:hover,
+.personal-drift-wall-studio .personal-drift-shuffle:hover { color: var(--fg); background: rgba(255,255,255,.08); }
+.personal-drift-wall-studio .personal-drift-mode-switch button[aria-pressed="true"]:hover { background: #fff7eb; color: #1d1510; }
+.personal-drift-wall-studio .personal-drift-shuffle { border-color: var(--line); }
+.personal-drift-wall-studio .personal-drift-shuffle span { margin-left: 12px; font-size: 17px; }
+.personal-drift-wall-studio .personal-drift-mode-controls button:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; }
+
+/* The original preview keeps the upstream masks and 600 px demo height.
+   Personal mode continues to use the earlier portrait layout above. */
+.personal-drift-wall-studio.is-original .personal-drift-wall-hero { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+.personal-drift-wall-studio.is-original .personal-drift-wall-copy { max-width: 760px; }
+.personal-drift-wall-studio.is-original .personal-drift-wall-caption { margin-top: 22px !important; }
+.personal-drift-wall-studio.is-original .personal-drift-wall-stage { display: flex; align-items: center; justify-content: center; height: 600px; min-height: 600px; padding: 0; margin-top: 1em; border: 1px solid #2f293a; border-radius: 14px; background: #120f17; }
+.personal-drift-wall-studio.is-original .personal-drift-wall-stage::before { content: none; }
+.personal-drift-wall-studio .personal-drift-wall-original-effect { position: absolute; inset: 0; }
+
+.personal-drift-archive { margin-top: clamp(80px, 10vw, 144px); padding: clamp(48px, 7vw, 96px) clamp(22px, 5vw, 78px) clamp(58px, 8vw, 112px); background: #e9e0d2; color: #1c1814; }
+.personal-drift-archive-heading { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, .5fr); gap: 40px; align-items: end; margin-bottom: 52px; }
+.personal-drift-eyebrow { margin: 0 0 18px; color: #9c5437; font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 10px; letter-spacing: .24em; line-height: 1.4; }
+.personal-drift-archive-heading h3 { max-width: 680px; margin: 0; font-family: Georgia, 'Songti SC', serif; font-size: clamp(38px, 5vw, 70px); font-weight: 400; letter-spacing: -.045em; line-height: .98; }
+.personal-drift-archive-heading > p { max-width: 350px; margin: 0 0 4px; color: #6e6257; font-size: 13px; line-height: 1.8; }
+.personal-drift-archive-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
+.personal-drift-archive-card { display: block; min-width: 0; padding: 0; border: 0; color: inherit; background: transparent; text-align: left; cursor: pointer; }
+.personal-drift-archive-card-image { display: block; aspect-ratio: .74; overflow: hidden; background: #d4c8b8; }
+.personal-drift-archive-card img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .5s cubic-bezier(.22,.61,.36,1), filter .3s ease; }
+.personal-drift-archive-card:hover img, .personal-drift-archive-card:focus-visible img { transform: scale(1.045); filter: saturate(1.1); }
+.personal-drift-archive-card:focus-visible { outline: 2px solid #9c5437; outline-offset: 4px; }
+.personal-drift-archive-card-meta { display: flex; justify-content: space-between; gap: 10px; padding: 11px 0 4px; color: #7d7064; font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9px; letter-spacing: .16em; }
+.personal-drift-archive-card-meta span:last-child { color: #a95736; opacity: 0; transform: translateX(-6px); transition: opacity .18s ease, transform .18s ease; }
+.personal-drift-archive-card:hover .personal-drift-archive-card-meta span:last-child, .personal-drift-archive-card:focus-visible .personal-drift-archive-card-meta span:last-child { opacity: 1; transform: translateX(0); }
+
+.personal-drift-modal-backdrop { position: fixed; z-index: 500; inset: 0; display: grid; place-items: center; padding: 22px; background: rgba(7,6,5,.88); backdrop-filter: blur(16px); }
+.personal-drift-image-modal { position: relative; display: flex; width: min(94vw, 720px); max-height: 94vh; flex-direction: column; padding: 12px; border: 1px solid rgba(241,236,228,.2); background: #191613; box-shadow: 0 30px 100px rgba(0,0,0,.5); }
+.personal-drift-image-modal img { display: block; width: 100%; max-height: calc(94vh - 74px); object-fit: contain; background: #272018; }
+.personal-drift-modal-close { position: absolute; z-index: 2; top: -16px; right: -16px; display: grid; width: 34px; height: 34px; place-items: center; padding: 0; border: 1px solid rgba(241,236,228,.35); border-radius: 50%; background: #1d1915; color: #f1ece4; font-size: 23px; line-height: 1; cursor: pointer; }
+.personal-drift-modal-close:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.personal-drift-modal-label { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 12px 4px 2px; color: #a9a096; font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9px; letter-spacing: .16em; }
+.personal-drift-modal-label button { padding: 8px 12px; border: 1px solid rgba(241,236,228,.35); border-radius: 999px; color: #191613; background: #f1ece4; font: inherit; letter-spacing: .06em; cursor: pointer; }
+.personal-drift-modal-label button:hover, .personal-drift-modal-label button:focus-visible { background: #fff; }
+body.personal-drift-modal-open { overflow: hidden; }
+
+@media (max-width: 920px) {
+  .personal-drift-wall-hero { grid-template-columns: minmax(0, 1fr); gap: 48px; }
+  .personal-drift-wall-copy { max-width: 620px; }
+  .personal-drift-wall-stage { height: min(68vw, 620px); min-height: 460px; }
+  .personal-drift-archive-heading { grid-template-columns: 1fr; gap: 18px; }
+  .personal-drift-archive-heading > p { max-width: 520px; }
+}
+
+@media (max-width: 590px) {
+  .personal-drift-wall-studio { padding-top: 88px; padding-bottom: 88px; }
+  .personal-drift-wall-copy > p:not(.eyebrow) { font-size: 15px; }
+  .personal-drift-wall-actions { align-items: flex-start; flex-direction: column; }
+  .personal-drift-wall-caption { margin-top: 34px !important; }
+  .personal-drift-wall-stage { height: 500px; min-height: 500px; }
+  .personal-drift-wall-edge-note { right: 12px; bottom: 12px; font-size: 8px; }
+  .personal-drift-archive { margin-top: 72px; padding: 42px 18px 70px; }
+  .personal-drift-archive-heading { margin-bottom: 36px; }
+  .personal-drift-archive-heading h3 { font-size: clamp(36px, 11vw, 58px); }
+  .personal-drift-archive-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .personal-drift-modal-backdrop { padding: 14px; }
+  .personal-drift-image-modal { padding: 8px; }
+  .personal-drift-modal-close { top: -12px; right: -8px; }
+  .personal-drift-modal-label { font-size: 8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .personal-drift-wall-button,
+  .personal-drift-archive-card img,
+  .personal-drift-archive-card-meta { transition: none; }
+}

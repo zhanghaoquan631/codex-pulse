@@ -1,0 +1,122 @@
+.chroma-card {
+  --chroma-card-width: 5;
+  --chroma-card-height: 6;
+  --chroma-aspect: .67;
+  --chroma-radius: 30px;
+  --chroma-opacity: 1;
+  --chroma-scale-intensity: .1;
+  --chroma-perspective: 1260px;
+  --chroma-pointer-x: 50%;
+  --chroma-pointer-y: 50%;
+  --chroma-rotate-x: 0deg;
+  --chroma-rotate-y: 0deg;
+  --chroma-shift-x: 0px;
+  --chroma-shift-y: 0px;
+  position: relative;
+  display: grid;
+  min-width: 0;
+  min-height: 1px;
+  place-items: center;
+  perspective: var(--chroma-perspective);
+  isolation: isolate;
+  opacity: var(--chroma-opacity);
+  color: #fff;
+  touch-action: none;
+}
+
+.chroma-card__surface {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 1px;
+  aspect-ratio: var(--chroma-card-width) / var(--chroma-card-height);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: var(--chroma-radius);
+  background: #171717;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, .42), inset 0 0 0 1px rgba(255, 255, 255, .04);
+  transform: translate3d(var(--chroma-shift-x), var(--chroma-shift-y), 0) rotateX(var(--chroma-rotate-x)) rotateY(var(--chroma-rotate-y)) scale(1);
+  transform-style: preserve-3d;
+  transition: transform .4s cubic-bezier(.2, .8, .2, 1), border-color .4s ease, box-shadow .4s ease;
+  will-change: transform;
+}
+
+.chroma-card__fallback,
+.chroma-card__canvas,
+.chroma-card__glow {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+
+.chroma-card__fallback {
+  z-index: 0;
+  object-fit: cover;
+  opacity: 1;
+  background: linear-gradient(145deg, #3c3c3c, #0f0f0f);
+  pointer-events: none;
+  user-select: none;
+  transition: opacity .3s ease;
+}
+
+.chroma-card__canvas {
+  z-index: 1;
+  pointer-events: none;
+}
+
+.chroma-card__glow {
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(35% 28% at var(--chroma-pointer-x) var(--chroma-pointer-y), rgba(255, 255, 255, .28), transparent 78%),
+    linear-gradient(120deg, rgba(255, 80, 90, .14), transparent 27%, transparent 68%, rgba(80, 190, 255, .14));
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity .4s ease;
+}
+
+.chroma-card__content {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 20px;
+  background: linear-gradient(to top, rgba(0, 0, 0, .78), transparent 58%);
+  pointer-events: none;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, .44);
+}
+
+.chroma-card[data-chroma-hover="true"] .chroma-card__surface {
+  border-color: rgba(255, 255, 255, .42);
+  box-shadow: 0 36px 84px rgba(0, 0, 0, .54), 0 0 26px rgba(255, 92, 128, .1), inset 0 0 0 1px rgba(255, 255, 255, .08);
+  transform: translate3d(var(--chroma-shift-x), var(--chroma-shift-y), 0) rotateX(var(--chroma-rotate-x)) rotateY(var(--chroma-rotate-y)) scale(calc(1 + var(--chroma-scale-intensity)));
+}
+
+.chroma-card[data-chroma-hover="true"] .chroma-card__glow {
+  opacity: .9;
+}
+
+.chroma-card:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, .9);
+  outline-offset: 7px;
+  border-radius: var(--chroma-radius);
+}
+
+@media (hover: none), (pointer: coarse) {
+  .chroma-card { touch-action: pan-y; }
+}
+
+@media (max-width: 590px) {
+  .chroma-card__content { padding: 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chroma-card__surface,
+  .chroma-card__glow,
+  .chroma-card__fallback { transition-duration: 0s; }
+}

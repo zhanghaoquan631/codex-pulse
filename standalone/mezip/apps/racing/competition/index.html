@@ -1,0 +1,22 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f5f0df"><title>极限竞技 · 简笔画</title><meta name="description" content="邀请微信好友参加6车3圈极限竞技。空位由噩梦级AI对手补齐，一起争夺前三名。"><meta property="og:title" content="简笔画 · 来抢第一名"><meta property="og:description" content="6辆车，3圈，噩梦级对手。邀请好友，争夺领奖台。"><meta property="og:image" content="https://mezip-art-playground.wozhe0196.chatgpt.site/racing/home-screen/sketch-time-trial.png"><link rel="icon" href="/racing/sketch-icon.svg"><link rel="stylesheet" href="./competition.css"><script type="module" src="./lobby.js?v=sketch-brand-1"></script></head><body class="competition-page">
+ <header class="cup-header"><a href="/racing/" class="cup-brand">← 简笔画</a><span>简笔画 / NIGHTMARE CUP</span><b>难度：最高</b></header>
+ <main class="cup-layout">
+  <section class="cup-poster"><p class="eyebrow">全新多人模式 · VOL. 02</p><h1>抢下<br><em>第一。</em></h1><p class="cup-intro">把挑战发给朋友。<br>亲自驾驶，挑战最难的 AI。</p>
+   <svg class="cup-car" viewBox="0 0 620 235" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M64 151l37-37 94-20 83-64 134 3 81 65 71 13 34 49-10 28H60z"/><path d="M199 93l91-51 108 2 56 55zM271 46l-19 50m140-53 26 54M69 145l126-17 254 5 121 14M173 107l-11 13m306-12 40 10M221 105l-4 67m219-67 21 73M219 120l26-1m154 3 28 1M270 171l111 2"/><ellipse cx="174" cy="178" rx="45" ry="42"/><ellipse cx="174" cy="178" rx="28" ry="29"/><ellipse cx="479" cy="178" rx="46" ry="42"/><ellipse cx="479" cy="178" rx="29" ry="30"/><path d="M147 174l52 9m-26-32 5 53m-25-47 41 42m-40-3 41-38M452 176l52 8m-27-33 6 53m-26-47 42 42m-42-3 42-38M84 123l36 2-15 18-38 4m466-21 40 5M512 91l4-28 68 5-1 9-67-3M55 209h510M76 221h118m239-2h128"/></svg>
+   <div class="cup-facts"><div><b>06</b><span>同场车手</span></div><div><b>03</b><span>比赛圈数</span></div><div><b>01</b><span>冠军席位</span></div></div>
+   <p class="cup-rule">噩梦级：极速赛车线、极限刹车点。<br>AI 不让速；失误会直接影响你的名次。<br>赛车互不碰撞，以完整三圈的冲线先后排名。</p>
+  </section>
+  <section class="cup-console">
+   <div id="create-panel"><p class="eyebrow">发起你的挑战</p><h2>朋友，起跑线见。</h2><form id="create-form"><label for="driver-name">你的车手名</label><input id="driver-name" name="name" maxlength="20" minlength="1" autocomplete="nickname" required placeholder="给对手记住的名字"><label for="track">选择赛道</label><select id="track" name="trackId"><option value="lagunaSeca">Laguna Seca · 山地弯道</option><option value="apexCircuit">APEX Circuit · 城市街道</option></select><div class="difficulty"><span>固定难度</span><strong>噩梦 / NIGHTMARE</strong><span>★★★★★</span></div><div class="choice-actions"><button class="cup-button" type="submit" name="intent" value="invite">邀请好友 <span>↗</span></button><button class="cup-button secondary" type="submit" name="intent" value="ai">挑战 AI <span>→</span></button></div></form><p class="fine-print">你亲自驾驶赛车。邀请微信好友同场竞技，或与 5 名噩梦级 AI 对手争夺名次。</p></div>
+   <div id="room-panel" hidden><div class="room-title"><div><p class="eyebrow" id="room-kicker">发车区</p><h2 id="room-heading">准备争夺前三</h2></div><span class="room-badge" id="room-stage">等待发车</span></div><p class="room-meta" id="room-meta"></p><ol class="starting-grid" id="starting-grid" aria-label="参赛车手"></ol>
+    <form id="join-form" hidden><label for="join-name">用这个名字出战</label><input id="join-name" maxlength="20" autocomplete="nickname" required placeholder="你的车手名"><button class="cup-button" type="submit">加入比赛 <span>↗</span></button></form>
+    <div class="choice-actions room-choices"><button class="cup-button" id="copy-link" type="button">邀请好友 <span>↗</span></button><button class="cup-button secondary" id="choose-ai" type="button">挑战 AI</button></div>
+    <a class="text-link room-entry" id="enter-race" hidden>进入起跑区 →</a>
+    <div class="invite-card" id="invite-card" hidden><img id="invite-qr" alt="扫码加入竞技房间" width="156" height="156"><div><b>微信扫一扫，来争第一。</b><p>也可复制链接，直接发给好友。</p><input id="invite-link" readonly aria-label="邀请链接"></div></div>
+    <p class="fine-print" id="room-help">你亲自驾驶。邀请朋友一起参赛，其余车位由 AI 对手补齐。</p>
+   </div>
+   <p id="lobby-status" class="cup-status" role="status" aria-live="polite"></p><a id="new-room" class="text-link" href="/racing/competition/" hidden>另开一场比赛 →</a>
+  </section>
+ </main><footer class="cup-footer"><span>同一赛道，同一场比赛。</span><span>真人驾驶 / AI 对手</span></footer>
+</body></html>
+

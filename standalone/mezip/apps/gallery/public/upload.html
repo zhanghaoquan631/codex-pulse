@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <title>上传到无限画廊</title>
+    <link rel="stylesheet" href="/upload.css" />
+  </head>
+  <body>
+    <main>
+      <p>INFINITE GALLERY</p>
+      <h1>把照片放进<br>无限画廊</h1>
+      <form id="upload-form">
+        <label for="photo"><span>选择照片</span><input id="photo" name="photo" type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" capture="environment" required></label>
+        <p id="file-name">还没有选择照片</p>
+        <button id="submit" type="submit">上传到画廊</button>
+      </form>
+      <p id="state" role="status"></p>
+    </main>
+    <script type="module" src="/upload.js"></script>
+  </body>
+</html>

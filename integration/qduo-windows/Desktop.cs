@@ -25,8 +25,8 @@ using System.Windows.Automation.Text;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 
-[assembly: System.Reflection.AssemblyVersion("1.1.0.0")]
-[assembly: System.Reflection.AssemblyFileVersion("1.1.0.0")]
+[assembly: System.Reflection.AssemblyVersion("1.2.0.0")]
+[assembly: System.Reflection.AssemblyFileVersion("1.2.0.0")]
 [assembly: System.Reflection.AssemblyProduct("QDuo Windows")]
 
 namespace QDuoWindows
@@ -547,6 +547,17 @@ namespace QDuoWindows
             bridgeStatus = new Label {Text = "正在启动本机接口…", Width = 865, Height = 40}; flow.Controls.Add(bridgeStatus);
             token = new TextBox {Text = config.Token, Width = 800, ReadOnly = true, UseSystemPasswordChar = true}; flow.Controls.Add(token);
             var tokenButtons = Row(); tokenButtons.Width = 840; tokenButtons.Controls.Add(MakeButton("复制配对码", () => { Clipboard.SetText(config.Token); status.Text = "配对码已复制，请只填入你的网站。"; })); tokenButtons.Controls.Add(MakeButton("显示 / 隐藏", () => token.UseSystemPasswordChar = !token.UseSystemPasswordChar)); tokenButtons.Controls.Add(MakeButton("重新生成", RotateToken)); tokenButtons.Controls.Add(MakeButton("打开网站", () => SafeBrowser.Open(AppConfig.SiteUrl + "#qduo"))); flow.Controls.Add(tokenButtons);
+            var startup = new CheckBox {Text = "登录 Windows 时自动启动（托盘运行，让网页自动连接）", AutoSize = true};
+            const string runKey = @"Software\Microsoft\Windows\CurrentVersion\Run";
+            using (var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(runKey)) startup.Checked = key != null && key.GetValue("QDuoWindows") != null;
+            startup.CheckedChanged += (s, e) => TryAction(() => {
+                using (var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(runKey)) {
+                    if (startup.Checked) key.SetValue("QDuoWindows", "\"" + Application.ExecutablePath + "\" --headless");
+                    else key.DeleteValue("QDuoWindows", false);
+                }
+                status.Text = startup.Checked ? "已开启登录时自动启动。网站配对一次后会自动重连。" : "已关闭登录时自动启动。";
+            });
+            flow.Controls.Add(startup);
             flow.Controls.Add(new Label {Text = "AI 服务 · OpenAI 兼容接口 / 本机 Ollama", AutoSize = true, Margin = new Padding(3, 18, 3, 9), Font = new Font(Font, FontStyle.Bold)});
             baseUrl = SettingsBox(flow, "Base URL（示例 https://api.openai.com/v1 或 http://localhost:11434/v1）", config.BaseUrl, false);
             model = SettingsBox(flow, "模型名称（需要服务端已经提供的模型）", config.Model, false);

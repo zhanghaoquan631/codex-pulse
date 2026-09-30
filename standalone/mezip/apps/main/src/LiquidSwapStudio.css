@@ -1,0 +1,161 @@
+.liquid-swap-studio {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, .78fr) minmax(420px, 1.22fr);
+  align-items: center;
+  gap: clamp(40px, 7vw, 112px);
+  padding-top: clamp(96px, 12vw, 176px);
+  padding-bottom: clamp(96px, 12vw, 176px);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  scroll-margin-top: 96px;
+}
+
+.liquid-swap-studio-copy { max-width: 475px; }
+.liquid-swap-studio-copy h2 { max-width: 530px; }
+.liquid-swap-studio-copy > p:not(.eyebrow) { max-width: 470px; margin: 22px 0 0; color: var(--muted); font-size: 16px; line-height: 1.65; }
+
+.liquid-swap-random-button {
+  display: inline-flex;
+  min-height: 52px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 42px;
+  margin-top: 32px;
+  padding: 0 18px 0 22px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: var(--fg);
+  color: var(--bg);
+  font-size: 14px;
+  font-weight: 600;
+  transition: transform .18s ease, opacity .18s ease;
+}
+.liquid-swap-random-button:hover:not(:disabled) { opacity: .86; transform: translateY(-2px); }
+.liquid-swap-random-button:focus-visible { outline: 2px solid var(--fg); outline-offset: 4px; }
+.liquid-swap-random-button:disabled { cursor: not-allowed; opacity: .42; }
+.liquid-swap-random-button b { display: grid; width: 28px; height: 28px; place-items: center; border-radius: 50%; background: var(--bg); color: var(--fg); font-size: 17px; font-weight: 400; }
+
+.liquid-swap-selection {
+  min-height: 18px;
+  max-width: 470px;
+  overflow: hidden;
+  color: var(--faint) !important;
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 11px !important;
+  line-height: 1.55 !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.liquid-swap-upload-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.liquid-swap-upload-label {
+  margin: 0 !important;
+  color: var(--faint) !important;
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 10px !important;
+  letter-spacing: .1em;
+  line-height: 1.5 !important;
+}
+
+.liquid-swap-local-upload { min-height: 44px; }
+
+.liquid-swap-upload-actions .session-image-upload-control.is-inline {
+  position: relative;
+  inset: auto;
+  z-index: 1;
+  justify-content: flex-start;
+  max-width: 100%;
+}
+
+.liquid-swap-upload-actions .session-image-upload-button,
+.liquid-swap-upload-actions .mobile-upload-link-buttons > button {
+  min-height: 44px;
+  padding: 0 17px;
+  font-size: 13px;
+}
+
+.liquid-swap-upload-actions .session-image-upload-status {
+  text-align: left;
+  line-height: 1.5;
+}
+
+.liquid-swap-upload-actions .mobile-upload-links { max-width: 100%; }
+.liquid-swap-upload-actions .mobile-upload-link-panel { min-width: 0; }
+
+.liquid-swap-studio-visual { display: grid; min-width: 0; gap: 14px; }
+.liquid-swap-studio-canvas {
+  position: relative;
+  width: 100%;
+  min-height: 520px;
+  height: min(48vw, 620px);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background: radial-gradient(circle at 25% 20%, rgba(132, 165, 255, .18), transparent 36%), radial-gradient(circle at 80% 72%, rgba(225, 250, 255, .12), transparent 33%), #08090d;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, .32);
+}
+.liquid-swap-studio-canvas::before { position: absolute; z-index: 2; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06), inset 0 -70px 100px rgba(0, 0, 0, .22); content: ''; pointer-events: none; }
+.liquid-swap-studio-effect { width: 100%; height: 100%; }
+
+.liquid-swap-refresh-button {
+  position: absolute;
+  z-index: 10;
+  top: 14px;
+  left: 14px;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: 12px;
+  background: rgba(10, 10, 13, .62);
+  color: var(--fg);
+  font-size: 21px;
+  line-height: 1;
+  transition: transform .22s ease, background .18s ease, opacity .18s ease;
+  backdrop-filter: blur(11px);
+}
+.liquid-swap-refresh-button:hover:not(:disabled) { background: rgba(255, 255, 255, .14); transform: rotate(24deg); }
+.liquid-swap-refresh-button:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; }
+.liquid-swap-refresh-button:disabled { cursor: not-allowed; opacity: .42; }
+
+.liquid-swap-indicators { position: absolute; z-index: 11; bottom: 21px; left: 24px; display: flex; gap: 6px; pointer-events: none; }
+.liquid-swap-indicators span { width: 18px; height: 2px; background: rgba(255, 255, 255, .38); transition: width .24s ease, background .24s ease; }
+.liquid-swap-indicators span.is-active { width: 34px; background: rgba(255, 255, 255, .92); }
+.liquid-swap-stage-note { position: absolute; z-index: 11; right: 24px; bottom: 18px; margin: 0; color: rgba(255,255,255,.5); font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; pointer-events: none; }
+.liquid-swap-transition-state { position: absolute; z-index: 11; top: 22px; right: 22px; color: rgba(255,255,255,.84); font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9px; letter-spacing: .14em; animation: liquid-swap-state .8s ease-in-out infinite alternate; pointer-events: none; }
+.liquid-swap-tip { margin: 0; color: var(--faint); font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 10px; line-height: 1.55; }
+
+@keyframes liquid-swap-state { from { opacity: .42; } to { opacity: 1; } }
+
+@media (max-width: 920px) {
+  .liquid-swap-studio { grid-template-columns: minmax(0, 1fr); gap: 48px; }
+  .liquid-swap-studio-copy { max-width: 620px; }
+  .liquid-swap-studio-canvas { height: min(70vw, 620px); min-height: 460px; }
+}
+
+@media (max-width: 590px) {
+  .liquid-swap-studio { padding-top: 88px; padding-bottom: 88px; }
+  .liquid-swap-studio-copy > p:not(.eyebrow) { font-size: 15px; }
+  .liquid-swap-studio-canvas { height: 430px; min-height: 430px; border-radius: 22px; }
+  .liquid-swap-refresh-button { top: 12px; left: 12px; }
+  .liquid-swap-indicators { bottom: 16px; left: 16px; }
+  .liquid-swap-stage-note { right: 14px; bottom: 14px; font-size: 8px; }
+  .liquid-swap-transition-state { top: 18px; right: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .liquid-swap-random-button,
+  .liquid-swap-refresh-button,
+  .liquid-swap-indicators span { transition: none; }
+  .liquid-swap-transition-state { animation: none; }
+}

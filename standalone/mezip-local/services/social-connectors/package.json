@@ -1,0 +1,25 @@
+{
+  "name": "@me-zip/social-connectors",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": { "types": "./src/index.ts", "node": "./dist/index.js", "default": "./src/index.ts" },
+    "./api": { "types": "./src/api.ts", "node": "./dist/api.js", "default": "./src/api.ts" }
+  },
+  "dependencies": {
+    "@me-zip/payment": "workspace:*",
+    "@me-zip/schemas": "workspace:*",
+    "@me-zip/shared-types": "workspace:*",
+    "@me-zip/utils": "workspace:*",
+    "zod": "^4.1.13"
+  },
+  "scripts": {
+    "lint": "eslint src --max-warnings=0",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run src --passWithNoTests",
+    "build": "tsc -p tsconfig.build.json && node scripts/write-build-entrypoints.mjs",
+    "test:local-capture-build": "node --test scripts/local-capture-build.test.mjs",
+    "dev:local-capture": "pnpm --filter @me-zip/schemas build && pnpm --filter @me-zip/shared-types build && pnpm build && node --experimental-transform-types dist/local-capture-server.js"
+  }
+}

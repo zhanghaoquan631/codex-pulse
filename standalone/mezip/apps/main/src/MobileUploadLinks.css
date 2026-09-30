@@ -1,0 +1,13 @@
+.mobile-upload-links { flex: 1 1 100%; min-width: 0; max-width: 440px; }
+.mobile-upload-link-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+.mobile-upload-links button { color: #eee; background: #171819; border: 1px solid #505153; border-radius: 24px; padding: 11px 16px; font: inherit; font-size: 13px; cursor: pointer; letter-spacing: 0; }
+.mobile-upload-links button:hover { background: #292b2e; }
+.mobile-upload-links button:disabled { opacity: .55; cursor: wait; }
+.mobile-upload-links button:focus-visible, .mobile-upload-links input:focus-visible { outline: 2px solid #c8dbec; outline-offset: 3px; }
+.mobile-upload-link-panel { margin-top: 12px; padding: 18px; border: 1px solid #494a4d; border-radius: 8px; background: #111214; }
+.mobile-upload-link-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.mobile-upload-link-heading button { border: 0; padding: 5px 10px; font-size: 24px; }
+.mobile-upload-link-panel img { display: block; margin: 12px 0; max-width: 100%; height: auto; border-radius: 4px; }
+.mobile-upload-links p { margin: 10px 0; color: #b9bbbf; font-size: 12px; line-height: 1.65; }
+.mobile-upload-pin { color: #f1f4f8; font-family: monospace; font-size: 18px; }
+.mobile-upload-link-panel input { width: 100%; min-width: 0; margin: 0 0 12px; padding: 10px; border: 1px solid #494a4d; border-radius: 4px; background: #070809; color: #c5cfdb; font-size: 12px; }

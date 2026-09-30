@@ -1,0 +1,10 @@
+packages:
+  - apps/*
+  - services/*
+  - services/social-connectors/*
+  - packages/*
+
+onlyBuiltDependencies:
+  - esbuild
+allowBuilds:
+  esbuild: true

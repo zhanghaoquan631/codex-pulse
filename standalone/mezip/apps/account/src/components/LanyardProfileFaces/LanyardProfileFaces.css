@@ -1,0 +1,462 @@
+.lanyard-face-shell {
+  --theme-green-0: #061a13;
+  --theme-green-1: #0b2b1e;
+  --theme-green-2: #164b32;
+  --theme-green-line: rgba(170, 245, 191, .34);
+  --theme-green-ink: #eaf9ee;
+  --theme-green-soft: #bce8c8;
+  --signature-font: "Vladimir Script", "Edwardian Script ITC", "Vivaldi", "Freestyle Script", "Ink Free", "Segoe Script", "Bradley Hand ITC", "Brush Script MT", cursive;
+  --chinese-signature-font: "华文行楷", "STXingkai", "华文楷体", "STKaiti", KaiTi, cursive;
+  --intro-signature-font: "Vladimir Script", "Edwardian Script ITC", "Vivaldi", "Freestyle Script", "Ink Free", "Segoe Script", "Bradley Hand ITC", "Brush Script MT", "华文行楷", "STXingkai", "华文楷体", "STKaiti", KaiTi, cursive;
+  --hover-rotate-x: 0deg;
+  --hover-rotate-y: 0deg;
+  --hover-light-x: 50%;
+  --hover-light-y: 50%;
+  position: relative;
+  width: min(474px, 88vw);
+  height: min(82svh, 660px);
+  aspect-ratio: 0.718;
+  transform-style: preserve-3d;
+  pointer-events: auto;
+  transform: perspective(900px) rotateX(var(--hover-rotate-x)) rotateY(var(--hover-rotate-y));
+  transition: transform 180ms cubic-bezier(.2, .8, .2, 1), filter 180ms ease;
+  will-change: transform, filter;
+}
+
+.lanyard-face-shell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  border-radius: 30px;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle at var(--hover-light-x) var(--hover-light-y), rgba(210, 255, 224, .2), transparent 52%);
+  mix-blend-mode: screen;
+  transition: opacity 180ms ease;
+}
+
+.lanyard-face-shell.is-near {
+  filter: brightness(.88) contrast(1.05) saturate(1.08);
+  transition-duration: 90ms, 180ms;
+}
+
+.lanyard-face-shell.is-near::after { opacity: .72; }
+
+.lanyard-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 30px;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  backface-visibility: visible;
+  pointer-events: none;
+}
+
+.lanyard-face.is-active { pointer-events: auto; }
+
+.lanyard-face:not(.is-active) { visibility: hidden; }
+.lanyard-face.is-active { visibility: visible; }
+
+.lanyard-face:not(.is-active),
+.lanyard-face:not(.is-active) * { pointer-events: none !important; }
+
+.lanyard-face-front {
+  transform: none;
+  pointer-events: auto;
+  overflow: visible;
+}
+
+.lanyard-face-back {
+  transform: rotateY(180deg);
+  pointer-events: none;
+  background: var(--theme-green-1);
+  box-shadow: inset 0 0 0 1px var(--theme-green-line), inset 0 0 36px rgba(0, 0, 0, 0.28);
+}
+
+.original-card-frame {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  pointer-events: auto;
+}
+
+.original-card-frame .pc-card-wrapper {
+  --interaction-halo: 14px;
+  --behind-glow-color: rgba(114, 239, 157, .72);
+  --inner-gradient: linear-gradient(145deg, #1c5a3a 0%, #092219 100%);
+  --sunpillar-1: hsl(137, 73%, 67%);
+  --sunpillar-2: hsl(157, 67%, 63%);
+  --sunpillar-3: hsl(176, 62%, 68%);
+  --sunpillar-4: hsl(111, 68%, 73%);
+  --sunpillar-5: hsl(82, 62%, 70%);
+  --sunpillar-6: hsl(45, 68%, 73%);
+  width: calc(100% + (var(--interaction-halo) * 2));
+  height: calc(100% + (var(--interaction-halo) * 2));
+  max-width: none;
+  padding: var(--interaction-halo);
+  margin: calc(var(--interaction-halo) * -1);
+  display: grid;
+  place-items: center;
+  perspective: 640px;
+  pointer-events: auto;
+}
+
+.original-card-frame .pc-card-wrapper > .pc-behind {
+  inset: var(--interaction-halo);
+}
+
+.original-card-frame .pc-card-shell {
+  position: relative;
+  margin: auto;
+  z-index: 1;
+}
+
+.original-card-frame .pc-card-shell,
+.original-card-frame .pc-card {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+
+.original-card-frame .pc-card {
+  border-radius: 30px;
+  background: linear-gradient(145deg, #174c33 0%, #071b13 100%);
+  box-shadow: 0 24px 52px rgba(0, 0, 0, .52), 0 0 34px rgba(81, 218, 132, .18);
+}
+
+/* Restore the original card's near-pointer dark wash. */
+.original-card-frame .pc-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  border-radius: inherit;
+  pointer-events: none;
+  background: rgba(3, 22, 13, 0);
+  transition: background-color .28s ease;
+}
+
+.original-card-frame .pc-card:hover::after,
+.original-card-frame .pc-card-shell.active .pc-card::after {
+  background: rgba(3, 22, 13, .22);
+}
+
+/* Keep the original left/right direction instead of the base component's mirrored display. */
+.original-card-frame .pc-card:hover,
+.original-card-frame .pc-card.active,
+.original-card-frame .pc-card-shell.active .pc-card {
+  transition: none;
+  transform: translateZ(0) rotateX(var(--rotate-y)) rotateY(calc(var(--rotate-x) * -1));
+}
+
+.original-card-frame .pc-card-shell.active .pc-shine {
+  filter: brightness(0.85) contrast(1.5) saturate(0.5);
+  animation-play-state: paused;
+}
+
+.original-card-frame .pc-card-shell.active .pc-shine::before,
+.original-card-frame .pc-card-shell.active .pc-shine::after {
+  opacity: 1;
+}
+
+/* Keep the supplied wide identity mark whole inside the portrait slot. */
+.original-card-frame .pc-avatar-content .avatar {
+  width: 100%;
+  top: 84px;
+  bottom: auto;
+  height: calc(100% - 84px);
+  object-fit: contain;
+  object-position: center;
+  background: #061a13;
+  mix-blend-mode: normal;
+  filter: none;
+}
+
+.original-card-frame .pc-content:not(.pc-avatar-content) {
+  mix-blend-mode: normal;
+}
+
+.original-card-frame .pc-details h3,
+.original-card-frame .pc-details p {
+  font-family: KaiTi, STKaiti, DFKai-SB, serif !important;
+  background-image: linear-gradient(to bottom, #f1fff2, #a9e6b9) !important;
+}
+
+.original-card-frame .pc-details {
+  gap: 12px;
+  transform: translateY(-32px);
+}
+
+.original-card-frame .pc-details h3 {
+  font-family: var(--chinese-signature-font) !important;
+  font-size: clamp(60px, 6.6svh, 72px) !important;
+  font-weight: 400 !important;
+  letter-spacing: .06em;
+  line-height: 1.02;
+}
+
+.original-card-frame .pc-details p {
+  top: 0;
+  margin-top: 0;
+  font-size: clamp(26px, 3.5svh, 32px) !important;
+  line-height: 1.05;
+  transform: none;
+}
+
+.lanyard-back-scroll {
+  position: absolute;
+  inset: 8% 7% 7%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  pointer-events: auto;
+  padding: 44px 34px 42px;
+  color: var(--theme-green-ink);
+  background:
+    radial-gradient(circle at 78% 8%, rgba(112, 236, 153, .22), transparent 34%),
+    linear-gradient(145deg, #164b32 0%, #071b13 68%, #0d3021 100%);
+  font-family: var(--intro-signature-font);
+  scrollbar-color: rgba(143, 236, 169, .72) rgba(255, 255, 255, .06);
+  scrollbar-width: thin;
+}
+
+/* Use the supplied signature-like treatment across the complete introduction. */
+.lanyard-back-scroll,
+.lanyard-back-scroll h2,
+.lanyard-back-scroll p,
+.lanyard-back-scroll a,
+.lanyard-back-scroll button {
+  font-family: var(--intro-signature-font) !important;
+}
+
+.lanyard-back-scroll::before {
+  content: '';
+  position: absolute;
+  inset: 14px;
+  border: 1px solid rgba(185, 246, 200, .24);
+  border-radius: 22px;
+  pointer-events: none;
+}
+
+.intro-block {
+  position: relative;
+  padding: 0 0 24px;
+  margin: 0 0 24px;
+  border-bottom: 1px solid rgba(185, 246, 200, .22);
+}
+
+/* Scroll reveal: downward motion uncovers text from the bottom; upward motion
+   uncovers it from the top. The JS only toggles direction/visibility, while
+   these keyframes keep the reveal smooth and reversible. */
+.intro-reveal-item {
+  opacity: 0;
+  transform: translateY(22px);
+  clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+  will-change: opacity, transform, clip-path;
+}
+
+.intro-reveal-item.is-revealed {
+  animation-duration: 560ms;
+  animation-delay: var(--reveal-delay, 0ms);
+  animation-timing-function: cubic-bezier(.2, .78, .2, 1);
+  animation-fill-mode: both;
+}
+
+.intro-reveal-item.is-revealed[data-reveal-direction='from-bottom'] {
+  animation-name: intro-reveal-from-bottom;
+}
+
+.intro-reveal-item.is-revealed[data-reveal-direction='from-top'] {
+  animation-name: intro-reveal-from-top;
+}
+
+@keyframes intro-reveal-from-bottom {
+  0% {
+    opacity: 0;
+    transform: translateY(22px);
+    clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+  }
+  45% { opacity: 1; }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+@keyframes intro-reveal-from-top {
+  0% {
+    opacity: 0;
+    transform: translateY(-22px);
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+  }
+  45% { opacity: 1; }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+.intro-identity {
+  padding-top: 4px;
+}
+
+.intro-eyebrow {
+  margin: 0 0 14px;
+  color: #9bdcae;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+}
+
+.intro-block h2 {
+  margin: 0 0 6px;
+  color: #effff1;
+  font-family: var(--chinese-signature-font) !important;
+  font-size: clamp(48px, 9vw, 72px);
+  font-weight: 400;
+  letter-spacing: .02em;
+  line-height: 1.08;
+  padding-bottom: .04em;
+  text-shadow: 0 2px 10px rgba(112, 239, 157, .12);
+}
+
+.intro-name,
+.intro-meta {
+  margin: 0;
+  color: #c9f0d1;
+  font-size: 24px;
+  line-height: 1.35;
+}
+
+.intro-meta {
+  color: #8fc8a0;
+  font-size: 19px;
+}
+
+.intro-block > p:not(.intro-eyebrow) {
+  margin: 0 0 12px;
+  color: #d8f1dc;
+  font-size: 22px;
+  line-height: 1.55;
+}
+
+.intro-block > p:last-child { margin-bottom: 0; }
+
+.intro-contact { margin-bottom: 0; }
+
+.intro-english-name {
+  font-family: var(--intro-signature-font) !important;
+  font-weight: 400;
+  font-style: normal;
+  font-synthesis: none;
+  letter-spacing: 0;
+}
+
+.lanyard-back-scroll p.intro-english-name {
+  font-family: var(--intro-signature-font) !important;
+  font-weight: 400;
+  font-synthesis: none;
+}
+
+.lanyard-back-scroll .intro-email-row button {
+  font-family: var(--signature-font) !important;
+  font-weight: 400;
+  font-synthesis: none;
+}
+
+.intro-email-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.intro-email-row a {
+  flex: 1 1 210px;
+  min-width: 0;
+  overflow: hidden;
+  color: #d8f7df;
+  font-size: 18px;
+  line-height: 1.2;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-decoration: none;
+  border: 1px solid rgba(185, 246, 200, .38);
+  border-radius: 999px;
+  padding: 13px 18px;
+  background: rgba(3, 23, 14, .32);
+}
+
+.intro-email-row button {
+  min-height: 50px;
+  padding: 7px 18px;
+  border: 1px solid rgba(185, 246, 200, .42);
+  border-radius: 999px;
+  background: rgba(185, 246, 200, .06);
+  color: #effff1;
+  cursor: pointer;
+  font-family: var(--signature-font);
+  font-size: 18px;
+  white-space: nowrap;
+  transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.intro-email-row button:hover {
+  border-color: rgba(185, 246, 200, .88);
+  background: rgba(114, 239, 157, .18);
+  transform: translateY(-1px);
+}
+
+.lanyard-drag-corner {
+  position: absolute;
+  width: 18%;
+  height: 18%;
+  z-index: 20;
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+}
+
+.lanyard-drag-corner:active { cursor: grabbing; }
+
+.lanyard-drag-corner-top-left { top: 0; left: 0; }
+.lanyard-drag-corner-top-right { top: 0; right: 0; }
+.lanyard-drag-corner-bottom-left { bottom: 0; left: 0; }
+.lanyard-drag-corner-bottom-right { bottom: 0; right: 0; }
+
+@media (max-width: 480px) {
+  .lanyard-face-shell {
+    width: min(345px, 88vw);
+    height: min(72svh, 480px);
+  }
+
+  .original-card-frame .pc-card-wrapper { --interaction-halo: 10px; }
+  .original-card-frame .pc-avatar-content .avatar {
+    top: 68px;
+    height: calc(100% - 68px);
+  }
+
+  .lanyard-back-scroll { padding: 32px 25px 30px; }
+  .intro-eyebrow { font-size: 11px; }
+  .intro-name { font-size: 18px; }
+  .intro-meta { font-size: 15px; }
+  .intro-block > p:not(.intro-eyebrow) { font-size: 17px; line-height: 1.65; }
+  .intro-email-row a { font-size: 14px; padding-inline: 14px; }
+  .intro-email-row button { min-height: 46px; font-size: 16px; padding-inline: 15px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-reveal-item,
+  .intro-reveal-item.is-revealed {
+    opacity: 1;
+    transform: none;
+    clip-path: none;
+    animation: none !important;
+  }
+}

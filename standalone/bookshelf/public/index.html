@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fdfbf6">
+  <meta name="description" content="我的私人书架。收藏书籍，整理分类，让喜欢的文字有一处自己的家。">
+  <title>我的书架</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/admin.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到书架内容</a>
+  <header class="masthead"><div class="header-inner"><a class="brand" href="/" data-nav>我的书架</a><nav aria-label="主导航"><a href="/search" data-nav>搜书</a><a href="/booklists" data-nav>书单</a><a href="/admin" data-nav class="admin-link">管理</a><button id="theme-toggle" class="theme-toggle" aria-label="切换日间或夜间模式" title="切换日间或夜间模式"></button></nav></div></header>
+  <main id="main" class="cover-container" tabindex="-1"><div class="loading-state">正在打开书架…</div></main>
+  <footer class="mastfoot"><div class="footer-main"><div><a href="/" data-nav class="footer-brand">我的书架</a><p id="footer-tagline">文字的避风港，收藏每一本心仪之作。</p></div><nav aria-label="页脚导航"><a href="/search" data-nav>搜书</a><a href="/category" data-nav>分类</a><a href="/booklists" data-nav>书单</a><a href="/admin" data-nav>管理后台</a></nav></div><p class="footer-bottom">© <span id="year"></span> · 我的私人藏书</p></footer>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

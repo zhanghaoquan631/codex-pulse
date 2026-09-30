@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0a0a">
+    <title>上传素材 · Cortex</title>
+    <style>
+      :root { color-scheme: dark; --bg:#0a0a0a; --panel:#151515; --line:#2a2a2a; --muted:#a0a0a0; --accent:#f4f0e9; --ok:#9ee6b2; --error:#ff9b9b; }
+      * { box-sizing:border-box; }
+      html, body { margin:0; min-height:100%; background:var(--bg); color:var(--accent); font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      body { min-height:100svh; }
+      main { width:min(100%, 560px); margin:0 auto; padding:calc(18px + env(safe-area-inset-top)) 20px calc(34px + env(safe-area-inset-bottom)); }
+      header { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:32px; }
+      .brand { display:flex; align-items:center; gap:10px; font-size:15px; letter-spacing:.02em; font-weight:600; }
+      .brand-mark { width:24px; height:24px; border:1px solid #ded9d0; border-radius:7px; display:grid; place-items:center; font-size:12px; }
+      .back { color:var(--muted); text-decoration:none; font-size:13px; padding:8px 0; }
+      .back:hover, .back:focus-visible { color:var(--accent); }
+      h1 { font-size:clamp(32px, 9vw, 46px); line-height:1.05; letter-spacing:-.045em; margin:0 0 10px; }
+      .lede { color:var(--muted); font-size:15px; line-height:1.55; margin:0 0 26px; }
+      .drop-zone { position:relative; display:grid; place-items:center; min-height:190px; border:1px dashed #5b5b5b; border-radius:22px; background:linear-gradient(145deg,#181818,#111); text-align:center; transition:border-color .2s, background .2s, transform .2s; }
+      .drop-zone.dragover { border-color:#f6f0e8; background:#1f1f1f; transform:scale(1.01); }
+      .drop-zone input { position:absolute; inset:0; opacity:0; cursor:pointer; }
+      .drop-copy { pointer-events:none; display:grid; gap:7px; padding:28px; }
+      .upload-icon { width:50px; height:50px; margin:0 auto 4px; border:1px solid #696969; border-radius:50%; display:grid; place-items:center; font-size:26px; }
+      .drop-title { font-size:17px; font-weight:600; }
+      .drop-hint { font-size:12px; color:var(--muted); }
+      .section { margin-top:25px; }
+      .label { display:block; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin-bottom:9px; }
+      textarea, select { width:100%; border:1px solid var(--line); border-radius:13px; background:var(--panel); color:var(--accent); font:inherit; font-size:15px; outline:none; }
+      textarea { min-height:82px; padding:13px 14px; resize:vertical; }
+      select { appearance:none; padding:13px 40px 13px 14px; background-image:linear-gradient(45deg,transparent 50%,#a8a8a8 50%),linear-gradient(135deg,#a8a8a8 50%,transparent 50%); background-position:calc(100% - 20px) 18px,calc(100% - 14px) 18px; background-size:6px 6px; background-repeat:no-repeat; }
+      textarea:focus, select:focus { border-color:#a9a9a9; }
+      .queue { display:grid; gap:9px; margin-top:17px; }
+      .queue:empty { display:none; }
+      .queue-item { display:grid; grid-template-columns:45px minmax(0,1fr) auto; align-items:center; gap:11px; border:1px solid var(--line); border-radius:14px; padding:9px 10px; background:#111; }
+      .thumb { width:45px; height:45px; border-radius:9px; object-fit:cover; background:#242424; }
+      .file-name { overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-size:13px; }
+      .file-meta { color:var(--muted); font-size:11px; margin-top:3px; }
+      .remove { color:var(--muted); border:0; background:transparent; padding:8px 3px; cursor:pointer; font-size:19px; line-height:1; }
+      .remove:hover { color:var(--accent); }
+      .progress { grid-column:2 / -1; height:4px; border-radius:9px; background:#292929; overflow:hidden; margin-top:1px; }
+      .progress > i { display:block; width:0; height:100%; border-radius:inherit; background:#e9e3d9; transition:width .15s ease; }
+      .queue-item[data-state="done"] .progress > i { background:var(--ok); }
+      .queue-item[data-state="error"] .progress > i { background:var(--error); }
+      .state { font-size:11px; color:var(--muted); white-space:nowrap; }
+      .queue-item[data-state="done"] .state { color:var(--ok); }
+      .queue-item[data-state="error"] .state { color:var(--error); }
+      .submit { width:100%; min-height:58px; margin-top:26px; border:0; border-radius:999px; background:var(--accent); color:#111; font:inherit; font-size:16px; font-weight:700; cursor:pointer; transition:opacity .2s, transform .2s; }
+      .submit:hover { opacity:.9; transform:translateY(-1px); }
+      .submit:disabled { cursor:not-allowed; opacity:.45; transform:none; }
+      .status { min-height:22px; margin:14px 3px 0; color:var(--muted); font-size:13px; line-height:1.4; }
+      .status.success { color:var(--ok); }
+      .status.error { color:var(--error); }
+      .footnote { margin:30px 3px 0; color:#777; font-size:11px; line-height:1.5; }
+      @media (min-width:500px) { main { padding-left:28px; padding-right:28px; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="brand"><span class="brand-mark" aria-hidden="true">C</span><span>CORTEX</span></div>
+        <a class="back" href="../" aria-label="返回 Cortex 主站">返回主站 ↗</a>
+      </header>
+      <section aria-labelledby="page-title">
+        <h1 id="page-title">上传素材</h1>
+        <p class="lede">把照片或影片放进你的素材库。图片会回到作品画廊，视频会进入影像档案；支持一次选择多个文件。</p>
+        <label class="drop-zone" id="drop-zone" for="file-input">
+          <input id="file-input" type="file" accept="image/*,video/*" multiple>
+          <span class="drop-copy"><span class="upload-icon" aria-hidden="true">＋</span><span class="drop-title">选择图片或视频</span><span class="drop-hint">点击选择，或拖放到这里 · 可多选</span></span>
+        </label>
+      </section>
+      <section class="section" aria-label="上传信息">
+        <label class="label" for="caption">素材说明（可选）</label>
+        <textarea id="caption" maxlength="500" placeholder="给这批素材写一句说明…"></textarea>
+      </section>
+      <section class="section">
+        <label class="label" for="placement">归位方式</label>
+        <select id="placement">
+          <option value="auto">自动归位：图片 → 画廊，视频 → 影像档案</option>
+        </select>
+      </section>
+      <div id="queue" class="queue" aria-live="polite"></div>
+      <button id="submit" class="submit" type="button" disabled>上传素材</button>
+      <p id="status" class="status" role="status"></p>
+      <p class="footnote">文件会通过同源连接安全发送。请只上传你拥有使用权的内容。</p>
+    </main>
+    <script>
+      (() => {
+        const input = document.querySelector('#file-input');
+        const zone = document.querySelector('#drop-zone');
+        const queue = document.querySelector('#queue');
+        const submit = document.querySelector('#submit');
+        const status = document.querySelector('#status');
+        const caption = document.querySelector('#caption');
+        const placement = document.querySelector('#placement');
+        let files = [];
+        const uploaded = new Set();
+        let active = false;
+
+        const formatBytes = bytes => {
+          if (!bytes) return '0 B';
+          const units = ['B', 'KB', 'MB', 'GB'];
+          const i = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
+          return `${(bytes / Math.pow(1024, i)).toFixed(i ? 1 : 0)} ${units[i]}`;
+        };
+        const setStatus = (message, type = '') => { status.textContent = message; status.className = `status ${type}`; };
+        const fileKey = file => `${file.name}:${file.size}:${file.lastModified}`;
+
+        function renderQueue() {
+          queue.innerHTML = '';
+          files.forEach((file, index) => {
+            const item = document.createElement('div');
+            item.className = 'queue-item'; item.dataset.index = index; item.dataset.state = uploaded.has(fileKey(file)) ? 'done' : 'ready';
+            const thumb = document.createElement(file.type.startsWith('video/') ? 'video' : 'img');
+            thumb.className = 'thumb'; thumb.muted = true; thumb.playsInline = true;
+            const url = URL.createObjectURL(file); thumb.src = url; thumb.onload = thumb.onloadeddata = () => URL.revokeObjectURL(url);
+            thumb.alt = '';
+            const info = document.createElement('div');
+            info.innerHTML = `<div class="file-name"></div><div class="file-meta">${file.type.startsWith('video/') ? '视频' : '图片'} · ${formatBytes(file.size)}</div>`;
+            info.querySelector('.file-name').textContent = file.name;
+            const remove = document.createElement('button'); remove.className = 'remove'; remove.type = 'button'; remove.setAttribute('aria-label', `移除 ${file.name}`); remove.textContent = '×'; remove.onclick = () => { if (!active) { files.splice(index, 1); renderQueue(); } };
+            const state = document.createElement('span'); state.className = 'state'; state.textContent = uploaded.has(fileKey(file)) ? '已完成' : '待上传';
+            const bar = document.createElement('div'); bar.className = 'progress'; bar.innerHTML = '<i></i>';
+            item.append(thumb, info, remove, state, bar); queue.append(item);
+          });
+          const pendingCount = files.filter(file => !uploaded.has(fileKey(file))).length;
+          submit.disabled = !pendingCount || active;
+          submit.textContent = pendingCount ? `上传 ${pendingCount} 个素材` : '上传完成';
+        }
+
+        function addFiles(list) {
+          const incoming = [...list].filter(file => file.type.startsWith('image/') || file.type.startsWith('video/'));
+          const known = new Set(files.map(fileKey));
+          incoming.forEach(file => { if (!known.has(fileKey(file))) files.push(file); });
+          renderQueue();
+          if (incoming.length) setStatus(`${files.length} 个素材已准备好`);
+        }
+        input.addEventListener('change', event => { addFiles(event.target.files); input.value = ''; });
+        ['dragenter', 'dragover'].forEach(type => zone.addEventListener(type, event => { event.preventDefault(); zone.classList.add('dragover'); }));
+        ['dragleave', 'drop'].forEach(type => zone.addEventListener(type, event => { event.preventDefault(); zone.classList.remove('dragover'); }));
+        zone.addEventListener('drop', event => addFiles(event.dataTransfer.files));
+
+        function uploadOne(file, index) {
+          return new Promise((resolve, reject) => {
+            const item = queue.querySelector(`[data-index="${index}"]`); const state = item.querySelector('.state'); const bar = item.querySelector('.progress i');
+            item.dataset.state = 'uploading'; state.textContent = '上传中…';
+            const xhr = new XMLHttpRequest(); xhr.open('POST', '/api/uploads');
+            // Keep the original raw-file POST contract used by the upload adapter.
+            // Metadata travels in headers; the request body is the selected File itself.
+            xhr.setRequestHeader('Accept', 'application/json');
+            // HTTP headers are byte strings. Encoding here keeps Chinese file
+            // names and captions safe across mobile Safari, Android, and Vite.
+            xhr.setRequestHeader('X-Filename', encodeURIComponent(file.name));
+            xhr.setRequestHeader('X-Media-Type', file.type || 'application/octet-stream');
+            xhr.setRequestHeader('X-Caption', encodeURIComponent(caption.value.trim()));
+            xhr.setRequestHeader('X-Placement', placement.value);
+            xhr.upload.onprogress = event => { if (event.lengthComputable) bar.style.width = `${Math.round(event.loaded / event.total * 100)}%`; };
+            xhr.onload = () => {
+              if (xhr.status >= 200 && xhr.status < 300) { uploaded.add(fileKey(file)); item.dataset.state = 'done'; bar.style.width = '100%'; state.textContent = '已完成'; resolve(); }
+              else { item.dataset.state = 'error'; state.textContent = '失败'; reject(new Error(`HTTP ${xhr.status}`)); }
+            };
+            xhr.onerror = () => { item.dataset.state = 'error'; state.textContent = '网络错误'; reject(new Error('network')); };
+            xhr.send(file);
+          });
+        }
+
+        submit.addEventListener('click', async () => {
+          const pending = files.map((file, index) => ({ file, index })).filter(({ file }) => !uploaded.has(fileKey(file)));
+          if (active || !pending.length) return;
+          active = true; renderQueue(); setStatus('正在上传，请稍候…');
+          let completed = 0;
+          try {
+            for (const { file, index } of pending) { await uploadOne(file, index); completed += 1; setStatus(`已上传 ${completed}/${pending.length}`); }
+            const images = files.filter(file => file.type.startsWith('image/')).length;
+            const videos = files.length - images;
+            const destinations = [images && `${images} 张图片会出现在作品画廊`, videos && `${videos} 个视频会出现在影像档案`].filter(Boolean).join('；');
+            setStatus(`上传成功：${destinations}。桌面主页面会自动刷新。`, 'success');
+            submit.textContent = '上传完成';
+          } catch (error) { setStatus(`有素材上传失败（已完成 ${completed}/${pending.length}）。请检查后重试。`, 'error'); }
+          active = false; renderQueue();
+        });
+      })();
+    </script>
+  </body>
+</html>

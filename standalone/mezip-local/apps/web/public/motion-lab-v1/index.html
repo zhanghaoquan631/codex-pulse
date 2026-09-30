@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#090a10" />
+    <meta name="description" content="ME.zip 的原创互动视觉实验室。" />
+    <title>互动视觉实验室 · ME.zip</title>
+    <script>
+      if (new URLSearchParams(window.location.search).has('embed')) {
+        document.documentElement.classList.add('embed-mode');
+      }
+    </script>
+    <link rel="stylesheet" href="./motion-lab.css" />
+  </head>
+  <body>
+    <main class="lab-page">
+      <header class="lab-header">
+        <a class="back-link" href="/post-login-app/index.html" aria-label="回到功能区">ME.zip</a>
+        <div class="lab-title">
+          <p>INTERACTION STUDIES · 01—23</p>
+          <h1>互动视觉实验室</h1>
+        </div>
+        <p class="lab-status" id="labStatus">原创视觉版</p>
+      </header>
+
+      <section class="lab-layout" aria-label="互动模块库">
+        <nav class="lab-nav" aria-label="选择互动模块">
+          <a href="#circle-gallery" data-demo="circle-gallery"><span>01</span>圆环画廊</a>
+          <a href="#animated-list" data-demo="animated-list"><span>02</span>动画列表</a>
+          <a href="#comparison-slider" data-demo="comparison-slider"><span>03</span>比较滑块</a>
+          <a href="#scroll-mask" data-demo="scroll-mask"><span>04</span>卷轴面具</a>
+          <a href="#scroll-stack" data-demo="scroll-stack"><span>05</span>卷轴堆栈</a>
+          <a href="#watercolor" data-demo="watercolor"><span>06</span>水彩画</a>
+          <a href="#neural-tunnel" data-demo="neural-tunnel"><span>07</span>神经隧道</a>
+          <a href="#blur-highlight" data-demo="blur-highlight"><span>08</span>模糊高光</a>
+          <a href="#text-scatter" data-demo="text-scatter"><span>09</span>文本散布</a>
+          <a href="#speeding-text" data-demo="speeding-text"><span>10</span>快速文本</a>
+          <a href="#particle-text" data-demo="particle-text"><span>11</span>粒子文本</a>
+          <a href="#bending-marquee" data-demo="bending-marquee"><span>12</span>弯曲帐篷</a>
+          <a href="#staggered-text" data-demo="staggered-text"><span>13</span>错开文本</a>
+          <a href="#tilted-tiles" data-demo="tilted-tiles"><span>14</span>倾斜瓷砖</a>
+          <a href="#simple-graph" data-demo="simple-graph"><span>15</span>简单图</a>
+          <a href="#grid-rise" data-demo="grid-rise"><span>16</span>网格上升</a>
+          <a href="#glass-cursor" data-demo="glass-cursor"><span>17</span>玻璃光标</a>
+          <a href="#parallax-pills" data-demo="parallax-pills"><span>18</span>视差药丸</a>
+          <a href="#smooth-cursor" data-demo="smooth-cursor"><span>19</span>光滑光标</a>
+          <a href="#text-cube" data-demo="text-cube"><span>20</span>文本立方体</a>
+          <a href="#user-cursor" data-demo="user-cursor"><span>21</span>用户光标</a>
+          <a href="#circles" data-demo="circles"><span>22</span>圆圈</a>
+          <a href="#tumble-carousel" data-demo="tumble-carousel"><span>23</span>翻滚旋转木马</a>
+        </nav>
+
+        <section class="demo-panel" aria-live="polite">
+          <div class="demo-kicker">
+            <span id="demoNumber">01</span>
+            <span id="demoEnglish">CIRCLE GALLERY</span>
+          </div>
+          <h2 id="demoTitle">圆环画廊</h2>
+          <div class="demo-stage" id="demoStage" tabindex="0" aria-label="当前互动演示"></div>
+        </section>
+      </section>
+    </main>
+    <script src="./motion-lab.js"></script>
+  </body>
+</html>

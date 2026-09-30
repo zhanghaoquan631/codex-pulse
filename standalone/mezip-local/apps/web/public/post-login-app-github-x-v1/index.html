@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0d0d10" />
+    <meta name="description" content="保留原 ME.zip 登录后功能区，并额外提供 GitHub 工作台与 X 连接中心入口。" />
+    <title>ME.zip · 登录后空间 · GitHub 与 X</title>
+    <style>
+      html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #0d0d10; }
+      iframe { width: 100%; height: 100%; border: 0; background: #0d0d10; }
+    </style>
+  </head>
+  <body>
+    <iframe id="mezip-original" title="ME.zip 登录后空间" src="/post-login-app/index.html?fromLogin=1"></iframe>
+    <script>
+      (() => {
+        const session = localStorage.getItem('mezip.local-demo-session.v1');
+        const signedIn = session === 'active' || session?.includes('"state":"active"');
+        const fromLogin = new URLSearchParams(location.search).get('fromLogin') === '1';
+        const returnTo = '/post-login-app-github-x-v1/index.html?fromLogin=1';
+        if (!signedIn && !fromLogin) {
+          location.replace(`/?login=1&returnTo=${encodeURIComponent(returnTo)}`);
+          return;
+        }
+        const frame = document.querySelector('#mezip-original');
+        const appendEntry = (doc, grid, className, href, title, detail, dataset) => {
+          if (grid.querySelector(`[${dataset}], .${className}`)) return;
+          const link = doc.createElement('a');
+          link.className = `feature ${className}`;
+          link.href = href;
+          link.target = '_top';
+          link.setAttribute(dataset, 'true');
+          link.innerHTML = `<strong>${title}</strong><span>${detail}</span>`;
+          grid.append(link);
+        };
+        const installEntries = () => {
+          const doc = frame.contentDocument;
+          const grid = doc?.querySelector('.feature-grid');
+          if (!doc || !grid) return;
+          appendEntry(doc, grid, 'feature-github', '/github-workspace-v6/index.html#overview', 'GitHub 工作台', '查看你已授权的仓库、代码片段与开发活动', 'data-github-workspace-entry');
+          appendEntry(doc, grid, 'feature-x', '/x', 'X 连接中心', '通过官方 OAuth 私密整理自己的 X 内容', 'data-x-connection-entry');
+        };
+        frame.addEventListener('load', () => {
+          installEntries();
+          const doc = frame.contentDocument;
+          if (!doc?.body) return;
+          new MutationObserver(installEntries).observe(doc.body, { childList: true, subtree: true });
+        });
+      })();
+    </script>
+  </body>
+</html>

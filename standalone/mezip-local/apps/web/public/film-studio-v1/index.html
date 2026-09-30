@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ME.zip Film Studio</title>
+  <style>
+    :root {
+      --bg: #070b14;
+      --panel: #0e1524;
+      --panel-2: #121c2e;
+      --line: #263550;
+      --text: #f5f4f0;
+      --muted: #8290a7;
+      --gold: #e9b85c;
+      --purple: #9b74ff;
+      --cyan: #62c9d4;
+      --green: #65d891;
+      --orange: #f6a45b;
+      --red: #ed7782;
+      --track: #18233a;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; }
+    body { overflow: hidden; }
+    button, input, select { font: inherit; }
+    button { border: 0; color: inherit; cursor: pointer; }
+    .app { min-height: 100vh; display: grid; grid-template-columns: 228px 1fr; background: radial-gradient(circle at 78% -10%, #20264a 0, transparent 35%), var(--bg); }
+    .sidebar { border-right: 1px solid var(--line); padding: 18px 14px; display: flex; flex-direction: column; gap: 20px; background: linear-gradient(180deg, #0b1120, #080d18); }
+    .brand { padding: 2px 8px 12px; }
+    .brand .eyebrow { letter-spacing: .18em; color: var(--gold); font-size: 11px; }
+    .brand h1 { margin: 7px 0 2px; font-size: 23px; letter-spacing: -.03em; }
+    .brand p { margin: 0; font-size: 12px; color: var(--muted); }
+    .nav-label { color: #5f6c83; font-size: 10px; text-transform: uppercase; letter-spacing: .18em; padding: 0 10px; }
+    .nav { display: grid; gap: 5px; }
+    .nav button { display: flex; align-items: center; gap: 10px; width: 100%; padding: 11px 10px; border-radius: 10px; background: transparent; color: #a8b3c7; text-align: left; transition: .18s ease; }
+    .nav button:hover, .nav button.active { color: var(--text); background: linear-gradient(90deg, #2c1d56, #171f36); box-shadow: inset 3px 0 var(--purple); }
+    .nav .icon { width: 21px; text-align: center; color: var(--purple); }
+    .sidebar-foot { margin-top: auto; border: 1px solid var(--line); border-radius: 13px; padding: 13px; background: #0e1626; }
+    .sidebar-foot strong { display: block; font-size: 13px; }
+    .sidebar-foot span { color: var(--muted); font-size: 11px; }
+    .workspace { min-width: 0; display: flex; flex-direction: column; }
+    .topbar { height: 66px; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 0 24px; border-bottom: 1px solid var(--line); background: rgba(8,12,22,.72); backdrop-filter: blur(14px); }
+    .breadcrumbs { color: var(--muted); font-size: 13px; }
+    .breadcrumbs b { color: var(--text); font-weight: 600; }
+    .top-actions { display: flex; align-items: center; gap: 9px; }
+    .mode-switch { display: flex; padding: 3px; border: 1px solid var(--line); border-radius: 9px; background: #0d1525; }
+    .mode-switch button { padding: 7px 12px; border-radius: 7px; background: transparent; color: var(--muted); font-size: 12px; }
+    .mode-switch button.active { background: #33225d; color: #f1ddff; }
+    .btn { border: 1px solid var(--line); border-radius: 8px; background: #131e31; padding: 8px 12px; font-size: 12px; transition: .18s ease; }
+    .btn:hover { border-color: #6a59a3; background: #1d2940; }
+    .btn.primary { background: linear-gradient(135deg, #a86eff, #7056db); border-color: #a987ff; box-shadow: 0 8px 24px rgba(133, 91, 255, .23); }
+    .btn.gold { background: #4b3721; border-color: #8a6734; color: #ffd88c; }
+    .btn.ghost { background: transparent; }
+    .btn:disabled { opacity: .45; cursor: not-allowed; }
+    .content { overflow: auto; padding: 21px 24px 34px; }
+    .content::-webkit-scrollbar { width: 9px; }
+    .content::-webkit-scrollbar-thumb { background: #243552; border-radius: 20px; }
+    .hero { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; margin-bottom: 18px; }
+    .hero h2 { margin: 0 0 5px; font-size: 24px; letter-spacing: -.035em; }
+    .hero p { margin: 0; color: var(--muted); font-size: 13px; }
+    .hero-actions { display: flex; gap: 8px; }
+    .notice { border-left: 3px solid var(--gold); padding: 10px 13px; margin: 14px 0 18px; color: #c8c5b5; background: rgba(233,184,92,.07); font-size: 12px; }
+    .layout { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(260px, .75fr); gap: 14px; }
+    .panel { border: 1px solid var(--line); border-radius: 12px; background: linear-gradient(145deg, rgba(19,29,47,.96), rgba(10,16,29,.96)); box-shadow: 0 12px 36px rgba(0,0,0,.15); }
+    .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 13px 15px; border-bottom: 1px solid rgba(38,53,80,.8); }
+    .panel-head h3 { margin: 0; font-size: 13px; letter-spacing: .02em; }
+    .panel-head span { color: var(--muted); font-size: 11px; }
+    .panel-body { padding: 13px 15px; }
+    .viewer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .viewer { position: relative; min-height: 184px; border: 1px solid #334667; border-radius: 9px; overflow: hidden; background: #050a13; }
+    .viewer-canvas { position: absolute; inset: 0; display: grid; place-items: center; background: radial-gradient(circle at 68% 30%, rgba(230,171,84,.8), transparent 15%), linear-gradient(145deg, #263f61, #111a2b 52%, #2d1d36); }
+    .viewer-canvas::after { content: ""; position: absolute; inset: 42% 10% 10%; border-radius: 50% 50% 0 0; background: linear-gradient(160deg, #182b3e, #08101d); opacity: .88; }
+    .viewer-label { position: absolute; top: 8px; left: 9px; z-index: 2; color: #bdc8da; font-size: 10px; letter-spacing: .08em; }
+    .viewer-title { z-index: 2; text-align: center; font-size: 18px; font-weight: 700; letter-spacing: .06em; text-shadow: 0 2px 15px #000; }
+    .viewer-controls { position: absolute; bottom: 8px; left: 9px; right: 9px; z-index: 3; display: flex; align-items: center; gap: 6px; }
+    .viewer-controls .btn { padding: 5px 8px; font-size: 11px; }
+    .timecode { margin-left: auto; color: #c3ccdc; font-size: 11px; font-variant-numeric: tabular-nums; }
+    .media-layout { display: grid; grid-template-columns: 1fr 1.3fr; gap: 12px; margin-top: 14px; }
+    .media-list { display: grid; gap: 7px; max-height: 222px; overflow: auto; }
+    .media-item { display: flex; align-items: center; gap: 9px; padding: 8px; border: 1px solid transparent; border-radius: 8px; background: #101a2a; cursor: pointer; }
+    .media-item:hover, .media-item.selected { border-color: #7554c9; background: #1a2039; }
+    .thumb { width: 55px; height: 34px; flex: 0 0 auto; border-radius: 5px; background: linear-gradient(135deg, #3a6b8a, #e29858 55%, #372041); position: relative; overflow: hidden; }
+    .thumb.image { background: linear-gradient(135deg, #243f78, #4ea59c 55%, #d79858); }
+    .thumb.audio { background: linear-gradient(90deg, #252a68, #7655c3, #2f8b8c); }
+    .thumb::after { content: ""; position: absolute; inset: auto 5px 5px; height: 4px; border-radius: 10px; background: rgba(255,255,255,.5); }
+    .media-meta { min-width: 0; }
+    .media-meta strong { display: block; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .media-meta span { color: var(--muted); font-size: 10px; }
+    .media-actions { display: flex; gap: 6px; margin-bottom: 8px; }
+    .media-actions input { display: none; }
+    .timeline { margin-top: 14px; }
+    .timeline-toolbar { display: flex; align-items: center; gap: 7px; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+    .tool { min-width: 28px; height: 26px; border-radius: 6px; background: #142038; color: #aeb8ca; font-size: 12px; }
+    .tool.active { background: #4c3279; color: white; }
+    .tool-label { color: var(--muted); font-size: 10px; margin-left: auto; }
+    .timeline-ruler { display: grid; grid-template-columns: repeat(9, 1fr); padding: 7px 10px 4px 96px; color: #6d7b92; font-size: 10px; border-bottom: 1px solid #1b2940; }
+    .track-row { display: grid; grid-template-columns: 96px 1fr; min-height: 45px; border-bottom: 1px solid #19263b; }
+    .track-name { display: flex; align-items: center; gap: 6px; padding: 0 10px; color: #9aa8bd; font-size: 11px; background: #0b1322; }
+    .track-lock { color: #536581; font-size: 10px; }
+    .track-lane { position: relative; background: repeating-linear-gradient(90deg, transparent 0, transparent calc(12.5% - 1px), rgba(54,74,107,.24) 12.5%); }
+    .clip { position: absolute; top: 7px; bottom: 7px; min-width: 62px; padding: 7px 9px; border-radius: 5px; color: #eef0f6; font-size: 10px; overflow: hidden; cursor: pointer; border: 1px solid rgba(255,255,255,.12); }
+    .clip.video { background: linear-gradient(135deg, #355f86, #27375a); }
+    .clip.broll { background: linear-gradient(135deg, #526744, #344535); }
+    .clip.title { background: linear-gradient(135deg, #6c4d8f, #3d2e5a); }
+    .clip.audio { background: linear-gradient(135deg, #195e65, #1f414e); }
+    .clip.selected { outline: 2px solid var(--gold); outline-offset: 1px; }
+    .playhead { position: absolute; top: 0; bottom: 0; width: 2px; background: #f0b95e; box-shadow: 0 0 10px #f0b95e; pointer-events: none; }
+    .timeline-foot { display: flex; justify-content: space-between; padding: 9px 12px; color: var(--muted); font-size: 10px; }
+    .inspector-grid { display: grid; gap: 11px; }
+    .field { display: grid; grid-template-columns: 84px 1fr 46px; align-items: center; gap: 7px; color: #9ba9bc; font-size: 11px; }
+    .field input[type=range] { width: 100%; accent-color: var(--purple); }
+    .field output { text-align: right; color: #ebeff8; font-variant-numeric: tabular-nums; }
+    .status-list { display: grid; gap: 8px; }
+    .status { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 10px; border-radius: 8px; background: #0d1728; font-size: 11px; }
+    .status span { color: var(--muted); }
+    .state { font-size: 10px; padding: 4px 7px; border-radius: 999px; }
+    .state.ok { color: #92e5a9; background: rgba(57,140,83,.18); }
+    .state.warn { color: #ffc37d; background: rgba(170,94,37,.18); }
+    .state.off { color: #ffabb2; background: rgba(158,45,61,.18); }
+    .project-card { display: flex; align-items: center; gap: 13px; padding: 11px; border: 1px solid #2b3c5c; border-radius: 9px; background: linear-gradient(110deg, #162542, #10192a); }
+    .project-art { width: 84px; height: 53px; border-radius: 7px; background: linear-gradient(145deg, #435d7d, #df9250 53%, #28223e); }
+    .project-card strong { display: block; font-size: 13px; }
+    .project-card p { margin: 3px 0 0; color: var(--muted); font-size: 11px; }
+    .project-card .btn { margin-left: auto; }
+    .bottom-grid { display: grid; grid-template-columns: 1.15fr 1fr 1fr; gap: 14px; margin-top: 14px; }
+    .mini-list { display: grid; gap: 8px; }
+    .mini-row { display: flex; justify-content: space-between; gap: 9px; padding-bottom: 7px; border-bottom: 1px solid #1e2a40; font-size: 11px; }
+    .mini-row span { color: var(--muted); }
+    .toast { position: fixed; right: 25px; bottom: 22px; z-index: 20; max-width: 370px; padding: 12px 15px; border: 1px solid #4a5d83; border-radius: 9px; background: #13213a; color: #eef1f7; box-shadow: 0 18px 48px rgba(0,0,0,.35); opacity: 0; transform: translateY(8px); pointer-events: none; transition: .2s ease; font-size: 12px; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .modal-backdrop { position: fixed; inset: 0; z-index: 30; display: none; place-items: center; background: rgba(3,6,13,.73); backdrop-filter: blur(7px); }
+    .modal-backdrop.show { display: grid; }
+    .modal { width: min(450px, calc(100vw - 30px)); border: 1px solid #3d4f72; border-radius: 12px; background: #101b2e; padding: 18px; box-shadow: 0 30px 80px rgba(0,0,0,.5); }
+    .modal h3 { margin: 0 0 14px; }
+    .modal label { display: grid; gap: 7px; color: var(--muted); font-size: 12px; }
+    .modal input, .modal select { border: 1px solid #304363; border-radius: 8px; padding: 9px; background: #0a1322; color: var(--text); }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+    .empty { padding: 22px 10px; text-align: center; color: var(--muted); font-size: 12px; }
+    @media (max-width: 1120px) { .app { grid-template-columns: 188px 1fr; } .layout { grid-template-columns: 1fr; } .bottom-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 760px) { body { overflow: auto; } .app { display: block; } .sidebar { position: static; min-height: auto; flex-direction: row; align-items: center; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--line); } .sidebar .nav-label, .sidebar-foot, .brand p { display: none; } .brand { min-width: 140px; } .nav { display: flex; } .nav button { white-space: nowrap; } .topbar { padding: 10px 14px; height: auto; flex-wrap: wrap; } .content { padding: 14px; } .viewer-grid, .media-layout, .bottom-grid { grid-template-columns: 1fr; } .hero { flex-direction: column; } }
+  </style>
+</head>
+<body>
+  <div class="app" id="app">
+    <aside class="sidebar">
+      <div class="brand"><div class="eyebrow">ME.ZIP · LOCAL CREATION</div><h1>Film Studio</h1><p>电影剪辑工作台</p></div>
+      <div class="nav-label">WORKSPACE</div>
+      <nav class="nav" aria-label="Film Studio navigation">
+        <button class="active" data-view="overview"><span class="icon">▦</span>工作台</button>
+        <button data-view="projects"><span class="icon">▣</span>项目</button>
+        <button data-view="media"><span class="icon">▤</span>媒体池</button>
+        <button data-view="timeline"><span class="icon">▥</span>时间线</button>
+        <button data-view="color"><span class="icon">◌</span>调色</button>
+        <button data-view="audio"><span class="icon">◉</span>音频</button>
+        <button data-view="subtitle"><span class="icon">T</span>字幕</button>
+        <button data-view="review"><span class="icon">✓</span>审片</button>
+        <button data-view="export"><span class="icon">⇧</span>导出</button>
+      </nav>
+      <div class="sidebar-foot"><strong>本地优先 · 私密默认</strong><span>素材和项目留在本机，未连接桌面桥接。</span></div>
+    </aside>
+    <main class="workspace">
+      <header class="topbar">
+        <div class="breadcrumbs"><b>Film Studio</b><span> / </span><span id="crumb-view">工作台</span></div>
+        <div class="top-actions">
+          <div class="mode-switch" aria-label="编辑模式"><button class="active" data-mode="quick">轻剪模式</button><button data-mode="film">电影模式</button></div>
+          <button class="btn" id="save-btn">保存 <span id="save-status">· 已保存</span></button>
+          <button class="btn primary" id="new-project-btn">＋ 新建项目</button>
+        </div>
+      </header>
+      <section class="content">
+        <div class="hero"><div><h2 id="view-title">电影剪辑工作台</h2><p id="view-subtitle">从素材到成片，先建立一个可靠的本地创作空间。</p></div><div class="hero-actions"><button class="btn gold" id="marker-btn">＋ 标记</button><button class="btn" id="shortcut-btn">快捷键</button></div></div>
+        <div class="notice" id="mode-notice">当前是轻剪模式：保留素材、播放器、时间线、字幕和导出入口。切换到电影模式后显示多轨、Inspector、Mixer 和 Scopes。</div>
+
+        <div class="layout">
+          <div>
+            <section class="panel" id="project-panel"><div class="panel-head"><h3>当前项目 · <span id="project-name-head">日本旅行 Vlog</span></h3><span id="project-status">PRIVATE · LOCAL</span></div><div class="panel-body"><div class="project-card"><div class="project-art"></div><div><strong id="project-name">日本旅行 Vlog</strong><p id="project-meta">04:28 · 4K · 30 FPS · 最近编辑：刚刚</p></div><button class="btn" id="rename-project-btn">重命名</button></div></div></section>
+            <section class="panel" style="margin-top:14px"><div class="panel-head"><h3>源监视器 / 成片监视器</h3><span>Source → Program</span></div><div class="panel-body"><div class="viewer-grid"><div class="viewer"><span class="viewer-label">SOURCE VIEWER</span><div class="viewer-canvas"><span class="viewer-title" id="source-title">山间湖泊 · CO012.MP4</span></div><div class="viewer-controls"><button class="btn" id="source-in">I 入点</button><button class="btn" id="source-out">O 出点</button><button class="btn" id="source-add">送入时间线</button><span class="timecode" id="source-time">00:00:00:00</span></div></div><div class="viewer"><span class="viewer-label">PROGRAM VIEWER</span><div class="viewer-canvas" id="program-canvas"><span class="viewer-title" id="program-title">JOURNEY<br><small>THE STORY OF MY TRIP</small></span></div><div class="viewer-controls"><button class="btn primary" id="play-btn">▶ 播放</button><button class="btn" id="frame-back">◀ 帧</button><button class="btn" id="frame-forward">帧 ▶</button><span class="timecode" id="program-time">00:01:23:08</span></div></div></div></div></section>
+            <section class="panel timeline" id="timeline-panel"><div class="timeline-toolbar"><button class="tool active" data-tool="select">↖</button><button class="tool" data-tool="razor">✂</button><button class="tool" data-tool="trim">◫</button><button class="tool" id="duplicate-btn">⧉</button><button class="tool" id="delete-btn">⌫</button><button class="tool" id="undo-btn">↶</button><button class="tool" id="redo-btn">↷</button><span class="tool-label" id="timeline-tool-label">选择工具 · 点击片段以检查</span></div><div class="timeline-ruler"><span>00:00</span><span>00:30</span><span>01:00</span><span>01:30</span><span>02:00</span><span>02:30</span><span>03:00</span><span>03:30</span><span>04:00</span></div><div id="tracks"><div class="track-row"><div class="track-name"><span class="track-lock">◉</span>V3 标题</div><div class="track-lane"><div class="clip title" data-clip="title" style="left:20%;width:17%">Journey Title</div></div></div><div class="track-row"><div class="track-name"><span class="track-lock">◉</span>V2 B-Roll</div><div class="track-lane"><div class="clip broll" data-clip="broll" style="left:36%;width:22%">湖泊 · B-Roll</div></div></div><div class="track-row"><div class="track-name"><span class="track-lock">◉</span>V1 Main</div><div class="track-lane"><div class="clip video selected" data-clip="main" style="left:4%;width:49%">CO012.MP4</div><div class="clip video" data-clip="main2" style="left:53%;width:29%">CO013.MP4</div></div></div><div class="track-row"><div class="track-name"><span class="track-lock">◉</span>A1 Dialogue</div><div class="track-lane"><div class="clip audio" data-clip="dialogue" style="left:5%;width:78%">Dialogue_01.wav</div></div></div><div class="track-row"><div class="track-name"><span class="track-lock">◉</span>A2 Music</div><div class="track-lane"><div class="clip audio" data-clip="music" style="left:12%;width:70%">BGM_Travel.mp3</div></div></div><div class="playhead" id="playhead" style="left:32%"></div></div><div class="timeline-foot"><span id="timeline-state">5 个片段 · 非破坏性参数</span><span>磁性吸附：开启 · 预览质量：1/2</span></div></section>
+          </div>
+          <aside>
+            <section class="panel"><div class="panel-head"><h3>媒体池 · Media Pool</h3><span id="media-count">6 个素材</span></div><div class="panel-body"><div class="media-actions"><label class="btn primary">导入素材<input id="media-input" type="file" multiple accept="video/*,image/*,audio/*" /></label><button class="btn" id="filter-media">筛选</button></div><div class="media-list" id="media-list"></div></div></section>
+            <section class="panel" style="margin-top:14px"><div class="panel-head"><h3>Inspector 检查器</h3><span id="inspector-clip">CO012.MP4</span></div><div class="panel-body"><div class="inspector-grid"><div class="field"><span>位置 X</span><input data-inspector="x" type="range" min="-960" max="960" value="0"><output id="out-x">0</output></div><div class="field"><span>位置 Y</span><input data-inspector="y" type="range" min="-540" max="540" value="0"><output id="out-y">0</output></div><div class="field"><span>缩放</span><input data-inspector="scale" type="range" min="50" max="200" value="100"><output id="out-scale">100%</output></div><div class="field"><span>旋转</span><input data-inspector="rotation" type="range" min="-180" max="180" value="0"><output id="out-rotation">0°</output></div><div class="field"><span>不透明度</span><input data-inspector="opacity" type="range" min="0" max="100" value="100"><output id="out-opacity">100%</output></div></div><div style="margin-top:14px;display:flex;gap:7px"><button class="btn" id="keyframe-btn">＋ 关键帧</button><button class="btn" id="reset-inspector">重置参数</button></div></div></section>
+            <section class="panel" style="margin-top:14px"><div class="panel-head"><h3>能力检测 · Capability</h3><span>FILM-0</span></div><div class="panel-body"><div class="status-list" id="capability-list"></div></div></section>
+          </aside>
+        </div>
+        <div class="bottom-grid"><section class="panel"><div class="panel-head"><h3>项目历史</h3><button class="btn ghost" id="snapshot-btn">创建快照</button></div><div class="panel-body mini-list" id="history-list"><div class="mini-row"><b>Auto Save</b><span>刚刚</span></div><div class="mini-row"><b>Project Opened</b><span>今天 10:32</span></div><div class="mini-row"><b>Snapshot · Before Color</b><span>昨天 23:41</span></div></div></section><section class="panel"><div class="panel-head"><h3>Markers / Review Notes</h3><button class="btn ghost" id="review-note-btn">添加评论</button></div><div class="panel-body mini-list" id="marker-list"><div class="mini-row"><b>01:23 · 这里需要换音乐</b><span style="color:var(--orange)">黄色</span></div><div class="mini-row"><b>02:18 · 镜头再短一点</b><span style="color:var(--purple)">紫色</span></div></div></section><section class="panel"><div class="panel-head"><h3>导出中心</h3><span>Desktop Bridge</span></div><div class="panel-body"><div class="mini-row"><b>MP4 · H.264 · 4K</b><span class="state warn">需要桌面运行时</span></div><p style="color:var(--muted);font-size:11px;line-height:1.6">浏览器原型不会假装完成真实编码。接入 Electron / Tauri 后再启用本地导出、Proxy 和 GPU 编解码。</p><button class="btn" id="export-btn" style="width:100%">检查导出能力</button></div></section></div>
+      </section>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+  <div class="modal-backdrop" id="modal-backdrop"><div class="modal"><h3>新建 Film Project</h3><label>项目名称<input id="new-project-name" value="未命名影片" /></label><label style="margin-top:12px">预设<select id="new-project-preset"><option>Documentary · 16:9 · 24 FPS</option><option>Cinema · 2.39:1 · 24 FPS</option><option>Quick Edit · 9:16 · 30 FPS</option></select></label><div class="modal-actions"><button class="btn" id="modal-cancel">取消</button><button class="btn primary" id="modal-create">创建项目</button></div></div></div>
+  <script>
+    (() => {
+      const STORE = 'mezip.film-studio.v1';
+      const state = JSON.parse(localStorage.getItem(STORE) || 'null') || { mode: 'quick', project: '日本旅行 Vlog', selectedClip: 'main', media: [], markers: [], history: [] };
+      const $ = (s, root = document) => root.querySelector(s);
+      const $$ = (s, root = document) => [...root.querySelectorAll(s)];
+      const toast = (message) => { const el = $('#toast'); el.textContent = message; el.classList.add('show'); clearTimeout(window.__toast); window.__toast = setTimeout(() => el.classList.remove('show'), 2600); };
+      const save = () => { localStorage.setItem(STORE, JSON.stringify(state)); $('#save-status').textContent = '· 已保存'; $('#project-meta').textContent = '04:28 · 4K · 30 FPS · 最近编辑：刚刚'; };
+      const markDirty = () => { $('#save-status').textContent = '· 正在保存…'; clearTimeout(window.__save); window.__save = setTimeout(save, 500); };
+      const viewCopy = { overview:['工作台','从素材到成片，先建立一个可靠的本地创作空间。'], projects:['项目','创建、打开、复制、重命名和管理本地 Film Project。'], media:['媒体池','管理视频、图片、音频与项目引用，不复制原始文件。'], timeline:['时间线','在多轨时间线上组织非破坏性剪辑参数。'], color:['调色','当前只展示 Color Workspace 入口；真实色彩处理需要媒体管线。'], audio:['音频','当前只展示 Audio Workspace 入口；真实波形与编码需要桌面桥。'], subtitle:['字幕','当前只展示字幕轨入口；SRT/VTT 处理将在后续阶段接入。'], review:['审片','标记时间点并记录 Review Notes，不修改主时间线。'], export:['导出','检查本机是否具备真实编码与桌面导出能力。'] };
+      function renderMedia() {
+        const list = $('#media-list'); list.innerHTML = '';
+        const media = state.media.length ? state.media : [{name:'CO012.MP4', type:'video', meta:'4K · 00:02:16'}, {name:'CO013.MP4', type:'video', meta:'4K · 00:01:42'}, {name:'IMG_5624.JPG', type:'image', meta:'3840×2160'}, {name:'BGM_Travel.mp3', type:'audio', meta:'WAV · 03:15'}, {name:'Dialogue_01.wav', type:'audio', meta:'48 kHz'}, {name:'SFX_Whoosh.wav', type:'audio', meta:'SFX'}];
+        $('#media-count').textContent = media.length + ' 个素材';
+        media.forEach((item, index) => { const row = document.createElement('div'); row.className = 'media-item' + (index === 0 ? ' selected' : ''); row.innerHTML = `<div class="thumb ${item.type || 'video'}"></div><div class="media-meta"><strong>${escapeHtml(item.name)}</strong><span>${escapeHtml(item.meta || item.type || '本地引用')}</span></div>`; row.addEventListener('click', () => { $$('.media-item').forEach(x => x.classList.remove('selected')); row.classList.add('selected'); $('#source-title').textContent = item.name; toast('已载入源监视器：' + item.name); }); list.appendChild(row); });
+      }
+      function escapeHtml(value) { return String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
+      function renderCapabilities() {
+        const hasWebGL = !!document.createElement('canvas').getContext('webgl2');
+        const hasVideo = 'VideoDecoder' in window || 'MediaSource' in window;
+        const rows = [['浏览器媒体预览', hasVideo ? '可用' : '受限', hasVideo ? 'ok' : 'warn'], ['GPU / WebGL2', hasWebGL ? '检测到' : 'CPU_FALLBACK', hasWebGL ? 'ok' : 'warn'], ['本地文件选择', '可用（浏览器权限）', 'ok'], ['桌面桥接 / FFmpeg', '未连接 · Desktop Runtime Required', 'off'], ['真实 H.264 导出', '未启用 · 不伪造渲染', 'off']];
+        $('#capability-list').innerHTML = rows.map(r => `<div class="status"><span>${r[0]}</span><b class="state ${r[2]}">${r[1]}</b></div>`).join('');
+      }
+      function updateMode(mode) {
+        state.mode = mode; $$('.mode-switch button').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+        $('#mode-notice').textContent = mode === 'film' ? '电影模式：显示多轨时间线、Inspector、Mixer、Scopes、Markers、Proxy 和版本入口。未连接桌面桥接的能力会保持明确的受限状态。' : '轻剪模式：保留素材、播放器、时间线、字幕和导出入口。切换到电影模式后显示多轨、Inspector、Mixer 和 Scopes。';
+        $('#app').dataset.mode = mode; markDirty();
+      }
+      function selectClip(name) { state.selectedClip = name; $$('.clip').forEach(c => c.classList.toggle('selected', c.dataset.clip === name)); $('#inspector-clip').textContent = name.toUpperCase(); toast('已选择片段：' + name); }
+      function timecode(seconds) { const s = Math.max(0, seconds); const mm = String(Math.floor(s/60)).padStart(2,'0'); const ss = String(Math.floor(s%60)).padStart(2,'0'); const ff = String(Math.floor((s%1)*24)).padStart(2,'0'); return `00:${mm}:${ss}:${ff}`; }
+      function setPlayhead(percent) { $('#playhead').style.left = Math.max(0, Math.min(100, percent)) + '%'; const sec = 268 * percent / 100; $('#program-time').textContent = timecode(sec); }
+      function addMarker(label = '新标记 · 需要复查') { const now = $('#program-time').textContent.slice(3,8); state.markers.unshift({label: `${now} · ${label}`, color:'黄色'}); renderMarkers(); markDirty(); toast('已添加时间标记'); }
+      function renderMarkers() { $('#marker-list').innerHTML = (state.markers.length ? state.markers : [{label:'01:23 · 这里需要换音乐',color:'黄色'},{label:'02:18 · 镜头再短一点',color:'紫色'}]).slice(0,5).map(m => `<div class="mini-row"><b>${escapeHtml(m.label)}</b><span style="color:var(--orange)">${escapeHtml(m.color)}</span></div>`).join(''); }
+      function openModal() { $('#modal-backdrop').classList.add('show'); $('#new-project-name').focus(); }
+      function closeModal() { $('#modal-backdrop').classList.remove('show'); }
+      function createProject() { const name = $('#new-project-name').value.trim() || '未命名影片'; state.project = name; $('#project-name').textContent = name; $('#project-name-head').textContent = name; closeModal(); markDirty(); toast('已在本地创建项目：' + name); }
+      function renameProject() { const name = prompt('输入新的项目名称', state.project); if (name && name.trim()) { state.project = name.trim(); $('#project-name').textContent = state.project; $('#project-name-head').textContent = state.project; markDirty(); toast('项目名称已更新'); } }
+      $$('.nav button').forEach(button => button.addEventListener('click', () => { $$('.nav button').forEach(b => b.classList.remove('active')); button.classList.add('active'); const copy = viewCopy[button.dataset.view]; $('#crumb-view').textContent = copy[0]; $('#view-title').textContent = copy[0] === '工作台' ? '电影剪辑工作台' : copy[0]; $('#view-subtitle').textContent = copy[1]; if (button.dataset.view === 'export') toast('导出中心已打开：先检查 Desktop Bridge 能力'); }));
+      $$('.mode-switch button').forEach(button => button.addEventListener('click', () => updateMode(button.dataset.mode)));
+      $('#new-project-btn').addEventListener('click', openModal); $('#modal-cancel').addEventListener('click', closeModal); $('#modal-create').addEventListener('click', createProject); $('#modal-backdrop').addEventListener('click', e => { if (e.target.id === 'modal-backdrop') closeModal(); }); $('#rename-project-btn').addEventListener('click', renameProject); $('#save-btn').addEventListener('click', () => { save(); toast('项目已保存到本机'); });
+      $('#marker-btn').addEventListener('click', () => addMarker()); $('#review-note-btn').addEventListener('click', () => addMarker('审片评论 · 需要确认')); $('#snapshot-btn').addEventListener('click', () => { $('#history-list').insertAdjacentHTML('afterbegin', '<div class="mini-row"><b>Snapshot · 手动快照</b><span>刚刚</span></div>'); markDirty(); toast('已创建本地项目快照'); });
+      $('#shortcut-btn').addEventListener('click', () => toast('快捷键：Space 播放 · I/O 入出点 · M 标记 · Ctrl/Cmd+S 保存 · Ctrl/Cmd+Z 撤销'));
+      $('#play-btn').addEventListener('click', () => { window.__playing = !window.__playing; $('#play-btn').textContent = window.__playing ? 'Ⅱ 暂停' : '▶ 播放'; toast(window.__playing ? '预览播放中' : '预览已暂停'); });
+      $('#frame-back').addEventListener('click', () => setPlayhead(parseFloat($('#playhead').style.left) - .5)); $('#frame-forward').addEventListener('click', () => setPlayhead(parseFloat($('#playhead').style.left) + .5));
+      $('#source-in').addEventListener('click', () => toast('已设置源素材 In 点（非破坏性参数）')); $('#source-out').addEventListener('click', () => toast('已设置源素材 Out 点（非破坏性参数）')); $('#source-add').addEventListener('click', () => toast('已将 In/Out 范围加入时间线')); $('#keyframe-btn').addEventListener('click', () => toast('已在当前时间创建关键帧参数')); $('#reset-inspector').addEventListener('click', () => { $$('[data-inspector]').forEach(i => i.value = i.dataset.inspector === 'scale' || i.dataset.inspector === 'opacity' ? 100 : 0); $$('[data-inspector]').forEach(i => i.dispatchEvent(new Event('input'))); });
+      $$('.clip').forEach(c => c.addEventListener('click', () => selectClip(c.dataset.clip))); $$('.track-lane').forEach(lane => lane.addEventListener('click', e => { if (e.target !== lane) return; const rect = lane.getBoundingClientRect(); setPlayhead((e.clientX - rect.left) / rect.width * 100); }));
+      $$('[data-inspector]').forEach(input => input.addEventListener('input', () => { const name = input.dataset.inspector; const out = $('#out-' + name); out.textContent = name === 'scale' || name === 'opacity' ? input.value + '%' : name === 'rotation' ? input.value + '°' : input.value; markDirty(); }));
+      $$('.tool').forEach(t => t.addEventListener('click', () => { if (t.dataset.tool) { $$('.tool').forEach(x => x.classList.remove('active')); t.classList.add('active'); $('#timeline-tool-label').textContent = ({select:'选择工具',razor:'Razor 分割工具',trim:'Trim 修剪工具'})[t.dataset.tool] + ' · 仅保存编辑参数'; } }));
+      $('#duplicate-btn').addEventListener('click', () => toast('已复制当前片段参数（原始素材未复制）')); $('#delete-btn').addEventListener('click', () => toast('删除需要先选择片段；原始文件不会被删除')); $('#undo-btn').addEventListener('click', () => toast('Undo 栈已准备，当前版本仅回退检查器参数')); $('#redo-btn').addEventListener('click', () => toast('Redo 栈已准备')); $('#export-btn').addEventListener('click', () => toast('当前浏览器没有 Desktop Bridge，无法真实导出；接入 Electron/Tauri 后启用')); $('#filter-media').addEventListener('click', () => toast('素材筛选：视频 / 图片 / 音频 / 收藏 / 离线媒体'));
+      $('#media-input').addEventListener('change', e => { const files = [...e.target.files]; files.forEach(file => { const type = file.type.startsWith('image') ? 'image' : file.type.startsWith('audio') ? 'audio' : 'video'; state.media.push({name:file.name,type,meta:`${type.toUpperCase()} · 本地引用`,url:URL.createObjectURL(file)}); }); if (files.length) { renderMedia(); markDirty(); toast(`已导入 ${files.length} 个本地素材，未上传云端`); } e.target.value = ''; });
+      document.addEventListener('keydown', e => { const key = e.key.toLowerCase(); if ((e.ctrlKey || e.metaKey) && key === 's') { e.preventDefault(); save(); toast('已保存'); } else if ((e.ctrlKey || e.metaKey) && key === 'z') { e.preventDefault(); toast('Undo：原始素材保持不变'); } else if (e.code === 'Space' && !['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) { e.preventDefault(); $('#play-btn').click(); } else if (key === 'm') addMarker('键盘标记'); else if (key === 'i') toast('In 点快捷键已触发'); else if (key === 'o') toast('Out 点快捷键已触发'); });
+      let last = 0; setInterval(() => { if (window.__playing) { last = (last + 0.6) % 268; setPlayhead(last / 268 * 100); } }, 600);
+      $('#project-name').textContent = state.project; $('#project-name-head').textContent = state.project; updateMode(state.mode); renderMedia(); renderMarkers(); renderCapabilities();
+    })();
+  </script>
+</body>
+</html>

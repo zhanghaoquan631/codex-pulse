@@ -1,51 +1,20 @@
+import catalog from './feature-source-catalog.json';
+import { sourceProjects as mapProjects } from './map-source-library';
 export const sourceRepository = 'https://github.com/zhanghaoquan631/codex-pulse';
-
-export const sourceProjects = {
-  'zju-overworld': {
-    title: '浙大校园漫游',
-    path: 'examples/zju-overworld',
-    prompt: `请用原生 JavaScript ES modules 与 Three.js 制作浙大紫金港主题的浏览器三维校园漫游游戏。
-用有来源的地图数据和程序化几何呈现校园道路、建筑、绿地与水面，提供可操作的俯视视角、步行与自由探索；地图为艺术化近似，不能作为精确导航。
-加入课程与微课、校园运动、搭建与物品、动物，以及夜间怪兽和生存玩法。微课使用原创内容与有权使用的声音，模型优先程序生成。
-兼容键盘鼠标和手机触控，支持暂停、昼夜变化与浏览器本地存档；用户操作后才播放声音。保留来源说明和加载失败提示。
-按世界、校园活动、教学、动物与夜间玩法拆分模块。交付可通过静态 HTTP 运行的 HTML、CSS、全部 ES modules、数据、资源许可与启动说明。提示词描述功能方向，不承诺与已有版本逐像素一致。`,
-  },
-  'chaoshan-map': {
-    title: '潮汕共创地图',
-    path: 'public/local-apps/chaoshan-atlas',
-    prompt: `请制作一个适配电脑和手机的潮汕三维地图与全国社区浏览应用。
-使用 Three.js 表现汕头、潮州、揭阳、南澳等地区的山地、河流、海岸、城镇和地标；提供地区选择、地名开关、缩放、朝北、平面视图、昼夜切换、自动巡游、全屏和景点详情。地图是资料快照与艺术化表达，不能冒充实时导航或测绘成果。
-全国社区页提供地图、列表、榜单、活动与政策，并标记资料日期和来源。收藏与自定义地点保存在当前浏览器；未知数据不编造，个人记录不打包。
-在地图中保留潮汕行旅十二章游戏入口。对加载过程提供阶段提示、停止和重试；离开屏幕或切换栏目时暂停渲染。保持地图与游戏通信的来源和窗口校验。
-交付完整可运行源码、安装/启动说明和资源来源。保留第三方许可证；未获得再分发许可的模型、照片、精灵需由使用者另行提供。验证电脑、手机、地图交互及入口，不把截图作为功能完成证明。`,
-  },
-  'chaoshan-adventure': {
-    title: '潮汕行旅 · 十二地墨潮',
-    path: 'public/local-apps/chaoshan-atlas/adventure',
-    prompt: `请用原生 JavaScript ES modules 与 Three.js 制作潮汕主题的浏览器三维冒险游戏，名称为“潮汕行旅 · 十二地墨潮”。
-以十二个地区/章节组织探索，表现小公园、广济桥、揭阳和南澳等地方特色；关卡规则、战斗、任务、天气、角色成长与渲染分模块实现。提供可切换视角、移动与跳跃、室内探索、NPC 互动、任务记录、装备、战斗反馈、章节选择、暂停与重开。
-支持键盘鼠标和手机触控，兼顾横竖屏；声音由用户主动开启。进度保存在当前浏览器，支持导出存档，不能声称和其他设备自动同步。
-使用程序化默认角色。外部动物精灵按需加载并保留来源；模型或贴图无法加载时仍可游玩，不擅自包含禁止再分发的角色资产。保留返回地图入口与同源消息校验。
-交付 HTML、CSS、各 ES module、合法可分发资源、许可说明、HTTP 启动步骤和实际验证结果。新生成结果不承诺与现有版本逐像素一致。`,
-  },
-  'rooster-rush': {
-    title: '公鸡快跑',
-    path: 'public/games/rooster-rush',
-    prompt: `请用原生 JavaScript 和 Three.js 制作可在电脑和手机直接玩的“公鸡快跑”游戏。
-玩家左右移动并跳跃，收集金币、踩敌人、使用火箭，挑战 10,000 分。键盘支持方向键或 A/D、空格跳跃、长按跳得更高、P 暂停、R 重开；手机提供摇杆与 JUMP 按钮。分数必须来自真实规则。
-将规则与碰撞放在 engine.js，角色和场景资产放在 assets.js，输入、渲染、声音及界面放在 app.js。提供加载失败重试、全屏、独立打开和适配手机的界面。
-在用户主动操作后播放声音。切换网页栏目时停止当前游戏，高分保存范围应明确；保留嵌入宿主的同源状态消息。
-交付完整源码、Three.js 与字体许可、静态 HTTP 启动说明，并验证移动、跳跃、得分、暂停和重开。`,
-  },
-  'xiamen-map': {
-    title: '厦门 3D 地图',
-    path: 'examples/xiamen-3d-map',
-    prompt: `请用 Vite、原生 JavaScript 与 Three.js 制作厦门和鼓浪屿三维旅行地图，适配手机与电脑。
-以有来源的地理数据表现鼓浪屿的街巷、海岸、建筑与码头，以及厦门中山路等景点；提供景点、酒店和码头分类、地图缩放与方向控制、自动巡游、图文详情和路线探索。
-支持浏览器定位，但只能在用户主动授权后读取位置；行程保存在本机，未取得定位时仍可浏览。明确地图资料的日期、近似程度和来源，不将艺术化场景当成精确导航。
-地图加载应有进度、错误提示与重试；手机触控不遮挡关键按钮。将地图生成、几何、渲染、查询和界面分为可维护模块。
-交付完整源文件、依赖锁文件、构建和启动说明。保留地图数据与第三方代码、照片许可，未获授权的资源单独说明。验证地图初次载入、景点切换、巡游、手机操作和定位拒绝状态。`,
-  },
-} as const;
-
-export type SourceProjectId = keyof typeof sourceProjects;
+export type SourceProjectId = string;
+export type SourceProject = { title: string; path: string; prompt: string; bundle: string; release: string; note: string };
+type CatalogItem = { id: string; title: string; requirements: string; path?: string };
+const paths: Record<string,string> = {tokens:'app/dashboard.tsx',websites:'app/websites.tsx',betteropc:'app/betteropc-center.tsx','mezip-local':'standalone/mezip-local',knowledge:'standalone/library',bookshelf:'standalone/bookshelf',mezip:'standalone/mezip',finance:'standalone/mezip-local/services/finance-mobile-bridge',shop:'standalone/shop',github:'standalone/mezip-local/services/github-workspace',media:'standalone/mezip-local/apps/web',music:'app/music-center.tsx',booking:'app/booking-center.tsx',qduo:'integration/qduo-windows',core:'app'};
+export const sourceProjects: Record<string,SourceProject> = Object.fromEntries(Object.entries(mapProjects).map(([id,item])=>[id,{...item,bundle:id,release:'source-v1.0.0',note:'提示词按现有功能整理；源码按文件分段，资源与地理数据请下载源码包。'}]));
+for (const section of catalog.sections) {
+  for (const item of section.items as CatalogItem[]) {
+    const map = sourceProjects[section.bundle];
+    const scope = section.id === 'betteropc' ? '源码包含本站的外站接入模块；BetterOPC 的服务器由第三方运营。' : '源码包含该功能所在模块及共享代码；独立服务需按随包说明配置。';
+    sourceProjects[item.id] = {
+      title: section.title + ' · ' + item.title,
+      bundle: section.bundle, path: item.path ?? map?.path ?? paths[section.bundle] ?? 'docs/development.md',
+      release: map?.release ?? catalog.release, note: scope,
+      prompt: '请实现“'+section.title+'”中的“'+item.title+'”功能，交付可编辑源码和运行说明。\n\n功能要求：'+item.requirements+'。\n\n沿用 Codex Pulse 的 React / TypeScript 工作台和该模块已有的独立服务边界；明确前端、API、数据存储、本机桥接和外部依赖。根据随附源码保留已有操作、错误处理与手机适配，不使用写死成功结果代替真实调用。\n个人数据与配置保持用户隔离，公开源码只放示例配置。凭据由部署者提供，禁止将作者的运行数据库、Cookie 或本机路径打包。需要屏幕、麦克风、文件或本机权限时由用户主动授权；变更数据时校验身份并处理重复请求。\n'+scope+'\n提供必要的数据库结构、接口、安装命令、失败与恢复说明。验证主要操作、断线、空状态、权限拒绝和手机布局。保留第三方许可与来源；此提示词根据现有功能整理，不宣称是原始对话的逐字记录。',
+    };
+  }
+}

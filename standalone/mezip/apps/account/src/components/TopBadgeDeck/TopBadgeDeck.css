@@ -1,0 +1,201 @@
+.top-badge-deck {
+  position: fixed;
+  inset: 0;
+  z-index: 7;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.top-badge-slot {
+  position: absolute;
+  top: 0;
+  width: 33.333333%;
+  height: 172px;
+  pointer-events: none;
+}
+
+.top-badge-slot-green { left: 0; }
+.top-badge-slot-blue { left: 33.333333%; }
+.top-badge-slot-orange { left: 66.666666%; }
+
+.top-badge-shell {
+  --badge-width: min(78%, 320px);
+  position: absolute;
+  top: clamp(24px, 4.5vh, 42px);
+  left: calc(50% - 22px);
+  width: var(--badge-width);
+  aspect-ratio: 990 / 302;
+  transform: translateX(-50%);
+  transform-origin: 13% 50%;
+  pointer-events: none;
+}
+
+.top-badge-art {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  border-radius: clamp(12px, 2.2vw, 22px);
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  filter: drop-shadow(0 12px 18px rgba(0, 0, 0, .38));
+  transition:
+    transform 680ms cubic-bezier(.16, 1.18, .3, 1),
+    opacity 560ms ease,
+    filter 300ms ease;
+  will-change: transform, opacity;
+}
+
+.top-badge-art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+/* A visible cord passes through the left-side hole in the reference badge. */
+.top-badge-thread {
+  position: absolute;
+  left: 12.7%;
+  top: -56px;
+  z-index: 1;
+  width: 15px;
+  height: calc(56px + 48%);
+  transform: translateX(-50%);
+  transform-origin: top center;
+  border: 1px solid rgba(5, 8, 16, .95);
+  border-left: 2px solid color-mix(in srgb, var(--badge-accent) 72%, #ffffff 28%);
+  border-right: 2px solid color-mix(in srgb, var(--badge-accent) 38%, #0a0d16 62%);
+  border-top: 0;
+  border-radius: 0 0 8px 8px;
+  background:
+    repeating-linear-gradient(to bottom, transparent 0 17px, rgba(255, 255, 255, .38) 18px 19px, transparent 20px 31px),
+    linear-gradient(90deg, rgba(7, 10, 18, .98), color-mix(in srgb, var(--badge-accent) 48%, #20273a 52%), rgba(4, 7, 13, .98));
+  box-shadow: inset 2px 0 0 color-mix(in srgb, var(--badge-accent) 65%, transparent), inset -2px 0 0 rgba(0, 0, 0, .52), 0 3px 10px rgba(0, 0, 0, .7);
+  opacity: .88;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .55));
+  transition: height 520ms cubic-bezier(.2, .8, .2, 1), transform 520ms cubic-bezier(.2, .8, .2, 1), opacity 260ms ease;
+}
+
+.top-badge-thread::before {
+  content: '';
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  width: 13px;
+  height: 13px;
+  transform: translateX(-50%);
+  border: 2px solid color-mix(in srgb, var(--badge-accent) 70%, #f5f6ff 30%);
+  border-bottom-color: color-mix(in srgb, var(--badge-accent) 34%, transparent);
+  border-radius: 50%;
+  background: #080b14;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, .42);
+}
+
+.top-badge-thread::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 7px;
+  width: 7px;
+  height: 7px;
+  transform: translateX(-50%);
+  border: 1px solid rgba(255, 255, 255, .58);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--badge-accent) 46%, transparent);
+}
+
+.top-badge-hole {
+  position: absolute;
+  left: 12.7%;
+  top: 48%;
+  z-index: 4;
+  width: clamp(13px, 1.65vw, 19px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border: 3px solid rgba(6, 9, 16, .96);
+  border-radius: 50%;
+  background: radial-gradient(circle, #05070b 0 38%, rgba(255, 255, 255, .28) 42% 48%, transparent 52%);
+  box-shadow: 0 0 0 2px rgba(120, 210, 180, .34), 0 3px 8px rgba(0, 0, 0, .56);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--badge-accent) 50%, transparent), 0 3px 8px rgba(0, 0, 0, .56);
+  pointer-events: none;
+}
+
+.top-badge-toggle {
+  position: absolute;
+  top: 50%;
+  right: 4.8%;
+  z-index: 6;
+  width: clamp(22px, 3.8vw, 34px);
+  aspect-ratio: 1;
+  padding: 0;
+  transform: translateY(-50%);
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+
+.top-badge-toggle span {
+  position: absolute;
+  inset: 4px;
+  display: block;
+  border: 1px solid var(--badge-accent);
+  border-color: color-mix(in srgb, var(--badge-accent) 76%, #ffffff 24%);
+  border-radius: 50%;
+  background: var(--badge-accent);
+  background: radial-gradient(circle at 34% 28%, color-mix(in srgb, var(--badge-accent) 78%, #ffffff 22%), var(--badge-accent) 52%, color-mix(in srgb, var(--badge-accent) 38%, #05070d 62%) 100%);
+  box-shadow: 0 0 0 4px rgba(120, 210, 180, .16), 0 0 18px rgba(120, 210, 180, .6), inset 0 1px 2px rgba(255, 255, 255, .45);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--badge-accent) 16%, transparent), 0 0 18px color-mix(in srgb, var(--badge-accent) 60%, transparent), inset 0 1px 2px rgba(255, 255, 255, .45);
+  transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+}
+
+.top-badge-toggle:hover span,
+.top-badge-toggle:focus-visible span {
+  transform: scale(1.16);
+  filter: brightness(1.18);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--badge-accent) 20%, transparent), 0 0 24px color-mix(in srgb, var(--badge-accent) 78%, transparent), inset 0 1px 2px rgba(255, 255, 255, .55);
+}
+
+.top-badge-toggle:focus-visible {
+  outline: 2px solid var(--badge-accent);
+  outline-color: color-mix(in srgb, var(--badge-accent) 74%, #ffffff 26%);
+  outline-offset: 4px;
+}
+
+.top-badge-shell.is-collapsed .top-badge-art {
+  transform: translate3d(0, -280%, 0) scale(.78);
+  opacity: 0;
+  filter: blur(2px) drop-shadow(0 8px 12px rgba(0, 0, 0, .25));
+}
+
+.top-badge-shell.is-collapsed .top-badge-thread {
+  height: 0;
+  transform: translateX(-50%) scaleY(.15);
+  opacity: 0;
+}
+
+@media (max-width: 760px) {
+  .top-badge-slot { height: 132px; }
+  .top-badge-shell {
+    --badge-width: min(90%, 270px);
+    top: 34px;
+    left: calc(50% - 12px);
+  }
+  .top-badge-thread {
+    top: -43px;
+    height: calc(43px + 48%);
+  }
+  .top-badge-hole { width: 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .top-badge-art,
+  .top-badge-thread,
+  .top-badge-toggle span { transition-duration: 1ms; }
+}

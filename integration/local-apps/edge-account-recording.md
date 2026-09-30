@@ -4,7 +4,7 @@ The owner asked for automatic account records with minimal repeated steps. Use o
 
 ## Authorization and access
 
-Only these complete emails are authorized: account1@example.com, account2@example.com, account3@example.com, account4@example.com, account6@example.com, account5@example.com. Excluded profiles 我我 and 小光 must not be opened or inspected.
+Only these complete emails are authorized: account2@example.com, account3@example.com, account4@example.com, account5@example.com, account7@example.com, account6@example.com. Excluded profiles 我我 and 小光 must not be opened or inspected.
 
 Read the current task AGENTS.md and outputs/账号查询索引.md first. Reuse the existing collector configuration at C:/Users/your-user/Documents/Codex/2026-09-11/ai/outputs/codex-pulse/collector/config.json in memory. It authorizes only this existing Site's ingest endpoint. Never print the file, its secrets, proxy values, credentials, cookies or browser tokens.
 

@@ -1,0 +1,8 @@
+.pixel-reveal { position: relative; display: block; overflow: hidden; isolation: isolate; background: var(--pixel-transition-color, #242424); }
+.pixel-reveal__image { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; user-select: none; }
+.pixel-reveal__canvas { position: absolute; z-index: 1; inset: 0; display: block; width: 100%; height: 100%; pointer-events: none; }
+.pixel-reveal__content { position: relative; z-index: 2; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pixel-reveal__canvas { display: none; }
+}

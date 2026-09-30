@@ -1,0 +1,40 @@
+.glow-cursor {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.glow-cursor__canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  user-select: none;
+}
+
+.glow-cursor__content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
+/* Full-page mode keeps the WebGL surface at viewport size, so the shader
+   stays lightweight while the existing page remains fully clickable. */
+.glow-cursor--viewport {
+  position: fixed;
+  z-index: 30;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.glow-cursor--viewport .glow-cursor__canvas {
+  position: absolute;
+  z-index: 0;
+}

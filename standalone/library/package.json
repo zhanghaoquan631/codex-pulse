@@ -1,0 +1,23 @@
+{
+  "name": "lingan-library-cloud",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "validate": "node scripts/validate-artifact.mjs",
+    "db:generate": "drizzle-kit generate",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "dependencies": {
+    "@noble/hashes": "2.0.1",
+    "drizzle-orm": "0.45.2",
+    "fflate": "0.8.2",
+    "mediabunny": "1.61.0",
+    "qrcode-generator": "^2.0.4"
+  },
+  "devDependencies": {
+    "drizzle-kit": "0.31.10",
+    "esbuild": "0.25.12",
+    "fake-indexeddb": "6.2.5"
+  }
+}

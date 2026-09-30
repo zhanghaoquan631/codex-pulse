@@ -5,7 +5,7 @@ export type CleanupScan = {schemaVersion:1;generatedAt:string;scanId:string;comp
 export type CleanupPlan = {schemaVersion:1;planId:string;createdAt:string;expiresAt:string;risk:Risk;requiresMediumApproval:boolean;files:CleanupCandidate[];fileCount:number;logicalBytes:number;excludedCount:number;warnings:string[]};
 export type CleanupResult = {schemaVersion:1;transactionId:string;startedAt:string;completedAt:string;status:string;quarantinePath:string;fileCount:number;quarantinedFiles:number;restoredFiles?:number;skippedFiles:number;failedFiles:number;logicalBytes:number;archiveBytes:number;drives:{name:string;freeBefore:number;freeAfter:number;freeDelta:number}[];results:{id:string;path:string;status:'quarantined'|'skipped'|'failed'|'restored';bytes:number;reason:string}[];suggestions:string[]};
 export type CleanupHistory = {transactionId:string;startedAt:string;completedAt:string|null;status:string;fileCount:number;quarantinedFiles:number;restoredFiles:number;logicalBytes:number;archiveBytes:number;canRestore:boolean};
-export type SafetyStatus = {schemaVersion:1;generatedAt:string;policyVersion:string;quarantinePath:string;lastScan:CleanupScan|null;lastCleanup:CleanupResult|null;transactions:CleanupHistory[];busy:boolean;errors:string[]};
+export type SafetyStatus = {backupDrive?:string;schemaVersion:1;generatedAt:string;policyVersion:string;quarantinePath:string;lastScan:CleanupScan|null;lastCleanup:CleanupResult|null;transactions:CleanupHistory[];busy:boolean;errors:string[]};
 export type DefenderJob = {id:string;action:string;state:'running'|'succeeded'|'failed';startedAt:string;completedAt:string|null;message:string;exitCode:number|null};
 export type DefenderStatus = {schemaVersion:1;checkedAt:string;available:boolean;status:null|{antivirusEnabled:boolean;realTimeProtectionEnabled:boolean;signatureVersion:string;signatureUpdatedAt:string|null;quickScanStartedAt:string|null;quickScanEndedAt:string|null;fullScanStartedAt:string|null;fullScanEndedAt:string|null};threats:{id:string|number;name:string;severityId:number;isActive:boolean;resources:string[]}[];detections:{id:string|number;threatId:string|number;initialDetectionAt:string|null;lastStatusChangeAt:string|null;actionSuccess:boolean;resources:string[]}[];errors:string[];suggestions:string[];job:DefenderJob|null};
 export type SavedBookmark = {id:string;title:string;url:string;projectId?:string};
@@ -92,3 +92,4 @@ export async function loadSavedBookmarks(signal?:AbortSignal):Promise<SavedBookm
  if(found.size!==snapshotLinks)throw new Error('收藏分页发生重排或遗漏，请重新读取完整收藏。');
  return [...found.values()];
 }
+

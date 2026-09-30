@@ -1,0 +1,114 @@
+{
+  "settings": {
+    "title": "我的书架",
+    "welcome": "欢迎来到我的书架!",
+    "tagline": "文字的避风港，收藏每一本心仪之作。",
+    "defaultTheme": "light",
+    "showAuthors": true,
+    "showGallery": true
+  },
+  "categories": [
+    {
+      "id": "new",
+      "name": "新书速递",
+      "icon": "stars"
+    },
+    {
+      "id": "100000",
+      "name": "精品小说",
+      "icon": "book"
+    },
+    {
+      "id": "200000",
+      "name": "历史",
+      "icon": "clock-history"
+    },
+    {
+      "id": "300000",
+      "name": "文学",
+      "icon": "book"
+    },
+    {
+      "id": "400000",
+      "name": "艺术",
+      "icon": "palette"
+    },
+    {
+      "id": "500000",
+      "name": "人物传记",
+      "icon": "person-badge"
+    },
+    {
+      "id": "600000",
+      "name": "哲学宗教",
+      "icon": "people"
+    },
+    {
+      "id": "700000",
+      "name": "计算机",
+      "icon": "laptop"
+    },
+    {
+      "id": "800000",
+      "name": "心理",
+      "icon": "heart-half"
+    },
+    {
+      "id": "900000",
+      "name": "社会文化",
+      "icon": "globe2"
+    },
+    {
+      "id": "100004",
+      "name": "科幻小说",
+      "icon": "book"
+    },
+    {
+      "id": "300004",
+      "name": "经典作品",
+      "icon": "book"
+    },
+    {
+      "id": "100008",
+      "name": "悬疑推理",
+      "icon": "book"
+    },
+    {
+      "id": "1000002",
+      "name": "励志成长",
+      "icon": "book"
+    },
+    {
+      "id": "700005",
+      "name": "人工智能",
+      "icon": "book"
+    },
+    {
+      "id": "1100000",
+      "name": "经济理财",
+      "icon": "book"
+    },
+    {
+      "id": "1200000",
+      "name": "政治军事",
+      "icon": "book"
+    },
+    {
+      "id": "1400000",
+      "name": "教育学习",
+      "icon": "book"
+    },
+    {
+      "id": "1500001",
+      "name": "工业技术",
+      "icon": "book"
+    },
+    {
+      "id": "1600000",
+      "name": "生活百科",
+      "icon": "book"
+    }
+  ],
+  "books": [],
+  "banners": []
+}

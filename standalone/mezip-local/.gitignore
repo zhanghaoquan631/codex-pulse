@@ -1,0 +1,22 @@
+node_modules/
+dist/
+.turbo/
+coverage/
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.local
+*.pem
+*.log
+x-session.key
+secrets/
+services/finance-mobile-bridge/runtime/
+miniprogram_npm/
+*.tsbuildinfo
+playwright-report/
+test-results/
+.DS_Store
+
+# Owner-controlled asset drop zone; only explicitly approved files are copied into the repo.
+_incoming-assets/*

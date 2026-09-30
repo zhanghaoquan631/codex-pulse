@@ -1,0 +1,49 @@
+.linked-gallery-preview {
+  position: relative;
+  padding-top: clamp(96px, 12vw, 168px);
+  padding-bottom: clamp(96px, 12vw, 168px);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  scroll-margin-top: 96px;
+}
+
+.linked-gallery-preview__heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; }
+.linked-gallery-preview__heading h2 { margin: 18px 0 0; font-family: Georgia, 'Songti SC', serif; font-size: clamp(48px, 7vw, 94px); font-weight: 400; letter-spacing: -.055em; line-height: .94; }
+.linked-gallery-preview__lede { max-width: 560px; margin: 24px 0 0; color: var(--muted); font-size: 15px; line-height: 1.75; }
+.linked-gallery-preview__status { display: inline-flex; align-items: center; gap: 8px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 10px; letter-spacing: .04em; white-space: nowrap; }
+.linked-gallery-preview__status > span { width: 7px; height: 7px; border-radius: 50%; background: #d6bb74; box-shadow: 0 0 0 3px rgba(214,187,116,.14); }
+.linked-gallery-preview__status.is-online { border-color: rgba(123,216,143,.3); color: #a7e8b4; }
+.linked-gallery-preview__status.is-online > span { background: #7bd88f; box-shadow: 0 0 0 3px rgba(123,216,143,.14); }
+.linked-gallery-preview__status.is-offline { border-color: rgba(224,138,138,.35); color: #e6aaaa; }
+.linked-gallery-preview__status.is-offline > span { background: #e08a8a; box-shadow: 0 0 0 3px rgba(224,138,138,.14); }
+.linked-gallery-preview__frame-wrap { position: relative; height: clamp(420px, 58vw, 760px); margin-top: 34px; overflow: hidden; border: 1px solid rgba(255,255,255,.18); border-radius: 20px; background: #020204; box-shadow: 0 28px 80px rgba(0,0,0,.32), inset 0 0 90px rgba(130,150,210,.05); }
+.linked-gallery-preview__iframe { display: block; width: 100%; height: 100%; border: 0; background: #000; }
+.linked-gallery-preview__loading { position: absolute; z-index: 2; inset: 0; display: grid; place-items: center; margin: 0; color: rgba(235,240,255,.7); background: linear-gradient(135deg, rgba(5,7,12,.52), rgba(13,17,30,.72)); font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 10px; letter-spacing: .08em; pointer-events: none; }
+.linked-gallery-preview__offline { position: absolute; z-index: 3; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 11px; padding: 24px; color: rgba(235,240,255,.8); background: rgba(3,4,8,.88); text-align: center; }
+.linked-gallery-preview__offline strong { color: #fff; font-family: Georgia, 'Songti SC', serif; font-size: 26px; font-weight: 400; }
+.linked-gallery-preview__offline span { color: var(--muted); font-size: 12px; }
+.linked-gallery-preview__offline button { min-height: 38px; padding: 0 14px; border: 1px solid rgba(216,227,255,.35); border-radius: 999px; background: transparent; color: #e6edff; font: inherit; font-size: 11px; cursor: pointer; }
+.linked-gallery-preview__enter { position: absolute; right: 18px; bottom: 18px; z-index: 4; display: inline-flex; align-items: center; gap: 9px; min-height: 42px; padding: 0 15px; border: 1px solid rgba(255,255,255,.4); border-radius: 999px; background: rgba(8,8,8,.82); color: #fff; backdrop-filter: blur(12px); font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 10px; letter-spacing: .05em; transition: transform .18s ease, background .18s ease, border-color .18s ease; }
+.linked-gallery-preview__enter:hover, .linked-gallery-preview__enter:focus-visible { border-color: #fff; background: rgba(255,255,255,.16); transform: translateY(-2px); outline: none; }
+
+@media (max-width: 720px) {
+  .linked-gallery-preview { padding-top: 88px; padding-bottom: 88px; }
+  .linked-gallery-preview__heading { align-items: flex-start; flex-direction: column; gap: 22px; }
+  .linked-gallery-preview__heading h2 { font-size: clamp(48px, 16vw, 74px); }
+  .linked-gallery-preview__frame-wrap { height: 520px; margin-top: 26px; border-radius: 14px; }
+  .linked-gallery-preview__enter { right: 12px; bottom: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .linked-gallery-preview__enter { transition: none; }
+}
+
+/* Framed canvas preview, with its independent-page link below the picture. */
+.linked-gallery-preview__panel { margin-top: 34px; overflow: hidden; border: 1px solid rgba(255,255,255,.18); border-radius: 8px; background: #050507; }
+.linked-gallery-preview__topline, .linked-gallery-preview__footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 13px 16px; color: var(--muted); font: 10px/1.6 'Geist Mono', ui-monospace, monospace; letter-spacing: .06em; }
+.linked-gallery-preview__topline { border-bottom: 1px solid var(--line); }
+.linked-gallery-preview__footer { border-top: 1px solid var(--line); }
+.linked-gallery-preview__panel .linked-gallery-preview__frame-wrap { height: clamp(420px, 46vw, 680px); margin: 0; border: 0; border-radius: 0; box-shadow: none; }
+.linked-gallery-preview__panel .linked-gallery-preview__status { padding: 0; border: 0; font-size: 10px; }
+.linked-gallery-preview__footer .linked-gallery-preview__enter { position: static; min-height: 32px; padding: 0; border: 0; border-bottom: 1px solid rgba(216,227,255,.35); border-radius: 0; background: transparent; color: #d8e3ff; backdrop-filter: none; }
+@media (max-width: 720px) { .linked-gallery-preview__topline { flex-wrap: wrap; gap: 8px; } .linked-gallery-preview__panel .linked-gallery-preview__frame-wrap { height: 480px; } }

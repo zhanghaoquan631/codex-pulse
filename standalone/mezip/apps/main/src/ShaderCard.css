@@ -1,0 +1,59 @@
+.shader-card {
+  --shader-card-radius: 12px;
+  --shader-card-color: #ff5a36;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: var(--shader-card-radius);
+  background: #070a12;
+  background-color: #070a12;
+  contain: paint;
+}
+
+.shader-card::before {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  border: 1px solid color-mix(in srgb, var(--shader-card-color) 45%, rgba(255, 255, 255, .16));
+  border-radius: inherit;
+  box-shadow: inset 0 0 34px color-mix(in srgb, var(--shader-card-color) 13%, transparent), 0 0 0 1px rgba(255, 255, 255, .025);
+  content: '';
+  pointer-events: none;
+}
+
+.shader-card__canvas {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  pointer-events: none;
+  user-select: none;
+  filter: blur(var(--shader-card-blur, 0px));
+}
+
+/* Pricing and other callers keep their original direct-child structure. The
+   canvas is an inert layer; all existing content remains above it and keeps
+   its native hit targets. */
+.shader-card > :not(.shader-card__canvas) {
+  position: relative !important;
+  z-index: 2;
+}
+
+.shader-card[data-shader-mode='css'] {
+  background:
+    radial-gradient(circle at 50% 88%, color-mix(in srgb, var(--shader-card-color) 28%, transparent), transparent 64%),
+    #070a12;
+}
+
+.shader-card[data-shader-reduced-motion='true'] .shader-card__canvas {
+  filter: saturate(.92);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shader-card::before {
+    box-shadow: inset 0 0 24px color-mix(in srgb, var(--shader-card-color) 10%, transparent);
+  }
+}

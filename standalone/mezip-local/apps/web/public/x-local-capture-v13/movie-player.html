@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>ME.zip 电影播放器</title>
+  <link rel="stylesheet" href="./movie-player.css">
+</head>
+<body>
+  <main class="movie-player" aria-label="电影播放器">
+    <header class="player-heading">
+      <div><p id="movie-platform" class="player-source">ME.zip</p><h1 id="movie-title">正在读取电影线路…</h1></div>
+      <a id="original-source" class="source-link" target="_blank" rel="noopener noreferrer" hidden>到原站播放 ↗</a>
+    </header>
+    <video id="movie-video" controls playsinline preload="metadata" aria-label="电影视频"></video>
+    <div class="player-controls">
+      <label for="playback-line">播放线路 <select id="playback-line" disabled></select></label>
+      <button id="play-button" type="button" disabled>播放 / 继续观看</button>
+      <button id="stop-button" type="button" disabled>停止播放</button>
+    </div>
+    <p id="player-status" class="player-status" role="status" aria-live="polite">正在读取可用线路。</p>
+    <p id="watch-status" class="player-note" role="status" aria-live="polite">实际播放后，观看进度会自动同步到本机。</p>
+    <p id="verify-note" class="player-note" hidden>只读验证模式：此页不写入观看记录。</p>
+    <p class="player-note">选择线路后点击播放。某条线路失效时，可以切换其他线路或到原站播放。</p>
+  </main>
+  <script src="./vendor/hls-1.7.3.min.js"></script>
+  <script src="./movie-watch-bridge.js"></script>
+  <script src="./movie-watch-engine.js"></script>
+  <script src="./movie-player.js"></script>
+</body>
+</html>

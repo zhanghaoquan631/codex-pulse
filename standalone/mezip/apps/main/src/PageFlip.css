@@ -1,0 +1,258 @@
+.page-flip {
+  --page-width: 220px;
+  --page-height: 320px;
+  --page-radius: 4px;
+  --page-color: #f4f4f4;
+  --page-perspective: 1200px;
+  --page-spine-shift: 110px;
+  --page-turn-angle: 180deg;
+  --page-peek-angle: 10deg;
+  --page-duration: .55s;
+  --page-stagger: .08s;
+  --page-ease: cubic-bezier(.42, 0, .58, 1);
+  --page-shadow-strength: .3;
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  color: #fff;
+  outline: none;
+}
+
+.page-flip:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, .7);
+  outline-offset: 8px;
+  border-radius: 10px;
+}
+
+.page-flip__scene {
+  position: relative;
+  display: grid;
+  width: 100%;
+  height: max(390px, calc(var(--page-height) + 110px));
+  min-height: 390px;
+  place-items: center;
+  overflow: hidden;
+  perspective: var(--page-perspective);
+  perspective-origin: 50% 46%;
+  touch-action: none;
+  user-select: none;
+  cursor: grab;
+  isolation: isolate;
+}
+
+.page-flip__scene::before {
+  position: absolute;
+  z-index: -2;
+  inset: 14% 18%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(255, 255, 255, .08), transparent 68%);
+  filter: blur(30px);
+  content: '';
+  pointer-events: none;
+}
+
+.page-flip__scene::after {
+  position: absolute;
+  z-index: -1;
+  right: 8%;
+  bottom: 7%;
+  left: 8%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .14), transparent);
+  content: '';
+  pointer-events: none;
+}
+
+.page-flip__scene:active { cursor: grabbing; }
+.page-flip.is-static .page-flip__scene { cursor: default; touch-action: auto; }
+
+.page-flip__book {
+  position: relative;
+  width: var(--page-width);
+  height: var(--page-height);
+  transform: translate3d(var(--page-book-shift, 0px), 0, 0);
+  transform-style: preserve-3d;
+  transition: transform calc(var(--page-duration) + .08s) var(--page-ease);
+  will-change: transform;
+}
+
+.page-flip__spine {
+  position: absolute;
+  z-index: 1;
+  top: -5%;
+  bottom: -5%;
+  left: -2px;
+  width: 4px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, .28) 14%, rgba(0, 0, 0, .72) 48%, rgba(255, 255, 255, .18) 86%, transparent);
+  box-shadow: 0 0 15px rgba(0, 0, 0, .8);
+  transform: translateZ(3px);
+  opacity: var(--page-spread-progress, 0);
+  transition: opacity var(--page-duration) ease;
+  pointer-events: none;
+}
+
+.page-flip__leaf {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: block;
+  width: var(--page-width);
+  height: var(--page-height);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--page-radius);
+  background: transparent;
+  color: inherit;
+  appearance: none;
+  cursor: pointer;
+  transform: translate3d(var(--page-leaf-offset, 0px), 0, 0) translateZ(var(--page-stack-offset, 0px)) rotateY(calc(var(--page-rotation, 0deg) + var(--page-peek-rotation, 0deg)));
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  transition: transform var(--page-duration) var(--page-ease) var(--page-delay, 0s), box-shadow var(--page-duration) ease var(--page-delay, 0s);
+  will-change: transform;
+}
+
+.page-flip__leaf::before {
+  position: absolute;
+  z-index: -1;
+  inset: 4% -8% -5% 3%;
+  border-radius: calc(var(--page-radius) * 1.6);
+  background: #000;
+  box-shadow: 0 22px 36px rgba(0, 0, 0, .6);
+  content: '';
+  opacity: calc(var(--page-shadow-alpha, .12) * var(--page-shadow-strength, .3) * 3.3);
+  filter: blur(13px);
+  transform: translateZ(-16px) scale(.98);
+  transition: opacity var(--page-duration) ease;
+  pointer-events: none;
+}
+
+.page-flip__leaf.is-hovered:not(.is-turned) {
+  filter: brightness(1.08);
+}
+
+.page-flip__leaf:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, .92);
+  outline-offset: 6px;
+}
+
+.page-flip__face {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: inherit;
+  background: var(--page-color);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .12);
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+
+.page-flip__face::after {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  background: linear-gradient(105deg, rgba(255, 255, 255, .22), transparent 20%, transparent 72%, rgba(0, 0, 0, .22));
+  content: '';
+  opacity: .38;
+  mix-blend-mode: screen;
+}
+
+.page-flip__face--back {
+  transform: rotateY(180deg);
+  filter: brightness(.82) saturate(.92);
+}
+
+.page-flip__face img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+}
+
+.page-flip__face--front img {
+  filter: saturate(.92) contrast(1.04);
+}
+
+.page-flip__face--back img {
+  filter: saturate(.86) contrast(1.04);
+}
+
+.page-flip__paper-edge {
+  position: absolute;
+  z-index: 4;
+  top: 2%;
+  right: -2px;
+  bottom: 2%;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .48), rgba(255, 255, 255, .06) 35%, rgba(0, 0, 0, .5));
+  opacity: calc(.18 + var(--page-progress, 0) * .64);
+  transform: translateZ(5px);
+  transition: opacity var(--page-duration) ease;
+  pointer-events: none;
+}
+
+.page-flip__hint {
+  position: absolute;
+  right: 24px;
+  bottom: 19px;
+  color: rgba(255, 255, 255, .42);
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 9px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.page-flip__status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+.page-flip.is-dragging .page-flip__book,
+.page-flip.is-dragging .page-flip__leaf,
+.page-flip.is-dragging .page-flip__leaf::before,
+.page-flip.is-dragging .page-flip__paper-edge { transition-duration: 0s; }
+
+@media (max-width: 920px) {
+  .page-flip__scene { height: max(390px, calc(var(--page-height) + 100px)); }
+}
+
+@media (max-width: 590px) {
+  .page-flip__scene {
+    height: 365px;
+    min-height: 365px;
+  }
+
+  .page-flip__book,
+  .page-flip__leaf {
+    width: min(var(--page-width), 64vw);
+    height: min(var(--page-height), 78vw);
+  }
+
+  .page-flip__hint {
+    right: 16px;
+    bottom: 14px;
+    font-size: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-flip__book,
+  .page-flip__leaf,
+  .page-flip__leaf::before,
+  .page-flip__paper-edge { transition-duration: 0s !important; }
+}

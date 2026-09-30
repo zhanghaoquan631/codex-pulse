@@ -1,0 +1,36 @@
+:root {
+  --mz-canvas-0: #080a0d;
+  --mz-canvas-1: #0b0e12;
+  --mz-canvas-2: #101318;
+  --mz-surface-1: #12161c;
+  --mz-surface-2: #151a21;
+  --mz-surface-3: #181d25;
+  --mz-text-primary: #f1f4f8;
+  --mz-text-secondary: #9ba6b5;
+  --mz-text-tertiary: #697586;
+  --mz-border-subtle: #27303b;
+  --mz-accent-ai: #8b8cff;
+  --mz-accent-movement: #79c79b;
+  --mz-accent-fitness: #e89a5e;
+  --mz-accent-history: #d7be83;
+  --mz-accent-life: #c783a8;
+  --mz-accent-platinum: #d7dce6;
+  --mz-space-1: 4px;
+  --mz-space-2: 8px;
+  --mz-space-3: 12px;
+  --mz-space-4: 16px;
+  --mz-space-5: 20px;
+  --mz-space-6: 24px;
+  --mz-space-8: 32px;
+  --mz-space-10: 40px;
+  --mz-space-12: 48px;
+  --mz-radius-sm: 10px;
+  --mz-radius-md: 16px;
+  --mz-radius-lg: 24px;
+  --mz-motion-fast: 160ms;
+  --mz-motion-normal: 220ms;
+  --mz-motion-slow: 320ms;
+  --mz-font-display: 'Avenir Next', 'Noto Sans SC', 'PingFang SC', sans-serif;
+  --mz-font-body: 'Noto Sans SC', 'PingFang SC', sans-serif;
+  --mz-font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
+}

@@ -1,0 +1,112 @@
+.warped-card {
+  --warped-card-width: 360px;
+  --warped-card-aspect: 1.3;
+  --warped-card-radius: 16px;
+  --warped-transition: .8s;
+  position: relative;
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  min-height: 1px;
+  place-items: center;
+  perspective: 1200px;
+  overflow: visible;
+  color: #fff;
+  isolation: isolate;
+  touch-action: none;
+}
+
+.warped-card__surface {
+  position: relative;
+  width: min(100%, var(--warped-card-width));
+  aspect-ratio: 1 / var(--warped-card-aspect);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: var(--warped-card-radius);
+  background: #191919;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .38), inset 0 0 0 1px rgba(255, 255, 255, .04);
+  transform: translateZ(0);
+  transition: box-shadow var(--warped-transition) cubic-bezier(.2, .8, .2, 1), border-color var(--warped-transition) ease;
+  will-change: transform;
+}
+
+.warped-card__fallback,
+.warped-card__canvas,
+.warped-card__sheen {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+
+.warped-card__fallback {
+  z-index: 0;
+  object-fit: cover;
+  opacity: 1;
+  background: linear-gradient(145deg, #363636, #111);
+  pointer-events: none;
+  user-select: none;
+  transition: opacity .22s ease;
+}
+
+.warped-card__canvas {
+  z-index: 1;
+  opacity: 1;
+  pointer-events: none;
+}
+
+.warped-card__sheen {
+  z-index: 2;
+  background:
+    radial-gradient(38% 30% at 20% 12%, rgba(255, 255, 255, .16), transparent 78%),
+    linear-gradient(130deg, rgba(255, 255, 255, .08), transparent 30%, transparent 66%, rgba(0, 0, 0, .2));
+  mix-blend-mode: soft-light;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--warped-transition) ease;
+}
+
+.warped-card__content {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 22px;
+  background: linear-gradient(to top, rgba(0, 0, 0, .74), transparent 58%);
+  pointer-events: none;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, .4);
+}
+
+.warped-card[data-warped-hover="true"] .warped-card__surface {
+  border-color: rgba(255, 255, 255, .3);
+  box-shadow: 0 30px 78px rgba(0, 0, 0, .52), 0 0 0 1px rgba(255, 255, 255, .08);
+}
+
+.warped-card[data-warped-hover="true"] .warped-card__sheen {
+  opacity: .78;
+}
+
+.warped-card:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, .88);
+  outline-offset: 7px;
+  border-radius: var(--warped-card-radius);
+}
+
+@media (hover: none), (pointer: coarse) {
+  .warped-card { touch-action: pan-y; }
+}
+
+@media (max-width: 590px) {
+  .warped-card__surface { width: min(100%, 78vw); }
+  .warped-card__content { padding: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .warped-card__surface,
+  .warped-card__sheen,
+  .warped-card__fallback { transition-duration: 0s; }
+}

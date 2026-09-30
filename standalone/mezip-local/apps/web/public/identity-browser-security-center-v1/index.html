@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="description" content="ME.zip 账号安全与浏览器环境中心。本机私密、按账号工作区隔离。" />
+    <title>ME.zip · 账号安全与浏览器环境中心</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <aside class="sidebar" aria-label="账号安全中心导航">
+        <a class="brand" href="#overview" aria-label="ME.zip 账号安全中心首页">
+          <span class="brand-mark">M</span><span><strong>ME.zip</strong><small>账号安全与浏览器环境中心</small></span>
+        </a>
+        <nav id="navigation" class="navigation"></nav>
+        <section class="sidebar-card quick-actions">
+          <p class="eyebrow">快速操作</p>
+          <button data-action="create-workspace">＋ 添加账号工作区</button>
+          <button data-action="open-vault">◈ 解锁 2FA Vault</button>
+          <button data-action="refresh">↻ 刷新本机状态</button>
+        </section>
+        <section class="privacy-note">
+          <strong>本机私密模式</strong>
+          <span>不保存 Google / ChatGPT 密码；不复制 Cookie；不伪造浏览器指纹。</span>
+        </section>
+      </aside>
+
+      <section class="main-column">
+        <header class="topbar">
+          <label class="global-search"><span>⌕</span><input id="search" type="search" placeholder="搜索账号、用途、标签、Profile、事件…" /></label>
+          <div class="topbar-status"><span id="bridge-status" class="status-pill pending">正在连接本机安全服务</span><button class="icon-button" data-action="refresh" aria-label="刷新">↻</button></div>
+        </header>
+        <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+        <div id="content" class="content" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <dialog id="workspace-dialog" class="modal">
+      <form id="workspace-form" method="dialog">
+        <div class="modal-heading"><div><p class="eyebrow">ACCOUNT WORKSPACE</p><h2>添加 Google 账号工作区</h2></div><button class="icon-button" value="cancel" aria-label="关闭">×</button></div>
+        <p class="muted">一个账号只会建立一套独立 Profile。不会读取现有浏览器的登录状态或 Cookie。</p>
+        <label>Google 邮箱<input name="email" type="email" autocomplete="email" placeholder="account@example.com" required /></label>
+        <label>用途<input name="purpose" maxlength="120" placeholder="例如：主账号、工作、备用" /></label>
+        <label>标签（用逗号分开）<input name="tags" maxlength="180" placeholder="例如：工作, 设计" /></label>
+        <div class="form-grid">
+          <label>浏览器<select name="browser"><option value="EDGE">Microsoft Edge</option><option value="CHROME">Google Chrome</option></select></label>
+          <label>Profile 名称<input name="profileName" maxlength="80" placeholder="例如：Profile 01" /></label>
+        </div>
+        <div class="modal-actions"><button class="secondary" value="cancel">取消</button><button class="primary" value="default">创建独立工作区</button></div>
+      </form>
+    </dialog>
+
+    <dialog id="vault-dialog" class="modal small-modal">
+      <form id="vault-form" method="dialog">
+        <div class="modal-heading"><div><p class="eyebrow">LOCAL ENCRYPTED VAULT</p><h2>解锁 2FA Vault</h2></div><button class="icon-button" value="cancel" aria-label="关闭">×</button></div>
+        <p class="muted">首次输入会创建仅保存在本机的加密 Vault。主密码不会被保存或写入日志；10 分钟后自动锁定。</p>
+        <label>主密码<input name="passphrase" type="password" autocomplete="new-password" minlength="12" required /></label>
+        <div class="modal-actions"><button class="secondary" value="cancel">取消</button><button class="primary" value="default">解锁 Vault</button></div>
+      </form>
+    </dialog>
+
+    <dialog id="totp-dialog" class="modal small-modal">
+      <form id="totp-form" method="dialog">
+        <div class="modal-heading"><div><p class="eyebrow">ENCRYPTED LOCAL VAULT</p><h2>添加 / 导入 TOTP</h2></div><button class="icon-button" value="cancel" aria-label="关闭">×</button></div>
+        <p class="muted">仅在本机已解锁 Vault 内加密保存。请只导入你本人拥有的认证器密钥；系统不会上传、记录或在普通页面显示密钥。</p>
+        <input id="totp-workspace-id" name="workspaceId" type="hidden" />
+        <label>认证器名称<input name="provider" maxlength="80" value="Google Authenticator" autocomplete="off" /></label>
+        <label>TOTP 密钥<input name="secret" type="password" autocomplete="off" spellcheck="false" minlength="16" required /></label>
+        <div class="modal-actions"><button class="secondary" value="cancel">取消</button><button class="primary" value="default">加密保存</button></div>
+      </form>
+    </dialog>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

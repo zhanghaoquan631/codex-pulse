@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#02040a" />
+    <meta name="description" content="实体晶体肖像与外轮廓粒子的互动预览。" />
+    <title>晶体肖像 · 实体照片粒子版</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="experience" id="experience" aria-label="实体晶体肖像与轮廓粒子互动">
+      <div class="ambient ambient-one" aria-hidden="true"></div>
+      <div class="ambient ambient-two" aria-hidden="true"></div>
+      <div class="photo-anchor" id="photoAnchor">
+        <figure class="portrait-shell" id="portraitShell">
+          <img class="depth-copy depth-cyan" src="./crystal-portrait-source.png" alt="" aria-hidden="true" />
+          <img class="depth-copy depth-magenta" src="./crystal-portrait-source.png" alt="" aria-hidden="true" />
+          <img class="portrait-image" id="portraitImage" src="./crystal-portrait-source.png" alt="彩色晶体人物侧面肖像" />
+          <span class="glass-light" aria-hidden="true"></span>
+        </figure>
+      </div>
+      <canvas id="particleCanvas" aria-label="围绕人物外轮廓的彩色粒子"></canvas>
+      <p class="sr-only" id="renderStatus" aria-live="polite">正在生成肖像外轮廓粒子。</p>
+    </main>
+    <script src="./photo-particles.js?v=3"></script>
+  </body>
+</html>

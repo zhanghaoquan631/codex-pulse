@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="可点击探索的独立夜空小镇。" />
+    <title>Night Town · Interactive</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --ink: #fff7dc;
+        --gold: #f3da93;
+        --panel: rgba(5, 8, 13, .93);
+        --line: rgba(243, 218, 147, .38);
+        background: #05070c;
+        color: var(--ink);
+        font-family: "Kaiti SC", "STKaiti", "KaiTi", "Noto Serif SC", serif;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { width: 100%; min-height: 100%; margin: 0; background: #05070c; }
+      body { overflow: hidden; }
+      button, textarea { font: inherit; }
+
+      .interactive-town { position: relative; isolation: isolate; width: 100vw; height: 100vh; overflow: hidden; background: #05070c; }
+      .scene-frame { position: absolute; z-index: -2; inset: 0; width: 100%; height: 100%; border: 0; pointer-events: none; transition: filter 240ms ease; }
+      .interactive-town::after { position: absolute; z-index: -1; inset: 0; content: ""; pointer-events: none; background: radial-gradient(circle at 50% 58%, transparent 38%, rgba(1, 3, 6, .38)); }
+      .interactive-town[data-lights="on"] .scene-frame { filter: brightness(1.16) saturate(1.1); }
+
+      .scene-hint { position: absolute; top: 22px; left: 50%; z-index: 2; margin: 0; transform: translateX(-50%); color: rgba(255,247,220,.76); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: clamp(.58rem, 1.2vw, .72rem); letter-spacing: .15em; text-align: center; text-transform: uppercase; text-shadow: 0 2px 12px #000; pointer-events: none; }
+      .scene-hint b { color: var(--gold); font-weight: 600; }
+
+      .hotspot {
+        position: absolute;
+        z-index: 1;
+        display: grid;
+        width: clamp(34px, 4vw, 52px);
+        height: clamp(34px, 4vw, 52px);
+        padding: 0;
+        place-items: center;
+        border: 1px solid rgba(243, 218, 147, .68);
+        border-radius: 50%;
+        color: var(--ink);
+        background: rgba(7, 11, 17, .48);
+        box-shadow: 0 0 0 0 rgba(243,218,147,.33), 0 8px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.16);
+        cursor: pointer;
+        opacity: .86;
+        transition: transform 160ms ease, opacity 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
+        backdrop-filter: blur(8px);
+      }
+      .hotspot::before { width: 8px; height: 8px; content: ""; border-radius: 50%; background: var(--gold); box-shadow: 0 0 12px var(--gold); }
+      .hotspot span { position: absolute; top: calc(100% + 8px); left: 50%; padding: 5px 7px; border: 1px solid rgba(243,218,147,.3); border-radius: 999px; color: var(--ink); background: rgba(5,8,13,.78); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: .56rem; letter-spacing: .08em; white-space: nowrap; transform: translateX(-50%) translateY(-2px); opacity: 0; pointer-events: none; transition: opacity 160ms ease, transform 160ms ease; }
+      .hotspot:hover, .hotspot:focus-visible, .hotspot.is-active { opacity: 1; transform: scale(1.1); background: rgba(54,47,28,.8); box-shadow: 0 0 0 8px rgba(243,218,147,.1), 0 8px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.2); outline: none; }
+      .hotspot:hover span, .hotspot:focus-visible span, .hotspot.is-active span { transform: translateX(-50%) translateY(0); opacity: 1; }
+      .hotspot[data-place="post"] { left: 8%; top: 77%; }
+      .hotspot[data-place="cafe"] { left: 29.5%; top: 75%; }
+      .hotspot[data-place="studio"] { left: 51.5%; top: 78%; }
+      .hotspot[data-place="tower"] { left: 78.5%; top: 68%; }
+      .hotspot[data-place="home"] { left: 92%; top: 79%; }
+      .hotspot[data-place="stars"] { left: 88%; top: 24%; }
+
+      .town-panel {
+        position: absolute;
+        z-index: 4;
+        top: 50%;
+        right: clamp(18px, 5vw, 74px);
+        width: min(388px, calc(100vw - 36px));
+        padding: clamp(20px, 3vw, 30px);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: linear-gradient(135deg, rgba(255,255,255,.06), transparent 28%), var(--panel);
+        box-shadow: 0 24px 80px rgba(0,0,0,.58), inset 0 1px 0 rgba(255,255,255,.14);
+        transform: translateY(-50%);
+        backdrop-filter: blur(18px) saturate(118%);
+      }
+      .town-panel[hidden] { display: none; }
+      .panel-close { position: absolute; top: 14px; right: 14px; display: grid; width: 36px; height: 36px; padding: 0; place-items: center; border: 1px solid var(--line); border-radius: 50%; color: var(--ink); background: rgba(6,9,14,.66); cursor: pointer; font-size: 1.15rem; }
+      .panel-close:hover, .panel-close:focus-visible { border-color: var(--gold); outline: none; }
+      .panel-eyebrow { margin: 0 42px 8px 0; color: rgba(243,218,147,.73); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: .66rem; letter-spacing: .14em; }
+      .town-panel h1 { margin: 0 38px 12px 0; color: var(--gold); font-family: "Segoe Script", "Snell Roundhand", cursive; font-size: clamp(2.3rem, 5vw, 3.5rem); font-style: italic; font-weight: 400; line-height: 1; }
+      .panel-copy { margin: 0; color: rgba(255,247,220,.84); line-height: 1.75; }
+      .note-field { display: none; width: 100%; min-height: 92px; margin-top: 16px; padding: 12px; resize: vertical; border: 1px solid rgba(243,218,147,.34); border-radius: 12px; color: var(--ink); background: rgba(0,0,0,.24); line-height: 1.55; }
+      .town-panel[data-mode="note"] .note-field { display: block; }
+      .note-field:focus { border-color: var(--gold); outline: none; }
+      .panel-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 20px; }
+      .panel-action { min-height: 42px; padding: 9px 14px; border: 1px solid var(--line); border-radius: 999px; color: var(--ink); background: rgba(10,13,19,.75); cursor: pointer; transition: transform 160ms ease, border-color 160ms ease; }
+      .panel-action:hover, .panel-action:focus-visible { transform: translateY(-2px); border-color: var(--gold); outline: none; }
+      .panel-action.primary { color: #1b170e; border-color: var(--gold); background: var(--gold); }
+      .panel-status { min-height: 1.5em; margin: 14px 0 0; color: rgba(243,218,147,.84); font-size: .9rem; line-height: 1.55; }
+
+      @media (max-width: 720px) {
+        .scene-hint { top: 14px; width: calc(100% - 36px); }
+        .hotspot[data-place="post"] { left: 7%; top: 76%; }
+        .hotspot[data-place="cafe"] { left: 28%; top: 75%; }
+        .hotspot[data-place="studio"] { left: 51%; top: 78%; }
+        .hotspot[data-place="tower"] { left: 77%; top: 69%; }
+        .hotspot[data-place="home"] { left: 90%; top: 78%; }
+        .hotspot[data-place="stars"] { left: 84%; top: 26%; }
+        .town-panel { top: auto; right: 18px; bottom: 18px; left: 18px; width: auto; max-height: min(60vh, 480px); overflow: auto; transform: none; }
+      }
+
+      @media (prefers-reduced-motion: reduce) { .scene-frame, .hotspot, .hotspot span, .panel-action { transition: none; } .hotspot:hover, .hotspot:focus-visible, .hotspot.is-active, .panel-action:hover, .panel-action:focus-visible { transform: none; } }
+    </style>
+  </head>
+  <body>
+    <main class="interactive-town" data-lights="off" aria-label="互动夜空小镇">
+      <iframe class="scene-frame" src="/tom-new-app/index.html" title="夜空小镇背景" tabindex="-1" aria-hidden="true"></iframe>
+      <p class="scene-hint">点击发光入口，探索 <b>Night Town</b></p>
+
+      <button class="hotspot" type="button" data-place="post" aria-label="打开邮局"><span>邮局</span></button>
+      <button class="hotspot" type="button" data-place="cafe" aria-label="打开咖啡馆"><span>咖啡馆</span></button>
+      <button class="hotspot" type="button" data-place="studio" aria-label="打开工作室"><span>工作室</span></button>
+      <button class="hotspot" type="button" data-place="tower" aria-label="打开观星塔"><span>观星塔</span></button>
+      <button class="hotspot" type="button" data-place="home" aria-label="打开小屋"><span>小屋</span></button>
+      <button class="hotspot" type="button" data-place="stars" aria-label="打开摩羯座星图"><span>摩羯座</span></button>
+
+      <section class="town-panel" role="dialog" aria-modal="false" aria-labelledby="panel-title" hidden>
+        <button class="panel-close" type="button" aria-label="关闭面板">×</button>
+        <p class="panel-eyebrow" id="panel-eyebrow"></p>
+        <h1 id="panel-title" tabindex="-1"></h1>
+        <p class="panel-copy" id="panel-copy"></p>
+        <textarea class="note-field" maxlength="180" aria-label="写一条便笺" placeholder="写下此刻的一句话…"></textarea>
+        <div class="panel-actions" id="panel-actions"></div>
+        <p class="panel-status" id="panel-status" aria-live="polite"></p>
+      </section>
+    </main>
+
+    <script>
+      (() => {
+        const town = document.querySelector('.interactive-town');
+        const panel = document.querySelector('.town-panel');
+        const closeButton = document.querySelector('.panel-close');
+        const title = document.querySelector('#panel-title');
+        const eyebrow = document.querySelector('#panel-eyebrow');
+        const copy = document.querySelector('#panel-copy');
+        const actions = document.querySelector('#panel-actions');
+        const status = document.querySelector('#panel-status');
+        const note = document.querySelector('.note-field');
+        const spots = [...document.querySelectorAll('.hotspot')];
+
+        const places = {
+          post: { eyebrow: 'POST OFFICE / 01', title: '邮局', copy: '给夜晚留下一条便笺。它只保留在这次浏览里，不需要账号。', mode: 'note', action: '保存便笺', done: '便笺已留在今晚的邮局。' },
+          cafe: { eyebrow: 'CAFE / 02', title: '咖啡馆', copy: '点亮窗灯，让小镇的夜色更暖一点。', mode: 'lights', action: '切换窗灯', done: '咖啡馆的灯光已经切换。' },
+          studio: { eyebrow: 'STUDIO / 03', title: '工作室', copy: '这里是一个可停留的创作角落。按一下，把此刻设为“已到访”。', mode: 'visit', action: '标记到访', done: '工作室已标记为本次到访。' },
+          tower: { eyebrow: 'OBSERVATORY / 04', title: '观星塔', copy: '抬头看一眼。这个入口可以把整座小镇调得更明亮。', mode: 'lights', action: '切换星光', done: '小镇星光已经切换。' },
+          home: { eyebrow: 'HOME / 05', title: '小屋', copy: '回到安静处。这里没有登录、账号或数据收集。', mode: 'visit', action: '留一盏灯', done: '小屋的窗灯仍为你亮着。' },
+          stars: { eyebrow: 'CAPRICORN / 06', title: '摩羯座', copy: '为这一晚的星图做个简单标记。', mode: 'star', action: '标记星图', done: '已标记这片星图。' }
+        };
+
+        const setStatus = (message) => { status.textContent = message; };
+        const clearHash = () => history.replaceState(null, '', location.pathname);
+        const closePanel = () => {
+          panel.hidden = true;
+          panel.dataset.mode = '';
+          spots.forEach((spot) => spot.classList.remove('is-active'));
+          clearHash();
+        };
+
+        const render = (placeId, updateHash = true) => {
+          const place = places[placeId];
+          if (!place) return closePanel();
+          panel.hidden = false;
+          panel.dataset.mode = place.mode;
+          eyebrow.textContent = place.eyebrow;
+          title.textContent = place.title;
+          copy.textContent = place.copy;
+          note.value = '';
+          actions.replaceChildren();
+          setStatus('');
+          const action = document.createElement('button');
+          action.type = 'button';
+          action.className = 'panel-action primary';
+          action.textContent = place.action;
+          action.addEventListener('click', () => {
+            if (place.mode === 'note') {
+              const value = note.value.trim();
+              if (value === '') return setStatus('先写下一句话，再保存。');
+              return setStatus(place.done);
+            }
+            if (place.mode === 'lights') town.dataset.lights = town.dataset.lights === 'on' ? 'off' : 'on';
+            setStatus(place.done);
+          });
+          const dismiss = document.createElement('button');
+          dismiss.type = 'button';
+          dismiss.className = 'panel-action';
+          dismiss.textContent = '回到小镇';
+          dismiss.addEventListener('click', closePanel);
+          actions.append(action, dismiss);
+          spots.forEach((spot) => spot.classList.toggle('is-active', spot.dataset.place === placeId));
+          if (updateHash) history.replaceState(null, '', `#${placeId}`);
+          title.focus();
+        };
+
+        spots.forEach((spot) => spot.addEventListener('click', () => render(spot.dataset.place)));
+        closeButton.addEventListener('click', closePanel);
+        window.addEventListener('keydown', (event) => { if (event.key === 'Escape' && !panel.hidden) closePanel(); });
+        window.addEventListener('hashchange', () => render(location.hash.slice(1), false));
+        if (location.hash) render(location.hash.slice(1), false);
+      })();
+    </script>
+  </body>
+</html>

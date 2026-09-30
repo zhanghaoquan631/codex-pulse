@@ -1,0 +1,12 @@
+{
+  "repository": "https://github.com/guohuiyuan/go-music-dl",
+  "commit": "c1b188c366ece39cb19a61d108e4fbf7c29271e5",
+  "license": "AGPL-3.0",
+  "modified": "Personal paths sanitized; executable/media outputs omitted",
+  "exportedFiles": 155,
+  "publicExportChanges": [
+    "Personal configuration replaced with examples",
+    "Runtime data and credentials excluded",
+    "Original site binding removed"
+  ]
+}

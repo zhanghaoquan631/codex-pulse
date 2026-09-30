@@ -1,0 +1,2 @@
+import {sha256} from '@noble/hashes/sha2.js';
+export async function fileHash(file,onProgress=()=>{}){const h=sha256.create();for(let offset=0;offset<file.size;offset+=8*1024*1024){h.update(new Uint8Array(await file.slice(offset,offset+8*1024*1024).arrayBuffer()));onProgress(Math.min(file.size,offset+8*1024*1024)/file.size);}return Array.from(h.digest(),x=>x.toString(16).padStart(2,'0')).join('');}

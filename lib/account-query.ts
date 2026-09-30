@@ -1,7 +1,7 @@
 import {parseQuotaEvidenceInput,parseStoredQuotaEvidence,mergeQuotaEvidence,quotaEvidenceProfile} from './quota-evidence.ts';
 import type {OfficialQuotaEvidence} from './quota';
 
-export const queryAccounts=['account1@example.com','account2@example.com','account3@example.com','account4@example.com','account6@example.com','account5@example.com'];
+export const queryAccounts=['account2@example.com','account3@example.com','account4@example.com','account5@example.com','account7@example.com','account6@example.com'];
 export const queryMessages:Record<string,string>={connection_required:'官方浏览器连接不可用，请重新连接 Edge。',login_required:'官方登录已失效，请在 Edge 完成登录。',account_mismatch:'Edge 当前登录邮箱与所选账号不同，原记录已保留。',account_changed:'查询过程中账号已切换，原记录已保留。',page_unavailable:'官方页面暂时无法读取，原记录已保留。',partial:'已保存本次读到的字段；其余字段保留原核验时间。',success:'官网查询已保存。',expired:'查询超时，原记录已保留。'};
 export type AccountQuery={id:string;email:string|null;state:string;reason:string;requested_at:number;started_at:number|null;finished_at:number|null;lease_until:number;verified_email:string|null;result_code:string|null;fields:string;message?:string};
 export type QueryControl={enabled:number;interval_minutes:number;worker_seen_at:number;last_attempt_at:number};

@@ -1,0 +1,19 @@
+:root { color-scheme: dark; font: 16px/1.6 system-ui, sans-serif; background: #101113; color: #f3f4f5; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+main { width: min(100%, 500px); padding: 40px 24px; margin: auto; }
+.eyebrow { font-size: 11px; color: #9caebd; }
+h1 { font-size: 28px; margin: 12px 0; }
+p { color: #b9bec6; overflow-wrap: anywhere; }
+form { margin-top: 28px; }
+label { display: block; margin: 10px 0; }
+input:not([type=file]) { display: block; width: 100%; padding: 14px; font: inherit; background: #202329; border: 1px solid #555d67; border-radius: 8px; }
+button, .picker { border: 1px solid #5b6572; border-radius: 8px; padding: 14px 18px; font: inherit; cursor: pointer; }
+button { width: 100%; background: #e1edf7; color: #111419; margin-top: 12px; }
+button:disabled { opacity: .5; cursor: default; }
+.picker { background: #20252a; text-align: center; }
+.picker input { display: block; width: 100%; margin-top: 12px; font-size: 13px; }
+#preview { width: 100%; max-height: 350px; object-fit: contain; margin-top: 18px; }
+progress { width: 100%; margin-top: 16px; accent-color: #b9d8eb; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px solid #b9d8eb; outline-offset: 3px; }

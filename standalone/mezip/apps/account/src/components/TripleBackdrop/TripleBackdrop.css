@@ -1,0 +1,290 @@
+.triple-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  overflow: hidden;
+  pointer-events: none;
+  isolation: isolate;
+  background: #080b14;
+}
+
+.triple-zone {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  contain: paint;
+  isolation: isolate;
+}
+
+.triple-zone + .triple-zone {
+  border-left: 1px solid rgba(255, 255, 255, .13);
+}
+
+/* These three base layers mirror the backgrounds used by 5198, 5179 and
+   5186 from left to right. Each one is clipped to its own equal-width zone. */
+.triple-zone-blue {
+  background:
+    radial-gradient(circle at 50% 24%, rgba(73, 113, 157, .22), transparent 35%),
+    radial-gradient(circle at 15% 86%, rgba(115, 246, 242, .09), transparent 28%),
+    linear-gradient(145deg, #09101f 0%, #0e152e 52%, #111a34 100%);
+}
+
+.triple-zone-orange {
+  background:
+    radial-gradient(circle at 50% 22%, rgba(255, 132, 47, .24), transparent 35%),
+    radial-gradient(circle at 12% 86%, rgba(255, 190, 103, .11), transparent 28%),
+    radial-gradient(circle at 92% 70%, rgba(196, 54, 10, .14), transparent 32%),
+    linear-gradient(145deg, #0c0807 0%, #1b0c07 52%, #241108 100%);
+}
+
+.triple-zone-green {
+  background:
+    radial-gradient(circle at 50% 24%, rgba(99, 205, 139, .24), transparent 35%),
+    radial-gradient(circle at 15% 86%, rgba(112, 241, 164, .12), transparent 28%),
+    linear-gradient(145deg, #061a13 0%, #0b2b1e 52%, #123b2a 100%);
+}
+
+.zone-grid {
+  position: absolute;
+  inset: 0;
+  opacity: .22;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, .045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .045) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to bottom, black, transparent 82%);
+}
+
+.triple-zone-orange .zone-grid {
+  background-image:
+    linear-gradient(rgba(255, 196, 126, .05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 196, 126, .05) 1px, transparent 1px);
+}
+
+.triple-zone-green .zone-grid {
+  background-image:
+    linear-gradient(rgba(210, 255, 224, .05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(210, 255, 224, .05) 1px, transparent 1px);
+}
+
+/* Animated flame stays behind the center card and never receives pointer
+   input. A soft center mask leaves a clear visual corridor for the tag. */
+.zone-flame {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  opacity: .86;
+  filter: blur(8px) saturate(1.35) brightness(1.12);
+  mix-blend-mode: screen;
+  mask-image: radial-gradient(ellipse 108% 78% at 50% 98%, #000 0 54%, rgba(0, 0, 0, .78) 76%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 108% 78% at 50% 98%, #000 0 54%, rgba(0, 0, 0, .78) 76%, transparent 100%);
+  transform-origin: 50% 100%;
+  animation: flame-breathe 5.8s ease-in-out infinite alternate;
+}
+
+.zone-flame::before,
+.zone-flame::after {
+  content: '';
+  position: absolute;
+  left: -14%;
+  right: -14%;
+  bottom: -20%;
+  height: 66%;
+  border-radius: 48% 52% 0 0 / 30% 36% 0 0;
+  background: var(--flame-core);
+  filter: blur(16px);
+  animation: flame-wave 4.4s ease-in-out infinite alternate;
+}
+
+.zone-flame::after {
+  bottom: -8%;
+  height: 50%;
+  opacity: .86;
+  filter: blur(24px);
+  animation-delay: -1.7s;
+  animation-duration: 6.2s;
+}
+
+.zone-flame-blue {
+  --flame-core: radial-gradient(ellipse at 50% 100%, rgba(87, 193, 255, .75), rgba(39, 99, 202, .34) 42%, transparent 76%);
+  --flame-hot: rgba(174, 241, 255, .86);
+  --flame-mid: rgba(73, 151, 255, .68);
+}
+
+.zone-flame-orange {
+  --flame-core: radial-gradient(ellipse at 50% 100%, rgba(255, 152, 44, .88), rgba(210, 57, 8, .44) 44%, transparent 76%);
+  --flame-hot: rgba(255, 230, 150, .92);
+  --flame-mid: rgba(255, 101, 18, .72);
+}
+
+.zone-flame-green {
+  --flame-core: radial-gradient(ellipse at 50% 100%, rgba(105, 241, 151, .76), rgba(25, 154, 94, .38) 44%, transparent 76%);
+  --flame-hot: rgba(206, 255, 212, .88);
+  --flame-mid: rgba(56, 208, 125, .66);
+}
+
+.flame-tongue {
+  position: absolute;
+  bottom: -4%;
+  width: 34%;
+  height: 66%;
+  border-radius: 55% 45% 42% 58% / 68% 62% 38% 32%;
+  clip-path: polygon(50% 0%, 70% 31%, 61% 49%, 88% 72%, 58% 100%, 22% 100%, 36% 65%, 17% 51%, 39% 29%);
+  background: linear-gradient(to top, var(--flame-mid), var(--flame-hot) 58%, transparent 100%);
+  opacity: .72;
+  filter: blur(4px);
+  transform-origin: 50% 100%;
+  animation: flame-tongue 3.8s ease-in-out infinite alternate;
+}
+
+.flame-tongue-a { left: -8%; transform: rotate(-18deg) scale(.86); animation-delay: -.8s; }
+.flame-tongue-b { left: 32%; height: 66%; transform: rotate(4deg) scale(1.06); animation-delay: -2.2s; }
+.flame-tongue-c { right: -8%; transform: rotate(19deg) scale(.82); animation-delay: -1.4s; }
+
+.flame-ember {
+  position: absolute;
+  bottom: 30%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--flame-hot);
+  box-shadow: 0 0 14px 4px var(--flame-mid);
+  opacity: 0;
+  animation: ember-rise 3.2s linear infinite;
+}
+
+.flame-ember-a { left: 28%; animation-delay: -1.2s; }
+.flame-ember-b { left: 56%; animation-delay: -2.4s; animation-duration: 4.1s; }
+.flame-ember-c { left: 72%; animation-delay: -.2s; animation-duration: 3.7s; }
+
+.zone-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, .18), transparent 30%, rgba(0, 0, 0, .24));
+}
+
+/*
+ * The colour filters deliberately sit above the Canvas (see main.jsx). This
+ * makes the effect spatial instead of a single filter on the whole scene:
+ * when a card is pulled across a divider, each part picks up the hue of the
+ * zone underneath it. `pointer-events: none` lets the official drag handles
+ * continue to receive input, and the low alpha preserves legible text.
+ */
+.triple-color-filters {
+  position: fixed;
+  inset: 0;
+  z-index: 6;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.triple-filter-zone {
+  position: relative;
+  min-width: 0;
+  pointer-events: none;
+  opacity: .3;
+  mix-blend-mode: color;
+  backdrop-filter: saturate(1.08) contrast(1.02);
+  -webkit-backdrop-filter: saturate(1.08) contrast(1.02);
+}
+
+.triple-filter-zone::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .45;
+  mix-blend-mode: soft-light;
+}
+
+.triple-filter-zone-green {
+  background: linear-gradient(135deg, rgba(35, 196, 113, .82), rgba(7, 92, 57, .7));
+}
+
+.triple-filter-zone-green::after {
+  background: radial-gradient(circle at 52% 34%, rgba(157, 255, 190, .68), transparent 54%);
+}
+
+.triple-filter-zone-blue {
+  background: linear-gradient(135deg, rgba(52, 130, 229, .78), rgba(12, 38, 112, .72));
+}
+
+.triple-filter-zone-blue::after {
+  background: radial-gradient(circle at 48% 34%, rgba(154, 226, 255, .62), transparent 54%);
+}
+
+.triple-filter-zone-orange {
+  background: linear-gradient(135deg, rgba(255, 137, 37, .86), rgba(138, 40, 8, .74));
+}
+
+.triple-filter-zone-orange::after {
+  background: radial-gradient(circle at 50% 34%, rgba(255, 225, 154, .68), transparent 54%);
+}
+
+.triple-filter-zone + .triple-filter-zone {
+  border-left: 1px solid rgba(255, 255, 255, .08);
+}
+
+@keyframes flame-breathe {
+  0% { transform: scaleX(.92) translateY(2%); opacity: .5; }
+  100% { transform: scaleX(1.08) translateY(-1%); opacity: .76; }
+}
+
+@keyframes flame-wave {
+  0% { transform: translateX(-5%) skewX(-3deg) scaleY(.9); }
+  100% { transform: translateX(6%) skewX(4deg) scaleY(1.08); }
+}
+
+@keyframes flame-tongue {
+  0% { transform: translateY(2%) rotate(-8deg) scaleY(.84); opacity: .32; }
+  100% { transform: translateY(-9%) rotate(8deg) scaleY(1.12); opacity: .68; }
+}
+
+@keyframes ember-rise {
+  0% { transform: translate3d(0, 12px, 0) scale(.6); opacity: 0; }
+  18% { opacity: .8; }
+  100% { transform: translate3d(18px, -210px, 0) scale(.12); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zone-flame,
+  .zone-flame::before,
+  .zone-flame::after,
+  .flame-tongue,
+  .flame-ember {
+    animation: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .triple-zone + .triple-zone { border-left-color: rgba(255, 255, 255, .1); }
+  .zone-flame { opacity: .54; filter: blur(9px) saturate(1.1); }
+  .zone-grid { background-size: 36px 36px; }
+  .triple-filter-zone { opacity: .24; }
+}
+
+/* The previous prototype used CSS tongues. v13 uses the exact Flame Paths
+   shader instead; these resets prevent the prototype mask/blur from touching
+   the shader canvas. */
+.triple-backdrop .zone-flame {
+  z-index: 1;
+  opacity: 1;
+  filter: none;
+  mix-blend-mode: normal;
+  mask-image: none;
+  -webkit-mask-image: none;
+  transform: none;
+  animation: none;
+}
+
+.triple-backdrop .zone-flame::before,
+.triple-backdrop .zone-flame::after {
+  display: none;
+}

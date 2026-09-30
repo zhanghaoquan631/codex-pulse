@@ -1,0 +1,82 @@
+[data-media-slot] { position: relative; }
+
+.orbit-studio-actions .session-image-upload-control.is-inline {
+  position: relative;
+  inset: auto;
+  z-index: 1;
+  justify-content: flex-start;
+  max-width: 100%;
+}
+.orbit-studio-actions .is-inline .session-image-upload-button {
+  min-height: 48px;
+  padding: 0 18px;
+  font-size: 14px;
+  letter-spacing: 0;
+}
+.orbit-studio-actions .is-inline .session-image-upload-status { text-align: left; }
+.session-image-upload-button:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 4px;
+}
+
+.session-image-upload-control {
+  position: absolute;
+  z-index: 120;
+  top: 14px;
+  right: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  max-width: min(260px, calc(100% - 28px));
+  pointer-events: none;
+}
+
+.session-image-upload-button,
+.session-image-clear-button {
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  gap: 5px;
+  padding: 0 10px;
+  border: 1px solid rgba(255,255,255,.26);
+  border-radius: 999px;
+  background: rgba(10,10,12,.72);
+  color: rgba(255,255,255,.92);
+  font-size: 10px;
+  letter-spacing: .04em;
+  line-height: 1;
+  cursor: pointer;
+  pointer-events: auto;
+  backdrop-filter: blur(12px);
+  transition: background .2s ease, border-color .2s ease, transform .2s ease;
+}
+
+.session-image-upload-button:hover,
+.session-image-clear-button:hover {
+  border-color: rgba(255,255,255,.6);
+  background: rgba(255,255,255,.16);
+  transform: translateY(-1px);
+}
+
+.session-image-upload-button span { font-size: 15px; line-height: 0; }
+.session-image-upload-input { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; pointer-events: none; }
+
+.session-image-upload-status {
+  flex-basis: 100%;
+  color: rgba(255,255,255,.62);
+  font-size: 9px;
+  line-height: 1.2;
+  text-align: right;
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .session-image-upload-control { top: 10px; right: 10px; max-width: calc(100% - 20px); }
+  .session-image-upload-button, .session-image-clear-button { min-height: 28px; padding: 0 8px; font-size: 9px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .session-image-upload-button, .session-image-clear-button { transition: none; }
+}

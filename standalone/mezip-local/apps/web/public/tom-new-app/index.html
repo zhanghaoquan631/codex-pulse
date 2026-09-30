@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="独立的夜空小镇场景网站。" />
+    <title>Night Town</title>
+    <style>
+      :root { color-scheme: dark; background: #05070c; }
+      * { box-sizing: border-box; }
+      html, body { width: 100%; min-height: 100%; margin: 0; background: #05070c; }
+      body { overflow: hidden; }
+      .night-town { position: relative; width: 100vw; height: 100vh; overflow: hidden; isolation: isolate; background: #05070c; }
+      .night-town::before {
+        position: absolute; z-index: 1; inset: 0; content: ""; pointer-events: none;
+        background: radial-gradient(circle at 50% 18%, rgba(65,77,127,.18), transparent 28%), radial-gradient(circle at 70% 38%, rgba(177,144,82,.09), transparent 20%), linear-gradient(180deg, transparent 54%, rgba(3,5,9,.5));
+      }
+      .night-town::after { position: absolute; z-index: 3; inset: 0; content: ""; pointer-events: none; opacity: .13; background-image: radial-gradient(rgba(255,255,255,.42) .45px, transparent .55px); background-size: 4px 4px; mix-blend-mode: screen; }
+      svg { display: block; width: 100%; height: 100%; }
+      .line { fill: none; stroke: #c8b787; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+      .fine { fill: none; stroke: rgba(200,183,135,.66); stroke-width: 1; stroke-linecap: round; stroke-linejoin: round; }
+      .dim { fill: none; stroke: rgba(200,183,135,.34); stroke-width: 1; }
+      .window { fill: rgba(231,211,151,.16); stroke: #c8b787; stroke-width: 1.5; }
+      .star { fill: #fff4c9; filter: url(#glow); }
+      .star-dim { fill: rgba(255,244,201,.54); }
+      @media (prefers-reduced-motion: no-preference) { .star-pulse { animation: pulse 3.4s ease-in-out infinite alternate; transform-origin: center; } .star-pulse-slow { animation: pulse 5.6s ease-in-out 1.2s infinite alternate; transform-origin: center; } }
+      @keyframes pulse { from { opacity: .42; } to { opacity: 1; } }
+    </style>
+  </head>
+  <body>
+    <main class="night-town" aria-label="独立夜空小镇场景">
+      <svg viewBox="0 0 1440 1080" preserveAspectRatio="xMidYMid slice" role="img" aria-labelledby="scene-title scene-description">
+        <title id="scene-title">Night Town</title>
+        <desc id="scene-description">没有资料卡、项目链接或应用入口的独立夜空小镇。</desc>
+        <defs>
+          <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#060911" /><stop offset=".55" stop-color="#0a101a" /><stop offset="1" stop-color="#071017" /></linearGradient>
+          <filter id="glow" x="-200%" y="-200%" width="400%" height="400%"><feGaussianBlur stdDeviation="3" result="blur" /><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <rect width="1440" height="1080" fill="url(#sky)" />
+        <path class="dim" d="M0 177 C170 150 290 190 460 150 S760 130 925 170 S1245 218 1440 162" opacity=".4" />
+        <circle class="dim" cx="138" cy="158" r="124" /><circle class="dim" cx="138" cy="158" r="104" /><circle class="dim" cx="138" cy="158" r="84" />
+        <path class="dim" d="M12 257 Q140 225 258 280 Q370 335 502 268" />
+        <g aria-hidden="true">
+          <circle class="star" cx="119" cy="136" r="3" /><path class="fine" d="M119 119v34M102 136h34" />
+          <circle class="star star-pulse" cx="334" cy="74" r="2" /><circle class="star-dim" cx="411" cy="132" r="1.5" /><circle class="star star-pulse-slow" cx="624" cy="44" r="2.2" /><circle class="star-dim" cx="702" cy="170" r="1.2" />
+          <circle class="star" cx="1098" cy="140" r="2.6" /><path class="fine" d="M1098 124v32M1082 140h32" /><circle class="star star-pulse" cx="1292" cy="58" r="1.8" /><circle class="star-dim" cx="1360" cy="112" r="1.2" />
+          <circle class="star-dim" cx="82" cy="416" r="1.4" /><circle class="star" cx="272" cy="304" r="1.7" /><circle class="star-dim" cx="488" cy="332" r="1.2" /><circle class="star" cx="965" cy="269" r="1.5" /><circle class="star-dim" cx="1218" cy="382" r="1.6" /><circle class="star" cx="1374" cy="295" r="2" />
+        </g>
+        <g aria-label="星座" transform="translate(1115 160)">
+          <path class="fine" d="M4 10 L72 46 L122 112 L190 83 L238 146 L204 205 L136 230" /><path class="dim" d="M72 46 L154 28 L190 83 M122 112 L74 160" />
+          <g class="star-pulse"><circle class="star" cx="4" cy="10" r="3" /><circle class="star" cx="72" cy="46" r="2.5" /><circle class="star" cx="122" cy="112" r="3" /><circle class="star" cx="190" cy="83" r="2.6" /><circle class="star" cx="238" cy="146" r="2.8" /><circle class="star" cx="204" cy="205" r="2.3" /><circle class="star" cx="136" cy="230" r="2.6" /></g>
+          <text x="120" y="280" fill="rgba(230,211,158,.67)" font-family="serif" font-size="18" text-anchor="middle" letter-spacing="3">CAPRICORN</text><text x="120" y="307" fill="rgba(230,211,158,.52)" font-family="serif" font-size="20" text-anchor="middle">摩羯座</text>
+        </g>
+        <g transform="translate(0 642)" aria-label="小镇建筑">
+          <path class="dim" d="M0 135 Q180 70 328 150 T620 122 T944 150 T1248 102 T1440 136" /><path class="fine" d="M0 170 Q158 204 295 168 Q440 130 580 176 Q725 224 860 174 Q1024 108 1163 154 Q1304 198 1440 154" /><path class="dim" d="M65 226 C112 173 180 162 243 205 M1004 217 C1070 176 1128 174 1190 220" />
+          <g transform="translate(60 180)"><path class="line" d="M0 170V12h128v158M18 12V-4h90v16M42 -4v-22h42v22" /><path class="fine" d="M13 55h102M13 115h102" /><rect class="window" x="26" y="68" width="26" height="34" /><rect class="window" x="76" y="68" width="26" height="34" /><path class="line" d="M49 170v-44h30v44M64 126v44" /><text x="64" y="42" fill="rgba(230,211,158,.72)" font-family="ui-monospace,monospace" font-size="10" text-anchor="middle">POST OFFICE</text><path class="fine" d="M-12 170h154M-2 184h136" /></g>
+          <g transform="translate(325 128)"><path class="line" d="M0 222V54h156v168M14 54V36h126v18M45 36V0h62v36" /><path class="fine" d="M12 95h132M12 158h132" /><rect class="window" x="22" y="106" width="30" height="35" /><rect class="window" x="104" y="106" width="30" height="35" /><path class="line" d="M63 222v-54h32v54M79 168v54" /><path class="fine" d="M-12 222h180M-2 237h160" /><text x="78" y="80" fill="rgba(230,211,158,.72)" font-family="ui-monospace,monospace" font-size="11" text-anchor="middle">CAFE</text></g>
+          <g transform="translate(632 191)"><path class="line" d="M0 159V41h109v118M-14 41L54 12l69 29M19 159V91h33v68" /><path class="fine" d="M-12 73h132M-10 159h130M-4 175h120" /><rect class="window" x="65" y="87" width="26" height="31" /><path class="line" d="M93 159V100h62v59M105 100V82h38v18" /><text x="124" y="124" fill="rgba(230,211,158,.69)" font-family="ui-monospace,monospace" font-size="9" text-anchor="middle">BURGERS</text></g>
+          <g transform="translate(1032 50)"><path class="line" d="M0 300V80h160v220M18 80V55h126v25M48 55V-22h50v77M43 -22h60M54 -22v-30h38v30" /><path class="fine" d="M20 137h120M20 218h120" /><rect class="window" x="31" y="151" width="25" height="42" /><rect class="window" x="104" y="151" width="25" height="42" /><rect class="window" x="31" y="235" width="25" height="38" /><rect class="window" x="104" y="235" width="25" height="38" /><path class="line" d="M62 300v-49h38v49M-13 300h187M-2 316h166" /><path class="fine" d="M132 55v-44h22v44M128 11h30M128 11l15-16 15 16" /></g>
+          <g transform="translate(1260 192)"><path class="line" d="M0 162V46h105v116M13 46L52 10l40 36M26 162v-55h28v55" /><rect class="window" x="67" y="81" width="22" height="28" /><path class="fine" d="M-12 162h130M-2 178h112" /></g>
+          <g class="fine"><path d="M242 304v-122M233 190h18M232 211h20M224 304h36M942 304V138M932 150h20M931 174h22M921 304h42M1236 304V174M1226 186h20M1225 211h22M1216 304h40" /><path d="M242 183c-18-22-38-22-52 0M242 183c20-22 41-18 54 2M942 139c-18-22-37-22-54 2M942 139c20-20 38-18 55 3" /><path d="M242 211 C425 263 610 250 792 201 S1110 145 1236 186" /><circle cx="397" cy="239" r="3" fill="#e6d39e" /><circle cx="548" cy="238" r="3" fill="#e6d39e" /><circle cx="698" cy="224" r="3" fill="#e6d39e" /><circle cx="840" cy="192" r="3" fill="#e6d39e" /><circle cx="1088" cy="159" r="3" fill="#e6d39e" /></g>
+        </g>
+        <path class="line" d="M0 996H1440M0 1012H1440" /><path class="fine" d="M0 1031H1440" opacity=".72" /><g aria-hidden="true"><circle class="star" cx="481" cy="1020" r="2" /><path class="fine" d="M481 1007v26M468 1020h26" /><circle class="star" cx="960" cy="1020" r="2" /><path class="fine" d="M960 1007v26M947 1020h26" /></g>
+      </svg>
+    </main>
+  </body>
+</html>

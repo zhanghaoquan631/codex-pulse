@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f5efe2" />
+    <title>ME.zip Life Studio · 生活记录中心</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./study-library.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <aside class="sidebar" aria-label="生活记录中心导航">
+      <a class="brand" href="#overview" aria-label="ME.zip Life Studio 首页">
+        <span class="brand-mark">M</span><span>ME.zip<br /><small>LIFE STUDIO</small></span>
+      </a>
+      <nav>
+        <a class="nav-link active" data-target="overview" href="#overview"><b>01</b> 生活总览</a>
+        <a class="nav-link" data-target="fitness" href="#fitness"><b>02</b> 健身记录</a>
+        <a class="nav-link" data-target="reading" href="#reading"><b>03</b> 读书感悟</a>
+        <a class="nav-link" data-target="photos" href="#photos"><b>04</b> 生活照片</a>
+        <a class="nav-link" data-target="community" href="#community"><b>05</b> 互动交流</a>
+        <a class="nav-link" data-target="study" href="#study"><b>06</b> 六科精选题</a>
+        <a class="nav-link" data-target="featured-problems" href="#featured-problems"><b>07</b> 精选题</a>
+        <a class="nav-link" data-target="library" href="#library"><b>08</b> 私人资料库</a>
+      </nav>
+      <div class="sidebar-note"><span class="signal"></span> 本机优先<br /><small>图片与记录保存于这台电脑</small></div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <span>ME.zip / PERSONAL FIELD NOTES</span>
+        <button class="ghost-button" id="refresh" type="button">↻ 刷新记录</button>
+      </header>
+
+      <section class="hero section" id="overview" data-section="overview">
+        <div class="hero-copy reveal">
+          <p class="eyebrow">LIFE, NOT JUST A LOG.</p>
+          <h1>把日常<br /><em>慢慢变成</em><br />自己的档案。</h1>
+          <p class="hero-text">健身、阅读、照片与交流，各自独立记录；来自手机的每一次上传都会先保存到这台电脑，再在这里被看见。</p>
+          <div class="hero-actions">
+            <button class="ink-button" data-generate="fitness" type="button">生成健身手机入口 ↗</button>
+            <a class="text-link" href="#community">浏览互动记录 ↓</a>
+          </div>
+        </div>
+        <article class="profile-card reveal" aria-label="生活档案资料卡">
+          <div class="profile-stamp">T</div>
+          <p class="card-kicker">PRIVATE PROFILE / 01</p>
+          <h2>Tom<br /><span>生活档案</span></h2>
+          <p>观察身体、阅读世界，<br />并把值得留下的日子收藏起来。</p>
+          <div class="profile-rule"></div>
+          <div class="profile-meta"><span>LOCAL FIRST</span><span>2026 — ∞</span></div>
+        </article>
+      </section>
+
+      <section class="metrics section reveal" aria-label="本地记录统计">
+        <article><span>全部记录</span><strong id="metric-total">—</strong><small>电脑端本地资料</small></article>
+        <article><span>本周健身</span><strong id="metric-fitness">—</strong><small>训练与运动记录</small></article>
+        <article><span>阅读感悟</span><strong id="metric-reading">—</strong><small>书页与想法</small></article>
+        <article><span>生活照片</span><strong id="metric-photos">—</strong><small>此刻正在发生</small></article>
+        <article><span>互动交流</span><strong id="metric-community">—</strong><small>点赞、收藏、评论</small></article>
+      </section>
+
+      <section class="module-section section" id="fitness" data-section="fitness">
+        <div class="section-heading reveal"><p class="eyebrow">02 / BODY IN MOTION</p><h2>健身记录</h2><p>记录训练、跑步、运动感受与目标进度。</p></div>
+        <div class="module-layout">
+          <article class="module-manifesto fitness-tone reveal"><span>01</span><h3>让身体的变化，<br />有迹可循。</h3><p>从手机上传照片、训练内容、时长、感受和标签；每一条都独立保存。</p><button class="outline-button" data-generate="fitness" type="button">生成手机链接</button></article>
+          <div class="entry-grid" id="fitness-list"></div>
+        </div>
+      </section>
+
+      <section class="module-section section paper-section" id="reading" data-section="reading">
+        <div class="section-heading reveal"><p class="eyebrow">03 / NOTES FROM BOOKS</p><h2>读书感悟</h2><p>不是书单，而是那些读完还会留在心里的句子和想法。</p></div>
+        <div class="module-layout reverse">
+          <article class="module-manifesto reading-tone reveal"><span>02</span><h3>读过的文字，<br /><em>回到自己的语言。</em></h3><p>用手机上传封面或手写笔记，添加作者、书名、页码和你的感悟。</p><button class="outline-button" data-generate="reading" type="button">生成手机链接</button></article>
+          <div class="entry-grid" id="reading-list"></div>
+        </div>
+      </section>
+
+      <section class="module-section section study-section" id="study" data-section="study">
+        <div class="section-heading reveal"><p class="eyebrow">06 / SELECTED STUDY</p><h2>六科精选题</h2><p>每科都有独立手机入口，一次可上传最多 6 张题目、过程或试卷图片。普通题保留在本学科历史区；只有你明确标记为「精选题」的内容才进入独立资料库。学习方法、二次结论、试卷库、创新题和题型总结也各自保存，不会挤在同一张小卡片里。</p></div>
+        <div class="subject-grid">
+          <article class="subject-card reveal" id="study-chinese"><p>01 / 语文</p><h3>语文精选题</h3><div class="question-types"><span>现代文阅读</span><span>古诗文</span><span>作文</span><span>语言运用</span><span>名著阅读</span></div><div class="study-area-grid"><span>学习方法</span><span>二次结论</span><span>试卷库</span><span>创新题</span><span>题型总结</span></div><div class="study-toolbar" data-study-toolbar="study-chinese" aria-label="语文资料筛选"></div><p class="study-scope-note" id="study-chinese-scope-note"></p><div class="study-entry-link" data-study-link="study-chinese"></div><div class="entry-grid compact-grid" id="study-chinese-list"></div></article>
+          <article class="subject-card reveal" id="study-math"><p>02 / 数学</p><h3>数学精选题</h3><div class="question-types"><span>函数与方程</span><span>几何</span><span>概率统计</span><span>数列</span><span>导数与不等式</span></div><div class="study-area-grid"><span>学习方法</span><span>二次结论</span><span>试卷库</span><span>创新题</span><span>题型总结</span></div><div class="study-toolbar" data-study-toolbar="study-math" aria-label="数学资料筛选"></div><p class="study-scope-note" id="study-math-scope-note"></p><div class="study-entry-link" data-study-link="study-math"></div><div class="entry-grid compact-grid" id="study-math-list"></div></article>
+          <article class="subject-card reveal" id="study-english"><p>03 / 英语</p><h3>英语精选题</h3><div class="question-types"><span>阅读理解</span><span>完形填空</span><span>语法填空</span><span>写作</span><span>听力</span></div><div class="study-area-grid"><span>学习方法</span><span>二次结论</span><span>试卷库</span><span>创新题</span><span>题型总结</span></div><div class="study-toolbar" data-study-toolbar="study-english" aria-label="英语资料筛选"></div><p class="study-scope-note" id="study-english-scope-note"></p><div class="study-entry-link" data-study-link="study-english"></div><div class="entry-grid compact-grid" id="study-english-list"></div></article>
+          <article class="subject-card reveal" id="study-physics"><p>04 / 物理</p><h3>物理精选题</h3><div class="question-types"><span>力学</span><span>电磁学</span><span>运动学</span><span>实验</span><span>光学与热学</span></div><div class="study-area-grid"><span>学习方法</span><span>二次结论</span><span>试卷库</span><span>创新题</span><span>题型总结</span></div><div class="study-toolbar" data-study-toolbar="study-physics" aria-label="物理资料筛选"></div><p class="study-scope-note" id="study-physics-scope-note"></p><div class="study-entry-link" data-study-link="study-physics"></div><div class="entry-grid compact-grid" id="study-physics-list"></div></article>
+          <article class="subject-card reveal" id="study-chemistry"><p>05 / 化学</p><h3>化学精选题</h3><div class="question-types"><span>物质结构</span><span>化学反应</span><span>溶液与电化学</span><span>有机化学</span><span>实验</span></div><div class="study-area-grid"><span>学习方法</span><span>二次结论</span><span>试卷库</span><span>创新题</span><span>题型总结</span></div><div class="study-toolbar" data-study-toolbar="study-chemistry" aria-label="化学资料筛选"></div><p class="study-scope-note" id="study-chemistry-scope-note"></p><div class="study-entry-link" data-study-link="study-chemistry"></div><div class="entry-grid compact-grid" id="study-chemistry-list"></div></article>
+          <article class="subject-card reveal" id="study-biology"><p>06 / 生物</p><h3>生物精选题</h3><div class="question-types"><span>细胞与代谢</span><span>遗传与进化</span><span>生态系统</span><span>实验设计</span><span>稳态调节</span></div><div class="study-area-grid"><span>学习方法</span><span>二次结论</span><span>试卷库</span><span>创新题</span><span>题型总结</span></div><div class="study-toolbar" data-study-toolbar="study-biology" aria-label="生物资料筛选"></div><p class="study-scope-note" id="study-biology-scope-note"></p><div class="study-entry-link" data-study-link="study-biology"></div><div class="entry-grid compact-grid" id="study-biology-list"></div></article>
+        </div>
+      </section>
+
+      <section class="module-section section" id="photos" data-section="photos">
+        <div class="section-heading reveal"><p class="eyebrow">04 / ORDINARY, HELD CLOSE</p><h2>生活照片</h2><p>把相册里不想丢失的瞬间，附上地点、人物和一句注释。</p></div>
+        <div class="module-layout">
+          <article class="module-manifesto photo-tone reveal"><span>03</span><h3>日常无需盛大，<br />也值得被保存。</h3><p>照片只会写入本机资料库；上传后可随时查看、点赞、收藏或删除。</p><button class="outline-button" data-generate="photos" type="button">生成手机链接</button></article>
+          <div class="entry-grid" id="photos-list"></div>
+        </div>
+      </section>
+
+      <section class="module-section section community-section" id="community" data-section="community">
+        <div class="section-heading reveal"><p class="eyebrow">05 / A SMALL EXCHANGE</p><h2>互动交流</h2><p>发布一段想分享的近况、照片或问题；浏览的人可以点赞、收藏和评论。</p></div>
+        <div class="community-layout">
+          <article class="module-manifesto community-tone reveal"><span>04</span><h3>把感受<br />留给愿意回应的人。</h3><p>每位打开同一台电脑生成手机链接的人，都可以提交一条互动；所有互动保存在这台电脑。</p><button class="outline-button" data-generate="community" type="button">生成手机链接</button></article>
+          <div class="community-feed" id="community-list"></div>
+        </div>
+      </section>
+
+      <section class="module-section section featured-section" id="featured-problems" data-section="featured-problems">
+        <div class="section-heading reveal"><p class="eyebrow">07 / SELECTED PROBLEMS</p><h2>精选题资料库</h2><p>这里仅保存你主动标记为「精选题」的内容。普通题仍留在所属学科的历史区，不会被移动、隐藏或丢失。</p></div>
+        <div class="entry-grid library-grid" id="featured-problems-list"></div>
+      </section>
+
+      <section class="module-section section library-section" id="library" data-section="library">
+        <div class="section-heading reveal"><p class="eyebrow">08 / PRIVATE LIBRARY</p><h2>私人资料库</h2><p>健身、读书、照片与互动记录的明确收藏会出现在这里。六科精选题保留在上方独立的「精选题资料库」；两类资料不会混在一起。</p></div>
+        <div class="entry-grid library-grid" id="library-list"></div>
+      </section>
+
+      <footer>ME.zip LIFE STUDIO · LOCAL ARCHIVE · <span id="service-status">正在连接本地资料库</span></footer>
+    </main>
+
+    <dialog class="link-dialog" id="link-dialog">
+      <button class="dialog-close" id="dialog-close" type="button" aria-label="关闭">×</button>
+      <p class="eyebrow">MOBILE ENTRY / LOCAL NETWORK</p>
+      <h2 id="dialog-title">生成手机链接</h2>
+      <p id="dialog-description">请让手机与电脑连接同一个可信 Wi‑Fi，然后在手机浏览器打开链接。</p>
+      <div class="link-box"><code id="mobile-link">正在生成…</code><div class="dialog-actions"><button id="copy-link" type="button">复制手机拍照链接</button><a class="outline-button mobile-preview-link" id="open-mobile-link" href="#" target="_blank" rel="noopener" aria-disabled="true">打开拍照页预览</a></div></div>
+      <p class="dialog-note">此链接仅用于手机和这台电脑之间的本地传输；不上传云端。链接会长期有效，除非你清除本机记录或重新配对。</p>
+    </dialog>
+    <template id="empty-template"><article class="empty-card"><span>—</span><p>这里还没有记录。</p><small>生成手机链接后，从手机上传第一条内容。</small></article></template>
+    <script src="./app.js"></script>
+  </body>
+</html>

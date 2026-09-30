@@ -1,0 +1,67 @@
+.shader-reveal {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: inherit;
+  background: #080b13;
+  touch-action: none;
+}
+
+.shader-reveal__canvas {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  pointer-events: none;
+  user-select: none;
+}
+
+.shader-reveal::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: inherit;
+  box-shadow: inset 0 0 28px rgba(255, 255, 255, .055);
+  content: '';
+  pointer-events: none;
+}
+
+.shader-reveal > :not(.shader-reveal__canvas):not(.shader-reveal__sr-status) {
+  position: relative;
+  z-index: 2;
+}
+
+.shader-reveal__sr-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.shader-reveal[data-shader-reveal-mode='css'] {
+  background:
+    radial-gradient(circle at 50% 48%, rgba(255, 255, 255, .16), transparent 58%),
+    #101522;
+}
+
+.shader-reveal[data-shader-reveal-reduced-motion='true'] {
+  touch-action: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shader-reveal::after {
+    box-shadow: inset 0 0 18px rgba(255, 255, 255, .04);
+  }
+}

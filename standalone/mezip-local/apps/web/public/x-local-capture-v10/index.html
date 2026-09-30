@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ME.zip Capture V10 — 在一个本地工作台内收集、整理和回看真实内容记录">
+  <title>ME.zip Capture · 内容工作台</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="rail" aria-label="内容工作台导航">
+      <a class="brand" href="#overview"><span class="brand-dots"><i></i><i></i><i></i><i></i></span><strong>ME.zip</strong><small>CAPTURE / V10</small></a>
+      <p class="rail-copy">把你主动留下的内容，收成可回看、可整理、默认私密的个人资料。</p>
+      <nav class="nav-list">
+        <a href="#overview" data-route="overview"><b>01</b><span>内容总览</span><i>↗</i></a>
+        <a href="#timeline" data-route="timeline"><b>02</b><span>行为记录</span><i>↗</i></a>
+        <a href="#links" data-route="links"><b>03</b><span>任意链接收集</span><i>↗</i></a>
+        <a href="#watch" data-route="watch"><b>04</b><span>电影与视频</span><i>↗</i></a>
+        <a href="#library" data-route="library"><b>05</b><span>私人资料库</span><i>↗</i></a>
+        <a href="#interest" data-route="interest"><b>06</b><span>标签与兴趣</span><i>↗</i></a>
+        <a href="#settings" data-route="settings"><b>07</b><span>本地设置</span><i>↗</i></a>
+      </nav>
+      <div class="rail-status"><span></span><div><strong id="rail-status">正在读取本地记录</strong><small>所有功能都在这个工作台内</small></div></div>
+      <div class="rail-foot">默认 PRIVATE · 不读取密码、Cookie 或支付信息</div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="top-title"><span>ME.ZIP / PERSONAL CONTENT DESK</span><strong>内容工作台</strong></div>
+        <form id="search-form" class="search-form" role="search"><label for="global-search">⌕</label><input id="global-search" type="search" placeholder="搜索标题、链接、作者、标签或主要作用"><button>搜索</button></form>
+        <div class="top-state"><span id="bridge-state" class="status-pill">正在检查本机服务…</span><button id="refresh-data" class="text-button" type="button">刷新记录</button></div>
+      </header>
+
+      <section class="view" data-view="overview">
+        <div class="hero">
+          <div><div class="eyebrow"><i></i><i></i><i></i><i></i> ONE DESK, YOUR REAL RECORDS</div><h1>所有明确留下的内容，<br>在一个地方回看。</h1><p>点赞、收藏、已保存链接、电影和视频观看记录都留在这个独立工作台。功能区不再跳转到旧页面；只有你点“打开原始内容”时，才会前往你保存的具体帖子或应用。</p><div class="hero-actions"><button class="button primary" data-open-dialog="link">收集任何链接 <span>↗</span></button><button class="button soft" data-open-dialog="watch">登记观看记录</button></div></div>
+          <article class="hero-card"><div class="hero-card-head"><span>WORKFLOW</span><b>LOCAL</b></div><div class="logic"><div><b>①</b><span>主动收集</span></div><i>→</i><div><b>②</b><span>本地保存</span></div><i>→</i><div><b>③</b><span>私人整理</span></div></div><p>收集链接不等于自动收藏；只有再次确认，才会进入私人资料库。</p></article>
+        </div>
+        <section class="panel metrics-panel"><div class="section-head"><div><span class="micro">AT A GLANCE</span><h2>你的内容脉冲</h2></div><span class="quiet">只显示已读取到的真实本地记录</span></div><div id="metrics" class="metrics"></div></section>
+        <section class="workspace-cards" aria-label="核心功能">
+          <button class="feature-card card-link" data-route-go="links"><span class="tile violet">↗</span><div><strong>任意链接收集</strong><small>网页、文章、代码、帖子或应用链接</small></div><i>→</i></button>
+          <button class="feature-card card-watch" data-route-go="watch"><span class="tile amber">▶</span><div><strong>电影与视频</strong><small>进度、已看完、继续观看与原始入口</small></div><i>→</i></button>
+          <button class="feature-card card-library" data-route-go="library"><span class="tile coral">★</span><div><strong>私人资料库</strong><small>从已记录内容中再次收藏</small></div><i>→</i></button>
+        </section>
+        <div class="two-col"><section class="panel"><div class="section-head"><div><span class="micro">LATEST SIGNALS</span><h2>最近记录</h2></div><button class="inline-button" data-route-go="timeline">查看全部 →</button></div><div id="recent-records" class="stack"></div></section><section class="panel"><div class="section-head"><div><span class="micro">READY TO KEEP</span><h2>刚加入资料库</h2></div><button class="inline-button" data-route-go="library">打开资料库 →</button></div><div id="library-preview" class="stack"></div></section></div>
+      </section>
+
+      <section class="view hidden" data-view="timeline">
+        <div class="route-head"><div><span class="micro">02 / ACTIVITY</span><h1>行为记录</h1><p>从已存在的 X 本地记录读取点赞、收藏、浏览与主动保存；在这里打开时只会定位到你原来保存的具体链接。</p></div><button class="button primary" data-open-dialog="link">收集任何链接 <span>↗</span></button></div>
+        <section class="panel toolbar"><div id="event-filters" class="tabs"><button class="active" data-filter="all">全部</button><button data-filter="like">点赞</button><button data-filter="bookmark">收藏</button><button data-filter="viewed">浏览</button><button data-filter="saved">已保存</button></div><input id="timeline-search" type="search" placeholder="搜标题、链接、标签、作者或主要作用"></section><div id="timeline-list" class="record-grid"></div>
+      </section>
+
+      <section class="view hidden" data-view="links">
+        <div class="route-head"><div><span class="micro">03 / LINK COLLECTOR</span><h1>任意链接收集</h1><p>可以保存网页、文章、代码、帖子、视频、电影或应用链接。保存后会保留来源、作者、主要作用与标签；点击“打开原始内容”才会跳到对应页面。</p></div><button class="button primary" data-open-dialog="link">＋ 收集链接</button></div>
+        <section class="panel collector-note"><span>↗</span><p><strong>不跳转的功能，已经收进本页。</strong> 收集、标签、进度、再次收藏和查看原始链接都在这里完成；原始链接本身仍可按你的需要点击打开。</p></section>
+        <section class="panel toolbar"><div id="link-filters" class="tabs"><button class="active" data-link-filter="all">全部</button><button data-link-filter="X_LINK">帖子</button><button data-link-filter="WEBPAGE">网页</button><button data-link-filter="ARTICLE">文章</button><button data-link-filter="CODE">代码</button><button data-link-filter="APP">应用</button></div><input id="link-search" type="search" placeholder="搜索链接、平台、作者、作用或标签"></section><div id="link-list" class="content-grid"></div>
+      </section>
+
+      <section class="view hidden" data-view="watch">
+        <div class="route-head"><div><span class="micro">04 / WATCH HISTORY</span><h1>电影与视频</h1><p>记录真正想持续跟进的电影和视频。每一条可标记进度、已看完、打开原始内容，以及再次收藏到私人资料库。</p></div><button class="button primary" data-open-dialog="watch">＋ 登记观看</button></div>
+        <section class="panel watch-explainer"><div><strong>观看进度 ≠ 实际观看时间</strong><p>手动登记会明确显示为本地记录；连接到本机桥接时，也会读取已有的真实播放记录。不会把打开页面误算成看完。</p></div><span id="watch-mode" class="status-pill">本地记录</span></section>
+        <section class="panel toolbar"><div id="watch-filters" class="tabs"><button class="active" data-watch-filter="all">全部</button><button data-watch-filter="continue">继续观看</button><button data-watch-filter="completed">已看完</button><button data-watch-filter="MOVIE">电影</button><button data-watch-filter="VIDEO">视频</button></div><input id="watch-search" type="search" placeholder="搜索电影、视频、平台、作者或链接"></section><div id="watch-list" class="watch-list"></div>
+      </section>
+
+      <section class="view hidden" data-view="library">
+        <div class="route-head"><div><span class="micro">05 / PRIVATE ARCHIVE</span><h1>私人资料库</h1><p>不是另一种自动捕获。只有你从已有的点赞、收藏、链接或观看记录中明确点击“加入私人资料库”，内容才会来到这里。</p></div><span class="private-stamp">PRIVATE BY DEFAULT</span></div>
+        <section class="panel collector-note"><span>★</span><p>删除原始记录不会自动删除这里的私人资料。电影、视频和网址内容会分别归纳，便于持续回看；你也可以保留重要内容、添加标签，并随时打开原始内容。</p></section>
+        <section class="panel toolbar"><div id="library-filters" class="tabs"><button class="active" data-library-filter="all">全部</button><button data-library-filter="X">X</button><button data-library-filter="MOVIE">电影</button><button data-library-filter="VIDEO">视频</button><button data-library-filter="WEBPAGE">网页</button><button data-library-filter="ARTICLE">文章</button><button data-library-filter="CODE">代码</button><button data-library-filter="APP">应用</button></div><input id="library-search" type="search" placeholder="搜索标题、链接、作者、标签或备注"></section><section id="library-groups" class="library-groups" aria-label="私人资料分类归纳"></section>
+      </section>
+
+      <section class="view hidden" data-view="interest">
+        <div class="route-head"><div><span class="micro">06 / TAG MAP</span><h1>标签与兴趣</h1><p>只按你自己保存的链接、观看记录与私人资料进行归纳；不调用外部推荐，也不生成不存在的内容。</p></div></div>
+        <div class="two-col"><section class="panel"><div class="section-head"><div><span class="micro">TAGS</span><h2>已使用标签</h2></div></div><div id="tag-cloud" class="tag-cloud"></div></section><section class="panel"><div class="section-head"><div><span class="micro">COUNTS</span><h2>记录构成</h2></div></div><div id="interest-summary" class="summary"></div></section></div>
+      </section>
+
+      <section class="view hidden" data-view="settings">
+        <div class="route-head"><div><span class="micro">07 / LOCAL CONTROL</span><h1>本地设置</h1><p>这些开关只控制本机记录方式。它们不读取任何密码、Cookie、验证码或支付信息。</p></div></div>
+        <section class="panel settings"><label class="switch-row"><span><strong>启用本地记录</strong><small>关闭后不会再保存本页新增内容</small></span><input id="setting-enabled" type="checkbox"><i></i></label><label class="switch-row"><span><strong>保存主动收集的链接</strong><small>网页、文章、代码、帖子和应用链接</small></span><input id="setting-captureSharedLinks" type="checkbox"><i></i></label><label class="switch-row"><span><strong>保存观看记录</strong><small>电影、视频与其进度由你确认后保存</small></span><input id="setting-watchCapture" type="checkbox"><i></i></label><label class="switch-row"><span><strong>保存标题和来源说明</strong><small>不保存密码、Cookie 或认证信息</small></span><input id="setting-savePageMetadata" type="checkbox"><i></i></label><div class="settings-actions"><button id="export-data" class="button soft" type="button">导出本地记录 JSON</button><button id="refresh-settings" class="button soft" type="button">重新读取本机服务</button></div></section>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="link-dialog"><form id="link-form"><div class="dialog-head"><div><span class="micro">LOCAL LINK COLLECTOR</span><h2>收集任何链接</h2></div><button class="close-dialog" type="button" data-close-dialog="link-dialog">×</button></div><label>原始链接<input id="link-url" type="url" required placeholder="https://…"></label><button id="paste-link" type="button" class="clipboard-button">从剪贴板填入</button><div class="form-grid"><label>内容类型<select id="link-type"><option value="WEBPAGE">网页</option><option value="ARTICLE">文章</option><option value="CODE">代码</option><option value="X_LINK">帖子</option><option value="APP">应用</option><option value="VIDEO">视频</option><option value="MOVIE">电影</option></select></label><label>来源 App / 网站<input id="link-platform" maxlength="120" placeholder="例如：X、Bilibili、GitHub"></label></div><div class="form-grid"><label>标题<input id="link-title" maxlength="300" placeholder="内容名称"></label><label>作者 / 发布者<input id="link-author" maxlength="160" placeholder="可选"></label></div><label>主要作用 / 介绍<textarea id="link-description" maxlength="2000" placeholder="说明为什么要保存、之后怎么使用。"></textarea></label><label>标签（逗号分隔）<input id="link-tags" maxlength="500" placeholder="产品, 灵感, 以后研究"></label><p id="link-error" class="form-error" role="alert"></p><div class="dialog-actions"><button class="button soft" type="button" data-close-dialog="link-dialog">取消</button><button class="button primary" type="submit">收集到本机</button></div></form></dialog>
+
+  <dialog id="watch-dialog"><form id="watch-form"><div class="dialog-head"><div><span class="micro">LOCAL WATCH RECORD</span><h2>登记电影或视频</h2></div><button class="close-dialog" type="button" data-close-dialog="watch-dialog">×</button></div><div class="form-grid"><label>类型<select id="watch-type"><option value="MOVIE">电影</option><option value="VIDEO">视频</option></select></label><label>来源 App / 网站<input id="watch-platform" maxlength="120" placeholder="例如：Netflix、Bilibili"></label></div><label>标题<input id="watch-title" required maxlength="300" placeholder="电影或视频名称"></label><label>原始链接<input id="watch-url" type="url" required placeholder="https://…"></label><div class="form-grid"><label>作者 / 主创（可选）<input id="watch-creator" maxlength="160"></label><label>总时长（分钟，可选）<input id="watch-duration" type="number" min="0" step="1" placeholder="例如 120"></label></div><label>当前进度 <input id="watch-progress" type="range" min="0" max="100" value="0"><output id="watch-progress-value">0%</output></label><label>备注（可选）<textarea id="watch-note" maxlength="1000" placeholder="例如：从 47 分钟处继续看。"></textarea></label><label>标签（逗号分隔）<input id="watch-tags" maxlength="500" placeholder="电影, 灵感"></label><p id="watch-error" class="form-error" role="alert"></p><div class="dialog-actions"><button class="button soft" type="button" data-close-dialog="watch-dialog">取消</button><button class="button primary" type="submit">保存观看记录</button></div></form></dialog>
+  <script src="./app.js"></script>
+</body>
+</html>

@@ -10,43 +10,77 @@ const bridge='http://127.0.0.1:17643';
 const aiActions=[['translate','翻译'],['polish','润色'],['summarize','总结'],['explain','解释']] as const;
 const downloadBase='/qduo-windows';
 const mobileQuery='(max-width:850px), (max-width:1100px) and (pointer:coarse)';
+const mobileDevice=()=>!/(Win32|Win64|Windows)/i.test(navigator.platform+' '+navigator.userAgent)&&window.matchMedia(mobileQuery).matches;
 export default function QDuoCenter(){
  const [mobile,setMobile]=useState(false);
- useEffect(()=>{const media=window.matchMedia(mobileQuery);setMobile(media.matches);if(media.matches)setView('text');const update=()=>{setMobile(media.matches);if(media.matches)setView(value=>['connection','safety'].includes(value)?'text':value);};media.addEventListener('change',update);return()=>media.removeEventListener('change',update);},[]);
+ useEffect(()=>{const media=window.matchMedia(mobileQuery);setMobile(mobileDevice());if(mobileDevice())setView('text');const update=()=>{setMobile(mobileDevice());if(mobileDevice())setView(value=>['connection','safety'].includes(value)?'text':value);};media.addEventListener('change',update);return()=>media.removeEventListener('change',update);},[]);
  const [view,setView]=useState('computer'),[text,setText]=useState(''),[output,setOutput]=useState(''),[operation,setOperation]=useState<TextOperation>('jsonPretty');
  const [token,setToken]=useState(''),[connected,setConnected]=useState(false),[report,setReport]=useState<QDuoReport|null>(null),[busy,setBusy]=useState(''),[message,setMessage]=useState(''),[query,setQuery]=useState(''),[listing,setListing]=useState('applications'),[source,setSource]=useState('');
  const fileInput=useRef<HTMLInputElement>(null),textArea=useRef<HTMLTextAreaElement>(null),generation=useRef(0);
- useEffect(()=>{let saved='';try{saved=sessionStorage.getItem('qduo:connection')||'';setToken(saved);}catch{}if(saved&&!window.matchMedia(mobileQuery).matches){const current=++generation.current;setBusy('正在自动连接本机');request('/report',undefined,saved).then(next=>{if(current!==generation.current)return;if(!isQDuoReport(next))throw new Error('请更新 Windows 客户端。');setReport(next);setConnected(true);setSource('实时本机连接');setMessage('电脑已自动连接。');}).catch(()=>{if(current===generation.current)setMessage('自动连接未成功，请确认 Windows 客户端正在运行。');}).finally(()=>{if(current===generation.current)setBusy('');});}return()=>{generation.current++;};},[]);
- async function request(path:string,body?:unknown,key=token,timeout=30000){
-  if(window.matchMedia(mobileQuery).matches)throw new Error('此功能在原 Windows 电脑上使用。手机可处理文本和导入体检报告。');
+ const autoKey=useRef(''),connectedRef=useRef(false),activeRequests=useRef(0),importedMode=useRef(false);
+ useEffect(()=>{connectedRef.current=connected;},[connected]);
+ useEffect(()=>{
+  let live=true,pending=false;
+  try{const saved=localStorage.getItem('qduo:connection')||sessionStorage.getItem('qduo:connection')||'';autoKey.current=saved;setToken(saved);if(saved)localStorage.setItem('qduo:connection',saved);}catch{}
+  async function reconnect(){
+   const key=autoKey.current,current=generation.current;
+   if(!live||pending||!key||activeRequests.current||document.hidden||mobileDevice())return;
+   pending=true;
+   try{
+    if(connectedRef.current){
+     try{const status=await request('/connection/status',undefined,key,6000);if(!status||typeof status!=='object'||!('ok' in status)||status.ok!==true)throw new Error('请更新 Windows 客户端。');}
+     catch(e){if(!e||typeof e!=='object'||!('status' in e)||e.status!==404)throw e;const next=await request('/report',undefined,key,20000);if(!isQDuoReport(next))throw new Error('请更新 Windows 客户端。');if(live&&current===generation.current)setMessage('电脑已连接。更新 Windows 客户端后可使用 D 盘备份清理。');}
+     return;
+    }
+    const next=await request('/report',undefined,key,20000);
+    if(!live||current!==generation.current||key!==autoKey.current)return;
+    if(!isQDuoReport(next))throw new Error('请更新 Windows 客户端。');
+    setToken(key);setReport(next);setConnected(true);connectedRef.current=true;setSource('实时本机连接');setMessage('电脑已自动连接。关闭网页后再打开也会自动连接。');
+   }catch(e){
+    if(!live||current!==generation.current||key!==autoKey.current)return;
+    setConnected(false);connectedRef.current=false;setSource('上次读取的本机报告');
+    if(e instanceof Error&&e.message.includes('连接码不正确')){autoKey.current='';try{localStorage.removeItem('qduo:connection');sessionStorage.removeItem('qduo:connection');}catch{}setMessage('配对码已失效，请从客户端重新复制配对码。');}
+    else setMessage('等待本机客户端，网页会自动重连。浏览器首次询问本地网络访问时请允许。');
+   }finally{pending=false;}
+  }
+  const onVisible=()=>{if(!document.hidden)void reconnect();};
+  void reconnect();const timer=window.setInterval(()=>void reconnect(),15000);
+  window.addEventListener('online',onVisible);document.addEventListener('visibilitychange',onVisible);
+  const onStorage=(event:StorageEvent)=>{if(event.key!=='qduo:connection'||importedMode.current)return;generation.current++;setBusy('');autoKey.current=event.newValue||'';setToken(autoKey.current);setConnected(false);connectedRef.current=false;if(!autoKey.current){setReport(null);setSource('');setMessage('已取消自动连接。');}else void reconnect();};window.addEventListener('storage',onStorage);
+  return()=>{live=false;generation.current++;window.clearInterval(timer);window.removeEventListener('online',onVisible);document.removeEventListener('visibilitychange',onVisible);window.removeEventListener('storage',onStorage);};
+ },[]);
+ async function request(path:string,body?:unknown,key=autoKey.current||token,timeout=30000){
+  if(mobileDevice())throw new Error('此功能在原 Windows 电脑上使用。手机可处理文本和导入体检报告。');
+  activeRequests.current++;try{
   const response=await fetch(bridge+path,{method:body===undefined?'GET':'POST',mode:'cors',cache:'no-store',headers:{'X-QDuo-Token':key,...(body!==undefined?{'Content-Type':'application/json'}:{})},...(body!==undefined?{body:JSON.stringify(body)}:{}),signal:AbortSignal.timeout(timeout)});
   const result=await response.json();
   const error=result&&typeof result==='object'&&'error' in result&&typeof result.error==='string'?result.error:'本机操作失败';
-  if(!response.ok)throw new Error(response.status===401?'连接码不正确，请从 Windows 客户端重新复制。':error);
+  if(!response.ok)throw Object.assign(new Error(response.status===401?'连接码不正确，请从 Windows 客户端重新复制。':error),{status:response.status});
   return result;
+  }finally{activeRequests.current--;}
  }
  async function connect(){
   if(!token.trim()){setMessage('请先打开 Windows 客户端，复制其中的网页配对码。');setView('connection');return;}
-  const current=++generation.current;setBusy('正在连接电脑');setMessage('');
-  try{const next=await request('/report',undefined,token.trim());if(current!==generation.current)return;if(!isQDuoReport(next))throw new Error('本机报告格式不兼容，请更新客户端。');setReport(next);setConnected(true);setSource('实时本机连接');setView('computer');try{sessionStorage.setItem('qduo:connection',token.trim());}catch{}setMessage('电脑已连接。当前报告只在这个浏览器中显示。');}
+  importedMode.current=false;const current=++generation.current;setBusy('正在连接电脑');setMessage('');
+  try{const next=await request('/report',undefined,token.trim());if(current!==generation.current)return;if(!isQDuoReport(next))throw new Error('本机报告格式不兼容，请更新客户端。');setReport(next);setConnected(true);connectedRef.current=true;autoKey.current=token.trim();setSource('实时本机连接');setView('computer');let remembered=false;try{localStorage.setItem('qduo:connection',token.trim());sessionStorage.removeItem('qduo:connection');remembered=true;}catch{}setMessage(remembered?'电脑已连接，已在此浏览器记住配对并开启自动重连。':'电脑已连接；浏览器禁止保存配对，下次打开需要重新连接。');}
   catch(e){if(current===generation.current){setConnected(false);setMessage(e instanceof TypeError?'未能连接本机。请确认客户端正在运行；浏览器提示访问本地网络时允许连接。也可导入客户端导出的报告。':e instanceof Error?e.message:'连接失败');}}
   finally{if(current===generation.current)setBusy('');}
  }
- function disconnect(){generation.current++;setConnected(false);setReport(null);setSource('');setToken('');setBusy('');try{sessionStorage.removeItem('qduo:connection');}catch{}setMessage('已断开本机连接。');}
+ function disconnect(){generation.current++;autoKey.current='';connectedRef.current=false;setConnected(false);setReport(null);setSource('');setToken('');setBusy('');try{localStorage.removeItem('qduo:connection');sessionStorage.removeItem('qduo:connection');}catch{}setMessage('已断开并忘记这台电脑，自动重连已停止。');}
  async function scan(deep=false){
   const current=++generation.current;setBusy(deep?'正在扫描缓存和大文件':'正在刷新电脑状态');setMessage('');
-  try{const next=await request(deep?'/scan':'/report',deep?{}:undefined,token,deep?180000:30000);if(current!==generation.current)return;if(!isQDuoReport(next))throw new Error('未收到完整报告，已保留原来的结果。');setReport(next);setSource('实时本机连接');setMessage(deep?'扫描完成。详情中的扫描限制也已列出。':'电脑状态已更新。');}
+  try{const next=await request(deep?'/scan':'/report',deep?{}:undefined,autoKey.current||token,deep?180000:30000);if(current!==generation.current)return;if(!isQDuoReport(next))throw new Error('未收到完整报告，已保留原来的结果。');setReport(next);setSource('实时本机连接');setMessage(deep?'扫描完成。详情中的扫描限制也已列出。':'电脑状态已更新。');}
   catch(e){if(current===generation.current)setMessage(e instanceof Error?e.message:'扫描失败，请检查客户端。');}finally{if(current===generation.current)setBusy('');}
  }
  async function localAction(kind:string,action:string,input=text){
   if(!connected){setView('connection');setMessage('此操作需要 Windows 客户端。连接后使用客户端中设置的模型。');return;}
   const current=++generation.current;setBusy('正在处理');setMessage('');
-  try{const result=await request('/action',{kind,action,text:input},token,90000);if(current!==generation.current)return;const obj=result&&typeof result==='object'?result as Record<string,unknown>:null;setOutput(typeof result==='string'?result:typeof obj?.result==='string'?obj.result:typeof obj?.output==='string'?obj.output:JSON.stringify(result));}
+  try{const result=await request('/action',{kind,action,text:input},autoKey.current||token,90000);if(current!==generation.current)return;const obj=result&&typeof result==='object'?result as Record<string,unknown>:null;setOutput(typeof result==='string'?result:typeof obj?.result==='string'?obj.result:typeof obj?.output==='string'?obj.output:JSON.stringify(result));}
   catch(e){if(current===generation.current)setMessage(e instanceof Error?e.message:'操作失败');}finally{if(current===generation.current)setBusy('');}
  }
  async function importReport(file?:File){
   if(!file)return;setMessage('');
-  try{if(file.size>8*1024*1024)throw new Error('报告文件不能超过 8 MB。');const value:unknown=JSON.parse(await file.text());if(!isQDuoReport(value))throw new Error('请选择 QDuo Windows 导出的 JSON 体检报告。');generation.current++;setBusy('');setConnected(false);setReport(value);setSource('导入的本机报告');setView('computer');setMessage('报告已在本页打开，未上传到网站。');}
+  try{if(file.size>8*1024*1024)throw new Error('报告文件不能超过 8 MB。');const value:unknown=JSON.parse(await file.text());if(!isQDuoReport(value))throw new Error('请选择 QDuo Windows 导出的 JSON 体检报告。');generation.current++;importedMode.current=true;autoKey.current='';connectedRef.current=false;setBusy('');setConnected(false);setReport(value);setSource('导入的本机报告');setView('computer');setMessage('报告已在本页打开，未上传到网站。');}
   catch(e){setMessage(e instanceof Error?e.message:'报告读取失败');}finally{if(fileInput.current)fileInput.current.value='';}
  }
  function exportReport(){if(!report)return;const url=URL.createObjectURL(new Blob([JSON.stringify(report,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`QDuo-体检-${report.generatedAt.slice(0,10)}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
@@ -84,10 +118,14 @@ export default function QDuoCenter(){
      <section className="panel"><div className="qd-panel-title"><h2>处理结果</h2><button className="library-button" disabled={!output} onClick={copy}><Copy size={15}/>复制</button></div><textarea aria-label="处理结果" value={output} onChange={e=>setOutput(e.target.value)} placeholder="处理结果会显示在这里。"/><div className="qd-actions"><button className="library-button" disabled={!output} onClick={()=>{setText(output);setOutput('');}}>替换本页输入</button><button className="library-button" disabled={!output} onClick={()=>setText(v=>v+(v?'\n':'')+output)}>追加到本页输入</button></div><p className="qd-subtle">{mobile?'文本转换在手机浏览器内完成。电脑报告可从“电脑报告”导入；跨应用划词和截图识字请在 Windows 客户端使用。':'跨应用划词、截图识字和回写由桌面客户端完成：Ctrl + Alt + Q 划词，Ctrl + Alt + S 截图。'}</p></section></div>
    </TabsContent>
    <TabsContent value="connection"><div className="qd-connect-grid">
-    <section className="panel qd-connect"><div className="qd-panel-title"><h2>连接 Windows 电脑</h2><Monitor size={22}/></div><ol><li>下载并解压 Windows 版，双击 <strong>QDuoWindows.exe</strong>。</li><li>在客户端“网页连接”处复制配对码。</li><li>粘贴到下方；浏览器询问访问本地网络时，允许连接。</li></ol><label htmlFor="qd-connection-code">网页连接码</label><input id="qd-connection-code" type="password" autoComplete="off" spellCheck={false} value={token} onChange={e=>setToken(e.target.value)} placeholder="粘贴 Windows 客户端显示的连接码"/><div className="qd-actions"><button className="library-button primary" disabled={!!busy} onClick={connect}><Link2 size={16}/>连接本机</button><button className="library-button" onClick={disconnect}><Unplug size={16}/>断开</button></div><p className="qd-subtle">仅连接当前浏览器所在的电脑。手机上可导入报告；客户端关闭后需重新连接。</p></section>
+    <section className="panel qd-connect"><div className="qd-panel-title"><h2>连接 Windows 电脑</h2><Monitor size={22}/></div><ol><li>下载并解压 Windows 版，双击 <strong>QDuoWindows.exe</strong>。</li><li>在客户端“网页连接”处复制配对码。</li><li>粘贴到下方；浏览器询问访问本地网络时，允许连接。</li></ol><label htmlFor="qd-connection-code">网页连接码</label><input id="qd-connection-code" type="password" autoComplete="off" spellCheck={false} value={token} onChange={e=>setToken(e.target.value)} placeholder="粘贴 Windows 客户端显示的连接码"/><div className="qd-actions"><button className="library-button primary" disabled={!!busy} onClick={connect}><Link2 size={16}/>连接本机</button><button className="library-button" onClick={disconnect}><Unplug size={16}/>断开并忘记</button></div><p className="qd-subtle">配对码仅保存在此浏览器。重新打开网页或客户端重启后会自动重连；“断开并忘记”会停止自动连接。客户端可开启“登录 Windows 时自动启动”。</p></section>
     <section className="panel qd-download"><div className="qd-panel-title"><h2>Windows 桌面版</h2><MousePointer2 size={23}/></div><p>选中其他应用中的文字，按快捷键打开动作窗口。支持 AI 动作、文本转换、朗读、搜索、截图识字和本地脚本。</p><div className="qd-hotkeys"><span>划词动作<kbd>Ctrl + Alt + Q</kbd></span><span>截图识字<kbd>Ctrl + Alt + S</kbd></span></div><a className="library-button primary" href={downloadBase+'/QDuo-Windows.zip'} download><Download size={16}/>下载便携版</a><a className="library-button" href={downloadBase+'/QDuo-Windows-Source.zip'} download><FileJson size={16}/>下载源代码</a><p className="qd-subtle">Windows 10 / 11 · .NET Framework 4.8 · 首次使用 AI 需在客户端配置模型。截图识字使用 Windows 已安装的 OCR 语言。</p><a className="qd-source-link" href="https://github.com/XueshiQiao/qduo" target="_blank" rel="noopener">基于 QDuo 的功能思路独立实现 · GPL-3.0</a></section>
    </div><div className="qd-privacy"><ShieldCheck size={17}/><p>体检、文件详情和图片预览由本机提供，不上传到网站。低风险缓存清理使用可恢复隔离；中风险隔离和 Defender 威胁处理在本机窗口确认。模型密钥保存在 Windows 客户端中。</p></div></TabsContent>
   </Tabs>
   <input ref={fileInput} type="file" accept="application/json,.json" aria-label="导入 QDuo 本机体检报告" className="qd-hidden-input" onChange={e=>importReport(e.target.files?.[0])}/>
  </section>;
 }
+
+
+
+

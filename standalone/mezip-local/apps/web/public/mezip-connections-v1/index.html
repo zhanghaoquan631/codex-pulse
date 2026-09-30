@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>ME.zip · 连接中心 v1</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="hero">
+        <p class="eyebrow">ME.ZIP / CONNECTIONS / V1</p>
+        <h1>连接中心</h1>
+        <p>独立版本入口：原网站与资料卡不会被此页面修改。连接后，功能与状态仍留在 ME.zip 内。</p>
+      </header>
+
+      <section class="card" aria-labelledby="github-heading">
+        <div class="card-heading"><div><p class="eyebrow">01 / GITHUB</p><h2 id="github-heading">GitHub 创作连接</h2></div><span id="github-status" class="status">正在检查</span></div>
+        <p>仅当你点击时才会开启 GitHub 官方授权窗口。GitHub 密码、Client Secret 与访问令牌不会显示或保存到本页。</p>
+        <div class="actions"><button id="github-connect" type="button">连接 GitHub</button><button id="github-refresh" class="secondary" type="button">刷新状态</button><a class="link-button" href="/creator">在 ME.zip 打开 Creator Lab</a></div>
+        <p id="github-message" class="message" role="status"></p>
+      </section>
+
+      <section class="card" aria-labelledby="wechat-heading">
+        <div class="card-heading"><div><p class="eyebrow">02 / WECHAT SPORT</p><h2 id="wechat-heading">微信运动步数</h2></div><span id="wechat-status" class="status">仅小程序可授权</span></div>
+        <p>微信运动同步必须在 ME.zip 小程序中由你点击授权。小程序上传的是加密数据；只有服务器验证成功的步数才会在这里显示。</p>
+        <div class="actions"><button id="wechat-refresh" class="secondary" type="button">查看已验证步数</button><a class="link-button" href="/fitness">在 ME.zip 打开 Fitness</a></div>
+        <ul id="wechat-records" class="record-list" aria-live="polite"><li>尚未读取服务器记录。</li></ul>
+        <p id="wechat-message" class="message" role="status"></p>
+      </section>
+
+      <footer><span>v1 独立连接页</span><span>真实状态优先 · 未配置即明确显示</span></footer>
+    </main>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

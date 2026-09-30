@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.env*
+!.env.example
+server/uploads/
+server/data/
+coverage/
+.sites-runtime/
+.wrangler/

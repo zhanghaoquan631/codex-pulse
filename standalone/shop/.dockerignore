@@ -1,0 +1,10 @@
+node_modules
+.env*
+dist
+server/uploads
+work
+coverage
+*.zip
+server/data/
+.sites-runtime/
+.wrangler/

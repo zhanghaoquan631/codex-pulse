@@ -19,6 +19,7 @@ import KnowledgeCenter, { KnowledgeEntry } from "./knowledge-center";
 import RoosterCenter from "./rooster-center";
 import BetterOpcCenter from "./betteropc-center";
 import UsageHeatmap from "./usage-heatmap";
+import FeatureSourcePanel from "./feature-source-panel";
 import ThemeToggle from "./theme-toggle";
 import AccountOverview from "./account-overview";
 import type { QuotaProfile } from "@/lib/quota";
@@ -92,6 +93,8 @@ function Dashboard(){
     <MusicDock onOpenMusic={()=>selectTab("music")}/>
     <div className="console-content">
      <EdgeScene kind="cat"/>
+     <FeatureSourcePanel key={tab} section={tab}/>
+     <details className="source-tools-disclosure"><summary>界面与通用工具的源码、提示词</summary><FeatureSourcePanel section="tools"/></details>
      <TabsContent value="tokens" className="tokens-view">
       <Tabs value={tokenView} onValueChange={selectTokenView} className="token-sections">
        <TabsList className="token-section-tabs" aria-label="Token 统计功能">{tokenSections.map(section=>{const Icon=section.icon;return <TabsTrigger key={section.id} value={section.id} onClick={playNavigationSound}><Icon size={17}/><span>{section.label}</span></TabsTrigger>;})}</TabsList>

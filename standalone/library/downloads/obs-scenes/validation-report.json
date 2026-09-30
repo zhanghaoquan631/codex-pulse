@@ -1,0 +1,153 @@
+{
+  "version": "1.0.0",
+  "official_obs_source_tag": "32.2.2",
+  "validation": {
+    "type": "official-source-based static and semantic checks",
+    "runtime_import_tested": false,
+    "capture_tested": false,
+    "presets": [
+      {
+        "preset": "01-camera-full",
+        "result": "passed",
+        "canvas": [
+          1920,
+          1080
+        ],
+        "rectangles": {
+          "dshow_input": [
+            0,
+            0,
+            1920,
+            1080
+          ]
+        },
+        "audio": {
+          "DesktopAudioDevice1": {
+            "id": "wasapi_output_capture",
+            "device_id": "default",
+            "volume": 0.5,
+            "muted": false,
+            "mixers": 1,
+            "monitoring_type": 0
+          },
+          "AuxAudioDevice1": {
+            "id": "wasapi_input_capture",
+            "device_id": "default",
+            "volume": 1.0,
+            "muted": false,
+            "mixers": 1,
+            "monitoring_type": 0
+          }
+        },
+        "runtime_import_tested": false,
+        "capture_tested": false
+      },
+      {
+        "preset": "02-screen-camera",
+        "result": "passed",
+        "canvas": [
+          1920,
+          1080
+        ],
+        "rectangles": {
+          "monitor_capture": [
+            0,
+            0,
+            1920,
+            1080
+          ],
+          "dshow_input": [
+            28,
+            772,
+            380,
+            280
+          ]
+        },
+        "audio": {
+          "DesktopAudioDevice1": {
+            "id": "wasapi_output_capture",
+            "device_id": "default",
+            "volume": 0.5,
+            "muted": false,
+            "mixers": 1,
+            "monitoring_type": 0
+          },
+          "AuxAudioDevice1": {
+            "id": "wasapi_input_capture",
+            "device_id": "default",
+            "volume": 1.0,
+            "muted": false,
+            "mixers": 1,
+            "monitoring_type": 0
+          }
+        },
+        "runtime_import_tested": false,
+        "capture_tested": false
+      },
+      {
+        "preset": "03-portrait-split",
+        "result": "passed",
+        "canvas": [
+          1080,
+          1920
+        ],
+        "rectangles": {
+          "monitor_capture": [
+            0,
+            240,
+            1080,
+            608
+          ],
+          "dshow_input": [
+            0,
+            848,
+            1080,
+            1072
+          ]
+        },
+        "audio": {
+          "DesktopAudioDevice1": {
+            "id": "wasapi_output_capture",
+            "device_id": "default",
+            "volume": 0.5,
+            "muted": false,
+            "mixers": 1,
+            "monitoring_type": 0
+          },
+          "AuxAudioDevice1": {
+            "id": "wasapi_input_capture",
+            "device_id": "default",
+            "volume": 1.0,
+            "muted": false,
+            "mixers": 1,
+            "monitoring_type": 0
+          }
+        },
+        "runtime_import_tested": false,
+        "capture_tested": false
+      }
+    ]
+  },
+  "artifacts": [
+    {
+      "file": "all.zip",
+      "bytes": 20532,
+      "sha256": "ccd907b91bd080f15247cc1e80edb1ab8f4d97094fca1c0011bdbeb7cc9bf4af"
+    },
+    {
+      "file": "portrait.zip",
+      "bytes": 6076,
+      "sha256": "2321d07aeb5cf2691c24e739aa4818c541fe325059ec14a6fd13472a41d68ce2"
+    },
+    {
+      "file": "presenter.zip",
+      "bytes": 5408,
+      "sha256": "09f3a431c33bcba3a2f3019bc40a4fc803550dfda228a89528a8e567b687da24"
+    },
+    {
+      "file": "screen-inset.zip",
+      "bytes": 5953,
+      "sha256": "d6b2882a857729d3d1f80475dd2995a48796f1dff08e8681c7a8ebc11e00a098"
+    }
+  ]
+}

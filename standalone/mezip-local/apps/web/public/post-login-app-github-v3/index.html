@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0d0d10" />
+    <meta
+      name="description"
+      content="保留 ME.zip 登录后功能区，并接入真实 GitHub 工作台 V6。"
+    />
+    <title>ME.zip · 登录后空间 · GitHub V6</title>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: #0d0d10;
+      }
+
+      iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        background: #0d0d10;
+      }
+    </style>
+  </head>
+  <body>
+    <iframe
+      id="mezip-original"
+      title="ME.zip 登录后空间"
+      src="/post-login-app/index.html?fromLogin=1"
+    ></iframe>
+    <script>
+      (() => {
+        const session = localStorage.getItem('mezip.local-demo-session.v1');
+        const signedIn = session === 'active' || session?.includes('"state":"active"');
+        const fromLogin = new URLSearchParams(location.search).get('fromLogin') === '1';
+        const returnTo = '/post-login-app-github-v3/index.html?fromLogin=1';
+
+        if (!signedIn && !fromLogin) {
+          location.replace(`/?login=1&returnTo=${encodeURIComponent(returnTo)}`);
+          return;
+        }
+
+        const frame = document.querySelector('#mezip-original');
+        const installWorkspaceButton = () => {
+          const doc = frame.contentDocument;
+          const grid = doc?.querySelector('.feature-grid');
+        // The current original app already contains the GitHub card. Only add
+        // the fallback entry for older snapshots that do not have one yet.
+        if (!grid || grid.querySelector('[data-github-workspace-entry], .feature-github')) return;
+
+          const link = doc.createElement('a');
+          link.className = 'feature feature-github';
+          link.href = '/github-workspace-v6/index.html#overview';
+          link.target = '_top';
+          link.dataset.githubWorkspaceEntry = 'true';
+          link.innerHTML =
+            '<strong>GitHub 工作台</strong><span>仓库、代码片段、任务中心与开发活动</span>';
+          grid.append(link);
+        };
+
+        frame.addEventListener('load', () => {
+          installWorkspaceButton();
+          const doc = frame.contentDocument;
+          if (!doc?.body) return;
+          const observer = new MutationObserver(installWorkspaceButton);
+          observer.observe(doc.body, { childList: true, subtree: true });
+        });
+      })();
+    </script>
+  </body>
+</html>

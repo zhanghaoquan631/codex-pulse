@@ -1,0 +1,16 @@
+{
+  "fontFamily": "LXGW WenKai",
+  "webfontVersion": "1.7.0",
+  "weight": 400,
+  "sourceStylesheet": "https://cdn.bootcdn.net/ajax/libs/lxgw-wenkai-webfont/1.7.0/lxgwwenkai-regular.css",
+  "sourceFontUrlPattern": "https://cdn.bootcdn.net/ajax/libs/lxgw-wenkai-webfont/1.7.0/files/lxgwwenkai-regular-subset-{number}.woff2",
+  "sourceRepository": "https://github.com/lxgw/LxgwWenKai",
+  "license": "SIL Open Font License 1.1",
+  "licenseSource": "https://raw.githubusercontent.com/lxgw/LxgwWenKai/main/OFL.txt",
+  "licenseFile": "/assets/fonts/OFL.txt",
+  "localStylesheet": "/assets/fonts/wenkai.css",
+  "subsetCount": 97,
+  "totalWoff2Bytes": 4634808,
+  "retrievedAt": "2026-09-30",
+  "note": "原站使用的常规字重 Web 字体已按原始 Unicode 范围自托管，未修改字形。"
+}

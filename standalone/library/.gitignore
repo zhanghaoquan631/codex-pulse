@@ -1,0 +1,10 @@
+dist/
+site.tar.gz
+node_modules/
+.env
+.env.*
+!.env.example
+.sites-runtime/
+data/
+*.zip
+__pycache__/

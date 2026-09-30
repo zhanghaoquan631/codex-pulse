@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ME.zip 阅读与研究历史">
+  <title>ME.zip Capture · 阅读与研究历史</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./resources.css">
+  <link rel="stylesheet" href="./reading.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="rail">
+      <a class="brand" href="./index.html#overview" aria-label="ME.zip 本地监控系统"><span class="brand-mark">ME<span>.zip</span></span><small>LOCAL MEMORY</small></a>
+      <nav aria-label="本地监控导航">
+        <a href="./index.html#overview">⌂<span>总览</span></a>
+        <a href="./watch.html">▶<span>观看记录</span></a>
+        <a href="./resources.html">▤<span>网页 / 文章 / 代码</span></a>
+        <a class="active" href="./reading.html">◉<span>阅读 / 研究历史</span></a>
+        <a href="./global-timeline.html">◷<span>全局行为时间轴</span></a><a href="./index.html#timeline">◷<span>行为时间轴</span></a>
+        <a href="/x-link-archive-v1/index.html">🔗<span>X 链接收集</span></a>
+        <a href="./index.html#special">★<span>私人资料库</span></a>
+        <a href="./index.html#settings">⚙<span>隐私设置</span></a>
+      </nav>
+      <div class="rail-foot"><span class="status-dot"></span><span>READING HISTORY</span></div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div><p class="eyebrow">READING / RESEARCH HISTORY</p><h1>阅读 / 研究历史</h1><p class="lede">网页、文章、代码和你主动保存的 X 链接，会在你从 ME.zip 打开后留下真实的打开历史。</p></div>
+        <div class="top-actions"><span id="reading-status" class="pill pill-muted">检查本地桥接…</span><a class="button button-quiet" href="./resources.html">＋ 保存网页 / 文章 / 代码</a></div>
+      </header>
+      <section class="panel reading-boundary"><div><strong>保存 ≠ 已阅读</strong><p>只有点击「开始阅读」或「继续阅读」时才新增一条历史；不会扫描你的浏览器历史，也不会伪造阅读时长。</p></div><a class="button button-quiet" href="/x-link-archive-v1/index.html">收集 X 链接 ↗</a></section>
+      <section class="reading-toolbar panel"><div class="filter-tabs" id="reading-filters"><button class="active" data-filter="recent">最近查看</button><button data-filter="continue">继续阅读</button><button data-filter="completed">已完成</button><button data-filter="WEBPAGE">网页</button><button data-filter="ARTICLE">文章</button><button data-filter="CODE">代码</button><button data-filter="X_LINK">X 链接</button><button data-filter="all">全部</button></div><div class="filter-row"><input id="reading-search" type="search" placeholder="搜索标题、来源、作者、介绍或链接"><span id="reading-count" class="pill pill-muted">0 条</span></div></section>
+      <section id="reading-error" class="empty panel hidden" role="alert"></section>
+      <section id="reading-loading" class="empty panel"><strong>正在读取阅读 / 研究历史…</strong><span>只显示你手动保存或从 ME.zip 明确打开过的内容。</span></section>
+      <section id="reading-list" class="reading-list hidden"></section>
+    </main>
+  </div>
+  <script src="./reading-app.js"></script>
+</body>
+</html>

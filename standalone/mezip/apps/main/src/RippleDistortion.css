@@ -1,0 +1,16 @@
+/* Adapted from React Bits RippleDistortion: https://reactbits.dev/animations/ripple-distortion */
+.ripple-distortion {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+}
+
+.ripple-distortion canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+

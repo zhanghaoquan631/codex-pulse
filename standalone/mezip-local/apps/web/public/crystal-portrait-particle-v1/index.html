@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#03050a" />
+    <meta name="description" content="晶体肖像粒子互动预览。" />
+    <title>晶体肖像 · 粒子深度版</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="portrait-page" aria-label="晶体肖像粒子互动画面">
+      <canvas id="particleCanvas" aria-label="由彩色立体粒子构成的晶体人物肖像"></canvas>
+      <p class="sr-only" id="renderStatus" aria-live="polite">正在构建晶体肖像。</p>
+    </main>
+    <script src="./particle-portrait.js"></script>
+  </body>
+</html>

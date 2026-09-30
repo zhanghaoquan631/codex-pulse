@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>ME.zip · Membership V2</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="membership-shell">
+      <header class="hero rise">
+        <p class="eyebrow">ME.zip / MEMBERSHIP · V2</p>
+        <h1>會員與福利，<em>由服務端確認。</em></h1>
+        <p class="lede">這是獨立新版，不會修改原來的會員中心。方案、權益、訂單與付款可用性只讀取已登入帳號的服務端資料。</p>
+        <div class="hero-status" aria-live="polite">
+          <span id="connection-dot" aria-hidden="true"></span>
+          <span id="connection-state">正在檢查會員服務…</span>
+        </div>
+      </header>
+
+      <section class="overview-grid rise" aria-label="目前會員狀態">
+        <article class="panel current-plan">
+          <p class="panel-kicker">CURRENT ACCESS</p>
+          <strong id="current-plan">—</strong>
+          <span id="membership-expiry">服務端資料尚未連線</span>
+        </article>
+        <article class="panel">
+          <p class="panel-kicker">AVAILABLE BENEFITS</p>
+          <strong id="benefit-count">—</strong>
+          <span>僅顯示當前帳號可用權益</span>
+        </article>
+        <article class="panel">
+          <p class="panel-kicker">STORAGE</p>
+          <strong id="storage-status">—</strong>
+          <span id="storage-detail">由服務端計算</span>
+        </article>
+      </section>
+
+      <section class="section-block rise" aria-labelledby="plans-title">
+        <div class="section-heading">
+          <div><p class="eyebrow">01 / MEMBERSHIP</p><h2 id="plans-title">選擇你的通行證</h2></div>
+          <p>價格由服務端的凍結目錄提供；前端不傳送金額，也不能自行開通會員。</p>
+        </div>
+        <div id="plan-list" class="plan-list" aria-live="polite"></div>
+      </section>
+
+      <section class="checkout-layout rise" aria-labelledby="checkout-title">
+        <article class="checkout-card">
+          <p class="eyebrow">02 / CHECKOUT</p>
+          <h2 id="checkout-title">選擇付款方式</h2>
+          <p id="selected-plan-copy" class="muted">請先選擇非免費方案。</p>
+          <div id="provider-list" class="provider-list" aria-live="polite"></div>
+          <button id="create-checkout" class="pay-button" type="button" disabled>建立安全付款訂單</button>
+          <p id="checkout-message" class="form-message" aria-live="polite"></p>
+          <p class="fine-print">建立訂單不代表付款成功。只有微信支付、支付寶或銀聯的簽章回調經服務端驗證後，會員才會啟用。</p>
+        </article>
+        <aside class="payment-boundary">
+          <p class="eyebrow">PAYMENT DESTINATION</p>
+          <h3>收款資訊不會顯示在這裡</h3>
+          <p>你的微信收款碼、支付寶商戶憑據、銀行卡資訊都不會上傳到瀏覽器。要把款項結算到你的微信，需先在官方商戶後台完成商戶、結算帳戶、回調網址與實名驗證。</p>
+          <p>當服務端確認付款渠道可用，對應按鈕才可點擊；未設定時會保持關閉，避免假付款或誤收款。</p>
+        </aside>
+      </section>
+
+      <section class="benefit-layout rise" aria-labelledby="benefits-title">
+        <div class="section-heading">
+          <div><p class="eyebrow">03 / BENEFITS</p><h2 id="benefits-title">我的福利與兌換</h2></div>
+          <button id="refresh-data" class="text-button" type="button">重新檢查服務</button>
+        </div>
+        <div id="benefit-list" class="benefit-list" aria-live="polite"></div>
+        <form id="redemption-form" class="redemption-form">
+          <label for="redemption-code">兌換碼</label>
+          <div class="redemption-row"><input id="redemption-code" autocomplete="off" maxlength="96" placeholder="輸入服務端發出的兌換碼" /><button type="submit">服務端兌換</button></div>
+          <p id="redemption-message" class="form-message" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <section class="section-block rise" aria-labelledby="orders-title">
+        <div class="section-heading"><div><p class="eyebrow">04 / ORDERS</p><h2 id="orders-title">付款與訂單記錄</h2></div><p>不會把「建立訂單」誤顯示成已付款。</p></div>
+        <ol id="order-list" class="order-list" aria-live="polite"></ol>
+      </section>
+    </main>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
